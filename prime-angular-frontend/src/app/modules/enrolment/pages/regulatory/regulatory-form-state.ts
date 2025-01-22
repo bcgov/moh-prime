@@ -7,6 +7,7 @@ import { ConfigService } from '@config/config.service';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 
 import { EnrolmentRegulatoryForm } from './enrolment-regulatory-form.model';
+import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
 export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryForm> {
   public colleges: CollegeConfig[];
 
@@ -39,6 +40,10 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     return this.formInstance.get('certificationNumber') as FormControl;
   }
 
+  public get unlistedCertifications(): FormArray {
+    return this.formInstance.get('unlistedCertifications') as FormArray;
+  }
+
   /**
    * @description
    * Access to college certifications where a self-documenting
@@ -55,7 +60,7 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
       return;
     }
 
-    const { certifications: rawCertifications, deviceProviderId, deviceProviderRoleCode, certificationNumber } = this.formInstance.getRawValue();
+    const { certifications: rawCertifications, deviceProviderId, deviceProviderRoleCode, certificationNumber, unlistedCertifications } = this.formInstance.getRawValue();
     let certifications = rawCertifications.map(c => {
       const { category, ...collegeCertification } = c;
       return collegeCertification;
@@ -69,19 +74,24 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     const enrolleeDeviceProviders = deviceProviderRoleCode ?
       [{ deviceProviderId, deviceProviderRoleCode, certificationNumber }] : [];
 
-    return { certifications, enrolleeDeviceProviders }
+    return { certifications, enrolleeDeviceProviders, unlistedCertifications }
   }
 
-  public patchValue({ certifications, enrolleeDeviceProviders }: EnrolmentRegulatoryForm): void {
+  public patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications }: EnrolmentRegulatoryForm): void {
 
     if (!this.formInstance || !Array.isArray(certifications)) {
       return;
     }
 
+    //clear the form array before patching the value
     this.removeCollegeCertifications();
+    this.removeUnlistedCertifications();
 
     if (certifications.length) {
       certifications.forEach((c: CollegeCertification) => this.addCollegeCertification(c));
+    }
+    if (unlistedCertifications && unlistedCertifications.length) {
+      unlistedCertifications.forEach((c: UnlistedCertification) => this.addUnlistedCertification(c));
     }
     if (enrolleeDeviceProviders && enrolleeDeviceProviders.length) {
       const { deviceProviderId, deviceProviderRoleCode, certificationNumber } = enrolleeDeviceProviders[0];
@@ -97,7 +107,8 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
       deviceProviderIdentifier: [null, []],
       deviceProviderId: [null, []],
       deviceProviderRoleCode: [null, []],
-      certificationNumber: [null, []]
+      certificationNumber: [null, []],
+      unlistedCertifications: this.fb.array([]),
     });
   }
 
@@ -141,11 +152,34 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     this.certifications.clear();
   }
 
+  public removeUnlistedCertifications() {
+    this.unlistedCertifications.clear();
+  }
+
   public collegeHasGrouping(collegeCode: number): boolean {
     if (collegeCode === 0) {
       return false;
     }
     const college = this.colleges.find((c) => c.code === collegeCode);
     return college ? college.collegeLicenses.some((l) => l.collegeLicenseGroupingCode) : false;
+  }
+
+  public buildUnlistedCollegeCertificationForm(): FormGroup {
+    return this.fb.group({
+      collegeName: ['', []],
+      licenceNumber: ['', []],
+      licenceClass: ['', []],
+      renewalDate: ['', []]
+    })
+  }
+
+  public addUnlistedCertification(unlistedCertification?: UnlistedCertification): void {
+    const unlistedCert = this.buildUnlistedCollegeCertificationForm();
+    unlistedCert.patchValue({ ...unlistedCertification });
+    this.unlistedCertifications.push(unlistedCert);
+  }
+
+  public addEmptyUnlistedCollegeCertification(): void {
+    this.addUnlistedCertification();
   }
 }

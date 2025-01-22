@@ -168,6 +168,7 @@ describe('RegulatoryComponent', () => {
               licenseNumber: "12345"
             }],
             enrolleeDeviceProviders: [],
+            unlistedCertifications: [],
           } as EnrolmentRegulatoryForm;
 
           spyOn<any>((component as any).enrolmentService, 'canRequestRemoteAccess')
@@ -192,6 +193,7 @@ describe('RegulatoryComponent', () => {
               licenseNumber: "12345"
             }],
             enrolleeDeviceProviders: [],
+            unlistedCertifications: [],
           } as EnrolmentRegulatoryForm;
 
           spyOn<any>((component as any).enrolmentService, 'canRequestRemoteAccess')

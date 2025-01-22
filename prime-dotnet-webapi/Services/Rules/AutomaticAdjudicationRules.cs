@@ -465,4 +465,18 @@ namespace Prime.Services.Rules
             }
         }
     }
+
+    public class UnlistedCertificationRule : AutomaticAdjudicationRule
+    {
+        public override Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.UnlistedCertifications != null && enrollee.UnlistedCertifications.Any())
+            {
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.HasUnlistedLicence, $"Enrollee has {enrollee.UnlistedCertifications.Count} unlisted licence(s).");
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
+        }
+    }
 }
