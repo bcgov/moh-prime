@@ -26,5 +26,7 @@ namespace Prime.ViewModels
         public PrescriberIdType? PrescriberIdType { get; set; }
 
         public ICollection<CollegeLicense> CollegeLicenses { get; set; }
+
+        public bool Multijurisdictional { get; set; }
     }
 }
