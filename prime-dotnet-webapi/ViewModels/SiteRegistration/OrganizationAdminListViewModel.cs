@@ -1,7 +1,4 @@
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using Prime.Models;
 
 namespace Prime.ViewModels
 {
@@ -13,6 +10,8 @@ namespace Prime.ViewModels
         public string DoingBusinessAs { get; set; }
         public string SigningAuthorityName { get; set; }
         public DateTime CreatedDate { get; set; }
+
+        //Number of site with care setting set
         public int ValidSiteCount { get; set; }
 
         //First Site ID with PEC

@@ -562,7 +562,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationAdminListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetOrganizationAdminView(string searchText)
         {
-            var organizations = await _organizationService.GetOrganizationAdminListViewAsynce(searchText);
+            var organizations = await _organizationService.GetOrganizationAdminListViewAsync(searchText);
 
             return Ok(organizations);
         }
@@ -580,7 +580,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<OrganizationAdminListViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetOrganizationAdminViewById(int id)
         {
-            var organization = await _organizationService.GetOrganizationAdminListViewByIdAsynce(id);
+            var organization = await _organizationService.GetOrganizationAdminListViewByIdAsync(id);
 
             return Ok(organization);
         }

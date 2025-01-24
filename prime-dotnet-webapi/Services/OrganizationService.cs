@@ -63,10 +63,11 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<OrganizationAdminListViewModel>> GetOrganizationAdminListViewAsynce(string searchText)
+        public async Task<IEnumerable<OrganizationAdminListViewModel>> GetOrganizationAdminListViewAsync(string searchText)
         {
             return await _context.Organizations
                 .AsNoTracking()
+                .Where(o => o.DeletedDate == null)
                 .If(!string.IsNullOrWhiteSpace(searchText), q => q
                     .Search(e => e.Name,
                     e => e.DoingBusinessAs,
@@ -78,11 +79,11 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<OrganizationAdminListViewModel> GetOrganizationAdminListViewByIdAsynce(int id)
+        public async Task<OrganizationAdminListViewModel> GetOrganizationAdminListViewByIdAsync(int id)
         {
             return await _context.Organizations
                 .AsNoTracking()
-                .Where(o => o.Id == id)
+                .Where(o => o.Id == id && o.DeletedDate == null)
                 .ProjectTo<OrganizationAdminListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
