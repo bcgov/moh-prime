@@ -23,6 +23,7 @@ import { SearchFormStatusType } from '@adjudication/shared/enums/search-form-sta
 export class OrganizationContainerComponent implements OnInit {
   @Input() public content: TemplateRef<any>;
   @Input() public hideSearchBar: boolean;
+  @Input() public hideOverviewButton: boolean;
 
   public busy: Subscription;
   public organizations: OrganizationAdminView[];

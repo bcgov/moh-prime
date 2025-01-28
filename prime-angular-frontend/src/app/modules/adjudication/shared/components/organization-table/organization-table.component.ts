@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 export class OrganizationTableComponent implements OnInit, OnChanges {
   @Input() public organizations: OrganizationAdminView[];
   @Input() public localStoragePrefix: string;
+  @Input() public hideOverviewButton: boolean;
 
   @Output() public refresh: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;

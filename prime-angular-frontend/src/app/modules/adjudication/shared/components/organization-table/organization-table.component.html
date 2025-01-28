@@ -106,6 +106,7 @@
 
   <mat-menu #menu="matMenu">
     <button mat-menu-item
+            *ngIf="!hideOverviewButton"
             (click)="onRoute([row.id, AdjudicationRoutes.ORGANIZATION_SITES])">
       <mat-icon>all_inclusive</mat-icon>
       <span>Overview</span>

@@ -12,6 +12,7 @@
 
   <app-organization-table *ngIf="busy.closed || organizations?.length"
                           [organizations]="organizations"
+                          [hideOverviewButton]="hideOverviewButton"
                           (route)="onRoute($event)"
                           (redirectSiteRegistration)="onRedirectToSiteRegistration($event)"
                           (delete)="onDelete($event)">

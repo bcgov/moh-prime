@@ -16,7 +16,7 @@ import { SendEmailComponent } from '@shared/components/dialogs/content/send-emai
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
-import { concat, EMPTY, exhaustMap, forkJoin, map, noop, of, Subscription, take } from 'rxjs';
+import { concat, EMPTY, exhaustMap, forkJoin, map, noop, of, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-organization-sites',
@@ -47,7 +47,7 @@ export class OrganizationSitesComponent implements OnInit {
     this.deviceProviders = new MatTableDataSource<SiteRegistrationListViewModel>([]);
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.route.params
       .subscribe((params) => {
         if (params.id) {
@@ -67,7 +67,7 @@ export class OrganizationSitesComponent implements OnInit {
       this.privateCommunityHealthPractices.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
       this.deviceProviders.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
 
-      this.initizedSite();
+      this.initializeFirstSite();
     });
   }
   public onRoute(routePath: RoutePath): void {
@@ -173,7 +173,7 @@ export class OrganizationSitesComponent implements OnInit {
       .subscribe(() => this.onReload());
   }
 
-  private initizedSite() {
+  private initializeFirstSite() {
     if (this.communityPharmacies && this.communityPharmacies.data.length > 0) {
       this.setOrganizationInfo(this.communityPharmacies.data[0]);
     }
