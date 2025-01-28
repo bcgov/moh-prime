@@ -48,7 +48,7 @@
     "rxjs": "~7.5.4",
     "smoothscroll-polyfill": "^0.4.4",
     "tinymce": "^7.0.0",
-    "tslib": "^2.0.0",
+    "tslib": "^2.8.1",
     "tus-js-client": "^1.8.0",
     "web-animations-js": "^2.3.2",
     "zone.js": "~0.11.5"
