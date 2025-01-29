@@ -1,0 +1,31 @@
+<app-page [busy]="busy"
+          mode="full">
+  <ng-content select="app-page-header"></ng-content>
+  <ng-content select="app-page-subheader"></ng-content>
+
+  <app-search-form *ngIf="!hideSearchBar"
+                   localStoragePrefix="organization"
+                   [statusType]="SearchFormStatusType.None"
+                   (search)="onSearch($event)"
+                   (refresh)="onRefresh()">
+  </app-search-form>
+
+  <app-organization-table *ngIf="busy.closed || organizations?.length"
+                          [organizations]="organizations"
+                          [hideOverviewButton]="hideOverviewButton"
+                          (route)="onRoute($event)"
+                          (redirectSiteRegistration)="onRedirectToSiteRegistration($event)"
+                          (delete)="onDelete($event)">
+  </app-organization-table>
+
+  <ng-container *ngIf="content">
+    <div class="row">
+      <div class="col py-5">
+
+        <ng-container [ngTemplateOutlet]="content"></ng-container>
+
+      </div>
+    </div>
+  </ng-container>
+
+</app-page>
