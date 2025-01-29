@@ -57,6 +57,8 @@ namespace Prime.Services
             var query = _context.CommunitySites
                 .AsNoTracking()
                 .Where(s => s.DeletedDate == null && s.Organization.DeletedDate == null)
+                .If(searchOptions.OrganizationId.HasValue, q => q
+                    .Where(s => s.OrganizationId == searchOptions.OrganizationId))
                 .If(searchOptions.CareSettingCode.HasValue, q => q
                     .Where(s => s.CareSettingCode == searchOptions.CareSettingCode)
                 )

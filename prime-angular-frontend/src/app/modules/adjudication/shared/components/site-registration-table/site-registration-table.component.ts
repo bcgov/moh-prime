@@ -128,7 +128,7 @@ export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
   public remoteUsers(siteRegistration: SiteRegistrationListViewModel): number | 'Yes' | 'No' | 'N/A' {
     const count = siteRegistration.remoteUserCount;
 
-    return (siteRegistration.careSettingCode !== CareSettingEnum.COMMUNITY_PHARMACIST)
+    return (siteRegistration.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE)
       ? (!this.activatedRoute.snapshot.params.sid)
         ? (count) ? 'Yes' : 'No'
         : count

@@ -1,4 +1,5 @@
 export enum SearchFormStatusType {
   SiteStatuses,
-  EnrolleeStatuses
+  EnrolleeStatuses,
+  None
 }
