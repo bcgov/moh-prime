@@ -548,5 +548,41 @@ namespace Prime.Controllers
 
             return Ok(token);
         }
+
+        // GET: api/Organizations/admin-view
+        /// <summary>
+        /// Gets a specific Organization.
+        /// </summary>
+        /// <param name="searchText"></param>
+        [HttpGet("admin-view", Name = nameof(GetOrganizationAdminView))]
+        [Authorize(Roles = Roles.PrimeAdministrant)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationAdminListViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetOrganizationAdminView(string searchText)
+        {
+            var organizations = await _organizationService.GetOrganizationAdminListViewAsync(searchText);
+
+            return Ok(organizations);
+        }
+
+        // GET: api/Organizations/admin-view/1
+        /// <summary>
+        /// Gets a specific Organization.
+        /// </summary>
+        /// <param name="id"></param>
+        [HttpGet("admin-view/{id}", Name = nameof(GetOrganizationAdminViewById))]
+        [Authorize(Roles = Roles.PrimeAdministrant)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<OrganizationAdminListViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetOrganizationAdminViewById(int id)
+        {
+            var organization = await _organizationService.GetOrganizationAdminListViewByIdAsync(id);
+
+            return Ok(organization);
+        }
     }
 }

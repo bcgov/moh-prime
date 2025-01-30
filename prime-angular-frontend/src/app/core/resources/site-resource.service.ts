@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import { forkJoin, Observable, of } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { DateUtils } from '@lib/utils/date-utils.class';
-import { RemoteUser } from '@lib/models/remote-user.model';
 import { BusinessDay } from '@lib/models/business-day.model';
-import { BusinessDayHours } from '@lib/models/business-day-hours.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
@@ -59,7 +57,7 @@ export class SiteResource {
   }
 
   public getPaginatedSites(
-    queryParam: { textSearch?: string, careSettingCode?: CareSettingEnum, page?: number }
+    queryParam: { textSearch?: string, careSettingCode?: CareSettingEnum, page?: number, organizationId?: number }
   ): Observable<PaginatedList<SiteRegistrationListViewModel>> {
     const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
     return this.apiResource.get<PaginatedList<SiteRegistrationListViewModel>>('sites', params)
