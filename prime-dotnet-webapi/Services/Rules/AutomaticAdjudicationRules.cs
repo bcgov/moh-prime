@@ -6,7 +6,6 @@ using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.HttpClients;
 using Prime.HttpClients.PharmanetCollegeApiDefinitions;
-using Microsoft.AspNetCore.Components.RenderTree;
 using System;
 
 namespace Prime.Services.Rules
