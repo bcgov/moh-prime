@@ -1388,6 +1388,8 @@ namespace Prime.Services
             _context.EnrolleeAbsences.Add(absence);
             await _context.SaveChangesAsync();
 
+            await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, "Absence Entered");
+
             return absence;
         }
 
@@ -1427,6 +1429,7 @@ namespace Prime.Services
                 absence.EndTimestamp = rightNow;
                 await _context.SaveChangesAsync();
             }
+            await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, "Absence Cancelled");
         }
 
         public async Task DeleteFutureEnrolleeAbsenceAsync(int enrolleeId, int absenceId)
@@ -1442,6 +1445,8 @@ namespace Prime.Services
                 _context.EnrolleeAbsences.Remove(absence);
                 await _context.SaveChangesAsync();
             }
+
+            await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, "Absence Cancelled");
         }
 
         public async Task<string> GetAdjudicatorIdirForEnrolleeAsync(int enrolleeId)
