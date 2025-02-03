@@ -183,7 +183,7 @@ namespace Prime.Engines.AgreementEngineInternal
                 }
                 else
                 {
-                    return AgreementType.PharmacyTechnicianTOA;
+                    return null;
                 }
             }
             else
