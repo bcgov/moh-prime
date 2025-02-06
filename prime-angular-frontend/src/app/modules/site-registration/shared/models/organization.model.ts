@@ -1,5 +1,5 @@
 import { Party } from '@lib/models/party.model';
-import { Site, SiteListViewModel } from './site.model';
+import { Site } from './site.model';
 
 export interface Organization {
   id?: number;
@@ -18,4 +18,16 @@ export interface Organization {
   pendingTransfer: boolean;
   // Children -----
   sites: Site[];
+}
+
+export interface OrganizationAdminView {
+  id: number;
+  name: string;
+  doingBusinessAs?: string;
+  signingAuthorityName: string;
+  createdDate: string;
+  hidden: boolean;
+  hasClaim: boolean;
+  siteId: number;
+  validSiteCount: number;
 }

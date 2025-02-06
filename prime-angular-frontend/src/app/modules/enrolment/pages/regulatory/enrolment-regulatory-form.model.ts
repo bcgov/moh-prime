@@ -1,3 +1,3 @@
 import { Enrolment } from '@shared/models/enrolment.model';
 
-export interface EnrolmentRegulatoryForm extends Pick<Enrolment, 'certifications' | 'enrolleeDeviceProviders'> { }
+export interface EnrolmentRegulatoryForm extends Pick<Enrolment, 'certifications' | 'enrolleeDeviceProviders' | 'unlistedCertifications'> { }
