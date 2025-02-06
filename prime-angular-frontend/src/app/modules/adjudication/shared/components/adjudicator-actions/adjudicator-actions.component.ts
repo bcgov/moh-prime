@@ -218,6 +218,8 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   }
 
   public canChangeToA() {
-    return this.enrollee.appliedDate !== null && this.enrollee.currentStatusCode === this.EnrolmentStatus.EDITABLE;
+    return this.enrollee.appliedDate !== null &&
+      this.enrollee.currentStatusCode === this.EnrolmentStatus.EDITABLE &&
+      this.enrollee.approvedDate !== null;
   }
 }

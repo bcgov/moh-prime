@@ -335,7 +335,7 @@ export class AdjudicationResource {
 
   public changeAgreementType(enrolleeId: number, note: string, agreementType: number): Observable<EnrolleeNote> {
     const payload = { note, agreementType };
-    return this.apiResource.post(`enrollees/${enrolleeId}/submissions/change/agreement-type`, payload)
+    return this.apiResource.put(`enrollees/${enrolleeId}/submissions/change/agreement-type`, payload)
       .pipe(
         map((response: ApiHttpResponse<EnrolleeNote>) => response.result),
         tap(() => {

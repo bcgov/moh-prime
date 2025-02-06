@@ -434,10 +434,6 @@ export class AdjudicationContainerComponent implements OnInit {
     }
   }
 
-  public onTest(enrolleeId: number) {
-    alert("testing");
-  }
-
   public onChangeToA(enrolleeId: number) {
     const data: DialogOptions = {
       data: {
