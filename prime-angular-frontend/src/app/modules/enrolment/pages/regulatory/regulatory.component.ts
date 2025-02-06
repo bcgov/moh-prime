@@ -241,6 +241,9 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
         if (this.formState.certifications.value.some(c => c.collegeCode !== '')) {
           this.enrolmentFormStateService.patchOboSitesForm(null);
         }
+        if (this.cannotRequestRemoteAccess) {
+          this.removeRemoteAccessData();
+        }
         super.handleSubmission();
       }
     } else {
