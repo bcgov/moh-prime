@@ -362,13 +362,13 @@ namespace Prime.Controllers
             return Ok(updatedEnrollee);
         }
 
-        // PUT: api/enrollees/5/submissions/change/agreement-type
+        // PUT: api/enrollees/5/status-actions/change-toa
         /// <summary>
-        /// Assign a TOA agreement type to the latest submission.
+        ///
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="data"></param>
-        [HttpPut("{enrolleeId}/submissions/change/agreement-type", Name = nameof(ChangeToaAgreementType))]
+        [HttpPut("{enrolleeId}/status-actions/change-toa", Name = nameof(ChangeToaAgreementType))]
         [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
