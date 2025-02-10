@@ -113,7 +113,7 @@ jobs:
         env:
           EXCLUDE: "**/Migrations/**%2c**/Models/**%2c**/Views/**%2c**/ViewModels/**%2c**/Configuration/**%2c**/DTOs/**%2c**/Helpers/**%2c**/Resources/**%2c**/**Definitions.cs"
         run: |
-          dotnet test prime-dotnet-webapi-tests.sln /p:ExcludeByFile=$EXCLUDE /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[xunit.*]* --filter FullyQualifiedName\!~Integration
+          dotnet test /p:ExcludeByFile=$EXCLUDE /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[xunit.*]* --filter FullyQualifiedName\!~Integration
       - name: Run report generator
         run: |
           reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:coverage" -reporttype:lcov "-filefilters:-ApiDbContextModelSnapshot.cs;" -verbosity:Error
