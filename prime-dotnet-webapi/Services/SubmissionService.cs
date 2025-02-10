@@ -339,7 +339,7 @@ namespace Prime.Services
 
                 await _enrolleeAgreementService.CreateEnrolleeAgreementAsync(enrollee.Id);
 
-                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, $"TOA Changed from {currentAgreementType} to {param.AgreementType}, Note: {param.Note}");
+                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, $"TOA changed from {currentAgreementType} to {param.AgreementType}, Note: {param.Note}");
 
                 await _emailService.SendReminderEmailAsync(enrollee.Id);
                 await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
