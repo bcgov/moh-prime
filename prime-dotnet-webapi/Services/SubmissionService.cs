@@ -476,6 +476,7 @@ namespace Prime.Services
         {
             return _context.Enrollees
                 .Include(e => e.EnrolleeCareSettings)
+                    .ThenInclude(e => e.CareSetting)
                 .Include(e => e.Submissions)
                 .Include(e => e.Addresses)
                     .ThenInclude(ea => ea.Address)
