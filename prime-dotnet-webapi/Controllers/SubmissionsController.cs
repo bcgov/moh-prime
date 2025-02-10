@@ -369,7 +369,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="data"></param>
         [HttpPut("{enrolleeId}/status-actions/change-toa", Name = nameof(ChangeToaAgreementType))]
-        [Authorize(Roles = Roles.ApproveEnrollee)]
+        [Authorize(Roles = Roles.ManageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -395,7 +395,7 @@ namespace Prime.Controllers
 
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable))
             {
-                return BadRequest("Assigned agreement type can not be updated when the current status is not 'Under Review'.");
+                return BadRequest("Assigned agreement type may be updated only when the current status is Editable.");
             }
 
             return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.ChangeToa, data);

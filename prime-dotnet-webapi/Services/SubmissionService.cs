@@ -13,7 +13,6 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services.Razor;
 using Prime.ViewModels;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Prime.Services
 {
@@ -340,7 +339,7 @@ namespace Prime.Services
 
                 await _enrolleeAgreementService.CreateEnrolleeAgreementAsync(enrollee.Id);
 
-                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, $"ToA Changed from {currentAgreementType} to {param.AgreementType}, Note: {param.Note}");
+                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, $"TOA Changed from {currentAgreementType} to {param.AgreementType}, Note: {param.Note}");
 
                 await _emailService.SendReminderEmailAsync(enrollee.Id);
                 await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
