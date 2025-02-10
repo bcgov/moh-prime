@@ -343,7 +343,7 @@ export class AdjudicationResource {
           this.toastService.openSuccessToast(`Agreement type changed.`);
         }),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Agreement could not be changed');
+          this.toastService.openErrorToast('Agreement type could not be changed');
           this.logger.error('[Adjudication] AdjudicationResource::changeAgreementType error has occurred: ', error);
           throw error;
         })
