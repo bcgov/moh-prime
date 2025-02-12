@@ -42,9 +42,11 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateEmailLogStatuses([FromQuery] int limit = 10)
         {
+            await _emailService.RetryIncompleteEmailsAsync();
+
             var total = await _emailService.UpdateEmailLogStatuses(limit);
 
-            return Ok($"Updated {limit} of {total}.");
+            return Ok($"Updated {limit} (at most) of {total} found.");
         }
 
         // POST: api/Emails/management/enrollees/renewal

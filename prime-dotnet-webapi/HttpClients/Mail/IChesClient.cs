@@ -7,6 +7,7 @@ namespace Prime.HttpClients.Mail
     {
         Task<Guid?> SendAsync(Email email);
         Task<string> GetStatusAsync(Guid msgId);
+        Task PromoteAsync(Guid msgId);
         Task<bool> HealthCheckAsync();
     }
 }
