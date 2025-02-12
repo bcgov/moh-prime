@@ -107,6 +107,12 @@
       <span>Change Date of Birth</span>
     </button>
     <button mat-menu-item
+            *ngIf="(Role.MANAGE_ENROLLEE | inRole )&& canChangeToA()"
+            (click)="onChangeToA()">
+      <mat-icon>edit</mat-icon>
+      <span>Change TOA</span>
+    </button>
+    <button mat-menu-item
             *ngIf="Role.SUPER_ADMIN | inRole"
             (click)="onDelete()">
       <mat-icon>delete</mat-icon>

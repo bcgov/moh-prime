@@ -13,6 +13,7 @@ namespace Prime.Engines
             {
                 (StatusType.Editable, EnrolleeStatusAction.LockProfile) => true,
                 (StatusType.Editable, EnrolleeStatusAction.DeclineProfile) => true,
+                (StatusType.Editable, EnrolleeStatusAction.ChangeToa) => true,
 
                 (StatusType.UnderReview, EnrolleeStatusAction.Approve) => true,
                 (StatusType.UnderReview, EnrolleeStatusAction.EnableEditing) => true,
