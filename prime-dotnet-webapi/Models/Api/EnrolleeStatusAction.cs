@@ -5,6 +5,7 @@ namespace Prime.Models.Api
         Approve,
         AcceptToa,
         DeclineToa,
+        ChangeToa,
         EnableEditing,
         LockProfile,
         DeclineProfile,

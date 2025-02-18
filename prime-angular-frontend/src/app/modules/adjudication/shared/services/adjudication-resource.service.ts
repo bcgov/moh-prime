@@ -334,6 +334,22 @@ export class AdjudicationResource {
       );
   }
 
+  public changeAgreementType(enrolleeId: number, note: string, agreementType: number): Observable<EnrolleeNote> {
+    const payload = { note, agreementType };
+    return this.apiResource.put(`enrollees/${enrolleeId}/status-actions/change-toa`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeNote>) => response.result),
+        tap(() => {
+          this.toastService.openSuccessToast(`Agreement type changed.`);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Agreement type could not be changed');
+          this.logger.error('[Adjudication] AdjudicationResource::changeAgreementType error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getAccessAgreementNote(enrolleeId: number): Observable<EnrolleeNote> {
     return this.apiResource.get<EnrolleeNote>(`enrollees/${enrolleeId}/access-agreement-notes`)
       .pipe(
