@@ -1376,6 +1376,13 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        private string AbsenceToString(EnrolleeAbsence absence)
+        {
+            var endDateString = absence.EndTimestamp == null ? " with no end date" : $", EndDate: {absence.EndTimestamp:yyyy-MM-dd}";
+
+            return $" Start Date: {absence.StartTimestamp:yyyy-MM-dd}{endDateString}";
+        }
+
         public async Task<EnrolleeAbsence> CreateEnrolleeAbsenceAsync(int enrolleeId, EnrolleeAbsenceViewModel createModel)
         {
             var absence = new EnrolleeAbsence
@@ -1388,7 +1395,7 @@ namespace Prime.Services
             _context.EnrolleeAbsences.Add(absence);
             await _context.SaveChangesAsync();
 
-            await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, "Absence Entered");
+            await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, $"Absence Entered. ({AbsenceToString(absence)})");
 
             return absence;
         }
@@ -1429,7 +1436,8 @@ namespace Prime.Services
                 absence.EndTimestamp = rightNow;
                 await _context.SaveChangesAsync();
             }
-            await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, "Absence Cancelled");
+
+            await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, $"Absence Cancelled ({AbsenceToString(absence)})");
         }
 
         public async Task DeleteFutureEnrolleeAbsenceAsync(int enrolleeId, int absenceId)
@@ -1446,7 +1454,7 @@ namespace Prime.Services
                 await _context.SaveChangesAsync();
             }
 
-            await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, "Absence Cancelled");
+            await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, $"Absence Deleted ({AbsenceToString(absence)})");
         }
 
         public async Task<string> GetAdjudicatorIdirForEnrolleeAsync(int enrolleeId)
