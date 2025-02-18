@@ -11,7 +11,7 @@ namespace Prime.Configuration.Database
             get
             {
                 return new[] {
-                    // Normal Remote Access
+                    // Normal Remote Access for select physician and nurse practitioner license classes
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.PrivateCommunityHealthPractice, LicenseCode = 1 },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.PrivateCommunityHealthPractice, LicenseCode = 2 },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.PrivateCommunityHealthPractice, LicenseCode = 3 },
@@ -37,7 +37,7 @@ namespace Prime.Configuration.Database
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.PrivateCommunityHealthPractice, LicenseCode = 88 },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.PrivateCommunityHealthPractice, LicenseCode = 89 },
 
-                    // FNHA
+                    // FNHA for select physician and nurse practitioner license classes
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 1 },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 2 },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 3 },
@@ -62,7 +62,7 @@ namespace Prime.Configuration.Database
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 87 },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 88 },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 89 },
-
+                    //FNHA for additional nurse license classes
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 35 },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 32 },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 41 },

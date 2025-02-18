@@ -14,6 +14,7 @@ namespace Prime.Models
 
         public string PEC { get; set; }
 
+        //Match Organzation Registration ID
         public string RegistrationId { get; set; }
 
         public int RemoteAccessTypeCode { get; set; }
