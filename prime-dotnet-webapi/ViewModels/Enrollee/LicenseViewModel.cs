@@ -27,6 +27,8 @@ namespace Prime.ViewModels
 
         public ICollection<CollegeLicense> CollegeLicenses { get; set; }
 
+        public ICollection<RemoteAccessTypeLicense> RemoteAccessTypeLicenses { get; set; }
+
         public bool Multijurisdictional { get; set; }
     }
 }

@@ -92,6 +92,7 @@ namespace Prime
         public DbSet<SiteVendor> SiteVendors { get; set; }
         public DbSet<SiteStatus> SiteStatuses { get; set; }
         public DbSet<CommunitySite> CommunitySites { get; set; }
+        public DbSet<ExceptionalRemoteAccessSite> ExceptionalRemoteAccessSites { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<RemoteUser> RemoteUsers { get; set; }

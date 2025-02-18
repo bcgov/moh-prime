@@ -25,6 +25,10 @@
           {{ remoteUser.remoteUserCertification.collegeCode | configCode: 'colleges' | default }}
         </app-enrollee-property>
 
+        <app-enrollee-property title="Licence Class">
+          {{ remoteUser.remoteUserCertification.licenseCode | configCode: 'licenses' | default }}
+        </app-enrollee-property>
+
         <app-enrollee-property *ngIf="remoteUser.remoteUserCertification.licenseNumber"
                                [title]="remoteUser.remoteUserCertification.collegeCode | licenseNumberLabel">
           {{ remoteUser.remoteUserCertification.licenseNumber | default }}
