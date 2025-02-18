@@ -353,6 +353,34 @@ namespace Prime.Services
             await Send(email);
         }
 
+        public async Task RetryIncompleteEmailsAsync()
+        {
+            DateTimeOffset now = DateTimeOffset.Now;
+
+            Expression<Func<EmailLog, bool>> predicate = log =>
+                log.SendType == SendType.Ches
+                && log.MsgId != null
+                && log.LatestStatus != ChesStatus.Completed
+                && log.LatestStatus != null
+                && log.DateSent.Value >= now.AddHours(-PrimeConfiguration.Current.ChesApi.RetryWithinHours);
+
+            var totalCount = await _context.EmailLogs
+                .Where(predicate)
+                .CountAsync();
+
+            var emailLogs = await _context.EmailLogs
+                .Where(predicate)
+                .OrderBy(e => e.DateSent)
+                .ToListAsync();
+
+            foreach (var email in emailLogs)
+            {
+                _logger.LogInformation($"Calling CHES Promote API on message with internal ID {email.Id}, msgId {email.MsgId}, current status '{email.LatestStatus}', originally sent to CHES {email.DateSent} ...");
+                await _chesClient.PromoteAsync(email.MsgId.Value);
+            }
+            _logger.LogInformation($"Retried number of emails:  {totalCount}");
+        }
+
         public async Task<int> UpdateEmailLogStatuses(int limit)
         {
             Expression<Func<EmailLog, bool>> predicate = log =>
@@ -373,10 +401,12 @@ namespace Prime.Services
 
             foreach (var email in emailLogs)
             {
+                _logger.LogInformation($"Calling CHES Status API on message with internal ID {email.Id}, msgId {email.MsgId}, current status '{email.LatestStatus}' ...");
                 var status = await _chesClient.GetStatusAsync(email.MsgId.Value);
                 if (status != null && email.LatestStatus != status)
                 {
                     email.LatestStatus = status;
+                    _logger.LogInformation($"... latest status of message with internal ID {email.Id}, msgId {email.MsgId} is '{email.LatestStatus}'");
                 }
                 email.UpdateCount++;
             }
