@@ -6,6 +6,8 @@ using Newtonsoft.Json.Linq;
 
 namespace Prime.Models
 {
+    //The site listed in this table will have a different licence class list
+    //according to their remote access type
     [Table("ExceptionalRemoteAccessSite")]
     public class ExceptionalRemoteAccessSite
     {
