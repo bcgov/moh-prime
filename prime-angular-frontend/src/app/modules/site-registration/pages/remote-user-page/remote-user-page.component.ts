@@ -24,7 +24,6 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { RemoteUsersPageFormState } from '../remote-users-page/remote-users-page-form-state.class';
 import { Site } from '@registration/shared/models/site.model';
-import { RemoteAccessTypeEnum } from '@shared/enums/remote-access-type.enum';
 
 @Component({
   selector: 'app-remote-user-page',
@@ -101,7 +100,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
         licenceConfig.remoteAccessTypeLicenses.length &&
         licenceConfig.remoteAccessTypeLicenses.some((r) => r.remoteAccessTypeCode === this.site.remoteAccessTypeCode);
     } else {
-      return null;
+      return false;
     }
   }
 

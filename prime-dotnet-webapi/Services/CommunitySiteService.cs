@@ -136,7 +136,7 @@ namespace Prime.Services
                 site.Organization != null &&
                 site.Organization.RegistrationId != null)
             {
-                var eras = await matchExceptionalRemoteAccessSite(site.PEC, site.Organization.RegistrationId);
+                var eras = await matchExceptionRemoteAccessSite(site.PEC, site.Organization.RegistrationId);
                 site.RemoteAccessTypeCode = eras != null ? eras.RemoteAccessTypeCode : (int)RemoteAccessTypeEnum.PrivateCommunityHealthPractice;
             }
 
@@ -714,9 +714,9 @@ namespace Prime.Services
                 .Include(s => s.SiteSubmissions);
         }
 
-        private async Task<ExceptionalRemoteAccessSite> matchExceptionalRemoteAccessSite(string siteId, string registrationId)
+        private async Task<ExceptionRemoteAccessSite> matchExceptionRemoteAccessSite(string siteId, string registrationId)
         {
-            return await _context.ExceptionalRemoteAccessSites
+            return await _context.ExceptionRemoteAccessSites
                 .Where(s => s.PEC == siteId && s.RegistrationId == registrationId).SingleOrDefaultAsync();
         }
     }
