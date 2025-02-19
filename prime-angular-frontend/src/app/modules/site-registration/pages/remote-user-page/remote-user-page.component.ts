@@ -23,6 +23,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { RemoteUsersPageFormState } from '../remote-users-page/remote-users-page-form-state.class';
+import { Site } from '@registration/shared/models/site.model';
 
 @Component({
   selector: 'app-remote-user-page',
@@ -53,6 +54,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    */
   public remoteUserIndex: string;
   public remoteUser: RemoteUser;
+  public site: Site;
   public licenses: LicenseConfig[];
   public formControlNames: AddressLine[];
   public SiteRoutes = SiteRoutes;
@@ -72,6 +74,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.licenses = this.configService.licenses;
     this.remoteUserIndex = route.snapshot.params.index;
+    this.site = siteService.site;
   }
 
   /**
@@ -92,8 +95,13 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public licenceFilterPredicate() {
-    return (licenceConfig: LicenseConfig) =>
-      this.enrolmentService.hasAllowedRemoteAccessLicences(licenceConfig);
+    if (this.site.remoteAccessTypeCode) {
+      return (licenceConfig: LicenseConfig) =>
+        licenceConfig.remoteAccessTypeLicenses.length &&
+        licenceConfig.remoteAccessTypeLicenses.some((r) => r.remoteAccessTypeCode === this.site.remoteAccessTypeCode);
+    } else {
+      return false;
+    }
   }
 
   /**

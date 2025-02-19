@@ -128,8 +128,19 @@ namespace Prime.Services
 
         public async Task<CommunitySite> GetSiteAsync(int siteId)
         {
-            return await GetBaseSiteQuery()
+            var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
+
+            if (site.CareSettingCode.HasValue &&
+                site.CareSettingCode.Value == (int)CareSettingType.CommunityPractice &&
+                site.Organization != null &&
+                site.Organization.RegistrationId != null)
+            {
+                var eras = await matchExceptionRemoteAccessSite(site.PEC, site.Organization.RegistrationId);
+                site.RemoteAccessTypeCode = eras != null ? eras.RemoteAccessTypeCode : (int)RemoteAccessTypeEnum.PrivateCommunityHealthPractice;
+            }
+
+            return site;
         }
 
         public async Task<List<Vendor>> GetVendorsAsync()
@@ -701,6 +712,12 @@ namespace Prime.Services
                 .Include(s => s.Adjudicator)
                 .Include(s => s.SiteStatuses)
                 .Include(s => s.SiteSubmissions);
+        }
+
+        private async Task<ExceptionRemoteAccessSite> matchExceptionRemoteAccessSite(string siteId, string registrationId)
+        {
+            return await _context.ExceptionRemoteAccessSites
+                .Where(s => s.PEC == siteId && s.RegistrationId == registrationId).SingleOrDefaultAsync();
         }
     }
 }
