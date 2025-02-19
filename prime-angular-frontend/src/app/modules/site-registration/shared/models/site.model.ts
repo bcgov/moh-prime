@@ -55,6 +55,7 @@ export class Site {
   currentSubmission: SiteSubmission;
   siteSubmissions: SiteSubmission[];
   missingBusinessLicence: boolean;
+  remoteAccessTypeCode: number;
 
   public static getExpiryDate(site: Site | SiteListViewModel): string | null {
     if (!site) {
