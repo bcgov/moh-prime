@@ -234,6 +234,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             }
           });
           this.toastService.openSuccessToast(`Email was successfully sent to ${emails.join(", ")}`);
+          this.emailForm.reset();
           this.router.navigate([this.EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY],
             { relativeTo: this.route.parent, queryParams: { initialEnrolment: this.initialEnrolment, complete: 'true' } });
         });
