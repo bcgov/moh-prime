@@ -22,6 +22,7 @@ import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/clas
 import { RemoteUsersPageFormState } from './remote-users-page-form-state.class';
 import { LicenseNumberLabelPipe } from '@shared/pipes/license-number-label.pipe';
 import { CollegeNamePipe } from '@shared/pipes/college-name.pipe';
+import { ConfigCodePipe } from '@config/config-code.pipe';
 
 @UntilDestroy()
 @Component({
@@ -49,6 +50,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     protected siteResource: SiteResource,
     protected licenseNumberLabelPipe: LicenseNumberLabelPipe,
     protected collegeNamePipe: CollegeNamePipe,
+    protected configCodePipe: ConfigCodePipe,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -66,6 +68,10 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
       {
         key: 'College',
         value: this.collegeNamePipe.transform(remoteUserCertification.value.collegeCode),
+      },
+      {
+        key: 'Licence Class',
+        value: this.configCodePipe.transform(remoteUserCertification.value.licenseCode, 'licenses')
       },
       {
         key: this.licenseNumberLabelPipe.transform(remoteUserCertification.value.collegeCode),
