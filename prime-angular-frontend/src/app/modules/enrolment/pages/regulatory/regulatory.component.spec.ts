@@ -29,6 +29,8 @@ import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { RegulatoryFormState } from './regulatory-form-state';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { CareSettingForm } from '@paper-enrolment/pages/care-setting-page/care-setting-form.model';
 
 describe('RegulatoryComponent', () => {
   let component: RegulatoryComponent;
@@ -171,12 +173,10 @@ describe('RegulatoryComponent', () => {
             unlistedCertifications: [],
           } as EnrolmentRegulatoryForm;
 
-          spyOn<any>((component as any).enrolmentService, 'canRequestRemoteAccess')
-            .and.callFake(() => true);
-
           component.formState.patchValue(mockRegulatoryForm);
           component.isProfileComplete = false;
           component.isDeviceProvider = false;
+          component.hasMatchingRemoteUser = true;
 
           (component as any).nextRouteAfterSubmit();
 
@@ -196,12 +196,10 @@ describe('RegulatoryComponent', () => {
             unlistedCertifications: [],
           } as EnrolmentRegulatoryForm;
 
-          spyOn<any>((component as any).enrolmentService, 'canRequestRemoteAccess')
-            .and.callFake(() => false);
-
           component.formState.patchValue(mockRegulatoryForm);
           component.isProfileComplete = false;
           component.isDeviceProvider = false;
+          component.hasMatchingRemoteUser = false;
           component.addEmptyCollegeCertification();
 
           (component as any).nextRouteAfterSubmit();

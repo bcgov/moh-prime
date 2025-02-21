@@ -132,7 +132,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.patchForm().subscribe(() => {
       this.initForm();
     });
-    this.canRequestRemoteAccess();
+    this.checkRemoteAccess();
     this.multijurisdictionalLicences = this.configService.licenses.filter(l => l.multijurisdictional);
   }
 
@@ -167,7 +167,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.formState.form.valueChanges
       .pipe(map((_) => this.hasMatchingRemoteUser && !this.isInitialEnrolment))
       .subscribe((couldRequestRemoteAccess: boolean) => {
-        this.canRequestRemoteAccess();
+        this.checkRemoteAccess();
         this.hasMatchingRemoteUser = couldRequestRemoteAccess && this.hasMatchingRemoteUser;
       }
       );
@@ -264,14 +264,13 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
   protected nextRouteAfterSubmit() {
     const certifications = this.formState.collegeCertifications;
-    const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value as CareSetting[];
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       // If DP Role Code is "None", we go to Job Site page
       nextRoutePath = (!certifications.length || (this.isDeviceProvider && this.formState.deviceProviderRoleCode.value === 15))
         ? EnrolmentRoutes.OBO_SITES
-        : (!this.hasMatchingRemoteUser)
+        : (this.hasMatchingRemoteUser)
           ? EnrolmentRoutes.REMOTE_ACCESS
           : EnrolmentRoutes.SELF_DECLARATION;
     }
@@ -325,33 +324,32 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     }
   }
 
-
-  private canRequestRemoteAccess(): void {
-    const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
+  private checkRemoteAccess(): void {
     const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
 
     if (!careSettings.some(cs => cs.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE)) {
       this.hasMatchingRemoteUser = false;
-    }
+    } else {
+      const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
+      const certSearch: CertSearch[] = certifications
+        .map(c => ({
+          collegeCode: c.collegeCode,
+          licenseCode: c.licenseCode,
+          licenceNumber: c.licenseNumber,
+          practitionerId: c.practitionerId
+        }));
 
-    const certSearch: CertSearch[] = certifications
-      .map(c => ({
-        collegeCode: c.collegeCode,
-        licenseCode: c.licenseCode,
-        licenceNumber: c.licenseNumber,
-        practitionerId: c.practitionerId
-      }));
-
-    if (certSearch.length) {
-      this.siteResource.getSitesByRemoteUserInfo(certSearch)
-        .subscribe(
-          (remoteAccessSearch: RemoteAccessSearch[]) => {
-            if (remoteAccessSearch.length) {
-              this.hasMatchingRemoteUser = true
-            } else {
-              this.hasMatchingRemoteUser = this.hasMatchingRemoteUser || false
-            }
-          });
+      if (certSearch.length) {
+        this.siteResource.getSitesByRemoteUserInfo(certSearch)
+          .subscribe(
+            (remoteAccessSearch: RemoteAccessSearch[]) => {
+              if (remoteAccessSearch.length) {
+                this.hasMatchingRemoteUser = true
+              } else {
+                this.hasMatchingRemoteUser = this.hasMatchingRemoteUser || false
+              }
+            });
+      }
     }
   }
 
