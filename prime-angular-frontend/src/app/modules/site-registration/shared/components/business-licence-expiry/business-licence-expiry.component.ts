@@ -34,13 +34,14 @@ export class BusinessLicenceExpiryComponent implements OnInit {
   public onChange(event: MatSlideToggleChange): void {
     this.showExpiryDate = !event.checked
     let expiryDateControl = this.form.get('expiryDate');
+
     if (event.checked) {
       expiryDateControl.reset();
       expiryDateControl.clearValidators();
       expiryDateControl.updateValueAndValidity();
     } else {
       expiryDateControl.setValidators([Validators.required]);
+      expiryDateControl.updateValueAndValidity();
     }
-    this.form.markAsUntouched();
   }
 }

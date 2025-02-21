@@ -38,6 +38,8 @@ namespace PrimeTests.ModelFactories
             // TODO: is BusinessLicenceFactory complete?
             RuleFor(x => x.BusinessLicences, (f, x) => new BusinessLicenceFactory(x).GenerateBetween(1, 3));
 
+            RuleFor(x => x.RemoteAccessTypeCode, f => f.Random.Number(1, 2))
+
             Ignore(x => x.AdministratorPharmaNetId);
             Ignore(x => x.PrivacyOfficerId);
             Ignore(x => x.TechnicalSupportId);
@@ -57,6 +59,8 @@ namespace PrimeTests.ModelFactories
             // The following are populated in FinishWith section
             Ignore(x => x.SiteStatuses);
             Ignore(x => x.ApprovedDate);
+            Ignore(x => x.SiteSubmissions);
+            Ignore(x => x.RemoteAccessTypeCode);
 
             FinishWith((f, x) =>
             {

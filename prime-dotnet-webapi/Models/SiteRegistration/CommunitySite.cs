@@ -74,5 +74,8 @@ namespace Prime.Models
 
             return DateTimeOffset.Now >= expiryDate.AddDays(-30);
         }
+
+        [NotMapped]
+        public int? RemoteAccessTypeCode { get; set; }
     }
 }

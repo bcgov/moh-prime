@@ -48,6 +48,8 @@ export class LicenseConfig extends Config<number> implements IWeightedConfig {
   validate: boolean;
   manual: boolean;
   prescriberIdType: PrescriberIdTypeEnum;
+  multijurisdictional: boolean;
+  remoteAccessTypeLicenses: RemoteAccessTypeLicense[];
 }
 
 export interface CollegeLicenseConfig {
@@ -55,6 +57,10 @@ export interface CollegeLicenseConfig {
   licenseCode: number;
   collegeLicenseGroupingCode: number;
   discontinued: boolean;
+}
+
+export interface RemoteAccessTypeLicense {
+  remoteAccessTypeCode: number;
 }
 
 export class CollegeLicenseGroupingConfig extends Config<number> implements IWeightedConfig {

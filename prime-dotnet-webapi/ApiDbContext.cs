@@ -71,6 +71,7 @@ namespace Prime
         public DbSet<DefaultPrivilege> DefaultPrivileges { get; set; }
         public DbSet<AssignedPrivilege> AssignedPrivileges { get; set; }
         public DbSet<Submission> Submissions { get; set; }
+        public DbSet<SiteSubmission> SiteSubmissions { get; set; }
         public DbSet<EnrolleeNote> EnrolleeNotes { get; set; }
         public DbSet<EmailLog> EmailLogs { get; set; }
         public DbSet<SiteRegistrationNote> SiteRegistrationNotes { get; set; }
@@ -83,6 +84,7 @@ namespace Prime
         public DbSet<RemoteAccessSite> RemoteAccessSites { get; set; }
         public DbSet<EnrolleeAbsence> EnrolleeAbsences { get; set; }
         public DbSet<Certification> Certifications { get; set; }
+        public DbSet<UnlistedCertification> UnlistedCertifications { get; set; }
 
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }
@@ -90,6 +92,7 @@ namespace Prime
         public DbSet<SiteVendor> SiteVendors { get; set; }
         public DbSet<SiteStatus> SiteStatuses { get; set; }
         public DbSet<CommunitySite> CommunitySites { get; set; }
+        public DbSet<ExceptionRemoteAccessSite> ExceptionRemoteAccessSites { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<RemoteUser> RemoteUsers { get; set; }

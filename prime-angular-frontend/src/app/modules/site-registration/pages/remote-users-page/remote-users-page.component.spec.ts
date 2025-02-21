@@ -20,6 +20,7 @@ import { LicenseNumberLabelPipe } from '@shared/pipes/license-number-label.pipe'
 import { CollegeNamePipe } from '@shared/pipes/college-name.pipe';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { ConfigCodePipe } from '@config/config-code.pipe';
 
 describe('RemoteUsersPageComponent', () => {
   let component: RemoteUsersPageComponent;
@@ -38,7 +39,7 @@ describe('RemoteUsersPageComponent', () => {
       declarations: [
         RemoteUsersPageComponent,
         AddressPipe,
-        FullnamePipe
+        FullnamePipe,
       ],
       providers: [
         LicenseNumberLabelPipe,
@@ -56,6 +57,7 @@ describe('RemoteUsersPageComponent', () => {
           useClass: MockConfigService
         },
         AddressPipe,
+        ConfigCodePipe,
         KeycloakService
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -68,7 +70,7 @@ describe('RemoteUsersPageComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', inject([LicenseNumberLabelPipe, CollegeNamePipe], () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
-  }));
+  });
 });

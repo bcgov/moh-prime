@@ -16,6 +16,7 @@ namespace Prime.Models
             // Initialize collections to prevent null exception on computed properties
             // like `Status`
             SiteStatuses = new List<SiteStatus>();
+            SiteSubmissions = new List<SiteSubmission>();
         }
 
         [Key]
@@ -56,6 +57,8 @@ namespace Prime.Models
 
         public Admin Adjudicator { get; set; }
 
+        public DateTimeOffset? DeletedDate { get; set; }
+
         [JsonIgnore]
         public ICollection<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }
 
@@ -65,6 +68,8 @@ namespace Prime.Models
         public ICollection<SiteRegistrationNote> SiteRegistrationNotes { get; set; }
 
         public ICollection<BusinessDay> BusinessHours { get; set; }
+
+        public ICollection<SiteSubmission> SiteSubmissions { get; set; }
 
         public SiteStatus AddStatus(SiteStatusType siteStatusType)
         {
@@ -102,6 +107,19 @@ namespace Prime.Models
                 .Where(h => atTime == null || h.IsOpen(atTime.Value))
                 .Select(b => b.Day)
                 .Distinct();
+        }
+
+        /// <summary>
+        /// Gets the most recent site submission.
+        /// </summary>
+        [NotMapped]
+        [Computed]
+        public SiteSubmission CurrentSubmission
+        {
+            get => SiteSubmissions
+                .OrderByDescending(ss => ss.CreatedDate)
+                .ThenByDescending(ss => ss.Id)
+                .FirstOrDefault();
         }
     }
 }

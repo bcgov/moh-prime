@@ -176,7 +176,22 @@ namespace Prime.Engines.AgreementEngineInternal
         {
             if (Regulated)
             {
-                return AgreementType.PharmacyTechnicianTOA;
+                // If only Community Pharmacy, return Pharmacy Obo ToA
+                if (!settings.Multiple && settings.HasCommunityPharmacy)
+                {
+                    return AgreementType.PharmacyOboTOA;
+                }
+                else
+                {
+                    if (settings.Multiple)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return AgreementType.PharmacyTechnicianTOA;
+                    }
+                }
             }
             else
             {

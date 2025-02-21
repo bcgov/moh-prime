@@ -1581,6 +1581,12 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            CollegeCode = 2,
+                            LicenseCode = 178,
+                            Discontinued = false
+                        },
+                        new
+                        {
                             CollegeCode = 3,
                             LicenseCode = 32,
                             CollegeLicenseGroupingCode = 2,
@@ -5881,6 +5887,28 @@ namespace Prime.Migrations
                     b.ToTable("EnrolmentStatusReference");
                 });
 
+            modelBuilder.Entity("Prime.Models.ExceptionRemoteAccessSite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("PEC")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RegistrationId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("RemoteAccessTypeCode")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExceptionRemoteAccessSite");
+                });
+
             modelBuilder.Entity("Prime.Models.Facility", b =>
                 {
                     b.Property<int>("Code")
@@ -6951,49 +6979,55 @@ namespace Prime.Migrations
                         {
                             Code = 25,
                             Name = "Full Pharmacist",
-                            Weight = 1
+                            Weight = 10
                         },
                         new
                         {
                             Code = 26,
                             Name = "Limited Pharmacist",
-                            Weight = 2
+                            Weight = 20
                         },
                         new
                         {
                             Code = 28,
                             Name = "Student Pharmacist",
-                            Weight = 3
+                            Weight = 30
                         },
                         new
                         {
                             Code = 27,
                             Name = "Temporary Pharmacist",
-                            Weight = 4
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 178,
+                            Name = "Temporary Limited Pharmacist",
+                            Weight = 45
                         },
                         new
                         {
                             Code = 30,
                             Name = "Non-Practicing Pharmacist",
-                            Weight = 5
+                            Weight = 50
                         },
                         new
                         {
                             Code = 29,
                             Name = "Pharmacy Technician",
-                            Weight = 6
+                            Weight = 60
                         },
                         new
                         {
                             Code = 31,
                             Name = "Non-Practicing Pharmacy Technician",
-                            Weight = 7
+                            Weight = 70
                         },
                         new
                         {
                             Code = 68,
                             Name = "Temporary Pharmacy Technician",
-                            Weight = 8
+                            Weight = 80
                         },
                         new
                         {
@@ -7800,6 +7834,9 @@ namespace Prime.Migrations
                     b.Property<bool>("Manual")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("Multijurisdictional")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("NamedInImReg")
                         .HasColumnType("boolean");
 
@@ -7838,6 +7875,7 @@ namespace Prime.Migrations
                             LicenseCode = 1,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -7854,6 +7892,7 @@ namespace Prime.Migrations
                             LicenseCode = 2,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -7870,6 +7909,7 @@ namespace Prime.Migrations
                             LicenseCode = 5,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -7886,6 +7926,7 @@ namespace Prime.Migrations
                             LicenseCode = 6,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -7902,6 +7943,7 @@ namespace Prime.Migrations
                             LicenseCode = 9,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -7918,6 +7960,7 @@ namespace Prime.Migrations
                             LicenseCode = 8,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -7934,6 +7977,7 @@ namespace Prime.Migrations
                             LicenseCode = 10,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -7950,6 +7994,7 @@ namespace Prime.Migrations
                             LicenseCode = 22,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -7966,6 +8011,7 @@ namespace Prime.Migrations
                             LicenseCode = 16,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -7982,6 +8028,7 @@ namespace Prime.Migrations
                             LicenseCode = 7,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -7998,6 +8045,7 @@ namespace Prime.Migrations
                             LicenseCode = 4,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8014,6 +8062,7 @@ namespace Prime.Migrations
                             LicenseCode = 3,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8030,6 +8079,7 @@ namespace Prime.Migrations
                             LicenseCode = 17,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8046,6 +8096,7 @@ namespace Prime.Migrations
                             LicenseCode = 12,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8062,6 +8113,7 @@ namespace Prime.Migrations
                             LicenseCode = 13,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8078,6 +8130,7 @@ namespace Prime.Migrations
                             LicenseCode = 14,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8094,6 +8147,7 @@ namespace Prime.Migrations
                             LicenseCode = 15,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8110,6 +8164,7 @@ namespace Prime.Migrations
                             LicenseCode = 11,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8126,6 +8181,7 @@ namespace Prime.Migrations
                             LicenseCode = 23,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8142,6 +8198,7 @@ namespace Prime.Migrations
                             LicenseCode = 20,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8158,6 +8215,7 @@ namespace Prime.Migrations
                             LicenseCode = 24,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8174,6 +8232,7 @@ namespace Prime.Migrations
                             LicenseCode = 18,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8190,6 +8249,7 @@ namespace Prime.Migrations
                             LicenseCode = 19,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8206,6 +8266,7 @@ namespace Prime.Migrations
                             LicenseCode = 21,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8222,6 +8283,7 @@ namespace Prime.Migrations
                             LicenseCode = 59,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8238,6 +8300,7 @@ namespace Prime.Migrations
                             LicenseCode = 65,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8254,6 +8317,7 @@ namespace Prime.Migrations
                             LicenseCode = 66,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8270,6 +8334,7 @@ namespace Prime.Migrations
                             LicenseCode = 67,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8286,6 +8351,7 @@ namespace Prime.Migrations
                             LicenseCode = 25,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "P1",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8302,6 +8368,7 @@ namespace Prime.Migrations
                             LicenseCode = 26,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "P1",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8318,6 +8385,7 @@ namespace Prime.Migrations
                             LicenseCode = 28,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "P1",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8334,6 +8402,7 @@ namespace Prime.Migrations
                             LicenseCode = 27,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "P1",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8350,6 +8419,7 @@ namespace Prime.Migrations
                             LicenseCode = 30,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "P1",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8366,6 +8436,7 @@ namespace Prime.Migrations
                             LicenseCode = 29,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "T9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8382,6 +8453,7 @@ namespace Prime.Migrations
                             LicenseCode = 31,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "T9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8398,6 +8470,7 @@ namespace Prime.Migrations
                             LicenseCode = 68,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "T9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8414,6 +8487,7 @@ namespace Prime.Migrations
                             LicenseCode = 29,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "T9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8430,6 +8504,7 @@ namespace Prime.Migrations
                             LicenseCode = 31,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "T9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8446,6 +8521,7 @@ namespace Prime.Migrations
                             LicenseCode = 68,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "T9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8462,6 +8538,7 @@ namespace Prime.Migrations
                             LicenseCode = 47,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "96",
                             PrescriberIdType = 2,
@@ -8479,6 +8556,7 @@ namespace Prime.Migrations
                             LicenseCode = 48,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8495,6 +8573,7 @@ namespace Prime.Migrations
                             LicenseCode = 51,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "96",
                             PrescriberIdType = 2,
@@ -8512,6 +8591,7 @@ namespace Prime.Migrations
                             LicenseCode = 49,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8528,6 +8608,7 @@ namespace Prime.Migrations
                             LicenseCode = 32,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "R9",
                             PrescriberIdType = 1,
@@ -8545,6 +8626,7 @@ namespace Prime.Migrations
                             LicenseCode = 33,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8561,6 +8643,7 @@ namespace Prime.Migrations
                             LicenseCode = 39,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "R9",
                             PrescriberIdType = 1,
@@ -8578,6 +8661,7 @@ namespace Prime.Migrations
                             LicenseCode = 34,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8594,6 +8678,7 @@ namespace Prime.Migrations
                             LicenseCode = 40,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8610,6 +8695,7 @@ namespace Prime.Migrations
                             LicenseCode = 35,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "R9",
                             PrescriberIdType = 1,
@@ -8627,6 +8713,7 @@ namespace Prime.Migrations
                             LicenseCode = 36,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8643,6 +8730,7 @@ namespace Prime.Migrations
                             LicenseCode = 37,
                             LicensedToProvideCare = false,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8659,6 +8747,7 @@ namespace Prime.Migrations
                             LicenseCode = 41,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "Y9",
                             PrescriberIdType = 1,
@@ -8676,6 +8765,7 @@ namespace Prime.Migrations
                             LicenseCode = 42,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "Y9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8692,6 +8782,7 @@ namespace Prime.Migrations
                             LicenseCode = 45,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "Y9",
                             PrescriberIdType = 1,
@@ -8709,6 +8800,7 @@ namespace Prime.Migrations
                             LicenseCode = 43,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "Y9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8725,6 +8817,7 @@ namespace Prime.Migrations
                             LicenseCode = 46,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "Y9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8741,6 +8834,7 @@ namespace Prime.Migrations
                             LicenseCode = 52,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8757,6 +8851,7 @@ namespace Prime.Migrations
                             LicenseCode = 53,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8773,6 +8868,7 @@ namespace Prime.Migrations
                             LicenseCode = 55,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8789,6 +8885,7 @@ namespace Prime.Migrations
                             LicenseCode = 54,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8805,6 +8902,7 @@ namespace Prime.Migrations
                             LicenseCode = 60,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8821,6 +8919,7 @@ namespace Prime.Migrations
                             LicenseCode = 61,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8837,6 +8936,7 @@ namespace Prime.Migrations
                             LicenseCode = 62,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8853,6 +8953,7 @@ namespace Prime.Migrations
                             LicenseCode = 63,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8869,6 +8970,7 @@ namespace Prime.Migrations
                             LicenseCode = 69,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8885,6 +8987,7 @@ namespace Prime.Migrations
                             LicenseCode = 70,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8901,6 +9004,7 @@ namespace Prime.Migrations
                             LicenseCode = 71,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8917,6 +9021,7 @@ namespace Prime.Migrations
                             LicenseCode = 72,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8933,6 +9038,7 @@ namespace Prime.Migrations
                             LicenseCode = 73,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8949,6 +9055,7 @@ namespace Prime.Migrations
                             LicenseCode = 74,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8965,6 +9072,7 @@ namespace Prime.Migrations
                             LicenseCode = 32,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "R9",
                             PrescriberIdType = 1,
@@ -8982,6 +9090,7 @@ namespace Prime.Migrations
                             LicenseCode = 33,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -8998,6 +9107,7 @@ namespace Prime.Migrations
                             LicenseCode = 34,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9014,6 +9124,7 @@ namespace Prime.Migrations
                             LicenseCode = 39,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "R9",
                             PrescriberIdType = 2,
@@ -9031,6 +9142,7 @@ namespace Prime.Migrations
                             LicenseCode = 41,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "Y9",
                             PrescriberIdType = 2,
@@ -9048,6 +9160,7 @@ namespace Prime.Migrations
                             LicenseCode = 42,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "Y9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9064,6 +9177,7 @@ namespace Prime.Migrations
                             LicenseCode = 43,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "Y9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9080,6 +9194,7 @@ namespace Prime.Migrations
                             LicenseCode = 45,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "Y9",
                             PrescriberIdType = 2,
@@ -9097,6 +9212,7 @@ namespace Prime.Migrations
                             LicenseCode = 52,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9113,6 +9229,7 @@ namespace Prime.Migrations
                             LicenseCode = 53,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9129,6 +9246,7 @@ namespace Prime.Migrations
                             LicenseCode = 54,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9145,6 +9263,7 @@ namespace Prime.Migrations
                             LicenseCode = 55,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9161,6 +9280,7 @@ namespace Prime.Migrations
                             LicenseCode = 60,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             PrescriberIdType = 2,
@@ -9178,6 +9298,7 @@ namespace Prime.Migrations
                             LicenseCode = 61,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9194,6 +9315,7 @@ namespace Prime.Migrations
                             LicenseCode = 62,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             PrescriberIdType = 2,
@@ -9211,6 +9333,7 @@ namespace Prime.Migrations
                             LicenseCode = 63,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9227,6 +9350,7 @@ namespace Prime.Migrations
                             LicenseCode = 32,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "R9",
                             PrescriberIdType = 1,
@@ -9244,6 +9368,7 @@ namespace Prime.Migrations
                             LicenseCode = 33,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9260,6 +9385,7 @@ namespace Prime.Migrations
                             LicenseCode = 34,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9276,6 +9402,7 @@ namespace Prime.Migrations
                             LicenseCode = 39,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "R9",
                             PrescriberIdType = 1,
@@ -9293,6 +9420,7 @@ namespace Prime.Migrations
                             LicenseCode = 41,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "Y9",
                             PrescriberIdType = 1,
@@ -9310,6 +9438,7 @@ namespace Prime.Migrations
                             LicenseCode = 42,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "Y9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9326,6 +9455,7 @@ namespace Prime.Migrations
                             LicenseCode = 43,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "Y9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9342,6 +9472,7 @@ namespace Prime.Migrations
                             LicenseCode = 45,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "Y9",
                             PrescriberIdType = 1,
@@ -9359,6 +9490,7 @@ namespace Prime.Migrations
                             LicenseCode = 52,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9375,6 +9507,7 @@ namespace Prime.Migrations
                             LicenseCode = 53,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9391,6 +9524,7 @@ namespace Prime.Migrations
                             LicenseCode = 54,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9407,6 +9541,7 @@ namespace Prime.Migrations
                             LicenseCode = 55,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9423,6 +9558,7 @@ namespace Prime.Migrations
                             LicenseCode = 60,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9439,6 +9575,7 @@ namespace Prime.Migrations
                             LicenseCode = 61,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9455,6 +9592,7 @@ namespace Prime.Migrations
                             LicenseCode = 63,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9471,6 +9609,7 @@ namespace Prime.Migrations
                             LicenseCode = 62,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9487,6 +9626,7 @@ namespace Prime.Migrations
                             LicenseCode = 48,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9503,6 +9643,7 @@ namespace Prime.Migrations
                             LicenseCode = 59,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9519,6 +9660,7 @@ namespace Prime.Migrations
                             LicenseCode = 65,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9535,6 +9677,7 @@ namespace Prime.Migrations
                             LicenseCode = 66,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9551,6 +9694,7 @@ namespace Prime.Migrations
                             LicenseCode = 67,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9567,6 +9711,7 @@ namespace Prime.Migrations
                             LicenseCode = 70,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9583,6 +9728,7 @@ namespace Prime.Migrations
                             LicenseCode = 75,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9599,6 +9745,7 @@ namespace Prime.Migrations
                             LicenseCode = 76,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9615,6 +9762,7 @@ namespace Prime.Migrations
                             LicenseCode = 77,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9631,6 +9779,7 @@ namespace Prime.Migrations
                             LicenseCode = 78,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "97",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9647,6 +9796,7 @@ namespace Prime.Migrations
                             LicenseCode = 79,
                             LicensedToProvideCare = false,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "97",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9663,6 +9813,7 @@ namespace Prime.Migrations
                             LicenseCode = 80,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "97",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9679,6 +9830,7 @@ namespace Prime.Migrations
                             LicenseCode = 81,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "97",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9695,6 +9847,7 @@ namespace Prime.Migrations
                             LicenseCode = 64,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9711,6 +9864,7 @@ namespace Prime.Migrations
                             LicenseCode = 1,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9727,6 +9881,7 @@ namespace Prime.Migrations
                             LicenseCode = 2,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9743,6 +9898,7 @@ namespace Prime.Migrations
                             LicenseCode = 3,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9759,6 +9915,7 @@ namespace Prime.Migrations
                             LicenseCode = 4,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9775,6 +9932,7 @@ namespace Prime.Migrations
                             LicenseCode = 5,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9791,6 +9949,7 @@ namespace Prime.Migrations
                             LicenseCode = 6,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9807,6 +9966,7 @@ namespace Prime.Migrations
                             LicenseCode = 8,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9823,6 +9983,7 @@ namespace Prime.Migrations
                             LicenseCode = 9,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9839,6 +10000,7 @@ namespace Prime.Migrations
                             LicenseCode = 10,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9855,6 +10017,7 @@ namespace Prime.Migrations
                             LicenseCode = 12,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9871,6 +10034,7 @@ namespace Prime.Migrations
                             LicenseCode = 13,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9887,6 +10051,7 @@ namespace Prime.Migrations
                             LicenseCode = 14,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9903,6 +10068,7 @@ namespace Prime.Migrations
                             LicenseCode = 18,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9919,6 +10085,7 @@ namespace Prime.Migrations
                             LicenseCode = 19,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9935,6 +10102,7 @@ namespace Prime.Migrations
                             LicenseCode = 22,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9951,6 +10119,7 @@ namespace Prime.Migrations
                             LicenseCode = 47,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "96",
                             PrescriberIdType = 2,
@@ -9968,6 +10137,7 @@ namespace Prime.Migrations
                             LicenseCode = 48,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9984,6 +10154,7 @@ namespace Prime.Migrations
                             LicenseCode = 51,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "96",
                             PrescriberIdType = 2,
@@ -10001,6 +10172,7 @@ namespace Prime.Migrations
                             LicenseCode = 59,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10017,6 +10189,7 @@ namespace Prime.Migrations
                             LicenseCode = 60,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10033,6 +10206,7 @@ namespace Prime.Migrations
                             LicenseCode = 61,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10049,6 +10223,7 @@ namespace Prime.Migrations
                             LicenseCode = 62,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10065,6 +10240,7 @@ namespace Prime.Migrations
                             LicenseCode = 66,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10081,6 +10257,7 @@ namespace Prime.Migrations
                             LicenseCode = 67,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10097,6 +10274,7 @@ namespace Prime.Migrations
                             LicenseCode = 41,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "Y9",
                             PrescriberIdType = 2,
@@ -10114,6 +10292,7 @@ namespace Prime.Migrations
                             LicenseCode = 42,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "Y9",
                             PrescriberIdType = 2,
@@ -10131,6 +10310,7 @@ namespace Prime.Migrations
                             LicenseCode = 43,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "Y9",
                             PrescriberIdType = 2,
@@ -10148,6 +10328,7 @@ namespace Prime.Migrations
                             LicenseCode = 45,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "Y9",
                             PrescriberIdType = 2,
@@ -10165,6 +10346,7 @@ namespace Prime.Migrations
                             LicenseCode = 46,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "Y9",
                             PrescriberIdType = 2,
@@ -10182,6 +10364,7 @@ namespace Prime.Migrations
                             LicenseCode = 65,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10198,6 +10381,7 @@ namespace Prime.Migrations
                             LicenseCode = 32,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "R9",
                             PrescriberIdType = 1,
@@ -10215,6 +10399,7 @@ namespace Prime.Migrations
                             LicenseCode = 33,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "R9",
                             PrescriberIdType = 1,
@@ -10232,6 +10417,7 @@ namespace Prime.Migrations
                             LicenseCode = 34,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10248,6 +10434,7 @@ namespace Prime.Migrations
                             LicenseCode = 35,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "R9",
                             PrescriberIdType = 1,
@@ -10265,6 +10452,7 @@ namespace Prime.Migrations
                             LicenseCode = 36,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "R9",
                             PrescriberIdType = 1,
@@ -10282,6 +10470,7 @@ namespace Prime.Migrations
                             LicenseCode = 37,
                             LicensedToProvideCare = false,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10298,6 +10487,7 @@ namespace Prime.Migrations
                             LicenseCode = 39,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "R9",
                             PrescriberIdType = 1,
@@ -10315,6 +10505,7 @@ namespace Prime.Migrations
                             LicenseCode = 41,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "Y9",
                             PrescriberIdType = 1,
@@ -10332,6 +10523,7 @@ namespace Prime.Migrations
                             LicenseCode = 42,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "Y9",
                             PrescriberIdType = 1,
@@ -10349,6 +10541,7 @@ namespace Prime.Migrations
                             LicenseCode = 43,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "Y9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10365,6 +10558,7 @@ namespace Prime.Migrations
                             LicenseCode = 45,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "Y9",
                             PrescriberIdType = 1,
@@ -10382,6 +10576,7 @@ namespace Prime.Migrations
                             LicenseCode = 46,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "Y9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10398,6 +10593,7 @@ namespace Prime.Migrations
                             LicenseCode = 47,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "96",
                             PrescriberIdType = 1,
@@ -10415,6 +10611,7 @@ namespace Prime.Migrations
                             LicenseCode = 48,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "96",
                             PrescriberIdType = 1,
@@ -10432,6 +10629,7 @@ namespace Prime.Migrations
                             LicenseCode = 49,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10448,6 +10646,7 @@ namespace Prime.Migrations
                             LicenseCode = 51,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "96",
                             PrescriberIdType = 1,
@@ -10465,6 +10664,7 @@ namespace Prime.Migrations
                             LicenseCode = 52,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "L9",
                             PrescriberIdType = 1,
@@ -10482,6 +10682,7 @@ namespace Prime.Migrations
                             LicenseCode = 53,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "L9",
                             PrescriberIdType = 1,
@@ -10499,6 +10700,7 @@ namespace Prime.Migrations
                             LicenseCode = 54,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10515,6 +10717,7 @@ namespace Prime.Migrations
                             LicenseCode = 55,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "L9",
                             PrescriberIdType = 1,
@@ -10532,6 +10735,7 @@ namespace Prime.Migrations
                             LicenseCode = 60,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             PrescriberIdType = 1,
@@ -10549,6 +10753,7 @@ namespace Prime.Migrations
                             LicenseCode = 61,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "98",
                             PrescriberIdType = 1,
@@ -10566,6 +10771,7 @@ namespace Prime.Migrations
                             LicenseCode = 62,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             PrescriberIdType = 1,
@@ -10583,6 +10789,7 @@ namespace Prime.Migrations
                             LicenseCode = 63,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10599,6 +10806,7 @@ namespace Prime.Migrations
                             LicenseCode = 47,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "NX",
                             Prefix = "96",
@@ -10617,6 +10825,7 @@ namespace Prime.Migrations
                             LicenseCode = 48,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "NX",
                             Prefix = "96",
@@ -10635,6 +10844,7 @@ namespace Prime.Migrations
                             LicenseCode = 49,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "NX",
                             Prefix = "96",
@@ -10652,6 +10862,7 @@ namespace Prime.Migrations
                             LicenseCode = 51,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "NX",
                             Prefix = "96",
@@ -10670,6 +10881,7 @@ namespace Prime.Migrations
                             LicenseCode = 32,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -10688,6 +10900,7 @@ namespace Prime.Migrations
                             LicenseCode = 33,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -10706,6 +10919,7 @@ namespace Prime.Migrations
                             LicenseCode = 34,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -10723,6 +10937,7 @@ namespace Prime.Migrations
                             LicenseCode = 35,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -10741,6 +10956,7 @@ namespace Prime.Migrations
                             LicenseCode = 36,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -10759,6 +10975,7 @@ namespace Prime.Migrations
                             LicenseCode = 37,
                             LicensedToProvideCare = false,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -10776,6 +10993,7 @@ namespace Prime.Migrations
                             LicenseCode = 39,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -10794,6 +11012,7 @@ namespace Prime.Migrations
                             LicenseCode = 40,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -10811,6 +11030,7 @@ namespace Prime.Migrations
                             LicenseCode = 41,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "YX",
                             Prefix = "Y9",
@@ -10829,6 +11049,7 @@ namespace Prime.Migrations
                             LicenseCode = 42,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "YX",
                             Prefix = "Y9",
@@ -10847,6 +11068,7 @@ namespace Prime.Migrations
                             LicenseCode = 43,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "YX",
                             Prefix = "Y9",
@@ -10864,6 +11086,7 @@ namespace Prime.Migrations
                             LicenseCode = 45,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "YX",
                             Prefix = "Y9",
@@ -10882,6 +11105,7 @@ namespace Prime.Migrations
                             LicenseCode = 46,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "YX",
                             Prefix = "Y9",
@@ -10899,6 +11123,7 @@ namespace Prime.Migrations
                             LicenseCode = 41,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "YX",
                             Prefix = "Y9",
@@ -10917,6 +11142,7 @@ namespace Prime.Migrations
                             LicenseCode = 42,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "YX",
                             Prefix = "Y9",
@@ -10935,6 +11161,7 @@ namespace Prime.Migrations
                             LicenseCode = 45,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "YX",
                             Prefix = "Y9",
@@ -10953,6 +11180,7 @@ namespace Prime.Migrations
                             LicenseCode = 47,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "NX",
                             Prefix = "96",
@@ -10971,6 +11199,7 @@ namespace Prime.Migrations
                             LicenseCode = 48,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "NX",
                             Prefix = "96",
@@ -10989,6 +11218,7 @@ namespace Prime.Migrations
                             LicenseCode = 51,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "NX",
                             Prefix = "96",
@@ -11007,6 +11237,7 @@ namespace Prime.Migrations
                             LicenseCode = 60,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             PrescriberIdType = 2,
@@ -11024,6 +11255,7 @@ namespace Prime.Migrations
                             LicenseCode = 61,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "98",
                             PrescriberIdType = 2,
@@ -11041,6 +11273,7 @@ namespace Prime.Migrations
                             LicenseCode = 62,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             PrescriberIdType = 2,
@@ -11058,6 +11291,7 @@ namespace Prime.Migrations
                             LicenseCode = 32,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -11076,6 +11310,7 @@ namespace Prime.Migrations
                             LicenseCode = 33,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -11094,6 +11329,7 @@ namespace Prime.Migrations
                             LicenseCode = 34,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -11112,6 +11348,7 @@ namespace Prime.Migrations
                             LicenseCode = 35,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -11130,6 +11367,7 @@ namespace Prime.Migrations
                             LicenseCode = 36,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -11148,6 +11386,7 @@ namespace Prime.Migrations
                             LicenseCode = 37,
                             LicensedToProvideCare = false,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -11166,6 +11405,7 @@ namespace Prime.Migrations
                             LicenseCode = 39,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -11184,6 +11424,7 @@ namespace Prime.Migrations
                             LicenseCode = 40,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -11202,6 +11443,7 @@ namespace Prime.Migrations
                             LicenseCode = 43,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "YX",
                             Prefix = "Y9",
@@ -11220,6 +11462,7 @@ namespace Prime.Migrations
                             LicenseCode = 46,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "YX",
                             Prefix = "Y9",
@@ -11238,6 +11481,7 @@ namespace Prime.Migrations
                             LicenseCode = 49,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "NX",
                             Prefix = "96",
@@ -11256,6 +11500,7 @@ namespace Prime.Migrations
                             LicenseCode = 52,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "L9",
                             PrescriberIdType = 2,
@@ -11273,6 +11518,7 @@ namespace Prime.Migrations
                             LicenseCode = 53,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "L9",
                             PrescriberIdType = 2,
@@ -11290,6 +11536,7 @@ namespace Prime.Migrations
                             LicenseCode = 54,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "L9",
                             PrescriberIdType = 2,
@@ -11307,6 +11554,7 @@ namespace Prime.Migrations
                             LicenseCode = 55,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "L9",
                             PrescriberIdType = 2,
@@ -11324,6 +11572,7 @@ namespace Prime.Migrations
                             LicenseCode = 63,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             PrescriberIdType = 2,
@@ -11341,6 +11590,7 @@ namespace Prime.Migrations
                             LicenseCode = 33,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -11359,6 +11609,7 @@ namespace Prime.Migrations
                             LicenseCode = 34,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -11377,6 +11628,7 @@ namespace Prime.Migrations
                             LicenseCode = 35,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -11395,6 +11647,7 @@ namespace Prime.Migrations
                             LicenseCode = 36,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -11413,6 +11666,7 @@ namespace Prime.Migrations
                             LicenseCode = 37,
                             LicensedToProvideCare = false,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -11431,6 +11685,7 @@ namespace Prime.Migrations
                             LicenseCode = 40,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -11449,6 +11704,7 @@ namespace Prime.Migrations
                             LicenseCode = 43,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "YX",
                             Prefix = "Y9",
@@ -11467,6 +11723,7 @@ namespace Prime.Migrations
                             LicenseCode = 46,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "YX",
                             Prefix = "Y9",
@@ -11485,6 +11742,7 @@ namespace Prime.Migrations
                             LicenseCode = 49,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "NX",
                             Prefix = "96",
@@ -11503,6 +11761,7 @@ namespace Prime.Migrations
                             LicenseCode = 52,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "L9",
                             PrescriberIdType = 2,
@@ -11520,6 +11779,7 @@ namespace Prime.Migrations
                             LicenseCode = 53,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "L9",
                             PrescriberIdType = 2,
@@ -11537,6 +11797,7 @@ namespace Prime.Migrations
                             LicenseCode = 54,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "L9",
                             PrescriberIdType = 2,
@@ -11554,6 +11815,7 @@ namespace Prime.Migrations
                             LicenseCode = 55,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "L9",
                             PrescriberIdType = 2,
@@ -11571,6 +11833,7 @@ namespace Prime.Migrations
                             LicenseCode = 63,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             PrescriberIdType = 2,
@@ -11588,6 +11851,7 @@ namespace Prime.Migrations
                             LicenseCode = 82,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11604,6 +11868,7 @@ namespace Prime.Migrations
                             LicenseCode = 83,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11620,6 +11885,7 @@ namespace Prime.Migrations
                             LicenseCode = 84,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11636,6 +11902,7 @@ namespace Prime.Migrations
                             LicenseCode = 85,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11652,6 +11919,7 @@ namespace Prime.Migrations
                             LicenseCode = 86,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11668,6 +11936,7 @@ namespace Prime.Migrations
                             LicenseCode = 72,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11684,6 +11953,7 @@ namespace Prime.Migrations
                             LicenseCode = 73,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11700,6 +11970,7 @@ namespace Prime.Migrations
                             LicenseCode = 74,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11716,6 +11987,7 @@ namespace Prime.Migrations
                             LicenseCode = 87,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11732,6 +12004,7 @@ namespace Prime.Migrations
                             LicenseCode = 88,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11748,6 +12021,7 @@ namespace Prime.Migrations
                             LicenseCode = 89,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11764,6 +12038,7 @@ namespace Prime.Migrations
                             LicenseCode = 90,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11780,6 +12055,7 @@ namespace Prime.Migrations
                             LicenseCode = 91,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11796,6 +12072,7 @@ namespace Prime.Migrations
                             LicenseCode = 7,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11812,6 +12089,7 @@ namespace Prime.Migrations
                             LicenseCode = 9,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11828,6 +12106,7 @@ namespace Prime.Migrations
                             LicenseCode = 15,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11844,6 +12123,7 @@ namespace Prime.Migrations
                             LicenseCode = 16,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11860,6 +12140,7 @@ namespace Prime.Migrations
                             LicenseCode = 17,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11876,6 +12157,7 @@ namespace Prime.Migrations
                             LicenseCode = 22,
                             LicensedToProvideCare = false,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11892,6 +12174,7 @@ namespace Prime.Migrations
                             LicenseCode = 40,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -11910,6 +12193,7 @@ namespace Prime.Migrations
                             LicenseCode = 92,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "M9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11926,6 +12210,7 @@ namespace Prime.Migrations
                             LicenseCode = 93,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11942,6 +12227,7 @@ namespace Prime.Migrations
                             LicenseCode = 94,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11958,6 +12244,7 @@ namespace Prime.Migrations
                             LicenseCode = 95,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11974,6 +12261,7 @@ namespace Prime.Migrations
                             LicenseCode = 96,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11990,6 +12278,7 @@ namespace Prime.Migrations
                             LicenseCode = 97,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12006,6 +12295,7 @@ namespace Prime.Migrations
                             LicenseCode = 98,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12022,6 +12312,7 @@ namespace Prime.Migrations
                             LicenseCode = 99,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12038,6 +12329,7 @@ namespace Prime.Migrations
                             LicenseCode = 100,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12054,6 +12346,7 @@ namespace Prime.Migrations
                             LicenseCode = 101,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12070,6 +12363,7 @@ namespace Prime.Migrations
                             LicenseCode = 102,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12086,6 +12380,7 @@ namespace Prime.Migrations
                             LicenseCode = 103,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12102,6 +12397,7 @@ namespace Prime.Migrations
                             LicenseCode = 104,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12118,6 +12414,7 @@ namespace Prime.Migrations
                             LicenseCode = 105,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12134,6 +12431,7 @@ namespace Prime.Migrations
                             LicenseCode = 106,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12150,6 +12448,7 @@ namespace Prime.Migrations
                             LicenseCode = 107,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12166,6 +12465,7 @@ namespace Prime.Migrations
                             LicenseCode = 108,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12182,6 +12482,7 @@ namespace Prime.Migrations
                             LicenseCode = 109,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12198,6 +12499,7 @@ namespace Prime.Migrations
                             LicenseCode = 110,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12214,6 +12516,7 @@ namespace Prime.Migrations
                             LicenseCode = 111,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12230,6 +12533,7 @@ namespace Prime.Migrations
                             LicenseCode = 112,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12246,6 +12550,7 @@ namespace Prime.Migrations
                             LicenseCode = 113,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "95",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12262,6 +12567,7 @@ namespace Prime.Migrations
                             LicenseCode = 114,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12278,6 +12584,7 @@ namespace Prime.Migrations
                             LicenseCode = 115,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12294,6 +12601,7 @@ namespace Prime.Migrations
                             LicenseCode = 116,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12310,6 +12618,7 @@ namespace Prime.Migrations
                             LicenseCode = 117,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12326,6 +12635,7 @@ namespace Prime.Migrations
                             LicenseCode = 118,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12342,6 +12652,7 @@ namespace Prime.Migrations
                             LicenseCode = 119,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12358,6 +12669,7 @@ namespace Prime.Migrations
                             LicenseCode = 5,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12374,6 +12686,7 @@ namespace Prime.Migrations
                             LicenseCode = 6,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12390,6 +12703,7 @@ namespace Prime.Migrations
                             LicenseCode = 48,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             NonPrescribingPrefix = "NX",
                             Prefix = "96",
@@ -12408,6 +12722,7 @@ namespace Prime.Migrations
                             LicenseCode = 60,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             PrescriberIdType = 2,
@@ -12425,6 +12740,7 @@ namespace Prime.Migrations
                             LicenseCode = 61,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "98",
                             PrescriberIdType = 2,
@@ -12442,6 +12758,7 @@ namespace Prime.Migrations
                             LicenseCode = 62,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "98",
                             PrescriberIdType = 2,
@@ -12459,6 +12776,7 @@ namespace Prime.Migrations
                             LicenseCode = 5,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12475,6 +12793,7 @@ namespace Prime.Migrations
                             LicenseCode = 6,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12491,6 +12810,7 @@ namespace Prime.Migrations
                             LicenseCode = 120,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12507,6 +12827,7 @@ namespace Prime.Migrations
                             LicenseCode = 121,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12523,6 +12844,7 @@ namespace Prime.Migrations
                             LicenseCode = 122,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12539,6 +12861,7 @@ namespace Prime.Migrations
                             LicenseCode = 123,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12555,6 +12878,7 @@ namespace Prime.Migrations
                             LicenseCode = 124,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12571,6 +12895,7 @@ namespace Prime.Migrations
                             LicenseCode = 125,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12587,6 +12912,7 @@ namespace Prime.Migrations
                             LicenseCode = 126,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12603,6 +12929,7 @@ namespace Prime.Migrations
                             LicenseCode = 127,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12619,6 +12946,7 @@ namespace Prime.Migrations
                             LicenseCode = 128,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12635,6 +12963,7 @@ namespace Prime.Migrations
                             LicenseCode = 129,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12651,6 +12980,7 @@ namespace Prime.Migrations
                             LicenseCode = 130,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12667,6 +12997,7 @@ namespace Prime.Migrations
                             LicenseCode = 131,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12683,6 +13014,7 @@ namespace Prime.Migrations
                             LicenseCode = 132,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12699,6 +13031,7 @@ namespace Prime.Migrations
                             LicenseCode = 133,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12715,6 +13048,7 @@ namespace Prime.Migrations
                             LicenseCode = 134,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12731,6 +13065,7 @@ namespace Prime.Migrations
                             LicenseCode = 135,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12747,6 +13082,7 @@ namespace Prime.Migrations
                             LicenseCode = 136,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12763,6 +13099,7 @@ namespace Prime.Migrations
                             LicenseCode = 137,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12779,6 +13116,7 @@ namespace Prime.Migrations
                             LicenseCode = 138,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12795,6 +13133,7 @@ namespace Prime.Migrations
                             LicenseCode = 139,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12811,6 +13150,7 @@ namespace Prime.Migrations
                             LicenseCode = 140,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12827,6 +13167,7 @@ namespace Prime.Migrations
                             LicenseCode = 141,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12843,6 +13184,7 @@ namespace Prime.Migrations
                             LicenseCode = 142,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12859,6 +13201,7 @@ namespace Prime.Migrations
                             LicenseCode = 143,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12875,6 +13218,7 @@ namespace Prime.Migrations
                             LicenseCode = 144,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12891,6 +13235,7 @@ namespace Prime.Migrations
                             LicenseCode = 145,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12907,6 +13252,7 @@ namespace Prime.Migrations
                             LicenseCode = 146,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12923,6 +13269,7 @@ namespace Prime.Migrations
                             LicenseCode = 147,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12939,6 +13286,7 @@ namespace Prime.Migrations
                             LicenseCode = 148,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12955,6 +13303,7 @@ namespace Prime.Migrations
                             LicenseCode = 149,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12971,6 +13320,7 @@ namespace Prime.Migrations
                             LicenseCode = 150,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -12987,6 +13337,7 @@ namespace Prime.Migrations
                             LicenseCode = 151,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13003,6 +13354,7 @@ namespace Prime.Migrations
                             LicenseCode = 152,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13019,6 +13371,7 @@ namespace Prime.Migrations
                             LicenseCode = 153,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13035,6 +13388,7 @@ namespace Prime.Migrations
                             LicenseCode = 154,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13051,6 +13405,7 @@ namespace Prime.Migrations
                             LicenseCode = 155,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13067,6 +13422,7 @@ namespace Prime.Migrations
                             LicenseCode = 156,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13083,6 +13439,7 @@ namespace Prime.Migrations
                             LicenseCode = 157,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13099,6 +13456,7 @@ namespace Prime.Migrations
                             LicenseCode = 158,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13115,6 +13473,7 @@ namespace Prime.Migrations
                             LicenseCode = 159,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13131,6 +13490,7 @@ namespace Prime.Migrations
                             LicenseCode = 160,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13147,6 +13507,7 @@ namespace Prime.Migrations
                             LicenseCode = 161,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13163,6 +13524,7 @@ namespace Prime.Migrations
                             LicenseCode = 162,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13179,6 +13541,7 @@ namespace Prime.Migrations
                             LicenseCode = 163,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13195,6 +13558,7 @@ namespace Prime.Migrations
                             LicenseCode = 164,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13211,6 +13575,7 @@ namespace Prime.Migrations
                             LicenseCode = 165,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13227,6 +13592,7 @@ namespace Prime.Migrations
                             LicenseCode = 166,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "97",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13243,6 +13609,7 @@ namespace Prime.Migrations
                             LicenseCode = 167,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "97",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13259,6 +13626,7 @@ namespace Prime.Migrations
                             LicenseCode = 168,
                             LicensedToProvideCare = true,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "97",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13275,6 +13643,7 @@ namespace Prime.Migrations
                             LicenseCode = 169,
                             LicensedToProvideCare = false,
                             Manual = false,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "97",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13291,6 +13660,7 @@ namespace Prime.Migrations
                             LicenseCode = 170,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13307,6 +13677,7 @@ namespace Prime.Migrations
                             LicenseCode = 171,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13323,6 +13694,7 @@ namespace Prime.Migrations
                             LicenseCode = 172,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13339,6 +13711,7 @@ namespace Prime.Migrations
                             LicenseCode = 173,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13355,6 +13728,7 @@ namespace Prime.Migrations
                             LicenseCode = 174,
                             LicensedToProvideCare = false,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = false,
                             Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13371,6 +13745,7 @@ namespace Prime.Migrations
                             LicenseCode = 175,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "RX",
                             Prefix = "R9",
@@ -13389,6 +13764,7 @@ namespace Prime.Migrations
                             LicenseCode = 176,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             NonPrescribingPrefix = "YX",
                             Prefix = "Y9",
@@ -13407,9 +13783,117 @@ namespace Prime.Migrations
                             LicenseCode = 177,
                             LicensedToProvideCare = true,
                             Manual = true,
+                            Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "L9",
                             PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 370,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 10, 22, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 178,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            Multijurisdictional = false,
+                            NamedInImReg = true,
+                            Prefix = "P1",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 371,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 11, 12, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 29,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = true,
+                            Prefix = "T9",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 372,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 11, 12, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 175,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = true,
+                            NamedInImReg = true,
+                            NonPrescribingPrefix = "RX",
+                            Prefix = "R9",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 373,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 11, 12, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 176,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = true,
+                            NamedInImReg = true,
+                            NonPrescribingPrefix = "YX",
+                            Prefix = "Y9",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 374,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 11, 12, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 177,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = true,
+                            NamedInImReg = true,
+                            Prefix = "L9",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 375,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2024, 11, 12, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 89,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = true,
+                            NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
@@ -13579,6 +14063,9 @@ namespace Prime.Migrations
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset?>("DeletedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DoingBusinessAs")
                         .HasColumnType("text");
@@ -17209,6 +17696,508 @@ namespace Prime.Migrations
                     b.ToTable("RemoteAccessSite");
                 });
 
+            modelBuilder.Entity("Prime.Models.RemoteAccessType", b =>
+                {
+                    b.Property<int>("Code")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("RemoteAccessTypeLookup");
+
+                    b.HasData(
+                        new
+                        {
+                            Code = 1,
+                            Name = "Private Community Health Practice"
+                        },
+                        new
+                        {
+                            Code = 2,
+                            Name = "FNHA"
+                        });
+                });
+
+            modelBuilder.Entity("Prime.Models.RemoteAccessTypeLicense", b =>
+                {
+                    b.Property<int>("RemoteAccessTypeCode")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("LicenseCode")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedDateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("RemoteAccessTypeCode", "LicenseCode");
+
+                    b.HasIndex("LicenseCode");
+
+                    b.ToTable("RemoteAccessTypeLicense");
+
+                    b.HasData(
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 1,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 2,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 3,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 4,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 5,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 6,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 8,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 9,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 10,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 12,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 13,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 14,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 15,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 17,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 18,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 19,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 47,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 51,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 87,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 88,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
+                            LicenseCode = 89,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 1,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 2,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 3,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 4,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 5,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 6,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 8,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 9,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 10,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 12,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 13,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 14,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 15,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 17,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 18,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 19,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 47,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 51,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 87,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 88,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 89,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 35,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 32,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 41,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 175,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 176,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 39,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 45,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        });
+                });
+
             modelBuilder.Entity("Prime.Models.RemoteUser", b =>
                 {
                     b.Property<int>("Id")
@@ -17664,6 +18653,9 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTimeOffset?>("DeletedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("DoingBusinessAs")
                         .HasColumnType("text");
 
@@ -17906,6 +18898,43 @@ namespace Prime.Migrations
                     b.ToTable("SiteStatus");
                 });
 
+            modelBuilder.Entity("Prime.Models.SiteSubmission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ProfileSnapshot")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("SiteSubmission");
+                });
+
             modelBuilder.Entity("Prime.Models.SiteVendor", b =>
                 {
                     b.Property<int>("Id")
@@ -18114,6 +19143,11 @@ namespace Prime.Migrations
                         {
                             Code = 21,
                             Name = "Unable to link enrollee to paper enrolment"
+                        },
+                        new
+                        {
+                            Code = 22,
+                            Name = "Enrollee has unlisted (typically non-BC) licences"
                         });
                 });
 
@@ -18182,6 +19216,9 @@ namespace Prime.Migrations
 
                     b.Property<int>("EnrolleeId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("LicenceClass")
+                        .HasColumnType("text");
 
                     b.Property<string>("LicenceNumber")
                         .HasColumnType("text");
@@ -19580,6 +20617,15 @@ namespace Prime.Migrations
                     b.Navigation("Site");
                 });
 
+            modelBuilder.Entity("Prime.Models.RemoteAccessTypeLicense", b =>
+                {
+                    b.HasOne("Prime.Models.License", null)
+                        .WithMany("RemoteAccessTypeLicenses")
+                        .HasForeignKey("LicenseCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Prime.Models.RemoteUser", b =>
                 {
                     b.HasOne("Prime.Models.Site", "Site")
@@ -19785,6 +20831,17 @@ namespace Prime.Migrations
                 {
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany("SiteStatuses")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Site");
+                });
+
+            modelBuilder.Entity("Prime.Models.SiteSubmission", b =>
+                {
+                    b.HasOne("Prime.Models.Site", "Site")
+                        .WithMany("SiteSubmissions")
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -20105,6 +21162,8 @@ namespace Prime.Migrations
                     b.Navigation("DefaultPrivileges");
 
                     b.Navigation("LicenseDetails");
+
+                    b.Navigation("RemoteAccessTypeLicenses");
                 });
 
             modelBuilder.Entity("Prime.Models.Organization", b =>
@@ -20178,6 +21237,8 @@ namespace Prime.Migrations
                     b.Navigation("SiteRegistrationReviewDocuments");
 
                     b.Navigation("SiteStatuses");
+
+                    b.Navigation("SiteSubmissions");
                 });
 
             modelBuilder.Entity("Prime.Models.SiteRegistrationNote", b =>

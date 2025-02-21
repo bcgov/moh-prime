@@ -20,6 +20,10 @@ export class AdjudicationRoutes {
   public static TOA = 'toa';
   public static LICENSE_CLASSES = 'license-classes';
 
+  // For Organizations section
+  public static ORGANIZATIONS = 'organizations';
+  public static ORGANIZATION_SITES = 'sites';
+
   // SITE_REGISTRATIONS is an alias for ORGANIZATIONS in the routing hierarchy
   public static SITE_REGISTRATIONS = 'site-registrations';
   // SITE_REGISTRATION is an alias for SITES in the routing hierarchy
@@ -28,6 +32,9 @@ export class AdjudicationRoutes {
   public static ORGANIZATION_INFORMATION = 'organization-information';
   public static SITE_REMOTE_USERS = 'remote-users';
   public static SITE_INFORMATION = 'site-information';
+
+  public static SITE_SUBMISSION_LIST = 'site-submission-list';
+  public static SITE_SUBMISSION = 'site-submission';
 
   public static HEALTH_AUTHORITIES = 'health-authorities';
   public static HEALTH_AUTH_CARE_TYPES = 'health-auth-care-types';

@@ -13,7 +13,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { DeviceProviderRoleConfig } from '@config/config.model';
+import { DeviceProviderRoleConfig, LicenseConfig } from '@config/config.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
@@ -28,6 +28,7 @@ import { DeviceProviderSite } from '@shared/models/device-provider-site.model';
 
 import { RegulatoryFormState } from './regulatory-form-state';
 import { ConfigService } from '@config/config.service';
+import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 
 @Component({
   selector: 'app-regulatory',
@@ -41,6 +42,11 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   public hasOtherCareSetting: boolean;
   public deviceProviderRoles: DeviceProviderRoleConfig[];
   public deviceProviderSite: DeviceProviderSite;
+  public hasUnlistedCertification: boolean;
+  public unlistedCertificationRequired: boolean;
+  public disableUnlistedCertificationToggle: boolean;
+  public multijurisdictionalLicences: LicenseConfig[];
+
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -69,13 +75,20 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       authService
     );
 
+    this.hasUnlistedCertification = false;
     this.cannotRequestRemoteAccess = false;
+    this.disableUnlistedCertificationToggle = false;
     this.deviceProviderRoles = this.configService.deviceProviderRoles;
   }
 
   public get selectedCollegeCodes(): number[] {
     return this.formState.certifications.value
       .map((certification: CollegeCertification) => +certification.collegeCode);
+  }
+
+  public get selectedLicenseCodes(): number[] {
+    return this.formState.certifications.value
+      .map((certification: CollegeCertification) => +certification.licenseCode);
   }
 
   public addEmptyCollegeCertification() {
@@ -94,17 +107,33 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.formState.certifications.removeAt(index);
   }
 
+  public licenceCodeSelected(code: number) {
+    if (this.multijurisdictionalLicences.some(l => l.code === code)) {
+      this.disableUnlistedCertificationToggle = true;
+      this.hasUnlistedCertification = true;
+      if (!this.formState.unlistedCertifications.length) {
+        this.formState.addEmptyUnlistedCollegeCertification();
+      }
+    } else {
+      this.disableUnlistedCertificationToggle = false;
+    }
+  }
+
   public ngOnInit() {
     this.isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
       careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
     this.hasOtherCareSetting = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
       careSetting.careSettingCode !== CareSettingEnum.DEVICE_PROVIDER);
     this.createFormInstance();
-    this.patchForm().subscribe(() => this.initForm());
+    this.patchForm().subscribe(() => {
+      this.initForm();
+    });
+    this.multijurisdictionalLicences = this.configService.licenses.filter(l => l.multijurisdictional);
   }
 
   public ngOnDestroy() {
     this.removeIncompleteCertifications(true);
+    this.removeIncompleteUnlistedCertification();
   }
 
   protected createFormInstance() {
@@ -113,6 +142,10 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   protected initForm() {
+
+    if (this.formState.unlistedCertifications.length) {
+      this.hasUnlistedCertification = true;
+    }
     this.setupDeviceProvider();
 
     // Always have at least one certification ready for
@@ -166,8 +199,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     }
 
     // Replace previous values on deactivation so updates are discarded
-    const { certifications, enrolleeDeviceProviders } = this.enrolmentService.enrolment;
-    this.formState.patchValue({ certifications, enrolleeDeviceProviders });
+    const { certifications, enrolleeDeviceProviders, unlistedCertifications } = this.enrolmentService.enrolment;
+    this.formState.patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications });
   }
 
   public onSubmit() {
@@ -196,7 +229,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
           .subscribe((result: boolean) => {
             if (result) {
               // Enrollees can not have certifications and jobs
-              this.removeOboSites();
+              this.removeCertificationsAndOboSites();
               // Remove remote access data when enrollee is no longer eligible, e.g., licence type changes
               if (this.cannotRequestRemoteAccess) {
                 this.removeRemoteAccessData();
@@ -205,6 +238,9 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
             }
           });
       } else {
+        if (this.formState.certifications.value.some(c => c.collegeCode !== '')) {
+          this.enrolmentFormStateService.patchOboSitesForm(null);
+        }
         super.handleSubmission();
       }
     } else {
@@ -214,6 +250,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
   protected afterSubmitIsSuccessful() {
     this.removeIncompleteCertifications(true);
+    this.removeIncompleteUnlistedCertification();
   }
 
   protected nextRouteAfterSubmit() {
@@ -254,12 +291,22 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     }
   }
 
+  private removeIncompleteUnlistedCertification() {
+    this.formState.unlistedCertifications.controls
+      .forEach((control: FormGroup, index: number) => {
+        // Remove if college code is "None" or the group is invalid
+        if (!control.get('collegeName').value || (control.invalid && !this.enrolmentService.isProfileComplete)) {
+          this.formState.unlistedCertifications.removeAt(index);
+        }
+      });
+  }
+
   /**
    * @description
    * Remove obo sites from the enrolment as enrollees can not have
    * certificate(s), as well as, OBO site(s).
    */
-  private removeOboSites() {
+  private removeCertificationsAndOboSites() {
     this.removeIncompleteCertifications(true);
 
     if (this.formState.certifications.length || (this.isDeviceProvider && this.formState.deviceProviderRoleCode.value !== 15)) {
@@ -308,6 +355,25 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       this.formUtilsService.resetAndClearValidators(this.formState.certificationNumber);
       this.formState.certificationNumber.markAsUntouched();
       this.formState.certificationNumber.disable();
+    }
+  }
+
+  public toggleUnlistedCertification({ checked }: ToggleContentChange) {
+    if (!checked) {
+      this.hasUnlistedCertification = false;
+      this.formState.unlistedCertifications.clear();
+    } else {
+      this.hasUnlistedCertification = true;
+      if (!this.formState.unlistedCertifications.length) {
+        this.formState.addEmptyUnlistedCollegeCertification();
+      }
+    }
+  }
+
+  public removeUnlistedCertification(index: number): void {
+    this.formState.unlistedCertifications.removeAt(index);
+    if (!this.formState.unlistedCertifications.length) {
+      this.hasUnlistedCertification = false;
     }
   }
 }
