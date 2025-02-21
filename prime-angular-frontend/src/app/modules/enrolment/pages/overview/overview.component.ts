@@ -31,7 +31,9 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
+import { CertSearch } from '@enrolment/shared/models/cert-search.model';
+import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-search.model';
+import { SiteResource } from '@core/resources/site-resource.service';
 
 
 @Component({
@@ -53,6 +55,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public hasOboToRuAgreementTypeChange: boolean;
+  public hasMatchingRemoteUser: boolean;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -67,7 +70,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     private toastService: ToastService,
     private formUtilsService: FormUtilsService,
     private busyService: BusyService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    protected siteResource: SiteResource,
   ) {
     super(route, router);
 
@@ -110,15 +114,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public showRequestRemoteAccessButton(): boolean {
-    return this.canRequestRemoteAccess() && this.currentStatus === this.EnrolmentStatus.EDITABLE && this.enrolment.appliedDate != null;
-  }
-
-  public canRequestRemoteAccess(): boolean {
-    const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
-    const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
-
-    return this.enrolmentService
-      .canRequestRemoteAccess(certifications, careSettings);
+    return this.hasMatchingRemoteUser && this.currentStatus === this.EnrolmentStatus.EDITABLE;
   }
 
   public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}): void {
@@ -210,6 +206,34 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           this.enrolmentErrors = this.getEnrolmentErrors(enrolment);
 
           this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
+
+          const { careSettings } = enrolment;
+
+          if (careSettings.some(cs => cs.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE)) {
+
+            const certSearch: CertSearch[] = enrolment.certifications
+              .map(c => ({
+                collegeCode: c.collegeCode,
+                licenseCode: c.licenseCode,
+                licenceNumber: c.licenseNumber,
+                practitionerId: c.practitionerId
+              }));
+
+            if (certSearch.length) {
+              this.siteResource.getSitesByRemoteUserInfo(certSearch)
+                .subscribe(
+                  (remoteAccessSearch: RemoteAccessSearch[]) => {
+                    if (remoteAccessSearch.length) {
+                      this.hasMatchingRemoteUser = true
+                    } else {
+                      this.hasMatchingRemoteUser = this.hasMatchingRemoteUser || false
+                    }
+                  });
+            } else {
+              this.hasMatchingRemoteUser = false;
+            }
+          }
+
         }),
         exhaustMap(_ =>
           (this.isMatchingPaperEnrollee)
@@ -224,6 +248,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
         ),
         exhaustMap(() => this.enrolmentResource.getCurrentEnrolleeAbsence(this.enrolment.id))
       ).subscribe((enrolleeAbsence: EnrolleeAbsence) => this.enrolleeAbsence = enrolleeAbsence);
+
   }
 
   /**

@@ -24,66 +24,39 @@
         </ng-container>
       </app-page-subheader>
 
-      <mat-slide-toggle #requestAccess
-                        color="primary"
-                        class="mb-4"
-                        [checked]="!!enrolment?.enrolleeRemoteUsers.length"
-                        (change)="onRequestAccess($event)">Request remote access</mat-slide-toggle>
+      <ng-container *ngIf="remoteAccessSearch?.length">
+        <app-page-subheader>
+          <ng-container appPageSubheaderSummary>
+            The sites below have registered you for remote access. Check to confirm that you want remote access for
+            these sites. If you need remote access for a site not listed here, talk to that site's PharmaNet
+            Administrator.
+          </ng-container>
+        </app-page-subheader>
 
-      <ng-container *ngIf="requestAccess.checked">
-
-        <div *ngIf="showProgress; else results"
-             class="mb-5">
-          We are locating your site's remote application
-          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        </div>
-
-        <ng-template #results>
-          <ng-container *ngIf="remoteAccessSearch?.length">
-            <app-page-subheader>
-              <ng-container appPageSubheaderSummary>
-                The sites below have registered you for remote access. Check to confirm that you want remote access for
-                these sites. If you need remote access for a site not listed here, talk to that site's PharmaNet
-                Administrator.
-              </ng-container>
-            </app-page-subheader>
-
-            <div formArrayName="sites"
-                 class="mb-3"
-                 *ngFor="let remoteAccessResult of remoteAccessSearch; let i = index">
-              <mat-checkbox [formControlName]="i">
-                <div class="pl-2">
-                  <address class="mb-0">
-                    {{ remoteAccessResult.siteDoingBusinessAs }}<br>
+        <div formArrayName="sites"
+             class="mb-3"
+             *ngFor="let remoteAccessResult of remoteAccessSearch; let i = index">
+          <mat-checkbox [formControlName]="i">
+            <div class="pl-2">
+              <address class="mb-0">
+                {{ remoteAccessResult.siteDoingBusinessAs }}<br>
                     {{ remoteAccessResult.siteAddress.street }},
                     {{ remoteAccessResult.siteAddress.city }}
                     {{ remoteAccessResult.siteAddress.provinceCode }}
                     {{ remoteAccessResult.siteAddress.postal }}
-                  </address>
+              </address>
 
-                  Vendor: {{ remoteAccessResult.vendorCodes[0] | configCode: 'vendors' | default }}
-                </div>
-              </mat-checkbox>
+              Vendor: {{ remoteAccessResult.vendorCodes[0] | configCode: 'vendors' | default }}
             </div>
-          </ng-container>
-        </ng-template>
-
+          </mat-checkbox>
+        </div>
       </ng-container>
 
-      <ng-container *ngIf="noRemoteAccess">
-        <p class="red">
-          No site has registered you for remote access. Please continue in PRIME; your enrolment will be processed
-          for onsite PharmaNet access. Ask your PharmaNet administrator to register your site in PRIME and add you
-          to their list of remote-access users. When that is complete, you will receive an email notification, and
-          you can return to PRIME and add your remote access information for approval.
-        </p>
-      </ng-container>
     </section>
 
   </form>
 
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
-                   [disableSave]="showProgress"
                    (save)="onSubmit()"
                    (back)="onBack(EnrolmentRoutes.REGULATORY)"
                    (continue)="onBack()"></app-page-footer>

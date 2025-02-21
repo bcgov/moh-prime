@@ -4,7 +4,6 @@ import { BehaviorSubject } from 'rxjs';
 
 import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
 import { ConfigService } from '@config/config.service';
-import { LicenseConfig } from '@config/config.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 import { Enrollee } from '@shared/models/enrollee.model';
@@ -12,6 +11,9 @@ import { Enrolment } from '@shared/models/enrolment.model';
 
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { SiteResource } from '@core/resources/site-resource.service';
+import { CertSearch } from '../models/cert-search.model';
+import { RemoteAccessSearch } from '../models/remote-access-search.model';
 
 export interface IEnrolmentService {
   enrolment$: BehaviorSubject<Enrolment>;
@@ -28,8 +30,10 @@ export class EnrolmentService implements IEnrolmentService {
   // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private readonly _enrolment: BehaviorSubject<Enrolment>;
   private _isMatchingPaperEnrollee: boolean | null;
+  private _remoteAccess: boolean;
 
   constructor(
+    protected siteResource: SiteResource,
     private configService: ConfigService
   ) {
     this._enrolment = new BehaviorSubject<Enrolment>(null);
@@ -54,7 +58,7 @@ export class EnrolmentService implements IEnrolmentService {
   }
 
   public set isMatchingPaperEnrollee(isMatchingPaperEnrollee: boolean) {
-    this._isMatchingPaperEnrollee = isMatchingPaperEnrollee;
+    this._isMatchingPaperEnrollee = isMatchingPaperEnrollee; 20
   }
 
   public get isInitialEnrolment(): boolean {
@@ -67,32 +71,45 @@ export class EnrolmentService implements IEnrolmentService {
 
   /**
    * @description
-   * Determine whether an enrollee can request remote access.
+   * Determine whether an enrollee should redirect to remote access.
    *
-   * Remote access rules:
-   * - Private Community Health Practice care setting only
-   * - Licences has "AllowRequestRemoteAccess" flag set
+   * rules:
+   * - Enrollee has PHCP care setting
+   * - Enrollee's certification match any remote user entered in site registration
    */
-  public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
-    if (!this.hasAllowedRemoteAccessCareSetting(careSettings)) {
+  public haveMatchingRemoteUser(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
+    if (!this.hasPossibleRemoteAccessCareSetting(careSettings)) {
       return false;
     }
 
-    const enrolleeLicenceCodes = certifications
-      .map((certification: CollegeCertification) => certification.licenseCode);
+    const certSearch: CertSearch[] = certifications
+      .map(c => ({
+        collegeCode: c.collegeCode,
+        licenseCode: c.licenseCode,
+        licenceNumber: c.licenseNumber,
+        practitionerId: c.practitionerId
+      }));
 
-    return this.configService.licenses
-      .filter((licence: LicenseConfig) => enrolleeLicenceCodes.includes(licence.code))
-      .some(this.hasAllowedRemoteAccessLicences);
+    //return true;
+    if (certSearch.length) {
+      this.siteResource.getSitesByRemoteUserInfo(certSearch)
+        .subscribe(
+          (remoteAccessSearch: RemoteAccessSearch[]) => {
+            if (remoteAccessSearch.length) {
+              this._remoteAccess = true
+            } else {
+              this._remoteAccess = this._remoteAccess || false
+            }
+          });
+    } else {
+      this._remoteAccess = false;
+    }
+    return this._remoteAccess;
   }
 
-  public hasAllowedRemoteAccessCareSetting(careSettings: CareSetting[]): boolean {
+  public hasPossibleRemoteAccessCareSetting(careSettings: CareSetting[]): boolean {
     return careSettings
       .some(cs => cs.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
-  }
-
-  public hasAllowedRemoteAccessLicences(licenceConfig: LicenseConfig): boolean {
-    return (licenceConfig.allowRequestRemoteAccess);
   }
 
   public shouldShowCollegePrefix(licenseCode: number): boolean {

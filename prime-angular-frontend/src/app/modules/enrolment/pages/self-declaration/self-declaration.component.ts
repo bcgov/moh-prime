@@ -20,6 +20,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import moment from 'moment';
+import { SiteResource } from '@core/resources/site-resource.service';
 
 @Component({
   selector: 'app-self-declaration',
@@ -34,6 +35,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
   public selfDeclarationQuestions = new Map<number, string>();
   public selfDeclarationVersions: SelfDeclarationVersion[];
+  public hasRemoteAccess: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -47,6 +49,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     protected authService: AuthService,
+    protected siteResource: SiteResource,
   ) {
     super(
       route,
@@ -139,16 +142,13 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
   public onBack() {
     const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
-    const careSettings = this.enrolmentFormStateService.careSettingsForm
-      .get('careSettings').value as CareSetting[];
     const isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
       careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
-    const deviceProviderIdentifier = this.enrolmentFormStateService.regulatoryFormState.deviceProviderIdentifier.value;
 
 
     let backRoutePath = EnrolmentRoutes.OVERVIEW;
     if (!this.isProfileComplete) {
-      backRoutePath = (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
+      backRoutePath = (this.hasRemoteAccess)
         ? EnrolmentRoutes.REMOTE_ACCESS
         : (!certifications.length && !isDeviceProvider)
           ? EnrolmentRoutes.OBO_SITES
@@ -217,6 +217,10 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
         this.toggleSelfDeclarationValidators(value, this.hasPharmaNetSuspendedDetails);
         this.showUnansweredQuestionsError = this.showUnansweredQuestions();
       });
+
+    const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
+
+    this.hasRemoteAccess = this.enrolmentService.haveMatchingRemoteUser(certifications, careSettings);
   }
 
   protected handleDeactivation(result: boolean): void {

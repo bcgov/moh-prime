@@ -29,6 +29,9 @@ import { DeviceProviderSite } from '@shared/models/device-provider-site.model';
 import { RegulatoryFormState } from './regulatory-form-state';
 import { ConfigService } from '@config/config.service';
 import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
+import { SiteResource } from '@core/resources/site-resource.service';
+import { CertSearch } from '@enrolment/shared/models/cert-search.model';
+import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-search.model';
 
 @Component({
   selector: 'app-regulatory',
@@ -37,7 +40,7 @@ import { ToggleContentChange } from '@shared/components/toggle-content/toggle-co
 })
 export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public formState: RegulatoryFormState;
-  public cannotRequestRemoteAccess: boolean;
+  public hasMatchingRemoteUser: boolean;
   public isDeviceProvider: boolean;
   public hasOtherCareSetting: boolean;
   public deviceProviderRoles: DeviceProviderRoleConfig[];
@@ -59,6 +62,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     protected authService: AuthService,
+    protected siteResource: SiteResource,
     protected configService: ConfigService
   ) {
     super(
@@ -76,7 +80,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     );
 
     this.hasUnlistedCertification = false;
-    this.cannotRequestRemoteAccess = false;
+    this.hasMatchingRemoteUser = false;
     this.disableUnlistedCertificationToggle = false;
     this.deviceProviderRoles = this.configService.deviceProviderRoles;
   }
@@ -128,6 +132,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.patchForm().subscribe(() => {
       this.initForm();
     });
+    this.canRequestRemoteAccess();
     this.multijurisdictionalLicences = this.configService.licenses.filter(l => l.multijurisdictional);
   }
 
@@ -154,17 +159,17 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       this.addEmptyCollegeCertification();
     }
 
-    const initialRemoteAccess = this.canRequestRemoteAccess();
-
     if (this.formState.deviceProviderId.value) {
       this.enrolmentResource.getDeviceProviderSite(this.formState.deviceProviderId.value)
         .subscribe((site) => this.deviceProviderSite = site);
     }
 
     this.formState.form.valueChanges
-      .pipe(map((_) => initialRemoteAccess && !this.isInitialEnrolment))
-      .subscribe((couldRequestRemoteAccess: boolean) =>
-        this.cannotRequestRemoteAccess = couldRequestRemoteAccess && !this.canRequestRemoteAccess()
+      .pipe(map((_) => this.hasMatchingRemoteUser && !this.isInitialEnrolment))
+      .subscribe((couldRequestRemoteAccess: boolean) => {
+        this.canRequestRemoteAccess();
+        this.hasMatchingRemoteUser = couldRequestRemoteAccess && this.hasMatchingRemoteUser;
+      }
       );
 
     this.formState.deviceProviderRoleCode.valueChanges.subscribe(() =>
@@ -231,7 +236,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
               // Enrollees can not have certifications and jobs
               this.removeCertificationsAndOboSites();
               // Remove remote access data when enrollee is no longer eligible, e.g., licence type changes
-              if (this.cannotRequestRemoteAccess) {
+              if (!this.hasMatchingRemoteUser) {
                 this.removeRemoteAccessData();
               }
               super.handleSubmission();
@@ -241,6 +246,10 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
         if (this.formState.certifications.value.some(c => c.collegeCode !== '')) {
           this.enrolmentFormStateService.patchOboSitesForm(null);
         }
+        if (!this.hasMatchingRemoteUser) {
+          this.removeRemoteAccessData();
+        }
+
         super.handleSubmission();
       }
     } else {
@@ -262,7 +271,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       // If DP Role Code is "None", we go to Job Site page
       nextRoutePath = (!certifications.length || (this.isDeviceProvider && this.formState.deviceProviderRoleCode.value === 15))
         ? EnrolmentRoutes.OBO_SITES
-        : (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
+        : (!this.hasMatchingRemoteUser)
           ? EnrolmentRoutes.REMOTE_ACCESS
           : EnrolmentRoutes.SELF_DECLARATION;
     }
@@ -316,12 +325,34 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     }
   }
 
-  private canRequestRemoteAccess(): boolean {
+
+  private canRequestRemoteAccess(): void {
     const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
     const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
 
-    return this.enrolmentService
-      .canRequestRemoteAccess(certifications, careSettings);
+    if (!careSettings.some(cs => cs.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE)) {
+      this.hasMatchingRemoteUser = false;
+    }
+
+    const certSearch: CertSearch[] = certifications
+      .map(c => ({
+        collegeCode: c.collegeCode,
+        licenseCode: c.licenseCode,
+        licenceNumber: c.licenseNumber,
+        practitionerId: c.practitionerId
+      }));
+
+    if (certSearch.length) {
+      this.siteResource.getSitesByRemoteUserInfo(certSearch)
+        .subscribe(
+          (remoteAccessSearch: RemoteAccessSearch[]) => {
+            if (remoteAccessSearch.length) {
+              this.hasMatchingRemoteUser = true
+            } else {
+              this.hasMatchingRemoteUser = this.hasMatchingRemoteUser || false
+            }
+          });
+    }
   }
 
   private removeRemoteAccessData(): void {
