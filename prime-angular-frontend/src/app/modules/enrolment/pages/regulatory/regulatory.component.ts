@@ -164,14 +164,6 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
         .subscribe((site) => this.deviceProviderSite = site);
     }
 
-    this.formState.form.valueChanges
-      .pipe(map((_) => this.hasMatchingRemoteUser && !this.isInitialEnrolment))
-      .subscribe((couldRequestRemoteAccess: boolean) => {
-        this.checkRemoteAccess();
-        this.hasMatchingRemoteUser = couldRequestRemoteAccess && this.hasMatchingRemoteUser;
-      }
-      );
-
     this.formState.deviceProviderRoleCode.valueChanges.subscribe(() =>
       this.toggleCertificationNumberValidation()
     );
