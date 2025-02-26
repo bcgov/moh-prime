@@ -339,7 +339,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
           practitionerId: c.practitionerId
         }));
 
-      if (certSearch.length && this.form.valid) {
+      if (certSearch.length && this.form.valid && certSearch.filter(c => c.licenseCode).length === certSearch.length) {
         this.siteResource.getSitesByRemoteUserInfo(certSearch)
           .subscribe(
             (remoteAccessSearch: RemoteAccessSearch[]) => {
