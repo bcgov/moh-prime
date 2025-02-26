@@ -1378,9 +1378,9 @@ namespace Prime.Services
 
         private string AbsenceToString(EnrolleeAbsence absence)
         {
-            var endDateString = absence.EndTimestamp == null ? " with no end date" : $", EndDate: {absence.EndTimestamp:yyyy-MM-dd}";
+            var endDateString = absence.EndTimestamp == null ? " with no end date" : $", End Date: {absence.EndTimestamp:d MMM yyyy}";
 
-            return $" Start Date: {absence.StartTimestamp:yyyy-MM-dd}{endDateString}";
+            return $"Start Date: {absence.StartTimestamp:d MMM yyyy}{endDateString}";
         }
 
         public async Task<EnrolleeAbsence> CreateEnrolleeAbsenceAsync(int enrolleeId, EnrolleeAbsenceViewModel createModel)
@@ -1395,7 +1395,7 @@ namespace Prime.Services
             _context.EnrolleeAbsences.Add(absence);
             await _context.SaveChangesAsync();
 
-            await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, $"Absence Entered. ({AbsenceToString(absence)})");
+            await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, $"Absence Entered ({AbsenceToString(absence)})");
 
             return absence;
         }
