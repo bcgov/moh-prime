@@ -153,6 +153,14 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     }
     this.setupDeviceProvider();
 
+    this.formState.form.valueChanges
+      .pipe(map((_) => this.hasMatchingRemoteUser && !this.isInitialEnrolment))
+      .subscribe((couldRequestRemoteAccess: boolean) => {
+        this.checkRemoteAccess();
+        this.hasMatchingRemoteUser = couldRequestRemoteAccess && this.hasMatchingRemoteUser;
+      }
+      );
+
     // Always have at least one certification ready for
     // the enrollee to fill out
     if (!this.formState.certifications.length) {
@@ -331,7 +339,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
           practitionerId: c.practitionerId
         }));
 
-      if (certSearch.length) {
+      if (certSearch.length && this.form.valid) {
         this.siteResource.getSitesByRemoteUserInfo(certSearch)
           .subscribe(
             (remoteAccessSearch: RemoteAccessSearch[]) => {
