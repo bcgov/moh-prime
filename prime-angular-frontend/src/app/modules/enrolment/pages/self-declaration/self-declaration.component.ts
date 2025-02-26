@@ -21,6 +21,8 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 import { AuthService } from '@auth/shared/services/auth.service';
 import moment from 'moment';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { CertSearch } from '@enrolment/shared/models/cert-search.model';
+import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-search.model';
 
 @Component({
   selector: 'app-self-declaration',
@@ -35,7 +37,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
   public selfDeclarationQuestions = new Map<number, string>();
   public selfDeclarationVersions: SelfDeclarationVersion[];
-  public hasRemoteAccess: boolean;
+  public hasMatchingRemoteUser: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -71,6 +73,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     ];
     this.hasAttemptedFormSubmission = false;
     this.showUnansweredQuestionsError = false;
+    this.hasMatchingRemoteUser = false;
   }
 
   public get hasConviction(): FormControl {
@@ -148,7 +151,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
     let backRoutePath = EnrolmentRoutes.OVERVIEW;
     if (!this.isProfileComplete) {
-      backRoutePath = (this.hasRemoteAccess)
+      backRoutePath = (this.hasMatchingRemoteUser)
         ? EnrolmentRoutes.REMOTE_ACCESS
         : (!certifications.length && !isDeviceProvider)
           ? EnrolmentRoutes.OBO_SITES
@@ -218,9 +221,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
         this.showUnansweredQuestionsError = this.showUnansweredQuestions();
       });
 
-    const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
-
-    this.hasRemoteAccess = this.enrolmentService.haveMatchingRemoteUser(certifications, careSettings);
+    this.checkRemoteAccess();
   }
 
   protected handleDeactivation(result: boolean): void {
@@ -285,5 +286,34 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   private removeSelfDeclarationDocumentGuid(controlName: string, documentGuid: string) {
     this.enrolmentFormStateService
       .removeSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, documentGuid);
+  }
+
+  private checkRemoteAccess(): void {
+    const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
+
+    if (!careSettings.some(cs => cs.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE)) {
+      this.hasMatchingRemoteUser = false;
+    } else {
+      const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
+      const certSearch: CertSearch[] = certifications
+        .map(c => ({
+          collegeCode: c.collegeCode,
+          licenseCode: c.licenseCode,
+          licenceNumber: c.licenseNumber,
+          practitionerId: c.practitionerId
+        }));
+
+      if (certSearch.length) {
+        this.siteResource.getSitesByRemoteUserInfo(certSearch)
+          .subscribe(
+            (remoteAccessSearch: RemoteAccessSearch[]) => {
+              if (remoteAccessSearch.length) {
+                this.hasMatchingRemoteUser = true
+              } else {
+                this.hasMatchingRemoteUser = this.hasMatchingRemoteUser || false
+              }
+            });
+      }
+    }
   }
 }

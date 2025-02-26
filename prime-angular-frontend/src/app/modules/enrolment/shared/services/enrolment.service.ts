@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, exhaustMap, Observable, of } from 'rxjs';
 
 import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
 import { ConfigService } from '@config/config.service';
@@ -67,44 +67,6 @@ export class EnrolmentService implements IEnrolmentService {
 
   public get isProfileComplete(): boolean {
     return this.enrolment && this.enrolment.profileCompleted;
-  }
-
-  /**
-   * @description
-   * Determine whether an enrollee should redirect to remote access.
-   *
-   * rules:
-   * - Enrollee has PHCP care setting
-   * - Enrollee's certification match any remote user entered in site registration
-   */
-  public haveMatchingRemoteUser(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
-    if (!this.hasPossibleRemoteAccessCareSetting(careSettings)) {
-      return false;
-    }
-
-    const certSearch: CertSearch[] = certifications
-      .map(c => ({
-        collegeCode: c.collegeCode,
-        licenseCode: c.licenseCode,
-        licenceNumber: c.licenseNumber,
-        practitionerId: c.practitionerId
-      }));
-
-    //return true;
-    if (certSearch.length) {
-      this.siteResource.getSitesByRemoteUserInfo(certSearch)
-        .subscribe(
-          (remoteAccessSearch: RemoteAccessSearch[]) => {
-            if (remoteAccessSearch.length) {
-              this._remoteAccess = true
-            } else {
-              this._remoteAccess = this._remoteAccess || false
-            }
-          });
-    } else {
-      this._remoteAccess = false;
-    }
-    return this._remoteAccess;
   }
 
   public hasPossibleRemoteAccessCareSetting(careSettings: CareSetting[]): boolean {
