@@ -10,10 +10,7 @@ import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { SiteResource } from '@core/resources/site-resource.service';
-import { CertSearch } from '../models/cert-search.model';
-import { RemoteAccessSearch } from '../models/remote-access-search.model';
 
 export interface IEnrolmentService {
   enrolment$: BehaviorSubject<Enrolment>;
@@ -58,7 +55,7 @@ export class EnrolmentService implements IEnrolmentService {
   }
 
   public set isMatchingPaperEnrollee(isMatchingPaperEnrollee: boolean) {
-    this._isMatchingPaperEnrollee = isMatchingPaperEnrollee; 20
+    this._isMatchingPaperEnrollee = isMatchingPaperEnrollee;
   }
 
   public get isInitialEnrolment(): boolean {
