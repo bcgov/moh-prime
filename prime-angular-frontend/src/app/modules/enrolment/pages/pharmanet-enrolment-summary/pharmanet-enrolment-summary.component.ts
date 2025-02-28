@@ -48,6 +48,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public currentAgreementGroup: AgreementTypeGroup;
 
   public initialEnrolment: boolean;
+  public isNextStep: boolean;
+  public isEnrolmentComplete: boolean;
   public complete: boolean;
   public healthAuthorities: Config<number>[];
 
@@ -233,6 +235,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
           });
           this.toastService.openSuccessToast(`Email was successfully sent to ${emails.join(", ")}`);
           this.emailForm.reset();
+          this.router.navigate([this.EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY],
+            { relativeTo: this.route.parent, queryParams: { initialEnrolment: this.initialEnrolment, complete: 'true' } });
         });
     }
   }
@@ -266,12 +270,15 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   }
 
   public getTitle() {
-    if (!this.initialEnrolment) {
-      return 'Share my Global PharmaNet ID (GPID)';
-    } else if (this.complete) {
-      return 'PRIME Enrolment Complete';
+    if (this.isNextStep) {
+      return 'Next Steps to Get PharmaNet';
+    } else {
+      if (!this.initialEnrolment) {
+        return 'Share my Global PharmaNet ID (GPID)';
+      } else {
+        return 'PRIME Enrolment Complete';
+      }
     }
-    return 'Next Steps to Get PharmaNet';
   }
 
   public getAgreementDescription() {
@@ -349,6 +356,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     this.createFormInstance();
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
     this.initialEnrolment = this.route.snapshot.queryParams?.initialEnrolment === 'true';
+    this.isNextStep = this.route.snapshot.url.some(v => v.path === "next-steps");
+    this.isEnrolmentComplete = this.route.snapshot.queryParams?.complete === 'true';
 
     this.enrolmentResource.getCurrentAgreementGroupForAnEnrollee(this.enrolment.id)
       .subscribe((group: AgreementTypeGroup) => this.currentAgreementGroup = group)

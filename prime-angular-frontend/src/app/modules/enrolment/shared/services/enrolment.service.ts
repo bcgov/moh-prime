@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, exhaustMap, Observable, of } from 'rxjs';
 
 import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
 import { ConfigService } from '@config/config.service';
-import { LicenseConfig } from '@config/config.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { SiteResource } from '@core/resources/site-resource.service';
 
 export interface IEnrolmentService {
   enrolment$: BehaviorSubject<Enrolment>;
@@ -28,8 +27,10 @@ export class EnrolmentService implements IEnrolmentService {
   // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private readonly _enrolment: BehaviorSubject<Enrolment>;
   private _isMatchingPaperEnrollee: boolean | null;
+  private _remoteAccess: boolean;
 
   constructor(
+    protected siteResource: SiteResource,
     private configService: ConfigService
   ) {
     this._enrolment = new BehaviorSubject<Enrolment>(null);
@@ -65,34 +66,9 @@ export class EnrolmentService implements IEnrolmentService {
     return this.enrolment && this.enrolment.profileCompleted;
   }
 
-  /**
-   * @description
-   * Determine whether an enrollee can request remote access.
-   *
-   * Remote access rules:
-   * - Private Community Health Practice care setting only
-   * - Licences has "AllowRequestRemoteAccess" flag set
-   */
-  public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
-    if (!this.hasAllowedRemoteAccessCareSetting(careSettings)) {
-      return false;
-    }
-
-    const enrolleeLicenceCodes = certifications
-      .map((certification: CollegeCertification) => certification.licenseCode);
-
-    return this.configService.licenses
-      .filter((licence: LicenseConfig) => enrolleeLicenceCodes.includes(licence.code))
-      .some(this.hasAllowedRemoteAccessLicences);
-  }
-
-  public hasAllowedRemoteAccessCareSetting(careSettings: CareSetting[]): boolean {
+  public hasPossibleRemoteAccessCareSetting(careSettings: CareSetting[]): boolean {
     return careSettings
       .some(cs => cs.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
-  }
-
-  public hasAllowedRemoteAccessLicences(licenceConfig: LicenseConfig): boolean {
-    return (licenceConfig.allowRequestRemoteAccess);
   }
 
   public shouldShowCollegePrefix(licenseCode: number): boolean {
