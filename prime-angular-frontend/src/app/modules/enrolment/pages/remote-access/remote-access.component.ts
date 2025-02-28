@@ -32,9 +32,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   @ViewChild('requestAccess') public requestAccess: MatSlideToggle;
 
   public form: FormGroup;
-  public showProgress: boolean;
   public remoteAccessSearch: RemoteAccessSearch[];
-  public noRemoteAccess: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -135,19 +133,10 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     super.onSubmit();
   }
 
-  public onRequestAccess(event: MatSlideToggleChange) {
-    if (event.checked) {
-      this.getRemoteAccess();
-    }
-  }
-
   public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm().subscribe(([_, enrolment]: [BcscUser, Enrolment]) => {
-      // TODO refactor and make this invoke initForm
-      if (enrolment.enrolleeRemoteUsers.length) {
-        this.getRemoteAccess();
-      }
+      this.getRemoteAccess();
     });
   }
 
@@ -203,8 +192,6 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
    * Request remote access information.
    */
   private getRemoteAccess(): void {
-    this.showProgress = true;
-    this.noRemoteAccess = false;
 
     const certSearch: CertSearch[] = this.enrolmentFormStateService
       .regulatoryFormState
@@ -217,21 +204,15 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
       }));
 
     this.siteResource.getSitesByRemoteUserInfo(certSearch)
-      .pipe(delay(2000))
       .subscribe(
         (remoteAccessSearch: RemoteAccessSearch[]) => {
           if (remoteAccessSearch.length) {
-            this.noRemoteAccess = false;
             this.remoteAccessSearch = remoteAccessSearch;
             this.initForm();
           } else {
-            this.noRemoteAccess = true;
             this.requestAccess.checked = false;
           }
-        },
-        (error: any) => { }, // Noop allowing use of finally
-        () => this.showProgress = false
-      );
+        });
   }
 
   /**
