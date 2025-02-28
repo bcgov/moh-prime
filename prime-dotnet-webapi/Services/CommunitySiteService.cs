@@ -472,19 +472,19 @@ namespace Prime.Services
                 }
             }
 
-            //remote RemoteAccessSites and RemoteAccessLocation records
+            //remove RemoteAccessSites and RemoteAccessLocation records for remote users that will be deleted
             var enrolleeIds = _context.EnrolleeRemoteUsers.Where(u => existingUsers.Keys.Contains(u.RemoteUserId))
                                                 .Select(u => u.EnrolleeId)
                                                 .ToList();
-            var remoteAccessSiteId = _context.RemoteAccessSites.Where(s => enrolleeIds.Contains(s.EnrolleeId) && s.SiteId == current.Id)
+            var remoteAccessSites = _context.RemoteAccessSites.Where(s => enrolleeIds.Contains(s.EnrolleeId) && s.SiteId == current.Id)
                                                 .Select(s => s)
                                                 .ToList();
-            _context.RemoteAccessSites.RemoveRange(remoteAccessSiteId);
+            _context.RemoteAccessSites.RemoveRange(remoteAccessSites);
 
             foreach (var enrolleeId in enrolleeIds)
             {
                 // Check if the enrollee has only one remote access site. if so, remove the remote access location
-                if (_context.RemoteAccessSites.Where(l => l.EnrolleeId == enrolleeId).Count() == 1)
+                if (_context.RemoteAccessSites.Where(s => s.EnrolleeId == enrolleeId).Count() == 1)
                 {
                     _context.RemoteAccessLocations.Where(l => l.EnrolleeId == enrolleeId).ExecuteDelete();
                 }
