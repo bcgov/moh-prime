@@ -389,6 +389,11 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   public removeUnlistedCertification(index: number): void {
+    if (index === 0 && this.disableUnlistedCertificationToggle) {
+      // Force enrollee to complete sub-form
+      return;
+    }
+
     this.formState.unlistedCertifications.removeAt(index);
     if (!this.formState.unlistedCertifications.length) {
       this.hasUnlistedCertification = false;
