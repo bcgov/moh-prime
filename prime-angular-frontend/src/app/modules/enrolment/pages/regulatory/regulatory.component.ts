@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormArray, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, concat, EMPTY, pipe } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { EMPTY } from 'rxjs';
+import { exhaustMap, take } from 'rxjs/operators';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { ToastService } from '@core/services/toast.service';
@@ -23,12 +23,13 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { DeviceProviderSite } from '@shared/models/device-provider-site.model';
 
 import { RegulatoryFormState } from './regulatory-form-state';
 import { ConfigService } from '@config/config.service';
 import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
+import { SiteResource } from '@core/resources/site-resource.service';
+import { CertSearch } from '@enrolment/shared/models/cert-search.model';
 
 @Component({
   selector: 'app-regulatory',
@@ -37,7 +38,7 @@ import { ToggleContentChange } from '@shared/components/toggle-content/toggle-co
 })
 export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public formState: RegulatoryFormState;
-  public cannotRequestRemoteAccess: boolean;
+  public hasMatchingRemoteUser: boolean;
   public isDeviceProvider: boolean;
   public hasOtherCareSetting: boolean;
   public deviceProviderRoles: DeviceProviderRoleConfig[];
@@ -59,6 +60,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     protected authService: AuthService,
+    protected siteResource: SiteResource,
     protected configService: ConfigService
   ) {
     super(
@@ -76,7 +78,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     );
 
     this.hasUnlistedCertification = false;
-    this.cannotRequestRemoteAccess = false;
+    this.hasMatchingRemoteUser = false;
     this.disableUnlistedCertificationToggle = false;
     this.deviceProviderRoles = this.configService.deviceProviderRoles;
   }
@@ -128,6 +130,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.patchForm().subscribe(() => {
       this.initForm();
     });
+    this.checkRemoteAccess();
     this.multijurisdictionalLicences = this.configService.licenses.filter(l => l.multijurisdictional);
   }
 
@@ -154,18 +157,10 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       this.addEmptyCollegeCertification();
     }
 
-    const initialRemoteAccess = this.canRequestRemoteAccess();
-
     if (this.formState.deviceProviderId.value) {
       this.enrolmentResource.getDeviceProviderSite(this.formState.deviceProviderId.value)
         .subscribe((site) => this.deviceProviderSite = site);
     }
-
-    this.formState.form.valueChanges
-      .pipe(map((_) => initialRemoteAccess && !this.isInitialEnrolment))
-      .subscribe((couldRequestRemoteAccess: boolean) =>
-        this.cannotRequestRemoteAccess = couldRequestRemoteAccess && !this.canRequestRemoteAccess()
-      );
 
     this.formState.deviceProviderRoleCode.valueChanges.subscribe(() =>
       this.toggleCertificationNumberValidation()
@@ -205,6 +200,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
+      this.checkRemoteAccess();
 
       if (this.isDeviceProvider && this.formState.deviceProviderId.value) {
         let siteName = this.deviceProviderSite ?
@@ -231,7 +227,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
               // Enrollees can not have certifications and jobs
               this.removeCertificationsAndOboSites();
               // Remove remote access data when enrollee is no longer eligible, e.g., licence type changes
-              if (this.cannotRequestRemoteAccess) {
+              if (!this.hasMatchingRemoteUser) {
                 this.removeRemoteAccessData();
               }
               super.handleSubmission();
@@ -241,6 +237,10 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
         if (this.formState.certifications.value.some(c => c.collegeCode !== '')) {
           this.enrolmentFormStateService.patchOboSitesForm(null);
         }
+        if (!this.hasMatchingRemoteUser) {
+          this.removeRemoteAccessData();
+        }
+
         super.handleSubmission();
       }
     } else {
@@ -255,14 +255,13 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
   protected nextRouteAfterSubmit() {
     const certifications = this.formState.collegeCertifications;
-    const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value as CareSetting[];
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       // If DP Role Code is "None", we go to Job Site page
       nextRoutePath = ((!this.isDeviceProvider && !certifications.length) || (this.isDeviceProvider && this.formState.deviceProviderRoleCode.value === 15))
         ? EnrolmentRoutes.OBO_SITES
-        : (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
+        : (this.hasMatchingRemoteUser)
           ? EnrolmentRoutes.REMOTE_ACCESS
           : EnrolmentRoutes.SELF_DECLARATION;
     }
@@ -316,12 +315,31 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     }
   }
 
-  private canRequestRemoteAccess(): boolean {
-    const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
+  private async checkRemoteAccess(): Promise<void> {
     const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
 
-    return this.enrolmentService
-      .canRequestRemoteAccess(certifications, careSettings);
+    if (!careSettings.some(cs => cs.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE)) {
+      this.hasMatchingRemoteUser = false;
+    } else {
+      const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
+      const certSearch: CertSearch[] = certifications
+        .map(c => ({
+          collegeCode: c.collegeCode,
+          licenseCode: c.licenseCode,
+          licenceNumber: c.licenseNumber,
+          practitionerId: c.practitionerId
+        }));
+
+      if (certSearch.length && this.form.valid && certSearch.filter(c => c.licenseCode).length === certSearch.length) {
+        var remoteAccessSearch = await this.siteResource.getSitesByRemoteUserInfo(certSearch)
+          .pipe(take(1)).toPromise();
+        if (remoteAccessSearch.length) {
+          this.hasMatchingRemoteUser = true
+        } else {
+          this.hasMatchingRemoteUser = false
+        }
+      }
+    }
   }
 
   private removeRemoteAccessData(): void {

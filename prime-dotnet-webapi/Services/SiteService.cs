@@ -290,6 +290,7 @@ namespace Prime.Services
             {
                 // For BCCNM (college code = 3), matching license number to practitioner ID.
                 matchesAnyCert.Or(ruc => ruc.CollegeCode == searchedCert.CollegeCode &&
+                    ruc.LicenseCode == searchedCert.LicenseCode &&
                     ((ruc.LicenseNumber == searchedCert.LicenceNumber && searchedCert.CollegeCode != CollegeCode.BCCNM) ||
                     (ruc.PractitionerId == searchedCert.PractitionerId && searchedCert.CollegeCode == CollegeCode.BCCNM)));
             }

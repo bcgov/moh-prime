@@ -63,6 +63,7 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.Mnemonic);
             Ignore(x => x.DeletedDate);
             Ignore(x => x.SiteSubmissions);
+            Ignore(x => x.RemoteAccessTypeCode);
 
             FinishWith((f, x) =>
             {

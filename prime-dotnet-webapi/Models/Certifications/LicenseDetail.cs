@@ -29,6 +29,7 @@ namespace Prime.Models
 
         public PrescriberIdType? PrescriberIdType { get; set; }
 
+        // No longer in used - keeping this column to avoid updating the seeding configration
         public bool AllowRequestRemoteAccess { get; set; }
 
         public string NonPrescribingPrefix { get; set; }
