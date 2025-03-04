@@ -12,7 +12,7 @@ on:
 
 jobs:
   build-document-manager-backend:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     environment: Production
     steps:
       - name: "Checkout the repo"
@@ -51,7 +51,7 @@ jobs:
 
 
   build-backend:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     environment: Production
     steps:
       - name: "Checkout the repo"
@@ -105,7 +105,7 @@ jobs:
           docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:prod
 
   build-frontend:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     environment: Production
     defaults:
       run:
@@ -160,7 +160,7 @@ jobs:
           docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:prod
 
   apply-oc-template:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     environment: Production
     needs: [build-document-manager-backend,build-frontend,build-backend]
     steps:
