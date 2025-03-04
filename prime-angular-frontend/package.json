@@ -66,7 +66,7 @@
     "@types/faker": "^4.1.12",
     "@types/jasmine": "~3.10.3",
     "@types/jasminewd2": "^2.0.8",
-    "@types/node": "^12.11.1",
+    "@types/node": "^12.20.55",
     "@types/smoothscroll-polyfill": "^0.3.1",
     "@types/tus-js-client": "^1.8.0",
     "@typescript-eslint/eslint-plugin": "4.33.0",
