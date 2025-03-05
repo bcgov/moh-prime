@@ -123,6 +123,21 @@ namespace Prime.Services
             return businessEvent;
         }
 
+        public async Task<BusinessEvent> CreateEnrolleeAbsenceAsync(int enrolleeId, string description)
+        {
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.Absence, enrolleeId, description);
+            _context.BusinessEvents.Add(businessEvent);
+            var created = await _context.SaveChangesAsync();
+
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create enrollee business event.");
+            }
+
+            return businessEvent;
+        }
+
+
         public async Task<BusinessEvent> CreateSiteEventAsync(int siteId, int partyId, string description)
         {
             var businessEvent = await CreateSiteBusinessEvent(BusinessEventType.Site, siteId, partyId, description);
