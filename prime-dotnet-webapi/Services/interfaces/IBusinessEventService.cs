@@ -13,6 +13,8 @@ namespace Prime.Services
         Task<BusinessEvent> CreateAdminActionEventAsync(int enrolleeId, string description);
         Task<BusinessEvent> CreateAdminViewEventAsync(int enrolleeId, string description);
         Task<BusinessEvent> CreateEnrolleeEventAsync(int enrolleeId, string description);
+        Task<BusinessEvent> CreateEnrolleeAbsenceAsync(int enrolleeId, string description);
+
         Task<BusinessEvent> CreateSiteEventAsync(int siteId, int partyId, string description);
         /// <summary>
         /// Creates a Site Event, with the PartyId set to the Party responsible for the Site; i.e. SigningAuthority for Community Sites, Authorized User for Health Authority Sites
