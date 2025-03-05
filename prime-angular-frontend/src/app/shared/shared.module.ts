@@ -131,6 +131,7 @@ import { HealthAuthSiteOverviewContainerComponent } from './components/health-au
 import { EmailFormComponent } from './components/forms/email-form/email-form.component';
 import { ChangeVendorNoteComponent } from './components/dialogs/content/change-vendor-note/change-vendor-note.component';
 import { TransferHASiteComponent } from './components/dialogs/content/transfer-ha-site/transfer-ha-site.component';
+import { AlternateNamePipe } from './pipes/alternate-name.pipe';
 import { SiteArchiveRestoreComponent } from './components/dialogs/content/site-archive-restore/site-archive-restore.component';
 import { ChangeTermsOfAccessComponent } from './components/dialogs/content/terms-of-access/terms-of-access.component';
 
@@ -157,6 +158,7 @@ import { ChangeTermsOfAccessComponent } from './components/dialogs/content/terms
     HealthAuthorityVendorPipe,
     LicenseNumberLabelPipe,
     CollegeNamePipe,
+    AlternateNamePipe,
     AddressFormComponent,
     ConfirmDialogComponent,
     HtmlComponent,
@@ -286,6 +288,7 @@ import { ChangeTermsOfAccessComponent } from './components/dialogs/content/terms
     HealthAuthorityVendorPipe,
     LicenseNumberLabelPipe,
     CollegeNamePipe,
+    AlternateNamePipe,
     AddressFormComponent,
     PageComponent,
     PageHeaderComponent,
