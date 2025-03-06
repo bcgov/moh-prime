@@ -1,364 +1,265 @@
-<div class="container">
-  <app-banner></app-banner>
-  <div class="row title">
-    <div class="col-sm-8">
-      <div class="t1">Request access to PharmaNet</div>
-      <div class="st1">Please select from the tabs below</div>
-    </div>
-    <div class="col-sm-4 logo">
-      <app-prime-logo label="right"
-                      [size]="(isMobile) ? 'small' : 'medium'"></app-prime-logo>
-    </div>
-  </div>
-  <div class="row">
-    <div *ngIf="loginCancelled"
-         class="col-sm-12">
-      <app-alert type="info"
-                 icon="error_outline">
-        <ng-container #alertTitle
-                      class="alert-title">
-          Login Cancelled
-        </ng-container>
-        <ng-container #alertContent
-                      class="alert-content">
-          <p>You have cancelled your log in to PRIME</p>
-          <p>For assistance with PRIME, contact <app-prime-phone></app-prime-phone> or
-            <app-prime-support-email></app-prime-support-email>
-          <p>
-            For assistance logging in with the BC Services Card app, contact the Help Desk
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              [attr.href]="bcscHelpDeskUrl">
-              <u>here</u></a>.
-          </p>
-        </ng-container>
-      </app-alert>
-    </div>
-  </div>
-</div>
-<div class="container mb-0">
-  <div class="row">
-    <div class="col-sm-auto tab selected-tab"
-         [ngClass]="{'selected-tab': mode === 'enrolment'}"
-         (click)="goTo(this.enrolmentUrl)">
-      BC health professionals
-    </div>
-    <div class="col-sm-auto tab-mid"
-         [ngClass]="{'selected-tab': mode === 'community'}"
-         (click)="goTo(this.communitySiteUrl)">
-      Community site registration
-    </div>
-    <div class="col-sm-auto tab"
-         [ngClass]="{'selected-tab': mode === 'health-authority'}"
-         (click)="goTo(this.healthAuthorityUrl)">
-      Health authority site registration
-    </div>
-  </div>
-</div>
-<div class="mid-gary">
-  <div *ngIf="mode === 'enrolment'"
-       class="container mt-0 mb-1">
-    <div class="mid-content">
-      <div class="mt1">Request approval to access PharmaNet, renew or update existing enrolment</div>
-      <div class="mt1"></div>
-      <div class="button_title">
-        Healthcare professionals working in health authority facilities, private community health practices, pharmacies,
-        and device providers located in B.C. who need PharmaNet access to deliver patient care must enrol in PRIME. This
-        includes those who access PharmaNet on behalf of someone else, e.g., medical office assistants.
+<div class="grad_bg">
+  <div class="container mb-1">
+    <app-banner></app-banner>
+    <div class="row title">
+      <div class="col-sm-8">
+        <div class="t1">Request Ministry of Health approval</div>
+        <div class="t1">to access PharmaNet</div>
+      </div>
+      <div class="col-sm-4 logo">
+        <span class="logo_title">PRIME</span>
+        <app-prime-logo label="none"
+                        size="small"></app-prime-logo>
       </div>
     </div>
-    <div class="row pb-50">
+    <div class="row"
+         *ngIf="loginCancelled">
       <div class="col-sm-12">
-        <button mat-flat-button
-                color="primary"
-                class="large"
-                (click)="onLogin(false)">Access Individual Enrolment</button>
+        <app-alert type="info"
+                   icon="error_outline">
+          <ng-container #alertTitle
+                        class="alert-title">
+            Login Cancelled
+          </ng-container>
+          <ng-container #alertContent
+                        class="alert-content">
+            <p>You have cancelled your log in to PRIME</p>
+            <p>For assistance with PRIME, contact <app-prime-phone></app-prime-phone> or
+              <app-prime-support-email></app-prime-support-email>
+            <p>
+              For assistance logging in with the BC Services Card app, contact the Help Desk
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                [attr.href]="bcscHelpDeskUrl">
+                <u>here</u></a>.
+            </p>
+          </ng-container>
+        </app-alert>
       </div>
     </div>
   </div>
-  <div *ngIf="mode === 'health-authority'"
-       class="container mt-0 mb-1">
-    <div class="mid-content pb-50">
-      <div class="mst1">
-        Please enter the passcode provided by your health authority to continue.
-        <br/> Otherwise, choose another tab.
-      </div>
-      <form [formGroup]="form"
-            novalidate
-            autocomplete="off">
-        <label>Passcode</label>
-        <mat-form-field class="w-100">
-          <input matInput
-                 class="input"
-                 type="password"
-                 formControlName="passcode">
-          <mat-error *ngIf="passcode.hasError('required')">Required</mat-error>
-          <mat-error *ngIf="passcode.hasError('validPasscode')">Invalid Passcode</mat-error>
-        </mat-form-field>
-        <button mat-flat-button
-                color="primary"
-                class="large"
-                (click)="onLogin(true)">Access Site Registration</button>
-      </form>
-    </div>
-  </div>
-  <div *ngIf="mode === 'community'"
-       class="container mt-0 mb-1">
-    <div class="mid-content">
-      <div class="mt1">Site registration for:</div>
-      <div class="button_title">
-        - Private community health practice<br/>
-        - Community pharmacy<br/>
-        - Device providers
-      </div>
-    </div>
-    <div class="row pb-50">
-      <div class="col-sm-6">
-        <button mat-flat-button
-                color="primary"
-                class="large"
-                (click)="onLogin(false)">Access Site Registration</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="row">
-
-    <div class="col-sm-12 col-md-4"
-         *ngIf="mode === 'enrolment'">
-      <div>
-        <div class="graphic-wrapper">
-          <img class="graphic"
-               src="/assets/bc_services_card_v2.svg"
-               alt="BC Services Card Icon">
+  <div class="container mb-1">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="container mb-1">
+          <div class="row">
+            <div class="col-md-12 card">
+              <img class="individual_graphic"
+                   src="/assets/individual_enrolment.png"
+                   alt="BC Services Card Icon">
+              <div class="card-title">
+                Individual Access
+              </div>
+              <div class="card-text">
+                Healthcare professinals are requested to first enrol with PRIME.
+              </div>
+              <button mat-flat-button
+                      class="button"
+                      color="primary"
+                      (click)="onEnrolClick()">Enrol now</button>
+              <br/>
+              <a href="#" class="ml-2" (click)="onAlreadyEnrolledLinkClick($event)">Already enrolled in PRIME <mat-icon class="link_icon">arrow_forward</mat-icon></a>
+            </div>
+          </div>
         </div>
-        <section class="content">
-          <h2>BC Services Card App</h2>
-
-          <p>
-            Set up the BC Services Card app on a mobile device if you haven’t done so already. Once finished, come back
-            to PRIME and complete your enrolment.
-
-            <br>
-            <br>
-
-            <a [href]="bcscMobileSetupUrl"
-                 target="_blank"
-                 rel="noopener noreferrer">
-                How to set up the BC Services Card app.
+      </div>
+      <div class="col-md-8">
+        <div class="container mb-1">
+          <div class="row">
+            <div class="col-md-12 card">
+              <img class="site_graphic"
+                   src="/assets/site_registration.png"
+                   alt="BC Services Card Icon">
+              <div class="card-title">Site Registration</div>
+              <div class="card-text">Clinical locations using PharmaNet must first be registered in PRIME. Start,
+                continue, or
+                update a site registration for a private community health practice, community pharmacy,
+                or device provider.</div>
+              <button mat-stroked-button
+                      [disabled]="mode === 'health-authority'"
+                      class="button"
+                      (click)="onSiteRegistrationClick()">Continue</button>
+              <br/>
+              <a href="#" class="ml-2" (click)="onHealthAuthoritySiteRegistrationClick($event)">Register site for a health authority
+                <mat-icon *ngIf="mode !== 'health-authority'" class="link_icon material-icons-outlined">add_box</mat-icon>
+                <mat-icon *ngIf="mode === 'health-authority'" class="link_icon material-icons-outlined">indeterminate_check_box</mat-icon>
               </a>
-          </p>
-        </section>
-      </div>
-    </div>
-    <div class="col-sm-12 col-md-4"
-         *ngIf="mode !== 'enrolment'">
-      <div>
-        <div class="graphic-wrapper">
-          <img class="graphic"
-               src="/assets/bc_services_card_v2.svg"
-               alt="BC Services Card Icon">
+              <div *ngIf="mode === 'health-authority'">
+                <form [formGroup]="form"
+                      novalidate
+                      class="card-ha"
+                      autocomplete="off">
+                  <span class="passcode_label">Enter Passcode</span>
+                  <br/>
+                  <mat-form-field appearance="outline">
+                    <input matInput
+                           type="password"
+                           class="passcode_input"
+                           formControlName="passcode">
+                    <mat-error *ngIf="passcode.hasError('required')">Required</mat-error>
+                    <mat-error *ngIf="passcode.hasError('validPasscode')">Invalid Passcode</mat-error>
+                  </mat-form-field>
+                  <button mat-stroked-button
+                          class="button"
+                          (click)="onPasscodeSubmit()">Continue</button>
+                  <button mat-stroked-button
+                          class="button"
+                          (click)="onPasscodeCancel()">Cancel</button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
-        <section class="content">
-          <h2>BC Services Card App</h2>
-
-          <p>
-            Set up the BC Services Card app on a mobile device if you haven’t done so already. Once finished, come back
-            to PRIME and complete your registration.
-
-            <br>
-            <br>
-
-            <a [href]="bcscMobileSetupUrl"
-                 target="_blank"
-                 rel="noopener noreferrer">
-                How to set up the BC Services Card app.
-              </a>
-          </p>
-        </section>
-      </div>
-    </div>
-
-    <div class="col-sm-12 col-md-4"
-         *ngIf="mode === 'enrolment'">
-      <div>
-        <div class="graphic-wrapper">
-          <img class="graphic"
-               src="/assets/enrolment_v2.svg"
-               alt="Enrolment Icon">
-        </div>
-        <section class="content">
-          <h2>PRIME Enrolment</h2>
-
-          <p>
-            Complete your PRIME enrolment. It usually only takes a few minutes. If you are a
-            regulated health professional, you will need your BC college information (licence number/ registration
-            number/ CPSID/ PharmaNet ID) and next renewal date.
-          </p>
-        </section>
-      </div>
-    </div>
-    <div class="col-sm-12 col-md-4"
-         *ngIf="mode === 'enrolment'">
-      <div>
-        <div class="graphic-wrapper">
-          <img class="graphic"
-               src="/assets/notification_v2.svg"
-               alt="Notification Icon">
-        </div>
-        <section class="content">
-          <h2>Enrolment Notification</h2>
-          <p>
-            Once you are approved to use PharmaNet, you send the PRIME approval email to the person in your workplace
-            who sets up PharmaNet accounts. They will get you connected to PharmaNet.
-          </p>
-          <h2>User Guides</h2>
-          <p>
-            Click here for user guides:
-            <a href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/pharmacare/pharmanet-bc-s-drug-information-network/prime/prime-user-guides">PRIME user guides</a>
-          </p>
-        </section>
-      </div>
-    </div>
-
-    <div class="col-sm-12 col-md-4"
-         *ngIf="mode === 'community'">
-      <div>
-        <div class="graphic-wrapper">
-          <img class="graphic"
-               src="/assets/signing_authority_v2.svg"
-               alt="Enrolment Icon">
-        </div>
-        <section class="content">
-          <h2>Who can register a site?</h2>
-
-          <p>
-            A person authorized by the organization to register sites.
-
-            <app-contextual-help>
-              A site must be registered by the organization's Signing Authority. The Signing Authority is responsible
-              for PharmaNet use, and can legally bind the organization to the terms of the registration and the
-              Organization Agreement for PharmaNet Use.
-            </app-contextual-help>
-          </p>
-        </section>
-      </div>
-    </div>
-
-    <div class="col-sm-12 col-md-4"
-         *ngIf="mode === 'health-authority'">
-      <div>
-        <div class="graphic-wrapper">
-          <img class="graphic"
-               src="/assets/signing_authority_v2.svg"
-               alt="Enrolment Icon">
-        </div>
-        <section class="content">
-          <h2>Who can register a site?</h2>
-
-          <p>
-            A person authorized by their health authority to register sites. If you have not been approved as an
-            authorized user for site registration, you will be directed to request approval first.
-          </p>
-        </section>
-      </div>
-    </div>
-
-    <div class="col-sm-12 col-md-4"
-         *ngIf="mode === 'community'">
-      <div>
-        <div class="graphic-wrapper">
-          <img class="graphic"
-               src="/assets/enrolment_v2.svg"
-               alt="Notification Icon">
-        </div>
-        <section class="content">
-          <h2>What you need</h2>
-
-          <p>
-            Your BC Services Card app and the contact details for these people for your site:
-          </p>
-
-          <ul>
-            <li>
-              PharmaNet Administrator
-
-              <app-contextual-help>
-                Either directly sets up individual PharmaNet access accounts at a site or
-                has the authority to request accounts from the site's contracted PharmaNet software vendor. They may,
-                for example, be the site’s office administrator, HR lead, medical office assistant (MOA), or
-                practitioner. This may be the software vendor.
-              </app-contextual-help>
-            </li>
-            <li>
-              Privacy Officer
-
-              <app-contextual-help>
-                Under privacy legislation (PIPA and FOIPPA), organizations holding or accessing
-                personal information must designate a Privacy Officer, who responds to privacy and information
-                management concerns on the organization’s behalf. In the event of a security breach, or concerns with
-                how PharmaNet data is accessed or used at the site, the Privacy Officer will be asked to help with
-                investigations and provide critical information quickly.
-              </app-contextual-help>
-            </li>
-            <li>
-              Technical Support Contact
-
-              <app-contextual-help>
-                This individual may be either a staff person at the site, a corporate IT
-                resource, or an independent IT contractor. They will be contacted in the event of a technology-related
-                issue (e.g., malware, problematic network traffic). They should familiar with: the practice's network
-                structure, Internet connections in use at the site, the application(s) used to access PharmaNet at the
-                site and security mechanisms such as firewalls and anti-virus measures (generally and at the site).
-              </app-contextual-help>
-            </li>
-          </ul>
-
-          <h2>User Guides</h2>
-          <p>
-            Click here for user guides:
-            <a href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/pharmacare/pharmanet-bc-s-drug-information-network/prime/prime-user-guides">PRIME user guides</a>
-          </p>
-        </section>
-      </div>
-    </div>
-
-    <div class="col-sm-12 col-md-4"
-         *ngIf="mode === 'health-authority'">
-      <div>
-        <div class="graphic-wrapper">
-          <img class="graphic"
-               src="/assets/enrolment_v2.svg"
-               alt="Notification Icon">
-        </div>
-        <section class="content">
-          <h2>User Guides</h2>
-          <p>
-            Click here for user guides:
-            <a href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/hospital-access-to-pharmanet">PRIME user guides</a>
-          </p>
-        </section>
       </div>
     </div>
   </div>
+  <div class="container">
+    <div class="row">
 
-  <div class="col-sm-12 support">
-    <app-pill>
-      <section>
-        <h2>Get Support</h2>
+      <div class="col-sm-12 col-md-4">
+        <div>
+          <div class="graphic_container">
+            <img class="graphic"
+                 src="/assets/mobile_icon.svg"
+                 alt="BC Services Card Icon">
+          </div>
+          <section class="content">
+            <h2>BC Services Card App</h2>
 
-        <p>
-          Questions about PRIME should be directed to:
-          <br>
-          <app-prime-phone></app-prime-phone>
-          <br>
-          <app-prime-support-email></app-prime-support-email>
-        </p>
-      </section>
-    </app-pill>
+            <p>
+              Set up the BC Services Card app on a
+              mobile device if you haven’t done so
+              already. Once finished, come back to
+              PRIME and complete your enrolment.
+            </p>
+            <a [href]="bcscMobileSetupUrl"
+                   target="_blank"
+                   class="underline"
+                   rel="noopener noreferrer">
+                  How to set up the BC Services Card app.
+                </a>
+            <br/>
+            <br/>
+            <h2>User Guides</h2>
+            <p>
+              Click here for
+              <a class="underline" href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/pharmacare/pharmanet-bc-s-drug-information-network/prime/prime-user-guides">PRIME user guides</a>
+            </p>
+          </section>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-4">
+        <div>
+          <div class="graphic_container">
+            <img class="graphic"
+                 src="/assets/individual_enrolment_icon.svg"
+                 alt="BC Services Card Icon">
+          </div>
+          <section class="content">
+            <h2>Individual Access</h2>
+            <p>
+              Complete your PRIME enrolment. It usually only take a few minutes. If you
+              are a regulated health professional, you will need your BC college information
+              (Licence number/ registration number/ CPSID/ PharmaNet Id) and next renewal date.
+            </p>
+            <h2>Enrolment Notification
+              <app-contextual-help class="va_super"
+                                   icon="info_outline">
+                Once you are approved to use PharmaNet, you send the PRIME approval email to the person in your
+                workplace who sets up PharmaNet accounts. They will get you connected to PharmaNet.
+              </app-contextual-help>
+            </h2>
+            <p>
+              Select this if you want to set up access to PharmaNet at a clinical setting (site) and are authorized by
+              the
+              responsible organization to register the site in PRIME
+            </p>
+          </section>
+        </div>
+      </div>
 
+      <div class="col-sm-12 col-md-4">
+        <div>
+          <div class="graphic_container">
+            <img class="graphic"
+                 src="/assets/site_registration_icon.svg"
+                 alt="Enrolment Icon">
+          </div>
+          <section class="content">
+            <h2>Site Registration</h2>
+            <p>
+              A person authorized by the organization to register sites. A person authorized by their health authority
+              to register sites. If you have not been approved as an authorized user for site registration, you will be
+              directed to request approval first.
+            </p>
+            <h2>What you need</h2>
+            <p>
+              Your BC Services Card app and the contact details for these people for your site:
+            </p>
+
+            <ul>
+              <li>
+                PharmaNet Administrator
+
+                <app-contextual-help class="va_super"
+                                     icon="info_outline">
+                  Either directly sets up individual PharmaNet access accounts at a site or
+                  has the authority to request accounts from the site's contracted PharmaNet software vendor. They
+                  may,
+                  for example, be the site’s office administrator, HR lead, medical office assistant (MOA), or
+                  practitioner. This may be the software vendor.
+                </app-contextual-help>
+              </li>
+              <li>
+                Privacy Officer
+
+                <app-contextual-help class="va_super"
+                                     icon="info_outline">
+                  Under privacy legislation (PIPA and FOIPPA), organizations holding or accessing
+                  personal information must designate a Privacy Officer, who responds to privacy and information
+                  management concerns on the organization’s behalf. In the event of a security breach, or concerns
+                  with
+                  how PharmaNet data is accessed or used at the site, the Privacy Officer will be asked to help with
+                  investigations and provide critical information quickly.
+                </app-contextual-help>
+              </li>
+              <li>
+                Technical Support Contact
+
+                <app-contextual-help class="va_super"
+                                     icon="info_outline">
+                  This individual may be either a staff person at the site, a corporate IT
+                  resource, or an independent IT contractor. They will be contacted in the event of a
+                  technology-related
+                  issue (e.g., malware, problematic network traffic). They should familiar with: the practice's
+                  network
+                  structure, Internet connections in use at the site, the application(s) used to access PharmaNet at
+                  the
+                  site and security mechanisms such as firewalls and anti-virus measures (generally and at the site).
+                </app-contextual-help>
+              </li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12 support">
+      <app-pill>
+        <section>
+          <h2>Get Support</h2>
+
+          <p>
+            Questions about PRIME should be directed to:
+            <br>
+            <app-prime-phone></app-prime-phone>
+            <br>
+            <app-prime-support-email></app-prime-support-email>
+          </p>
+        </section>
+      </app-pill>
+
+    </div>
   </div>
 </div>

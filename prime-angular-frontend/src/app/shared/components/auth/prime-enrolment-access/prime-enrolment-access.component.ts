@@ -66,8 +66,30 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
     return this.viewportService.isMobile;
   }
 
-  public onLogin(isHA: boolean) {
-    if (!isHA || this.form.valid) {
+  public onEnrolClick() {
+    this.enrolmentLogin();
+  }
+
+  public onAlreadyEnrolledLinkClick(event: Event) {
+    event.preventDefault();
+    this.enrolmentLogin();
+  }
+
+  public onSiteRegistrationClick() {
+    this.communitySiteLogin();
+  }
+
+  public onHealthAuthoritySiteRegistrationClick(event: Event) {
+    event.preventDefault();
+    if (this.mode !== 'health-authority') {
+      this.router.navigate([this.healthAuthorityUrl]);
+    } else {
+      this.router.navigate([this.communitySiteUrl]);
+    }
+  }
+
+  public onPasscodeSubmit() {
+    if (this.form.valid) {
       const data: DialogOptions = {
         title: this.collectionNoticeService.Title,
         component: HtmlComponent,
@@ -85,12 +107,37 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
     }
   }
 
+  public onPasscodeCancel() {
+    this.router.navigate([this.communitySiteUrl]);
+  }
+
+  public onLoginSite() {
+    this.router.navigate([this.communitySiteUrl], { queryParams: { login: true } });
+  }
+
   public ngOnInit(): void {
     this.createFormInstance();
 
     this.viewportService.onResize()
       .pipe(untilDestroyed(this))
       .subscribe();
+
+    if (this.route.snapshot.queryParams?.login === 'true') {
+      const data: DialogOptions = {
+        title: this.collectionNoticeService.Title,
+        component: HtmlComponent,
+        data: {
+          content: this.collectionNoticeService.ContentToRender,
+        },
+        actionText: 'Next',
+      };
+
+      this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .subscribe((isNext: boolean) => {
+          if (isNext) this.login.emit()
+        });
+    }
   }
 
   public goTo(url: string) {
@@ -110,4 +157,47 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
   private checkHAPasscode(): (passcode: string) => Observable<boolean> {
     return (passcode: string) => this.healthAuthorityResource.checkHealthAuthorityPasscode(passcode);
   }
+
+  private enrolmentLogin() {
+    if (this.mode === 'enrolment') {
+      const data: DialogOptions = {
+        title: this.collectionNoticeService.Title,
+        component: HtmlComponent,
+        data: {
+          content: this.collectionNoticeService.ContentToRender,
+        },
+        actionText: 'Next',
+      };
+
+      this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .subscribe((isNext: boolean) => {
+          if (isNext) this.login.emit()
+        });
+    } else {
+      this.router.navigate([this.enrolmentUrl], { queryParams: { login: true } });
+    }
+  }
+
+  private communitySiteLogin() {
+    if (this.mode === 'community') {
+      const data: DialogOptions = {
+        title: this.collectionNoticeService.Title,
+        component: HtmlComponent,
+        data: {
+          content: this.collectionNoticeService.ContentToRender,
+        },
+        actionText: 'Next',
+      };
+
+      this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .subscribe((isNext: boolean) => {
+          if (isNext) this.login.emit()
+        });
+    } else {
+      this.router.navigate([this.communitySiteUrl], { queryParams: { login: true } });
+    }
+  }
+
 }
