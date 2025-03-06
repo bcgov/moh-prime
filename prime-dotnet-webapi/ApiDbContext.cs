@@ -82,6 +82,7 @@ namespace Prime
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
         public DbSet<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
         public DbSet<RemoteAccessSite> RemoteAccessSites { get; set; }
+        public DbSet<RemoteAccessLocation> RemoteAccessLocations { get; set; }
         public DbSet<EnrolleeAbsence> EnrolleeAbsences { get; set; }
         public DbSet<Certification> Certifications { get; set; }
         public DbSet<UnlistedCertification> UnlistedCertifications { get; set; }

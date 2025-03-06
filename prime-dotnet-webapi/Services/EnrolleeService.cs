@@ -1376,6 +1376,13 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        private string AbsenceToString(EnrolleeAbsence absence)
+        {
+            var endDateString = absence.EndTimestamp == null ? " with no end date" : $", End Date: {absence.EndTimestamp:d MMM yyyy}";
+
+            return $"Start Date: {absence.StartTimestamp:d MMM yyyy}{endDateString}";
+        }
+
         public async Task<EnrolleeAbsence> CreateEnrolleeAbsenceAsync(int enrolleeId, EnrolleeAbsenceViewModel createModel)
         {
             var absence = new EnrolleeAbsence
@@ -1387,6 +1394,8 @@ namespace Prime.Services
 
             _context.EnrolleeAbsences.Add(absence);
             await _context.SaveChangesAsync();
+
+            await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, $"Absence Entered ({AbsenceToString(absence)})");
 
             return absence;
         }
@@ -1426,6 +1435,7 @@ namespace Prime.Services
             {
                 absence.EndTimestamp = rightNow;
                 await _context.SaveChangesAsync();
+                await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, $"Absence Cancelled ({AbsenceToString(absence)})");
             }
         }
 
@@ -1441,6 +1451,7 @@ namespace Prime.Services
             {
                 _context.EnrolleeAbsences.Remove(absence);
                 await _context.SaveChangesAsync();
+                await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, $"Absence Deleted ({AbsenceToString(absence)})");
             }
         }
 
