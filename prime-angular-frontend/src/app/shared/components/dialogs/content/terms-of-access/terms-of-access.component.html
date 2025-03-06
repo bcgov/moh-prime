@@ -1,0 +1,48 @@
+<h2 mat-dialog-title
+    class="d-flex align-items-stretch">
+  <mat-icon color="warn">warning</mat-icon>
+  <span class="flex-grow-1">
+Change Terms of Access
+  </span>
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field class="w-100">
+      <mat-label>TOA Selection</mat-label>
+      <mat-select [formControl]="assignedTOAType">
+        <mat-option *ngFor="let agreement of termsOfAccessAgreements"
+                    [value]="agreement.type">
+          {{ agreement.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error>Required</mat-error>
+    </mat-form-field>
+    <mat-form-field class="w-100">
+      <textarea matInput
+                placeholder="Note"
+                rows="10"
+                formControlName="note"></textarea>
+      <mat-hint>
+        Note is required
+      </mat-hint>
+      <mat-error>Required</mat-error>
+    </mat-form-field>
+  </form>
+  <div class="mt-4">
+    <div class="row">
+      <div class="col-6">
+        <button mat-stroked-button
+                (click)="onCancel()"
+                class="my-2 mr-2">Cancel</button>
+      </div>
+      <div class="col-6 text-right">
+        <button mat-flat-button
+                (click)="onSubmit()"
+                color="warn"
+                class="my-2 mr-1">
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

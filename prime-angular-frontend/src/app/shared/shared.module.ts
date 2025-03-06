@@ -132,6 +132,7 @@ import { EmailFormComponent } from './components/forms/email-form/email-form.com
 import { ChangeVendorNoteComponent } from './components/dialogs/content/change-vendor-note/change-vendor-note.component';
 import { TransferHASiteComponent } from './components/dialogs/content/transfer-ha-site/transfer-ha-site.component';
 import { SiteArchiveRestoreComponent } from './components/dialogs/content/site-archive-restore/site-archive-restore.component';
+import { ChangeTermsOfAccessComponent } from './components/dialogs/content/terms-of-access/terms-of-access.component';
 
 @NgModule({
   declarations: [
@@ -245,6 +246,7 @@ import { SiteArchiveRestoreComponent } from './components/dialogs/content/site-a
     SelfDeclarationTermComponent,
     TransferHASiteComponent,
     SiteArchiveRestoreComponent,
+    ChangeTermsOfAccessComponent,
   ],
   imports: [
     CommonModule,

@@ -44,7 +44,7 @@ namespace Prime.Services
 
             if (organizationId != null)
             {
-                query = query.Where(s => s.OrganizationId == organizationId);
+                query = query.Where(s => s.OrganizationId == organizationId && s.Organization.DeletedDate == null);
             }
 
             return await query.ToListAsync();
@@ -56,6 +56,9 @@ namespace Prime.Services
 
             var query = _context.CommunitySites
                 .AsNoTracking()
+                .Where(s => s.DeletedDate == null && s.Organization.DeletedDate == null)
+                .If(searchOptions.OrganizationId.HasValue, q => q
+                    .Where(s => s.OrganizationId == searchOptions.OrganizationId))
                 .If(searchOptions.CareSettingCode.HasValue, q => q
                     .Where(s => s.CareSettingCode == searchOptions.CareSettingCode)
                 )
@@ -125,8 +128,19 @@ namespace Prime.Services
 
         public async Task<CommunitySite> GetSiteAsync(int siteId)
         {
-            return await GetBaseSiteQuery()
+            var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
+
+            if (site.CareSettingCode.HasValue &&
+                site.CareSettingCode.Value == (int)CareSettingType.CommunityPractice &&
+                site.Organization != null &&
+                site.Organization.RegistrationId != null)
+            {
+                var eras = await matchExceptionRemoteAccessSite(site.PEC, site.Organization.RegistrationId);
+                site.RemoteAccessTypeCode = eras != null ? eras.RemoteAccessTypeCode : (int)RemoteAccessTypeEnum.PrivateCommunityHealthPractice;
+            }
+
+            return site;
         }
 
         public async Task<List<Vendor>> GetVendorsAsync()
@@ -225,7 +239,7 @@ namespace Prime.Services
         {
             return await _context.CommunitySites
                 .AsNoTracking()
-                .Where(s => s.Id == siteId)
+                .Where(s => s.Id == siteId && s.DeletedDate == null)
                 .Select(s => new PermissionsRecord { Username = s.Organization.SigningAuthority.Username })
                 .SingleOrDefaultAsync();
         }
@@ -458,6 +472,24 @@ namespace Prime.Services
                 }
             }
 
+            //remove RemoteAccessSites and RemoteAccessLocation records for remote users that will be deleted
+            var enrolleeIds = _context.EnrolleeRemoteUsers.Where(u => existingUsers.Keys.Contains(u.RemoteUserId))
+                                                .Select(u => u.EnrolleeId)
+                                                .ToList();
+            var remoteAccessSites = _context.RemoteAccessSites.Where(s => enrolleeIds.Contains(s.EnrolleeId) && s.SiteId == current.Id)
+                                                .Select(s => s)
+                                                .ToList();
+            _context.RemoteAccessSites.RemoveRange(remoteAccessSites);
+
+            foreach (var enrolleeId in enrolleeIds)
+            {
+                // Check if the enrollee has only one remote access site. if so, remove the remote access location
+                if (_context.RemoteAccessSites.Where(s => s.EnrolleeId == enrolleeId).Count() == 1)
+                {
+                    _context.RemoteAccessLocations.Where(l => l.EnrolleeId == enrolleeId).ExecuteDelete();
+                }
+            }
+
             foreach (var pendingToRemoveUser in existingUsers.Values)
             {
                 var message = $"Remote user '{pendingToRemoveUser.FirstName} {pendingToRemoveUser.LastName}', " +
@@ -635,7 +667,7 @@ namespace Prime.Services
             return await _context.CommunitySites
                 .Include(s => s.BusinessLicences)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
-                .Where(s => s.Id == siteId)
+                .Where(s => s.Id == siteId && s.DeletedDate == null)
                 .Select(s => s.BusinessLicence)
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
@@ -645,7 +677,7 @@ namespace Prime.Services
         {
             return await _context.CommunitySites
                 .AsNoTracking()
-                .AnyAsync(s => s.Id == siteId);
+                .AnyAsync(s => s.Id == siteId && s.DeletedDate == null);
         }
 
         public async Task<IEnumerable<IndividualDeviceProviderViewModel>> GetIndividualDeviceProvidersAsync(int siteId)
@@ -659,7 +691,7 @@ namespace Prime.Services
         public async Task UpdateSigningAuthorityForOrganization(int organizationId, int partyId)
         {
             var sites = await _context.CommunitySites
-                .Where(s => s.OrganizationId == organizationId)
+                .Where(s => s.OrganizationId == organizationId && s.DeletedDate == null)
                 .ToListAsync();
 
             foreach (var site in sites)
@@ -673,6 +705,7 @@ namespace Prime.Services
         private IQueryable<CommunitySite> GetBaseSiteQuery()
         {
             return _context.CommunitySites
+                .Where(s => s.DeletedDate == null)
                 .Include(s => s.Provisioner)
                 .Include(s => s.SiteVendors)
                     .ThenInclude(v => v.Vendor)
@@ -697,6 +730,12 @@ namespace Prime.Services
                 .Include(s => s.Adjudicator)
                 .Include(s => s.SiteStatuses)
                 .Include(s => s.SiteSubmissions);
+        }
+
+        private async Task<ExceptionRemoteAccessSite> matchExceptionRemoteAccessSite(string siteId, string registrationId)
+        {
+            return await _context.ExceptionRemoteAccessSites
+                .Where(s => s.PEC == siteId && s.RegistrationId == registrationId).SingleOrDefaultAsync();
         }
     }
 }

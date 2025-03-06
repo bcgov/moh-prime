@@ -1,0 +1,55 @@
+<app-organization-container [content]="content"
+                            [hideSearchBar]="true"
+                            [hideOverviewButton]="true">
+  <app-page-header>Sites of Organization</app-page-header>
+</app-organization-container>
+
+<ng-template #content>
+  <app-page-section *ngIf="privateCommunityHealthPractices.data.length">
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>
+        Private Community Health Practices
+      </ng-container>
+    </app-page-subheader>
+    <app-site-registration-table [dataSource]="privateCommunityHealthPractices"
+                                 (assign)="onAssign($event)"
+                                 (reassign)="onReassign($event)"
+                                 (notify)="onNotify($event)"
+                                 (route)="onRoute($event)">
+    </app-site-registration-table>
+  </app-page-section>
+
+  <app-page-section *ngIf="communityPharmacies.data.length">
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>
+        Community Pharmacies
+      </ng-container>
+    </app-page-subheader>
+    <app-site-registration-table [dataSource]="communityPharmacies"
+                                 (assign)="onAssign($event)"
+                                 (reassign)="onReassign($event)"
+                                 (notify)="onNotify($event)"
+                                 (route)="onRoute($event)">
+    </app-site-registration-table>
+  </app-page-section>
+
+  <app-page-section *ngIf="deviceProviders.data.length">
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>
+        Device Providers
+      </ng-container>
+    </app-page-subheader>
+    <app-site-registration-table [dataSource]="deviceProviders"
+                                 (assign)="onAssign($event)"
+                                 (reassign)="onReassign($event)"
+                                 (notify)="onNotify($event)"
+                                 (route)="onRoute($event)">
+    </app-site-registration-table>
+  </app-page-section>
+
+  <ng-container *ngIf="!privateCommunityHealthPractices.data.length &&
+                      !communityPharmacies.data.length &&
+                      !deviceProviders.data.length">
+    No sites found
+  </ng-container>
+</ng-template>

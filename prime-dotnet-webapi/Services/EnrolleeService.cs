@@ -369,6 +369,7 @@ namespace Prime.Services
             UpdateRemoteAccessLocations(enrollee, updateModel);
 
             UpdateOboSites(enrollee, updateModel);
+            await UpdateUnlistedCertification(enrollee, updateModel);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -573,6 +574,47 @@ namespace Prime.Services
             }
         }
 
+        private async Task UpdateUnlistedCertification(Enrollee enrollee, EnrolleeUpdateModel enrolleeUpdateModel)
+        {
+            var enrolleeUnlistedCertifications = await _context.UnlistedCertifications
+                .Where(uc => uc.EnrolleeId == enrollee.Id).ToListAsync();
+
+            if (enrolleeUpdateModel.UnlistedCertifications != null && enrolleeUpdateModel.UnlistedCertifications.Count > 0)
+            {
+                foreach (var updateModelCert in enrolleeUpdateModel.UnlistedCertifications)
+                {
+                    var matchingUnlistedCert = enrolleeUnlistedCertifications.Where(uc => uc.LicenceClass == updateModelCert.LicenceClass &&
+                        uc.CollegeName == updateModelCert.CollegeName &&
+                        uc.LicenceNumber == updateModelCert.LicenceNumber &&
+                        uc.RenewalDate == updateModelCert.RenewalDate).SingleOrDefault();
+
+                    if (matchingUnlistedCert == null)
+                    {
+                        await _context.AddAsync(new Models.UnlistedCertification
+                        {
+                            EnrolleeId = enrollee.Id,
+                            CollegeName = updateModelCert.CollegeName,
+                            LicenceNumber = updateModelCert.LicenceNumber,
+                            RenewalDate = updateModelCert.RenewalDate,
+                            LicenceClass = updateModelCert.LicenceClass
+                        });
+                    }
+                    else
+                    {
+                        enrolleeUnlistedCertifications.Remove(matchingUnlistedCert);
+                    }
+                }
+                if (enrolleeUnlistedCertifications.Count > 0)
+                {
+                    enrolleeUnlistedCertifications.ForEach(uc => _context.Remove(uc));
+                }
+            }
+            else
+            {
+                enrolleeUnlistedCertifications.ForEach(uc => _context.Remove(uc));
+            }
+        }
+
         private void UpdateOboSites(Enrollee dbEnrollee, EnrolleeUpdateModel updateEnrollee)
         {
             // Wholesale replace the obo sites
@@ -695,6 +737,14 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<UnlistedCertificationViewModel>> GetUnlistedCertificationsAsync(int enrolleeId)
+        {
+            return await _context.UnlistedCertifications
+            .Where(c => c.EnrolleeId == enrolleeId)
+            .ProjectTo<UnlistedCertificationViewModel>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+        }
+
         public async Task<IEnumerable<EnrolleeDeviceProviderViewModel>> GetEnrolleeDeviceProvidersAsync(int enrolleeId)
         {
             return await _context.Set<EnrolleeDeviceProvider>()
@@ -706,7 +756,10 @@ namespace Prime.Services
         public async Task<IEnumerable<EnrolleeRemoteUserViewModel>> GetEnrolleeRemoteUsersAsync(int enrolleeId)
         {
             return await _context.EnrolleeRemoteUsers
-                .Where(eru => eru.EnrolleeId == enrolleeId)
+                .Where(eru => eru.EnrolleeId == enrolleeId &&
+                    _context.RemoteUsers
+                    .Where(ru => ru.Site.DeletedDate == null)
+                    .Select(ru => ru.Id).Contains(eru.RemoteUserId))
                 .ProjectTo<EnrolleeRemoteUserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
@@ -734,7 +787,7 @@ namespace Prime.Services
             // Currently, only maps from Community Sites as Remote Users are disabled on Health Authorities
             return await _context.RemoteAccessSites
                 .AsNoTracking()
-                .Where(ras => ras.EnrolleeId == enrolleeId)
+                .Where(ras => ras.EnrolleeId == enrolleeId && ras.Site.DeletedDate == null)
                 .ProjectTo<RemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
@@ -1323,6 +1376,13 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        private string AbsenceToString(EnrolleeAbsence absence)
+        {
+            var endDateString = absence.EndTimestamp == null ? " with no end date" : $", End Date: {absence.EndTimestamp:d MMM yyyy}";
+
+            return $"Start Date: {absence.StartTimestamp:d MMM yyyy}{endDateString}";
+        }
+
         public async Task<EnrolleeAbsence> CreateEnrolleeAbsenceAsync(int enrolleeId, EnrolleeAbsenceViewModel createModel)
         {
             var absence = new EnrolleeAbsence
@@ -1334,6 +1394,8 @@ namespace Prime.Services
 
             _context.EnrolleeAbsences.Add(absence);
             await _context.SaveChangesAsync();
+
+            await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, $"Absence Entered ({AbsenceToString(absence)})");
 
             return absence;
         }
@@ -1373,6 +1435,7 @@ namespace Prime.Services
             {
                 absence.EndTimestamp = rightNow;
                 await _context.SaveChangesAsync();
+                await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, $"Absence Cancelled ({AbsenceToString(absence)})");
             }
         }
 
@@ -1388,6 +1451,7 @@ namespace Prime.Services
             {
                 _context.EnrolleeAbsences.Remove(absence);
                 await _context.SaveChangesAsync();
+                await _businessEventService.CreateEnrolleeAbsenceAsync(enrolleeId, $"Absence Deleted ({AbsenceToString(absence)})");
             }
         }
 

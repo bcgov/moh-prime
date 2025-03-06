@@ -7,7 +7,7 @@ import { debounceTime } from 'rxjs/operators';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { LocalStorageService } from '@core/services/local-storage.service';
-import { EnrolmentStatusFilterEnum, PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
+import { EnrolmentStatusFilterEnum, PaperStatusEnum } from '@shared/enums/status-filter.enum';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { SearchFormStatusType } from '@adjudication/shared/enums/search-form-status-type.enum';
 
@@ -129,11 +129,14 @@ export class SearchFormComponent implements OnInit {
         textSearch: this.localStorage.get(this.textSearchKey),
         siteStatusCode: this.localStorage.getInteger(this.siteStatusCodeKey) || null,
       });
-    }
-    if (this.statusType === SearchFormStatusType.EnrolleeStatuses) {
+    } else if (this.statusType === SearchFormStatusType.EnrolleeStatuses) {
       this.form.patchValue({
         textSearch: this.localStorage.get(this.textSearchKey),
         enrolleeStatusCode: this.localStorage.getInteger(this.enrolleeStatusCodeKey) || null
+      });
+    } else {
+      this.form.patchValue({
+        textSearch: this.localStorage.get(this.textSearchKey)
       });
     }
   }

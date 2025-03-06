@@ -842,19 +842,33 @@ objects:
 ###      Document Manager (backend)     ###
 ###########################################
 #   Document Manager (backend) Deployment Config
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
+- apiVersion: apps/v1
+  kind: Deployment
   metadata:
     name: ${SVC_NAME}-document-manager
     namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: python
+    annotations:
+      image.openshift.io/triggers: |-
+        [
+          {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "${OC_LICENSE_PLATE}-tools",
+              "name": "prime-document-manager:${IMAGE_TAG}"
+            },
+            "fieldPath": "spec.template.spec.containers[0].image",
+            "paused": false
+          }
+        ]
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-document-manager
+      matchLabels:
+        name: ${SVC_NAME}-document-manager
     strategy:
       type: Recreate
       rollingParams:
@@ -1006,18 +1020,7 @@ objects:
           - name: ${SVC_NAME}-document-manager-pvc
             persistentVolumeClaim:
               claimName: '${SVC_NAME}-document-manager-pvc'
-    triggers:
-      - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true
-          containerNames:
-            - ${SVC_NAME}-document-manager
-            - run-migrations
-          from:
-            kind: ImageStreamTag
-            namespace: "${OC_LICENSE_PLATE}-tools"
-            name: 'prime-document-manager:${IMAGE_TAG}'
+
 
 #   Document Manager (backend) Service
 - apiVersion: v1
@@ -1073,7 +1076,7 @@ objects:
         containers:
           - name: redis
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/redis-6:latest
+              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/redis-6:tini
             resources:
               limits:
                 cpu: 25m

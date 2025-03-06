@@ -120,7 +120,7 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            var site = await _healthAuthoritySiteService.GetSiteAsync(siteId);
+            var site = await _healthAuthoritySiteService.GetSiteViewModelAsync(siteId);
 
             return Ok(site);
         }

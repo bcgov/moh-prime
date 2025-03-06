@@ -7,31 +7,33 @@
     </app-page-header>
 
     <app-enrolment-progress-indicator *ngIf="initialEnrolment"
-                                      [inProgress]="false"
+                                      [inProgress]="!isEnrolmentComplete"
                                       [isCentered]="true"></app-enrolment-progress-indicator>
 
     <div class="row">
 
       <ng-container *ngIf="initialEnrolment; else renewalConfirmation">
-        <div *ngIf="!complete"
+        <div *ngIf="!isEnrolmentComplete"
              imageName="notification"
              class="col-12">
-          <app-page-subheader [divider]="false">
-            <ng-container appPageSubheaderTitle>Share your approval with your PharmaNet administrator</ng-container>
-            <ng-container appPageSubheaderSummary>
-              PRIME will send your enrolment information to your PharmaNet administrator(s) so they can set up your
-              access.
-              <div class="font-italic"
-                   *ngIf="enrolment.currentStatus.statusCode === EnrolmentStatus.EDITABLE">
-                Note: You cannot access PharmaNet without completing this step. If necessary, you can leave this blank
-                and
-                return to PRIME later to enter the email(s).
-              </div>
-            </ng-container>
-          </app-page-subheader>
+          <ng-container>
+            <app-page-subheader [divider]="false">
+              <ng-container appPageSubheaderTitle>Share your approval with your PharmaNet administrator</ng-container>
+              <ng-container appPageSubheaderSummary>
+                PRIME will send your enrolment information to your PharmaNet administrator(s) so they can set up your
+                access.
+                <div class="font-italic"
+                     *ngIf="enrolment.currentStatus.statusCode === EnrolmentStatus.EDITABLE">
+                  Note: You cannot access PharmaNet without completing this step. If necessary, you can leave this blank
+                  and
+                  return to PRIME later to enter the email(s).
+                </div>
+              </ng-container>
+            </app-page-subheader>
+          </ng-container>
 
           <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
-            <div class="col-12 mb-4">
+            <div class="mb-4">
               <ng-container [ngTemplateOutlet]="settingEmail"
                             [ngTemplateOutletContext]="careSettingConfig">
               </ng-container>
@@ -49,7 +51,7 @@
           </div>
         </div>
 
-        <ng-container>
+        <ng-container *ngIf="isEnrolmentComplete">
           <div class="col-12">
             <ng-container>
               <p>
@@ -146,7 +148,8 @@
 
       </div>
       <div class="col">
-        <ng-container [ngTemplateOutlet]="gpidSection">
+        <ng-container *ngIf="!isNextStep || isEnrolmentComplete"
+                      [ngTemplateOutlet]="gpidSection">
         </ng-container>
       </div>
     </ng-template>

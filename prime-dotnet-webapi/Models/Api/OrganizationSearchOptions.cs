@@ -6,5 +6,6 @@ namespace Prime.Models.Api
         public int? CareSettingCode { get; set; }
         public int? Page { get; set; }
         public int? Status { get; set; }
+        public int? OrganizationId { get; set; }
     }
 }

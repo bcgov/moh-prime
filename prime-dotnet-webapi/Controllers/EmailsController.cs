@@ -44,7 +44,9 @@ namespace Prime.Controllers
         {
             var total = await _emailService.UpdateEmailLogStatuses(limit);
 
-            return Ok($"Updated {limit} of {total}.");
+            await _emailService.RetryIncompleteEmailsAsync();
+
+            return Ok($"Updated {limit} (at most) of {total} found.");
         }
 
         // POST: api/Emails/management/enrollees/renewal

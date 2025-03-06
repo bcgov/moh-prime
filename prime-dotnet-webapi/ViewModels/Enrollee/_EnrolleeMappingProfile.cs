@@ -85,6 +85,8 @@ namespace Prime.ViewModels.Profiles
             CreateMap<HpdidLookup, GpidDetailLookup>();
 
             CreateMap<DeviceProviderSite, DeviceProviderSiteViewModel>();
+
+            CreateMap<UnlistedCertification, UnlistedCertificationViewModel>();
         }
     }
 }
