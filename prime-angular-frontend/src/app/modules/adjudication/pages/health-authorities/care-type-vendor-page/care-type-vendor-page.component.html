@@ -27,8 +27,7 @@
                  *ngIf="hasDuplicate(careTypeIndex)">
               Duplicate vendors detected. Please remove duplicate vendor.
             </div>
-            <ng-container
-                          *ngIf="careTypeVendor.get('vendorCodes').controls && careTypeVendor.get('vendorCodes').controls.length > 0">
+            <ng-container *ngIf="careTypeVendor.get('vendorCodes').controls">
               <ng-container
                             *ngFor="let careTypeVendorCode of careTypeVendor.get('vendorCodes').controls; let vendorIndex = index;">
                 <ng-container [formGroup]="careTypeVendorCode">
