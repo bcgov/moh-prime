@@ -8,7 +8,7 @@ import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
 import { EnumUtils } from '@lib/utils/enum-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { AgreementType } from '@shared/enums/agreement-type.enum';
+import { AgreementType, termsOfAccessAgreements } from '@shared/enums/agreement-type.enum';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -40,6 +40,8 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   @Output() public assignToa: EventEmitter<{ enrolleeId: number, agreementType: AgreementType }>;
   @Output() public reload: EventEmitter<boolean>;
   @Output() public changeDateOfBirth: EventEmitter<number>;
+  @Output() public changeToA: EventEmitter<number>;
+
 
   public form: FormGroup;
   public termsOfAccessAgreements: { type: AgreementType, name: string }[];
@@ -69,21 +71,10 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
     this.route = new EventEmitter<string | (string | number)[]>();
     this.reload = new EventEmitter<boolean>();
     this.changeDateOfBirth = new EventEmitter<number>();
+    this.changeToA = new EventEmitter<number>();
     this.mode = 'column';
 
-
-    this.termsOfAccessAgreements = [
-      { type: 0, name: 'None' },
-      { type: AgreementType.REGULATED_USER_TOA, name: 'RU' },
-      { type: AgreementType.OBO_TOA, name: 'OBO' },
-      { type: AgreementType.COMMUNITY_PHARMACIST_TOA, name: 'PharmRU' },
-      { type: AgreementType.PHARMACY_OBO_TOA, name: 'PharmOBO' },
-      { type: AgreementType.PHARMACY_TECHNICIAN_TOA, name: 'PharmTech' },
-      { type: AgreementType.LICENCED_PRACTICAL_NURSE_TOA, name: 'LPNRU' },
-      { type: AgreementType.DEVICE_PROVIDER_RU_TOA, name: 'DP RU' },
-      { type: AgreementType.DEVICE_PROVIDER_OBO_TOA, name: 'DP OBO' },
-      { type: AgreementType.PRESCRIBER_OBO_TOA, name: 'OBO Prescriber' },
-    ];
+    this.termsOfAccessAgreements = termsOfAccessAgreements;
   }
 
   public get assignedTOAType(): FormControl {
@@ -167,6 +158,12 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
     }
   }
 
+  public onChangeToA() {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
+      this.changeToA.emit(this.enrollee.id);
+    }
+  }
+
   public onEscalate() {
     const data: DialogOptions = {
       data: {
@@ -218,5 +215,11 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
       .subscribe((agreementType: AgreementType) =>
         this.assignToa.emit({ enrolleeId: this.enrollee.id, agreementType })
       );
+  }
+
+  public canChangeToA() {
+    return this.enrollee.appliedDate !== null &&
+      this.enrollee.currentStatusCode === this.EnrolmentStatus.EDITABLE &&
+      this.enrollee.approvedDate !== null;
   }
 }

@@ -97,15 +97,17 @@
     </app-enrollee-property>
 
     <ng-container *ngIf="!admin; else businessLicenceListView">
-      <ng-container *ngIf="site.businessLicence?.businessLicenceDocument; else deferredLicence">
-
+      <ng-container
+                    *ngIf="(site.businessLicence?.businessLicenceDocument || businessLicenceUpdated); else deferredLicence">
         <app-enrollee-property title="Expiry"
-                               [hasError]="!site.businessLicence?.expiryDate && withinRenewalPeriod"
-                               [errorMessage]="'Business licence expiry date is required'">
+                               [hasError]="site.businessLicence?.expiryDate && withinRenewalPeriod"
+                               [errorMessage]="'Please update business licence'">
           {{ site.businessLicence?.expiryDate | formatDate | default }}
         </app-enrollee-property>
 
-        <app-enrollee-property title="Filename">
+        <app-enrollee-property title="Filename"
+                               [hasError]="!site.businessLicence?.expiryDate && withinRenewalPeriod && !businessLicenceUpdated"
+                               [errorMessage]="'Please update business licence'">
           <ng-container *ngIf="!businessLicenceUpdated; else businessLicenceUpdatedMessage">
             <button mat-stroked-button
                     color="primary"
@@ -115,7 +117,7 @@
             </button>
           </ng-container>
           <ng-template #businessLicenceUpdatedMessage>
-            New business licence document has been uploaded for submission
+            (New) {{filename}}
           </ng-template>
         </app-enrollee-property>
         <app-enrollee-property *ngIf="site.businessLicence.deferredLicenceReason"

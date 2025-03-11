@@ -78,6 +78,26 @@ namespace Prime.HttpClients.Mail
 
         }
 
+        public async Task PromoteAsync(Guid msgId)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.PostAsync($"promote/{msgId}", null);
+                var responseString = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    // Only response if not OK
+                    _logger.LogError($"CHES response code: {(int)response.StatusCode}, response body: {responseString}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CHES Exception: {ex.Message}");
+                throw new Exception("Error occurred when calling CHES Email API. Try again later.", ex);
+            }
+        }
+
         public async Task<bool> HealthCheckAsync()
         {
             try

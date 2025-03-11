@@ -422,6 +422,7 @@ namespace Prime.Controllers
                 var licenceDto = _mapper.Map<BusinessLicence>(existingLicence);
                 licenceDto.Id = 0;
                 licenceDto.ExpiryDate = newLicence.ExpiryDate;
+                licenceDto.DeferredLicenceReason = newLicence.DeferredLicenceReason;
 
                 var licence = await _communitySiteService.AddBusinessLicenceAsync(site.Id, licenceDto, newLicence.DocumentGuid.Value);
                 return licence != null;

@@ -19,6 +19,7 @@ namespace Prime.Models
         public const int Organization = 8;
         public const int PharmanetApiCall = 9;
         public const int PaperEnrolmentLink = 10;
+        public const int Absence = 11;
 
         [Key]
         public int Code { get; set; }

@@ -25,6 +25,7 @@ export class OverviewContainerComponent implements OnInit {
   @Input() public admin: boolean;
   @Input() public siteErrors: ValidationErrors;
   @Input() public businessLicenceUpdated: boolean;
+  @Input() public filename: string;
 
   public withinRenewalPeriod: boolean;
   public routeUtils: RouteUtils;

@@ -101,6 +101,7 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     return this.fb.group({
       collegeName: ['', []],
       licenceNumber: ['', []],
+      licenceClass: ['', []],
       renewalDate: ['', []]
     })
   }

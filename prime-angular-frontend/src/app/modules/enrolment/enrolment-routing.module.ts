@@ -34,7 +34,6 @@ import { RemoteAccessComponent } from './pages/remote-access/remote-access.compo
 import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
 import { PaperEnrolleeReturneesPageComponent } from './pages/paper-enrollee-returnees-page/paper-enrollee-returnees-page.component';
 import { AbsenceManagementPageComponent } from './pages/absence-management-page/absence-management-page.component';
-import { NextStepsComponent } from './pages/next-steps/next-steps.component';
 
 const routes: Routes = [
   {
@@ -173,7 +172,7 @@ const routes: Routes = [
       },
       {
         path: EnrolmentRoutes.NEXT_STEPS,
-        component: NextStepsComponent,
+        component: PharmanetEnrolmentSummaryComponent,
         data: { title: 'Next Steps' }
       },
       //

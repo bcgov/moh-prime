@@ -91,6 +91,10 @@ import { SiteSubmissionComponent } from './shared/components/site-submission/sit
 import { AdminUsersContainerComponent } from './shared/components/admin-users-container/admin-users-container.component';
 import { AdminUsersPageComponent } from './pages/admin-users-page/admin-users-page.component';
 import { AdminUsersTableComponent } from './shared/components/admin-users-table/admin-users-table.component';
+import { OrganizationsComponent } from './pages/organizations/organizations.component';
+import { OrganizationTableComponent } from './shared/components/organization-table/organization-table.component';
+import { OrganizationContainerComponent } from './shared/components/organization-container/organization-container.component';
+import { OrganizationSitesComponent } from './pages/organization-sites/organization-sites.component';
 
 @NgModule({
   declarations: [
@@ -176,6 +180,10 @@ import { AdminUsersTableComponent } from './shared/components/admin-users-table/
     AdminUsersContainerComponent,
     AdminUsersPageComponent,
     AdminUsersTableComponent,
+    OrganizationsComponent,
+    OrganizationTableComponent,
+    OrganizationContainerComponent,
+    OrganizationSitesComponent,
   ],
   imports: [
     AdjudicationRoutingModule,

@@ -60,6 +60,8 @@ import { HaSiteSubmissionPageComponent } from './pages/health-authorities/ha-sit
 import { CommunitySiteSubmissionPageComponent } from './pages/community-site-submission-page/community-site-submission-page.component';
 import { CommunitySiteSubmissionListPageComponent } from './pages/community-site-submission-list-page/community-site-submission-list-page.component';
 import { AdminUsersPageComponent } from './pages/admin-users-page/admin-users-page.component';
+import { OrganizationsComponent } from './pages/organizations/organizations.component';
+import { OrganizationSitesComponent } from './pages/organization-sites/organization-sites.component';
 
 const routes: Routes = [
   {
@@ -442,6 +444,26 @@ const routes: Routes = [
                 redirectTo: AdjudicationRoutes.ORGANIZATION_INFORMATION,
                 pathMatch: 'full'
               }
+            ]
+          }
+        ]
+      },
+      {
+        path: AdjudicationRoutes.ORGANIZATIONS,
+        children: [
+          {
+            path: '',
+            component: OrganizationsComponent,
+            data: { title: 'Organizations' }
+          },
+          {
+            path: ':id',
+            children: [
+              {
+                path: AdjudicationRoutes.ORGANIZATION_SITES,
+                component: OrganizationSitesComponent,
+                data: { title: 'Organization Sites' }
+              },
             ]
           }
         ]

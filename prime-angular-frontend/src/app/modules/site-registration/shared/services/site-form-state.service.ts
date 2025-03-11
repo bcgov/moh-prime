@@ -19,6 +19,7 @@ import { CareSettingPageFormState } from '@registration/pages/care-setting-page/
 import { BusinessLicenceFormState } from '@registration/pages/business-licence-page/business-licence-form-state.class';
 import { BusinessLicenceRenewalPageFormState } from '@registration/pages/business-licence-renewal-page/business-licence-renewal-form-state.class';
 import { DeviceProviderPageFormState } from '@registration/pages/device-provider-page/device-provider-page-form-state.class';
+import { SiteService } from './site.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   public privacyOfficerFormState: PrivacyOfficerPageFormState;
   public technicalSupportFormState: TechnicalSupportPageFormState;
   public deviceProviderFormState: DeviceProviderPageFormState;
+  public businessLicenceRenewalPageFormState: BusinessLicenceRenewalPageFormState;
 
   private siteId: number;
   private organizationId: number;
@@ -49,7 +51,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     protected routeStateService: RouteStateService,
     protected logger: ConsoleLoggerService,
     private formUtilsService: FormUtilsService,
-    private siteResource: SiteResource
+    private siteResource: SiteResource,
+    private siteService: SiteService,
   ) {
     super(fb, routeStateService, logger);
 
@@ -231,7 +234,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   protected buildForms(): void {
     this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
-    this.businessLicenceFormState = new BusinessLicenceFormState(this.fb, this.siteResource, this.formUtilsService);
+    this.businessLicenceFormState = new BusinessLicenceFormState(this.fb, this.siteResource, this.formUtilsService, this.siteService);
     this.hoursOperationPageFormState = new HoursOperationPageFormState(this.fb);
     this.remoteUsersPageFormState = new RemoteUsersPageFormState(this.fb);
     this.administratorPharmaNetFormState = new AdministratorPageFormState(this.fb, this.formUtilsService);

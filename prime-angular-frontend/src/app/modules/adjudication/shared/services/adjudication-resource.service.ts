@@ -47,6 +47,7 @@ import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-c
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
 import { AdminStatusType } from '../models/admin-status.enum';
+import { OrganizationAdminView } from '@registration/shared/models/organization.model';
 
 @Injectable({
   providedIn: 'root'
@@ -328,6 +329,22 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Limits and conditions clause could not be updated');
           this.logger.error('[Adjudication] AdjudicationResource::updateAccessAgreementNote error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public changeAgreementType(enrolleeId: number, note: string, agreementType: number): Observable<EnrolleeNote> {
+    const payload = { note, agreementType };
+    return this.apiResource.put(`enrollees/${enrolleeId}/status-actions/change-toa`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeNote>) => response.result),
+        tap(() => {
+          this.toastService.openSuccessToast(`Agreement type changed.`);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Agreement type could not be changed');
+          this.logger.error('[Adjudication] AdjudicationResource::changeAgreementType error has occurred: ', error);
           throw error;
         })
       );
@@ -849,5 +866,36 @@ export class AdjudicationResource {
       }
     }
     profileSnapshot.selfDeclarations = orderedSelfDeclarations;
+  }
+
+  /******************************
+   * Organization Page resource
+   ******************************/
+
+  public getOrganizations(searchText: string): Observable<OrganizationAdminView[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ searchText });
+    return this.apiResource.get<OrganizationAdminView[]>('organizations/admin-view', params)
+      .pipe(
+        map((response: ApiHttpResponse<OrganizationAdminView[]>) => response.result),
+        tap((organizations: OrganizationAdminView[]) => this.logger.info('ORGANIZATION_ADMIN_VIEW', organizations)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization admin view could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getOrganizations error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getOrganizationById(id: number): Observable<OrganizationAdminView> {
+    return this.apiResource.get<OrganizationAdminView>(`organizations/admin-view/${id}`)
+      .pipe(
+        map((response: ApiHttpResponse<OrganizationAdminView>) => response.result),
+        tap((organization: OrganizationAdminView) => this.logger.info('ORGANIZATION_ADMIN_VIEW', organization)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization admin view could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getOrganizationById error has occurred: ', error);
+          throw error;
+        })
+      );
   }
 }

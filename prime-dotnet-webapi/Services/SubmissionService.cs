@@ -269,6 +269,10 @@ namespace Prime.Services
                     await DeclineToaAsync(enrollee);
                     break;
 
+                case EnrolleeStatusAction.ChangeToa:
+                    await ChangeToaAsync(enrollee, additionalParameters);
+                    break;
+
                 case EnrolleeStatusAction.EnableEditing:
                     await EnableEditingAsync(enrollee);
                     break;
@@ -315,6 +319,37 @@ namespace Prime.Services
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
             // Manually Approved submissions are automatically confirmed
             await ConfirmLatestSubmissionAsync(enrollee.Id);
+        }
+
+        private async Task<bool> ChangeToaAsync(
+            Enrollee enrollee,
+            object changeToaParameters)
+        {
+            if (changeToaParameters is ChangeToaUpdateViewModel param &&
+            param.AgreementType is AgreementType type)
+            {
+                var enrolleeSubmissions = await _enrolleeSubmissionService.GetEnrolleeSubmissionsAsync(enrollee.Id);
+                string currentAgreementType = enrolleeSubmissions.OrderByDescending(s => s.CreatedDate).First().AgreementType.ToString();
+
+                var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
+                newStatus.AddStatusReason(StatusReasonType.Manual);
+                await _context.SaveChangesAsync();
+
+                await _enrolleeService.AssignToaAgreementType(enrollee.Id, type);
+
+                await _enrolleeAgreementService.CreateEnrolleeAgreementAsync(enrollee.Id);
+
+                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, $"TOA changed from {currentAgreementType} to {param.AgreementType}, Note: {param.Note}");
+
+                await _emailService.SendReminderEmailAsync(enrollee.Id);
+                await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private async Task<bool> AcceptToaAsync(Enrollee enrollee, object additionalParameters)
@@ -476,6 +511,7 @@ namespace Prime.Services
         {
             return _context.Enrollees
                 .Include(e => e.EnrolleeCareSettings)
+                    .ThenInclude(e => e.CareSetting)
                 .Include(e => e.Submissions)
                 .Include(e => e.Addresses)
                     .ThenInclude(ea => ea.Address)

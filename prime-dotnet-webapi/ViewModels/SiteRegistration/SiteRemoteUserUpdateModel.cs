@@ -26,7 +26,8 @@ namespace Prime.ViewModels
                 && Email == other.Email
                 && RemoteUserCertification.CollegeCode == other.RemoteUserCertification.CollegeCode
                 && RemoteUserCertification.LicenseCode == other.RemoteUserCertification.LicenseCode
-                && RemoteUserCertification.LicenseNumber == other.RemoteUserCertification.LicenseNumber;
+                && RemoteUserCertification.LicenseNumber == other.RemoteUserCertification.LicenseNumber
+                && RemoteUserCertification.PractitionerId == other.RemoteUserCertification.PractitionerId;
         }
     }
 }

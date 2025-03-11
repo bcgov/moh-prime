@@ -16,6 +16,10 @@ export class BusinessLicenceRenewalPageFormState extends AbstractFormState<Busin
     this.buildForm();
   }
 
+  public get filename(): FormControl {
+    return this.formInstance.get('filename') as FormControl;
+  }
+
   public get businessLicenceGuid(): FormControl {
     return this.formInstance.get('businessLicenceGuid') as FormControl;
   }
@@ -55,6 +59,7 @@ export class BusinessLicenceRenewalPageFormState extends AbstractFormState<Busin
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
+      filename: [null, []],
       businessLicenceGuid: [
         // Will never be patched when the form is built, and is
         // only updated based on a document upload occurring.

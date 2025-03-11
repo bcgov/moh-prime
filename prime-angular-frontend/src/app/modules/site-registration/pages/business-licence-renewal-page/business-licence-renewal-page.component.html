@@ -30,7 +30,8 @@
         </ng-container>
       </app-alert>
 
-      <app-business-licence-expiry [form]="formState.form"></app-business-licence-expiry>
+      <app-business-licence-expiry [form]="formState.form"
+                                   [showExpiryDate]="true"></app-business-licence-expiry>
 
       <ng-container *ngIf="businessLicence.businessLicenceDocument">
 
