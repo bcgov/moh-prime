@@ -2,11 +2,12 @@
   <div class="container mb-1">
     <app-banner></app-banner>
     <div class="row title">
-      <div class="col-sm-8">
+      <div class="col-md-8">
         <div class="t1">Request Ministry of Health approval</div>
         <div class="t1">to access PharmaNet</div>
       </div>
-      <div class="col-sm-4 logo">
+      <div class="col-md-4 logo"
+           [class]="(isMobile) ? 'text-left' : ''">
         <span class="logo_title">PRIME</span>
         <app-prime-logo label="none"
                         size="small"></app-prime-logo>
@@ -47,12 +48,12 @@
             <div class="col-md-12 card">
               <img class="individual_graphic"
                    src="/assets/individual_enrolment.png"
-                   alt="BC Services Card Icon">
+                   alt="individual enrolment graphic">
               <div class="card-title">
                 Individual Access
               </div>
               <div class="card-text">
-                Healthcare professinals are requested to first enrol with PRIME.
+                Healthcare professionals are required to enrol with PRIME.
               </div>
               <button mat-flat-button
                       class="button"
@@ -70,8 +71,10 @@
             <div class="col-md-12 card">
               <img class="site_graphic"
                    src="/assets/site_registration.png"
-                   alt="BC Services Card Icon">
-              <div class="card-title">Site Registration</div>
+                   alt="site registration graphic"
+                   #siteGraphicImg>
+              <div class="card-title"
+                   #siteTitleDiv>Site Registration</div>
               <div class="card-text">Clinical locations using PharmaNet must first be registered in PRIME. Start,
                 continue, or
                 update a site registration for a private community health practice, community pharmacy,
@@ -96,7 +99,8 @@
                     <input matInput
                            type="password"
                            class="passcode_input"
-                           formControlName="passcode">
+                           formControlName="passcode"
+                           #passcodeInput>
                     <mat-error *ngIf="passcode.hasError('required')">Required</mat-error>
                     <mat-error *ngIf="passcode.hasError('validPasscode')">Invalid Passcode</mat-error>
                   </mat-form-field>
@@ -142,7 +146,7 @@
             <h2>User Guides</h2>
             <p>
               Review the
-              <a class="underline" href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/pharmacare/pharmanet-bc-s-drug-information-network/prime/prime-user-guides">PRIME user guides</a>
+              <a class="underline" target="_blank" href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/pharmacare/pharmanet-bc-s-drug-information-network/prime/prime-user-guides">PRIME user guides</a>
             </p>
           </section>
         </div>
@@ -160,8 +164,8 @@
               Enrolling in PRIME only takes a few minutes.
             </p>
             <p>
-              If you are a regulated health professional, you will need your B.C. college information, such as licence
-              number, registration number, CPSID, PharmaNET ID, and next renewal date.
+              If you are a regulated health professional, you will need your BC college information, such as licence
+              number or registration number, CPSID or PharmaNet ID, and next renewal date.
             </p>
             <p>
               Once you are approved to access PharmaNet, you will enter the email address for the person in your

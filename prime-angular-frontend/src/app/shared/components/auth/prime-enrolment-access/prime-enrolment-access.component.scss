@@ -1,3 +1,5 @@
+@import 'bootstrap/bootstrap-imports';
+
 .title {
   padding-top: 50px;
   font-size: 2.5rem;
@@ -7,7 +9,15 @@
 .grad_bg {
   height: 700px;
   width: 100%;
-  margin-top: -32px;
+
+  @include media-breakpoint-up(xs) {
+    margin-top: -24px;
+  }
+
+  @include media-breakpoint-up(sm) {
+    margin-top: -32px;
+  }
+
   background-image: linear-gradient(to bottom, #DEDEDE, #FFFFFF);
 }
 
@@ -53,12 +63,48 @@
   width: 100%;
   max-height: 212px;
   padding: 10px 10px 10px 10px;
+  border-radius: 20px;
+
+  @include media-breakpoint-up(xs) {
+    content: url("/assets/individual_enrolment.png");
+  }
+
+  @include media-breakpoint-up(sm) {
+    content: url("/assets/individual_enrolment_sm.png");
+  }
+
+  @include media-breakpoint-up(md) {
+    content: url("/assets/individual_enrolment.png");
+  }
+
+  @include media-breakpoint-up(lg) {
+    content: url("/assets/individual_enrolment.png");
+  }
 }
 
 .site_graphic {
   width: 100%;
   max-height: 212px;
   padding: 10px 10px 10px 10px;
+  border-radius: 20px;
+
+  @include media-breakpoint-up(xs) {
+    content: url("/assets/site_registration_xs.png");
+  }
+
+  @include media-breakpoint-up(sm) {
+    content: url("/assets/site_registration_sm.png");
+  }
+
+  @include media-breakpoint-up(md) {
+    content: url("/assets/site_registration.png");
+  }
+
+  @include media-breakpoint-up(lg) {
+    content: url("/assets/site_registration.png");
+    width: 100%;
+    max-height: 212px;
+  }
 }
 
 a,
@@ -137,95 +183,3 @@ h2 {
 ::ng-deep label.ng-star-inserted {
   transform: translateY(-0.59375em) scale(0.75) !important;
 }
-
-/*
-
-.mid-content {
-  padding: 50px 0 50px 0;
-}
-
-.button_title {
-  font-size: 1.75rem;
-  margin-bottom: 20px;
-  margin-top: 20px;
-}
-
-.graphic {
-  height: 200px;
-  width: 200px;
-  padding-top: 30px;
-  padding-bottom: 30px;
-}
-
-.graphic-wrapper {
-  width: 100%;
-  text-align: center;
-  margin-bottom: 50px;
-  margin-left: 10px;
-  margin-right: 10px;
-  border-radius: 15px;
-  border: 1px solid #D2DAE4;
-}
-
-.content {
-  margin-left: 30px;
-  margin-right: 30px;
-  font-size: .9rem;
-}
-
-.content h2 {
-  font-size: 1.1rem;
-  color: #003366;
-}
-
-.border-right {
-  border-right: 1px solid #ffffff;
-}
-
-.pb-50 {
-  padding-bottom: 50px;
-}
-
-a,
-a:hover,
-a:visited {
-  color: #007bff;
-  text-decoration: underline;
-}
-
-.link-button {
-  color: #007bff;
-  text-decoration: underline;
-}
-
-a.tab-link,
-a.tab-link:hover,
-a.tab-link:visited {
-  color: #606B75;
-  font-weight: 500;
-  font-size: 1.25rem;
-  text-decoration: none;
-}
-
-.radio_button {
-  color: #ffffff;
-  margin-right: 20px;
-}
-
-.radio-group {
-  //display: flex;
-  //flex-direction: column;
-  display: grid;
-  margin: 10px 20px 0;
-}
-
-.input,
-.mat-focused .mat-form-field-label {
-  color: #ffffff;
-}
-
-.mat-input-element,
-.mat-select-value {
-  color: #ffffff !important;
-}
-  */

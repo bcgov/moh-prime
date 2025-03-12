@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -15,6 +15,7 @@ import { CollectionNoticeService } from '@shared/services/collection-notice.serv
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { asyncValidator } from '@lib/validators/form-async.validators';
 import { Observable } from 'rxjs/internal/Observable';
+import { filter, first, from, tap } from 'rxjs';
 
 @UntilDestroy()
 @Component({
@@ -25,7 +26,10 @@ import { Observable } from 'rxjs/internal/Observable';
     '../access.component.scss'
   ],
 })
-export class PrimeEnrolmentAccessComponent implements OnInit {
+export class PrimeEnrolmentAccessComponent implements OnInit, AfterViewInit {
+  @ViewChild('passcodeInput') passcodeInput: ElementRef<HTMLInputElement>;
+  @ViewChild('siteTitleDiv') siteTitleDiv: ElementRef<HTMLDivElement>;
+
   @Input() public mode: 'enrolment' | 'community' | 'health-authority';
   @Output() public login: EventEmitter<void>;
   public form: FormGroup;
@@ -56,6 +60,13 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
     this.enrolmentUrl = "info";
     this.communitySiteUrl = "site";
     this.healthAuthorityUrl = "health-authority";
+
+
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      window.scrollTo(500, 0);
+    });
   }
 
   public get passcode(): FormControl {
@@ -111,10 +122,6 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
     this.router.navigate([this.communitySiteUrl]);
   }
 
-  public onLoginSite() {
-    this.router.navigate([this.communitySiteUrl], { queryParams: { login: true } });
-  }
-
   public ngOnInit(): void {
     this.createFormInstance();
 
@@ -138,7 +145,14 @@ export class PrimeEnrolmentAccessComponent implements OnInit {
           if (isNext) this.login.emit()
         });
     }
+
+
   }
+
+  public ngAfterViewInit(): void {
+
+  }
+
 
   public goTo(url: string) {
     this.router.navigate([url]);
