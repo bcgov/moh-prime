@@ -25,6 +25,7 @@ namespace Prime.Configuration.Database
                     new License { Code = 3,  Weight = 12, Name = "Special"                                             },
                     new License { Code = 17, Weight = 13, Name = "Visitor"                                             },
                     new License { Code = 12, Weight = 14, Name = "Educational - Postgraduate Resident"                 },
+                    new License { Code = 179,Weight = 15, Name = "Educational - Postgraduate Resident Clinical Associate"},
                     new License { Code = 13, Weight = 15, Name = "Educational - Postgraduate Resident Elective"        },
                     new License { Code = 14, Weight = 16, Name = "Educational - Postgraduate Fellow"                   },
                     new License { Code = 15, Weight = 17, Name = "Educational - Postgraduate Trainee"                  },
