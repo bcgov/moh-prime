@@ -1,7 +1,7 @@
 ###################################
 ### Stage 1 - Build environment ###
 ###################################
-FROM public.ecr.aws/bitnami/node:14.17.0-prod AS build-deps
+FROM public.ecr.aws/bitnami/node:18.19.1 AS build-deps
 
 
 ## Everything should be proxied through nginx now, no separate url
@@ -34,7 +34,6 @@ COPY package.json yarn.lock ./
 COPY . .
 
 # Install Angular CLI
-RUN npm set unsafe-perm true
 RUN npm install -g @angular/cli
 # Install dependencies
 RUN yarn ci
