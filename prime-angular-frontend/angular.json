@@ -121,13 +121,13 @@
           "options": {},
           "configurations": {
             "production": {
-              "browserTarget": "angular-frontend:build:production"
+              "buildTarget": "angular-frontend:build:production"
             },
             "es5": {
-              "browserTarget": "angular-frontend:build:es5"
+              "buildTarget": "angular-frontend:build:es5"
             },
             "development": {
-              "browserTarget": "angular-frontend:build:development"
+              "buildTarget": "angular-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
