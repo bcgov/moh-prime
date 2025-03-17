@@ -1,5 +1,5 @@
 # base image
-FROM node:14.16 as buildDeps
+FROM node:18.19 as buildDeps
 #SHELL [ "/bin/bash","-c"]
 # set working directory
 USER 0
@@ -14,7 +14,7 @@ WORKDIR /usr/src/app
 
 COPY . .
 RUN apt-get update && \
-    apt-get install yarn && \
+    apt-get install -y yarn && \
     apt-get install -y nginx gettext-base && \
     mkdir -p /var/cache/nginx && \
     mkdir -p /var/cache/nginx/client_temp && \

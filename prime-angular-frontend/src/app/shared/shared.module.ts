@@ -9,7 +9,7 @@ import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 
 registerPlugin(FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective } from 'ngx-mask';
 
 import { ConfigModule } from '@config/config.module';
 import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
@@ -254,7 +254,7 @@ import { ChangeTermsOfAccessComponent } from './components/dialogs/content/terms
     ConfigModule,
     NgxBusyModule,
     NgxContextualHelpModule,
-    NgxMaskModule.forRoot(),
+    NgxMaskDirective,
     NgxMaterialModule,
     FilePondModule,
     ReactiveFormsModule
@@ -265,7 +265,7 @@ import { ChangeTermsOfAccessComponent } from './components/dialogs/content/terms
     NgxBusyModule,
     NgxContextualHelpModule,
     NgxMaterialModule,
-    NgxMaskModule,
+    NgxMaskDirective,
     ReactiveFormsModule,
     CapitalizePipe,
     CasePipe,
