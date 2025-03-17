@@ -4,7 +4,7 @@ import { EventEmitter } from '@angular/core';
 import { FilePondErrorDescription, FilePondFile, FilePondOptions, ProcessServerConfigFunction } from 'filepond';
 import { FilePondPluginFileValidateTypeProps } from 'filepond-plugin-file-validate-type';
 import { FilePondPluginFileValidateSizeProps } from 'filepond-plugin-file-validate-size';
-import { FilePondComponent } from 'ngx-filepond/filepond.component';
+import { FilePondComponent } from 'ngx-filepond';
 import tus from 'tus-js-client';
 
 import { EnumUtils } from '@lib/utils/enum-utils.class';
