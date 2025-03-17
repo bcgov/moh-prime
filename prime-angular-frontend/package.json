@@ -13,8 +13,7 @@
     "e2e": "ng e2e",
     "reporter": "ng build --configuration production --stats-json --source-map",
     "bundle-report": "npm run reporter && webpack-bundle-analyzer dist/angular-frontend/stats-es2015.json",
-    "source-report": "npm run reporter && source-map-explorer dist/angular-frontend/main-es2015.**.js",
-    "postinstall": "ngcc"
+    "source-report": "npm run reporter && source-map-explorer dist/angular-frontend/main-es2015.**.js"
   },
   "private": true,
   "dependencies": {
