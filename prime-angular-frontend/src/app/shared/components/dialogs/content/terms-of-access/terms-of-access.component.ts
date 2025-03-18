@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AgreementType, termsOfAccessAgreements } from '@shared/enums/agreement-type.enum';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
@@ -15,12 +15,12 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 export class ChangeTermsOfAccessComponent implements OnInit {
   public enrollee: HttpEnrollee;
 
-  public form: FormGroup;
+  public form: UntypedFormGroup;
 
   public termsOfAccessAgreements: { type: AgreementType, name: string }[];
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private dialogRef: MatDialogRef<ConfirmDialogComponent>,
     protected adjudicationResource: AdjudicationResource,
     @Inject(MAT_DIALOG_DATA) public data: DialogOptions,
@@ -29,12 +29,12 @@ export class ChangeTermsOfAccessComponent implements OnInit {
     this.termsOfAccessAgreements = termsOfAccessAgreements.filter((a) => a.type !== 0 && a.type !== this.enrollee?.assignedTOAType);
   }
 
-  public get note(): FormControl {
-    return this.form.get('note') as FormControl;
+  public get note(): UntypedFormControl {
+    return this.form.get('note') as UntypedFormControl;
   }
 
-  public get assignedTOAType(): FormControl {
-    return this.form.get('assignedTOAType') as FormControl;
+  public get assignedTOAType(): UntypedFormControl {
+    return this.form.get('assignedTOAType') as UntypedFormControl;
   }
 
   ngOnInit(): void {

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { debounceTime } from 'rxjs/operators';
@@ -25,7 +25,7 @@ export class SearchHAFormComponent implements OnInit {
   @Output() public refresh: EventEmitter<void>;
 
 
-  public form: FormGroup;
+  public form: UntypedFormGroup;
 
   public siteStatuses: Config<number>[];
   public vendors: Config<number>[];
@@ -38,7 +38,7 @@ export class SearchHAFormComponent implements OnInit {
   private assignToMeCodeKey: string = "ha-search-form-assignToMeCode";
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private configService: ConfigService,
     private localStorage: LocalStorageService
   ) {
@@ -64,24 +64,24 @@ export class SearchHAFormComponent implements OnInit {
     this.refresh = new EventEmitter<void>();
   }
 
-  public get textSearch(): FormControl {
-    return this.form.get('textSearch') as FormControl;
+  public get textSearch(): UntypedFormControl {
+    return this.form.get('textSearch') as UntypedFormControl;
   }
 
-  public get siteStatusCode(): FormControl {
-    return this.form.get('siteStatusCode') as FormControl;
+  public get siteStatusCode(): UntypedFormControl {
+    return this.form.get('siteStatusCode') as UntypedFormControl;
   }
 
-  public get vendorCode(): FormControl {
-    return this.form.get('vendorCode') as FormControl;
+  public get vendorCode(): UntypedFormControl {
+    return this.form.get('vendorCode') as UntypedFormControl;
   }
 
-  public get careTypeCode(): FormControl {
-    return this.form.get('careTypeCode') as FormControl;
+  public get careTypeCode(): UntypedFormControl {
+    return this.form.get('careTypeCode') as UntypedFormControl;
   }
 
-  public get assignToMeCkbx(): FormControl {
-    return this.form.get('assignToMe') as FormControl;
+  public get assignToMeCkbx(): UntypedFormControl {
+    return this.form.get('assignToMe') as UntypedFormControl;
   }
 
   public onRefresh() {

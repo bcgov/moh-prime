@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -18,7 +18,7 @@ import { PhsaEformsFormStateService } from '@phsa/shared/services/phsa-eforms-fo
 })
 export class AccessCodeComponent implements OnInit {
 
-  public form: FormGroup;
+  public form: UntypedFormGroup;
 
   public constructor(
     protected route: ActivatedRoute,
@@ -31,8 +31,8 @@ export class AccessCodeComponent implements OnInit {
     protected phsaEformsFormStateService: PhsaEformsFormStateService,
   ) { }
 
-  public get accessCode(): FormControl {
-    return this.form.get('accessCode') as FormControl;
+  public get accessCode(): UntypedFormControl {
+    return this.form.get('accessCode') as UntypedFormControl;
   }
 
   public onSubmit(): void {

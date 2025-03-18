@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, inject, waitForAsync } from '@angular/core/t
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { KeycloakService } from 'keycloak-angular';
@@ -93,7 +93,7 @@ describe('AuthorizedUserPageComponent', () => {
       component.onPreferredNameChange({ checked });
       expect(spyOnFormGetPreferredMiddleName).toHaveBeenCalledTimes(0);
       expect(spyOnTogglePreferredNameValidators).toHaveBeenCalled();
-      expect(spyOnTogglePreferredNameValidators).toHaveBeenCalledWith(checked, jasmine.any(FormControl), jasmine.any(FormControl));
+      expect(spyOnTogglePreferredNameValidators).toHaveBeenCalledWith(checked, jasmine.any(UntypedFormControl), jasmine.any(UntypedFormControl));
     });
 
     it('should call getPreferredMiddleName once and call togglePreferredNameValidators with false as first param', () => {
@@ -103,7 +103,7 @@ describe('AuthorizedUserPageComponent', () => {
       component.onPreferredNameChange({ checked });
       expect(spyOnFormGetPreferredMiddleName).toHaveBeenCalledTimes(1);
       expect(spyOnTogglePreferredNameValidators).toHaveBeenCalled();
-      expect(spyOnTogglePreferredNameValidators).toHaveBeenCalledWith(checked, jasmine.any(FormControl), jasmine.any(FormControl));
+      expect(spyOnTogglePreferredNameValidators).toHaveBeenCalledWith(checked, jasmine.any(UntypedFormControl), jasmine.any(UntypedFormControl));
     });
   });
 
@@ -116,14 +116,14 @@ describe('AuthorizedUserPageComponent', () => {
       const checked = true;
 
       component.onPhysicalAddressChange({ checked });
-      expect(spyOnToggleAddressLineValidators).toHaveBeenCalledWith(checked, jasmine.any(FormGroup));
+      expect(spyOnToggleAddressLineValidators).toHaveBeenCalledWith(checked, jasmine.any(UntypedFormGroup));
     });
 
     it('should call onPhysicalAddressChange with false as the first argument', () => {
       const checked = false;
 
       component.onPhysicalAddressChange({ checked });
-      expect(spyOnToggleAddressLineValidators).toHaveBeenCalledWith(checked, jasmine.any(FormGroup));
+      expect(spyOnToggleAddressLineValidators).toHaveBeenCalledWith(checked, jasmine.any(UntypedFormGroup));
     });
   });
 });

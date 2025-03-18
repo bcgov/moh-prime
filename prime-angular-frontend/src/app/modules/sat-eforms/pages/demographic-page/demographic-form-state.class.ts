@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { Address, AddressType, addressTypes } from '@lib/models/address.model';
@@ -9,7 +9,7 @@ import { DemographicForm } from '@sat/pages/demographic-page/demographic-form.mo
 
 export class DemographicFormState extends AbstractFormState<DemographicForm> {
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtilsService: FormUtilsService
   ) {
     super();
@@ -17,36 +17,36 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
     this.buildForm();
   }
 
-  public get preferredFirstName(): FormControl {
-    return this.formInstance.get('preferredFirstName') as FormControl;
+  public get preferredFirstName(): UntypedFormControl {
+    return this.formInstance.get('preferredFirstName') as UntypedFormControl;
   }
 
-  public get preferredMiddleName(): FormControl {
-    return this.formInstance.get('preferredMiddleName') as FormControl;
+  public get preferredMiddleName(): UntypedFormControl {
+    return this.formInstance.get('preferredMiddleName') as UntypedFormControl;
   }
 
-  public get preferredLastName(): FormControl {
-    return this.formInstance.get('preferredLastName') as FormControl;
+  public get preferredLastName(): UntypedFormControl {
+    return this.formInstance.get('preferredLastName') as UntypedFormControl;
   }
 
-  public get verifiedAddress(): FormGroup {
-    return this.formInstance.get('verifiedAddress') as FormGroup;
+  public get verifiedAddress(): UntypedFormGroup {
+    return this.formInstance.get('verifiedAddress') as UntypedFormGroup;
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.formInstance.get('physicalAddress') as FormGroup;
+  public get physicalAddress(): UntypedFormGroup {
+    return this.formInstance.get('physicalAddress') as UntypedFormGroup;
   }
 
-  public get phone(): FormControl {
-    return this.formInstance.get('phone') as FormControl;
+  public get phone(): UntypedFormControl {
+    return this.formInstance.get('phone') as UntypedFormControl;
   }
 
-  public get smsPhone(): FormControl {
-    return this.formInstance.get('smsPhone') as FormControl;
+  public get smsPhone(): UntypedFormControl {
+    return this.formInstance.get('smsPhone') as UntypedFormControl;
   }
 
-  public get email(): FormControl {
-    return this.formInstance.get('email') as FormControl;
+  public get email(): UntypedFormControl {
+    return this.formInstance.get('email') as UntypedFormControl;
   }
 
   public get json(): DemographicForm {
@@ -86,7 +86,7 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
    * @description
    * Sanitize JSON for patching the reactive form.
    */
-  private jsonToForm(formGroup: FormGroup, data: DemographicForm): void {
+  private jsonToForm(formGroup: UntypedFormGroup, data: DemographicForm): void {
     if (data) {
       const { physicalAddress, ...remainder } = data;
       const addresses = { physicalAddress };
