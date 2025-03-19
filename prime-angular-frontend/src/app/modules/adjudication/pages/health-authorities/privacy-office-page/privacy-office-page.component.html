@@ -35,7 +35,7 @@
                    placeholder="Phone"
                    formControlName="phone"
                    mask="(000) 000-0000"
-                   [showMaskTyped]="false">
+                   showMaskTyped="false">
             <mat-error *ngIf="formState.phone.hasError('required')">Required</mat-error>
             <mat-error *ngIf="formState.phone.hasError('phone')">Must be a valid phone number</mat-error>
           </mat-form-field>

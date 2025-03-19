@@ -2,8 +2,7 @@ import { Component, OnInit, ViewChild, Input, Output, Inject } from '@angular/co
 import { EventEmitter } from '@angular/core';
 
 import { FilePondErrorDescription, FilePondFile, FilePondOptions, ProcessServerConfigFunction } from 'filepond';
-import { FilePondComponent } from 'ngx-filepond/filepond.component';
-import { FilePondModule, registerPlugin } from 'ngx-filepond';
+import { FilePondModule, registerPlugin, FilePondComponent } from 'ngx-filepond';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 registerPlugin(FilePondPluginFileValidateType);
 
