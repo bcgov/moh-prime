@@ -30,6 +30,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime AddTemporaryLimitedPharmacistLicenceClasses = new(2024, 10, 22, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime UpdatePharmacyTechnician = new(2024, 11, 12, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime AddMultijurisdictionalFlag = new(2024, 11, 12, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime AddPostgraduateResidentClinicalAssociate = new(2025, 03, 12, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
         {
@@ -471,6 +472,9 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id = 373, LicenseCode = 176, Prefix = "Y9", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, NonPrescribingPrefix = "YX", EffectiveDate = AddMultijurisdictionalFlag, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE, Multijurisdictional = true},
                     new LicenseDetail { Id = 374, LicenseCode = 177, Prefix = "L9", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, EffectiveDate = AddMultijurisdictionalFlag, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE, Multijurisdictional = true},
                     new LicenseDetail { Id = 375, LicenseCode = 89, Prefix = "91", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = AddMultijurisdictionalFlag, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE, Multijurisdictional = true },
+
+                    //new licence class - Educational – Postgraduate Resident Clinical Associate
+                    new LicenseDetail { Id = 376, LicenseCode = 179, Prefix = "91", Manual = false, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true,  EffectiveDate = AddPostgraduateResidentClinicalAssociate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
 
                 };
             }
