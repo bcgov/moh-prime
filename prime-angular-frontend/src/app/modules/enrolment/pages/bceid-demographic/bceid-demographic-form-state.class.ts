@@ -1,4 +1,4 @@
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -7,7 +7,7 @@ import { Enrollee } from '@shared/models/enrollee.model';
 
 export class BceidDemographicFormState extends AbstractFormState<Enrollee> {
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtilsService: FormUtilsService
   ) {
     super();

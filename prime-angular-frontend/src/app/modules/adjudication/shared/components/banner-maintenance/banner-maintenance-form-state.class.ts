@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, ValidationErrors, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, FormGroupDirective, ValidationErrors, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -11,7 +11,7 @@ import moment from 'moment';
 import { Banner } from '@shared/models/banner.model';
 
 export class IsSameOrBeforeErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
-  public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
+  public isErrorState(control: UntypedFormControl | null, form: FormGroupDirective | null): boolean {
     const invalidCtrl = super.isErrorState(control, form);
     // Apply custom validation from parent form group
     const dirtyOrSubmitted = (control?.dirty || form?.submitted || control?.touched);
@@ -27,7 +27,7 @@ export class BannerMaintenanceFormState extends AbstractFormState<BannerMaintena
   private id: number;
 
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtilsService: FormUtilsService,
     private locationCode: BannerLocationCode,
   ) {
@@ -36,40 +36,40 @@ export class BannerMaintenanceFormState extends AbstractFormState<BannerMaintena
     this.buildForm();
   }
 
-  public get content(): FormControl {
-    return this.form.get('content') as FormControl;
+  public get content(): UntypedFormControl {
+    return this.form.get('content') as UntypedFormControl;
   }
 
-  public get title(): FormControl {
-    return this.form.get('title') as FormControl;
+  public get title(): UntypedFormControl {
+    return this.form.get('title') as UntypedFormControl;
   }
 
-  public get bannerType(): FormControl {
-    return this.form.get('bannerType') as FormControl;
+  public get bannerType(): UntypedFormControl {
+    return this.form.get('bannerType') as UntypedFormControl;
   }
 
-  public get bannerLocationCode(): FormControl {
-    return this.form.get('bannerLocationCode') as FormControl;
+  public get bannerLocationCode(): UntypedFormControl {
+    return this.form.get('bannerLocationCode') as UntypedFormControl;
   }
 
-  public get dateRange(): FormGroup {
-    return this.form.get('dateRange') as FormGroup;
+  public get dateRange(): UntypedFormGroup {
+    return this.form.get('dateRange') as UntypedFormGroup;
   }
 
-  public get startDate(): FormControl {
-    return this.dateRange.get('startDate') as FormControl;
+  public get startDate(): UntypedFormControl {
+    return this.dateRange.get('startDate') as UntypedFormControl;
   }
 
-  public get startTime(): FormControl {
-    return this.dateRange.get('startTime') as FormControl;
+  public get startTime(): UntypedFormControl {
+    return this.dateRange.get('startTime') as UntypedFormControl;
   }
 
-  public get endDate(): FormControl {
-    return this.dateRange.get('endDate') as FormControl;
+  public get endDate(): UntypedFormControl {
+    return this.dateRange.get('endDate') as UntypedFormControl;
   }
 
-  public get endTime(): FormControl {
-    return this.dateRange.get('endTime') as FormControl;
+  public get endTime(): UntypedFormControl {
+    return this.dateRange.get('endTime') as UntypedFormControl;
   }
 
   public get json(): BannerMaintenanceForm {
@@ -142,7 +142,7 @@ export class BannerMaintenanceFormState extends AbstractFormState<BannerMaintena
     this.isSameOrBeforeErrorStateMatcher = new IsSameOrBeforeErrorStateMatcher();
   }
 
-  private isTimeValid(group: FormGroup): ValidationErrors | null {
+  private isTimeValid(group: UntypedFormGroup): ValidationErrors | null {
     const startDate = moment(group.get('startDate').value);
     const startTime = moment(group.get('startTime').value, 'HHmm');
     const endDate = moment(group.get('endDate').value);

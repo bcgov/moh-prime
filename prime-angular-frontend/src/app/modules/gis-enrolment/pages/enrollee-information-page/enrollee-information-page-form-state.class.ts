@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -10,19 +10,19 @@ export interface EnrolleeInformationPageDataModel {
 
 export class EnrolleeInformationPageFormState extends AbstractFormState<EnrolleeInformationPageDataModel> {
   public constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get phone(): FormControl {
-    return this.formInstance.get('phone') as FormControl;
+  public get phone(): UntypedFormControl {
+    return this.formInstance.get('phone') as UntypedFormControl;
   }
 
-  public get email(): FormControl {
-    return this.formInstance.get('email') as FormControl;
+  public get email(): UntypedFormControl {
+    return this.formInstance.get('email') as UntypedFormControl;
   }
 
   public get json(): EnrolleeInformationPageDataModel {

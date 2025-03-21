@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, UntypedFormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { KeyValue } from '@angular/common';
 
@@ -62,8 +62,8 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public getRemoteUserProperties(remoteUser: FormGroup): KeyValue<string, string>[] {
-    const remoteUserCertification = remoteUser.controls?.remoteUserCertification as FormGroup;
+  public getRemoteUserProperties(remoteUser: UntypedFormGroup): KeyValue<string, string>[] {
+    const remoteUserCertification = remoteUser.controls?.remoteUserCertification as UntypedFormGroup;
     return [
       {
         key: 'College',

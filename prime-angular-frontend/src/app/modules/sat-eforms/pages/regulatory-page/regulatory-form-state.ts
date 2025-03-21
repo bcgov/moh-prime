@@ -1,4 +1,4 @@
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { ConfigService } from '@config/config.service';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
@@ -8,7 +8,7 @@ import { RegulatoryForm } from './regulatory-form.model';
 
 export class RegulatoryFormState extends AbstractFormState<RegulatoryForm> {
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private configService: ConfigService,
     private certificationsKey: string
   ) {
@@ -16,8 +16,8 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryForm> {
     this.buildForm();
   }
 
-  public get certifications(): FormArray {
-    return this.formInstance.get(this.certificationsKey) as FormArray;
+  public get certifications(): UntypedFormArray {
+    return this.formInstance.get(this.certificationsKey) as UntypedFormArray;
   }
 
   public get selectedCollegeCodes(): number[] {
@@ -66,7 +66,7 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryForm> {
     });
   }
 
-  public buildCollegeCertificationForm(): FormGroup {
+  public buildCollegeCertificationForm(): UntypedFormGroup {
     return this.fb.group({
       // Force selection of "None" on new certifications
       collegeCode: ['', [Validators.required]],
@@ -129,7 +129,7 @@ export class RegulatoryFormState extends AbstractFormState<RegulatoryForm> {
    */
   public removeIncompleteCertifications(noEmptyCert: boolean = false) {
     this.certifications.controls
-      .forEach((control: FormGroup, index: number) => {
+      .forEach((control: UntypedFormGroup, index: number) => {
         // Remove if college code is "None" or the group is invalid
         if (!control.get('collegeCode').value || control.invalid) {
           this.removeCertification(index);

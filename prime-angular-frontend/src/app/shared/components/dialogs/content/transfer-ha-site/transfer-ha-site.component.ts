@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
@@ -21,14 +21,14 @@ export class TransferHASiteComponent implements OnInit {
   public currentAuthorizedUserId: number;
   public healthAuthorityId: number;
 
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public transferSiteClick: boolean;
   public authorizedUsers: AuthorizedUser[];
 
   constructor(
     private healthAuthorityResource: HealthAuthorityResource,
     private healthAuthoritySiteResource: HealthAuthoritySiteResource,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogOptions,
   ) {
@@ -40,8 +40,8 @@ export class TransferHASiteComponent implements OnInit {
     this.transferSite = new EventEmitter<boolean>();
   }
 
-  public get authorizedUser(): FormControl {
-    return this.form.get('authorizedUser') as FormControl;
+  public get authorizedUser(): UntypedFormControl {
+    return this.form.get('authorizedUser') as UntypedFormControl;
   }
 
   public onCancel() {

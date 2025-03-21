@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { OrgBookResource } from '@registration/shared/services/org-book-resource
 export class DoingBusinessAsFormFieldComponent implements OnInit {
   @Input() public organizationId?: number;
   @Input() public label: string;
-  @Input() public doingBusinessAs: FormControl;
+  @Input() public doingBusinessAs: UntypedFormControl;
 
   public busy: Subscription;
   public doingBusinessAsNames: string[];

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -39,7 +39,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private configService: ConfigService,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private route: ActivatedRoute,

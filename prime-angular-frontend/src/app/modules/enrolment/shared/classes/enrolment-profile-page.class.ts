@@ -1,5 +1,5 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, pipe, from, of, UnaryFunction, OperatorFunction } from 'rxjs';
@@ -34,7 +34,7 @@ export interface IBaseEnrolmentProfilePage {
    * @description
    * Instance of the form loaded from the form state.
    */
-  form: FormGroup;
+  form: UntypedFormGroup;
   /**
    * @description
    * Local copy of the enrolment for use in views.
@@ -69,7 +69,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    * @description
    * Instance of the form loaded from the form state.
    */
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public enrolment: Enrolment;
   public routeUtils: RouteUtils;
 

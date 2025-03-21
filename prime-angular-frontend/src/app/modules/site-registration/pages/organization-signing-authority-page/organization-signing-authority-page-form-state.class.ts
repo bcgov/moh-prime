@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { Party } from '@lib/models/party.model';
 import { Address, AddressType, addressTypes } from '@lib/models/address.model';
@@ -8,7 +8,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 
 export class OrganizationSigningAuthorityPageFormState extends AbstractFormState<Party> {
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtilsService: FormUtilsService
   ) {
     super();
@@ -16,40 +16,40 @@ export class OrganizationSigningAuthorityPageFormState extends AbstractFormState
     this.buildForm();
   }
 
-  public get preferredFirstName(): FormControl {
-    return this.formInstance.get('preferredFirstName') as FormControl;
+  public get preferredFirstName(): UntypedFormControl {
+    return this.formInstance.get('preferredFirstName') as UntypedFormControl;
   }
 
-  public get preferredLastName(): FormControl {
-    return this.formInstance.get('preferredLastName') as FormControl;
+  public get preferredLastName(): UntypedFormControl {
+    return this.formInstance.get('preferredLastName') as UntypedFormControl;
   }
 
-  public get verifiedAddress(): FormGroup {
-    return this.formInstance.get('verifiedAddress') as FormGroup;
+  public get verifiedAddress(): UntypedFormGroup {
+    return this.formInstance.get('verifiedAddress') as UntypedFormGroup;
   }
 
-  public get mailingAddress(): FormGroup {
-    return this.formInstance.get('mailingAddress') as FormGroup;
+  public get mailingAddress(): UntypedFormGroup {
+    return this.formInstance.get('mailingAddress') as UntypedFormGroup;
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.formInstance.get('physicalAddress') as FormGroup;
+  public get physicalAddress(): UntypedFormGroup {
+    return this.formInstance.get('physicalAddress') as UntypedFormGroup;
   }
 
-  public get phone(): FormControl {
-    return this.formInstance.get('phone') as FormControl;
+  public get phone(): UntypedFormControl {
+    return this.formInstance.get('phone') as UntypedFormControl;
   }
 
-  public get fax(): FormControl {
-    return this.formInstance.get('fax') as FormControl;
+  public get fax(): UntypedFormControl {
+    return this.formInstance.get('fax') as UntypedFormControl;
   }
 
-  public get smsPhone(): FormControl {
-    return this.formInstance.get('smsPhone') as FormControl;
+  public get smsPhone(): UntypedFormControl {
+    return this.formInstance.get('smsPhone') as UntypedFormControl;
   }
 
-  public get email(): FormControl {
-    return this.formInstance.get('email') as FormControl;
+  public get email(): UntypedFormControl {
+    return this.formInstance.get('email') as UntypedFormControl;
   }
 
   public get json(): Party {
@@ -102,7 +102,7 @@ export class OrganizationSigningAuthorityPageFormState extends AbstractFormState
    * @description
    * Convert party JSON to form model for reactive forms.
    */
-  private toPartyFormModel(formGroup: FormGroup, data: Party): void {
+  private toPartyFormModel(formGroup: UntypedFormGroup, data: Party): void {
     if (data) {
       const { verifiedAddress, physicalAddress, mailingAddress, ...person } = data;
       const addresses = { verifiedAddress, physicalAddress, mailingAddress };

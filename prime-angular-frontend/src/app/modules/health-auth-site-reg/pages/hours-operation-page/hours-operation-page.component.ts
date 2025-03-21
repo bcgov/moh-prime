@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, Validators, FormGroupDirective, FormBuilder, FormArray } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators, FormGroupDirective, UntypedFormBuilder, UntypedFormArray } from '@angular/forms';
 import { WeekDay } from '@angular/common';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,7 +20,7 @@ import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared
 import { HoursOperationFormState } from './hours-operation-form-state.class';
 
 export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
-  public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
+  public isErrorState(control: UntypedFormControl | null, form: FormGroupDirective | null): boolean {
     const invalidCtrl = super.isErrorState(control, form);
     // Apply custom validation from parent form group
     const dirtyOrSubmitted = (control?.dirty || form?.submitted);
@@ -69,7 +69,7 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
     protected healthAuthoritySiteService: HealthAuthoritySiteService,
     protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
     protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     router: Router,
   ) {
     super(dialog, formUtilsService, route, healthAuthoritySiteService, healthAuthoritySiteFormStateService, healthAuthoritySiteResource);
@@ -78,11 +78,11 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
   }
 
-  public hasDay(group: FormGroup): boolean {
+  public hasDay(group: UntypedFormGroup): boolean {
     return group.get('startTime').value !== null;
   }
 
-  public is24Hours(group: FormGroup): boolean {
+  public is24Hours(group: UntypedFormGroup): boolean {
     return (
       group.get('startTime').value === this.business24Hours.startTime &&
       group.get('endTime').value === this.business24Hours.endTime
@@ -90,10 +90,10 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
   }
 
   public get isSite247(): boolean {
-    return this.formState.businessDays.controls.every((bd: FormGroup) => this.is24Hours(bd));
+    return this.formState.businessDays.controls.every((bd: UntypedFormGroup) => this.is24Hours(bd));
   }
 
-  public on24Hours(change: MatCheckboxChange, group: FormGroup): void {
+  public on24Hours(change: MatCheckboxChange, group: UntypedFormGroup): void {
     (change.checked)
       ? group.patchValue(this.business24Hours)
       : group.patchValue(this.businessRegularHours);
@@ -103,7 +103,7 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
     group.markAsDirty();
   }
 
-  public onDayToggle(group: FormGroup, change: MatSlideToggleChange): void {
+  public onDayToggle(group: UntypedFormGroup, change: MatSlideToggleChange): void {
     if (change.checked) {
       this.hasNoBusinessHoursError = false;
     }
@@ -121,7 +121,7 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
   }
 
   public onSite247(change: MatCheckboxChange): void {
-    this.formState.businessDays.controls.forEach((businessDay: FormGroup) => {
+    this.formState.businessDays.controls.forEach((businessDay: UntypedFormGroup) => {
       this.on24Hours(change, businessDay);
     });
   }
@@ -157,14 +157,14 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
     this.healthAuthoritySiteFormStateService.setForm(site, !this.hasBeenSubmitted);
 
     // TODO move this into form state, and perform individual, but expose for controller
-    this.formState.businessDays.controls.forEach((group: FormGroup) => {
+    this.formState.businessDays.controls.forEach((group: UntypedFormGroup) => {
       if (this.is24Hours(group)) {
         this.allowEditingHours(group, false);
       }
     });
   }
 
-  protected checkValidity(form: FormGroup | FormArray): boolean {
+  protected checkValidity(form: UntypedFormGroup | UntypedFormArray): boolean {
     // Form being disabled indicates that every day of the week is 24 hours
     return (form.disabled || this.formUtilsService.checkValidity(form)) && this.additionalValidityChecks(form.getRawValue());
   }
@@ -190,9 +190,9 @@ export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegi
     this.routeUtils.routeRelativeTo(nextRoutePath);
   }
 
-  private allowEditingHours(group: FormGroup, isEditable: boolean = true): void {
-    const startTime = group.get('startTime') as FormControl;
-    const endTime = group.get('endTime') as FormControl;
+  private allowEditingHours(group: UntypedFormGroup, isEditable: boolean = true): void {
+    const startTime = group.get('startTime') as UntypedFormControl;
+    const endTime = group.get('endTime') as UntypedFormControl;
 
     if (isEditable) {
       startTime.enable();

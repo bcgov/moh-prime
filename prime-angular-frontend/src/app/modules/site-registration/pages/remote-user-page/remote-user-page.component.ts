@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { noop, Observable, of } from 'rxjs';
@@ -43,7 +43,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * not linked with the form state until submission where it
    * gets mirrored.
    */
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public isSubmitted: boolean;
@@ -81,8 +81,8 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * @description
    * Remote user certifications specific to the local form.
    */
-  public get remoteUserCertification(): FormGroup {
-    return this.form.get('remoteUserCertification') as FormGroup;
+  public get remoteUserCertification(): UntypedFormGroup {
+    return this.form.get('remoteUserCertification') as UntypedFormGroup;
   }
 
   public onBack() {
@@ -176,7 +176,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     // Set the parent form for updating on submission, but otherwise use the
     // local form group for all changes prior to submission
     const parent = this.formState.form;
-    const remoteUsersFormArray = parent.get('remoteUsers') as FormArray;
+    const remoteUsersFormArray = parent.get('remoteUsers') as UntypedFormArray;
 
     if (this.remoteUserIndex !== 'new') {
       const remoteUserFormGroup = remoteUsersFormArray.at(+this.remoteUserIndex);

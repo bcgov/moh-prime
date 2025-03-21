@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 
 import { Contact } from '@lib/models/contact.model';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -12,7 +12,7 @@ import { AbstractFormState } from './abstract-form-state.class';
 })
 export class ContactFormState extends AbstractFormState<Contact> {
   public constructor(
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     private formUtilsService: FormUtilsService
   ) {
     super();

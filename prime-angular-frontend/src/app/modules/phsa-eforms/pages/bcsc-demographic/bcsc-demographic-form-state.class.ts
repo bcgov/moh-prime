@@ -1,4 +1,4 @@
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
@@ -12,7 +12,7 @@ export interface PhsaBcscDemographicFormModel {
 
 export class BcscDemographicFormState extends AbstractFormState<PhsaBcscDemographicFormModel> {
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtilsService: FormUtilsService
   ) {
     super();

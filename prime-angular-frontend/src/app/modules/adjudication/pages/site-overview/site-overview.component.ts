@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -41,7 +41,7 @@ export class SiteOverviewComponent implements OnInit {
   public refresh: BehaviorSubject<boolean>;
   public orgClaim: OrganizationClaim;
   public newSigningAuthority: Party;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public showSendNotification: boolean;
   public isNotificationSent: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -57,7 +57,7 @@ export class SiteOverviewComponent implements OnInit {
     protected healthAuthSiteResource: HealthAuthoritySiteResource,
     private organizationResource: OrganizationResource,
     private formUtilsService: FormUtilsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private configService: ConfigService,
   ) {
     this.hasActions = true;
@@ -65,12 +65,12 @@ export class SiteOverviewComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
   }
 
-  public get pec(): FormControl {
-    return this.form.get('pec') as FormControl;
+  public get pec(): UntypedFormControl {
+    return this.form.get('pec') as UntypedFormControl;
   }
 
-  public get vendors(): FormControl {
-    return this.form.get('vendors') as FormControl;
+  public get vendors(): UntypedFormControl {
+    return this.form.get('vendors') as UntypedFormControl;
   }
 
   public onRoute(routePath: RoutePath): void {

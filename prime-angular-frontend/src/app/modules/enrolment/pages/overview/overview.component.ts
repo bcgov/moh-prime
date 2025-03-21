@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
-import { FormGroup, ValidationErrors } from '@angular/forms';
+import { UntypedFormGroup, ValidationErrors } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable, of, noop, EMPTY } from 'rxjs';
@@ -89,7 +89,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
   public onSubmit(): void {
     if (!this.enrolmentFormStateService.isValidSubmission || this.isMissingPharmaNetId(this.enrolment.certifications)) {
-      this.enrolmentFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
+      this.enrolmentFormStateService.forms.forEach((form: UntypedFormGroup) => this.formUtilsService.logFormErrors(form));
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
       return;
     }
@@ -188,7 +188,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           // regardless of whether they visited the demographic view to make adjustments
           const form = this.enrolmentFormStateService.bcscDemographicFormState.form;
           if (!verifiedAddress) {
-            this.formUtilsService.resetAndClearValidators(form.get('verifiedAddress') as FormGroup);
+            this.formUtilsService.resetAndClearValidators(form.get('verifiedAddress') as UntypedFormGroup);
             verifiedAddress = new Address();
           }
 

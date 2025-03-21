@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -19,11 +19,11 @@ export class AdjudicatorEventsComponent implements OnInit {
   @Input() public businessEvents$: Observable<BusinessEvent[]>;
   @Output() public getBusinessEvents: EventEmitter<BusinessEventTypeEnum[]>;
 
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public businessEventTypes: { key: number, value: string }[];
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private casePipe: CasePipe,
     private capitalizePipe: CapitalizePipe
   ) {
@@ -37,8 +37,8 @@ export class AdjudicatorEventsComponent implements OnInit {
       });
   }
 
-  public get filter(): FormControl {
-    return this.form.get('filter') as FormControl;
+  public get filter(): UntypedFormControl {
+    return this.form.get('filter') as UntypedFormControl;
   }
 
   ngOnInit(): void {

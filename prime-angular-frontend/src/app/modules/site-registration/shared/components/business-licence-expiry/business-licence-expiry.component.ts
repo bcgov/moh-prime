@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, AfterContentInit, ViewChild } from '@angular/core';
-import { Validators, FormGroup } from '@angular/forms';
+import { Validators, UntypedFormGroup } from '@angular/forms';
 
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
@@ -11,7 +11,7 @@ import moment from 'moment';
   styleUrls: ['./business-licence-expiry.component.scss']
 })
 export class BusinessLicenceExpiryComponent implements OnInit {
-  @Input() public form: FormGroup;
+  @Input() public form: UntypedFormGroup;
   @Input() public showExpiryDate: boolean;
 
   public minExpiryDate: moment.Moment;

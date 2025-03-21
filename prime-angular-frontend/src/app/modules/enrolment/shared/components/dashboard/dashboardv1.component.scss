@@ -29,6 +29,7 @@
 }
 
 .mat-nav-list {
+
   &:not(:first-of-type) {
     padding-top: 0;
   }
@@ -42,6 +43,10 @@
     // De-emphasize the link
     opacity: 0.4;
   }
+}
+
+.mat-icon {
+  vertical-align: sub;
 }
 
 @media print {

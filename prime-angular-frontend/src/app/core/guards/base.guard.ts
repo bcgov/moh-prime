@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  CanLoad, CanActivate, CanActivateChild, Route, UrlSegment,
-  ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Params
-} from '@angular/router';
+import { Route, UrlSegment, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Params } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
@@ -12,7 +9,7 @@ import { ConsoleLoggerService } from '@core/services/console-logger.service';
 @Injectable({
   providedIn: 'root'
 })
-export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
+export class BaseGuard  {
   private authenticated: boolean;
 
   constructor(

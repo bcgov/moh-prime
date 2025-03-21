@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
 import { Subscription } from 'rxjs';
@@ -20,7 +20,7 @@ import { EnrolleeBannerListPageComponent } from '@adjudication/pages/enrollee-ba
   styleUrls: ['./site-information-form.component.scss']
 })
 export class SiteInformationFormComponent implements OnInit {
-  @Input() public form: FormGroup;
+  @Input() public form: UntypedFormGroup;
   @Input() public organizationId?: number;
   @Input() public careSettingCode: number;
   public busy: Subscription;
@@ -35,28 +35,28 @@ export class SiteInformationFormComponent implements OnInit {
     this.doingBusinessAsNames = [];
   }
 
-  public get doingBusinessAs(): FormControl {
-    return this.form.get('doingBusinessAs') as FormControl;
+  public get doingBusinessAs(): UntypedFormControl {
+    return this.form.get('doingBusinessAs') as UntypedFormControl;
   }
 
-  public get pec(): FormControl {
-    return this.form.get('pec') as FormControl;
+  public get pec(): UntypedFormControl {
+    return this.form.get('pec') as UntypedFormControl;
   }
 
-  public get isNewWithSiteId(): FormControl {
-    return this.form.get('isNewWithSiteId') as FormControl;
+  public get isNewWithSiteId(): UntypedFormControl {
+    return this.form.get('isNewWithSiteId') as UntypedFormControl;
   }
 
-  public get isNewWithoutSiteId(): FormControl {
-    return this.form.get('isNewWithoutSiteId') as FormControl;
+  public get isNewWithoutSiteId(): UntypedFormControl {
+    return this.form.get('isNewWithoutSiteId') as UntypedFormControl;
   }
 
-  public get activeBeforeRegistration(): FormControl {
-    return this.form.get('activeBeforeRegistration') as FormControl;
+  public get activeBeforeRegistration(): UntypedFormControl {
+    return this.form.get('activeBeforeRegistration') as UntypedFormControl;
   }
 
-  public get deviceProviderId(): FormControl {
-    return this.form.get('deviceProviderId') as FormControl;
+  public get deviceProviderId(): UntypedFormControl {
+    return this.form.get('deviceProviderId') as UntypedFormControl;
   }
 
   public isCommunityPharmacy() {

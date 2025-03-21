@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder } from '@angular/forms';
 
 import { debounceTime } from 'rxjs/operators';
 
@@ -9,18 +9,18 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./note.component.scss']
 })
 export class NoteComponent implements OnInit {
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public isEmpty: boolean;
   @Output() public output: EventEmitter<string>;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
   ) {
     this.output = new EventEmitter<string>();
   }
 
-  public get note(): FormControl {
-    return this.form.get('note') as FormControl;
+  public get note(): UntypedFormControl {
+    return this.form.get('note') as UntypedFormControl;
   }
 
   public ngOnInit(): void {

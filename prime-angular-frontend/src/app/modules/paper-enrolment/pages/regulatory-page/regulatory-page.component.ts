@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -36,7 +36,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private route: ActivatedRoute,
     router: Router

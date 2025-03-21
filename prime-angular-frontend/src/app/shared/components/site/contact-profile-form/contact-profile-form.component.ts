@@ -8,7 +8,7 @@ import {
   AfterContentInit,
   ViewChild
 } from '@angular/core';
-import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { UntypedFormGroup, Validators, UntypedFormControl } from '@angular/forms';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -33,7 +33,7 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
    * @description
    * Instance of the contact profile form.
    */
-  @Input() public form: FormGroup;
+  @Input() public form: UntypedFormGroup;
   /**
    * @description
    * List of fields that should be excluded.
@@ -89,24 +89,24 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
     return !!this.pageSubheaderMoreInfoChildren.length;
   }
 
-  public get phone(): FormControl {
-    return this.form.get('phone') as FormControl;
+  public get phone(): UntypedFormControl {
+    return this.form.get('phone') as UntypedFormControl;
   }
 
-  public get fax(): FormControl {
-    return this.form.get('fax') as FormControl;
+  public get fax(): UntypedFormControl {
+    return this.form.get('fax') as UntypedFormControl;
   }
 
-  public get smsPhone(): FormControl {
-    return this.form.get('smsPhone') as FormControl;
+  public get smsPhone(): UntypedFormControl {
+    return this.form.get('smsPhone') as UntypedFormControl;
   }
 
-  public get email(): FormControl {
-    return this.form.get('email') as FormControl;
+  public get email(): UntypedFormControl {
+    return this.form.get('email') as UntypedFormControl;
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.form.get('physicalAddress') as FormGroup;
+  public get physicalAddress(): UntypedFormGroup {
+    return this.form.get('physicalAddress') as UntypedFormGroup;
   }
 
   /**
@@ -198,7 +198,7 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
    * @description
    * Apply or reset address validators based on the toggle existence.
    */
-  private changeAddressValidators(address: FormGroup, blacklist: string[] = ['id', 'street2']) {
+  private changeAddressValidators(address: UntypedFormGroup, blacklist: string[] = ['id', 'street2']) {
     if (!this.excludeList.includes('physicalAddress')) {
       if (this.toggle) {
         (this.toggle.checked)

@@ -59,7 +59,7 @@
             <mat-label>Start Time</mat-label>
             <input matInput
                    mask="AB:CB"
-                   [patterns]="hoursTimePattern"
+                   patterns="hoursTimePattern"
                    formControlName="startTime"
                    placeholder="00:00">
             <mat-error>Required</mat-error>
@@ -89,7 +89,7 @@
             <mat-label>End Time</mat-label>
             <input matInput
                    mask="AB:CB"
-                   [patterns]="hoursTimePattern"
+                   patterns="hoursTimePattern"
                    formControlName="endTime"
                    placeholder="00:00">
             <mat-error>Required</mat-error>

@@ -1,4 +1,4 @@
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -8,7 +8,7 @@ import { DemographicForm } from './demographic-form.model';
 
 export class DemographicFormState extends AbstractFormState<DemographicForm> {
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtilsService: FormUtilsService
   ) {
     super();
@@ -16,28 +16,28 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
     this.buildForm();
   }
 
-  public get firstName(): FormControl {
-    return this.form.get('firstName') as FormControl;
+  public get firstName(): UntypedFormControl {
+    return this.form.get('firstName') as UntypedFormControl;
   }
 
-  public get middleName(): FormControl {
-    return this.form.get('middleName') as FormControl;
+  public get middleName(): UntypedFormControl {
+    return this.form.get('middleName') as UntypedFormControl;
   }
 
-  public get lastName(): FormControl {
-    return this.form.get('lastName') as FormControl;
+  public get lastName(): UntypedFormControl {
+    return this.form.get('lastName') as UntypedFormControl;
   }
 
-  public get dateOfBirth(): FormControl {
-    return this.form.get('dateOfBirth') as FormControl;
+  public get dateOfBirth(): UntypedFormControl {
+    return this.form.get('dateOfBirth') as UntypedFormControl;
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.form.get('physicalAddress') as FormGroup;
+  public get physicalAddress(): UntypedFormGroup {
+    return this.form.get('physicalAddress') as UntypedFormGroup;
   }
 
-  public get additionalAddresses(): FormArray {
-    return this.form.get('additionalAddresses') as FormArray;
+  public get additionalAddresses(): UntypedFormArray {
+    return this.form.get('additionalAddresses') as UntypedFormArray;
   }
 
   public addAdditionalAddress(): void {

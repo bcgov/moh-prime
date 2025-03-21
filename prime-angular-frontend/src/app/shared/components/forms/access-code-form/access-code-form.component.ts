@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-access-code-form',
@@ -7,12 +7,12 @@ import { FormGroup, FormControl } from '@angular/forms';
   styleUrls: ['./access-code-form.component.scss']
 })
 export class AccessCodeFormComponent implements OnInit {
-  @Input() public form: FormGroup;
+  @Input() public form: UntypedFormGroup;
 
   constructor() { }
 
-  public get accessCode(): FormControl {
-    return this.form.get('accessCode') as FormControl;
+  public get accessCode(): UntypedFormControl {
+    return this.form.get('accessCode') as UntypedFormControl;
   }
 
   public ngOnInit(): void { }

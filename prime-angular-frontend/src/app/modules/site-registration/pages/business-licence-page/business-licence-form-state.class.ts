@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators, ValidatorFn, FormGroup, ValidationErrors } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators, ValidatorFn, UntypedFormGroup, ValidationErrors } from '@angular/forms';
 
 import { Observable, of } from 'rxjs';
 
@@ -20,7 +20,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
   private businessLicenceUpdated: boolean;
 
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private siteResource: SiteResource,
     private formUtilsService: FormUtilsService,
     private siteService: SiteService,
@@ -30,32 +30,32 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
     this.buildForm();
   }
 
-  public get filename(): FormControl {
-    return this.formInstance.get('filename') as FormControl;
+  public get filename(): UntypedFormControl {
+    return this.formInstance.get('filename') as UntypedFormControl;
   }
 
-  public get businessLicenceGuid(): FormControl {
-    return this.formInstance.get('businessLicenceGuid') as FormControl;
+  public get businessLicenceGuid(): UntypedFormControl {
+    return this.formInstance.get('businessLicenceGuid') as UntypedFormControl;
   }
 
-  public get businessLicenceExpiry(): FormControl {
-    return this.formInstance.get('expiryDate') as FormControl;
+  public get businessLicenceExpiry(): UntypedFormControl {
+    return this.formInstance.get('expiryDate') as UntypedFormControl;
   }
 
-  public get deferredLicenceReason(): FormControl {
-    return this.formInstance.get('deferredLicenceReason') as FormControl;
+  public get deferredLicenceReason(): UntypedFormControl {
+    return this.formInstance.get('deferredLicenceReason') as UntypedFormControl;
   }
 
-  public get doingBusinessAs(): FormControl {
-    return this.formInstance.get('doingBusinessAs') as FormControl;
+  public get doingBusinessAs(): UntypedFormControl {
+    return this.formInstance.get('doingBusinessAs') as UntypedFormControl;
   }
 
-  public get pec(): FormControl {
-    return this.formInstance.get('pec') as FormControl;
+  public get pec(): UntypedFormControl {
+    return this.formInstance.get('pec') as UntypedFormControl;
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.formInstance.get('physicalAddress') as FormGroup;
+  public get physicalAddress(): UntypedFormGroup {
+    return this.formInstance.get('physicalAddress') as UntypedFormGroup;
   }
 
   public get json(): BusinessLicenceForm {
@@ -195,7 +195,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
   }
 
   public validateMinOneCheckboxChecked(): ValidatorFn {
-    return (form: FormGroup): ValidationErrors | null => {
+    return (form: UntypedFormGroup): ValidationErrors | null => {
 
       const isNewWSiteId = form.get("isNewWithSiteId");
       const isNewWOSiteId = form.get("isNewWithoutSiteId");

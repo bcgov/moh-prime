@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder, AbstractControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormArray, UntypedFormBuilder, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -48,7 +48,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     protected formUtilsService: FormUtilsService,
     protected authService: AuthService,
     private configService: ConfigService,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super(
       route,
@@ -70,28 +70,28 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     this.healthAuthorities = this.configService.healthAuthorities;
   }
 
-  public get oboSites(): FormArray {
-    return this.form.get('oboSites') as FormArray;
+  public get oboSites(): UntypedFormArray {
+    return this.form.get('oboSites') as UntypedFormArray;
   }
 
-  public get communityHealthSites(): FormArray {
-    return this.form.get('communityHealthSites') as FormArray;
+  public get communityHealthSites(): UntypedFormArray {
+    return this.form.get('communityHealthSites') as UntypedFormArray;
   }
 
-  public get communityPharmacySites(): FormArray {
-    return this.form.get('communityPharmacySites') as FormArray;
+  public get communityPharmacySites(): UntypedFormArray {
+    return this.form.get('communityPharmacySites') as UntypedFormArray;
   }
 
-  public get deviceProviderSites(): FormArray {
-    return this.form.get('deviceProviderSites') as FormArray;
+  public get deviceProviderSites(): UntypedFormArray {
+    return this.form.get('deviceProviderSites') as UntypedFormArray;
   }
 
-  public get healthAuthoritySites(): FormGroup {
-    return this.form.get('healthAuthoritySites') as FormGroup;
+  public get healthAuthoritySites(): UntypedFormGroup {
+    return this.form.get('healthAuthoritySites') as UntypedFormGroup;
   }
 
-  public get lastUpdatedDatetime(): FormGroup {
-    return this.form.get('lastUpdatedDatetime') as FormGroup;
+  public get lastUpdatedDatetime(): UntypedFormGroup {
+    return this.form.get('lastUpdatedDatetime') as UntypedFormGroup;
   }
 
   public get chosenHealthAuthorityCodes(): string[] {
@@ -123,20 +123,20 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
   }
 
   public healthAuthoritySiteControl(healthAuthorityCode: string): AbstractControl[] {
-    const sites = this.healthAuthoritySites.get(healthAuthorityCode) as FormArray;
+    const sites = this.healthAuthoritySites.get(healthAuthorityCode) as UntypedFormArray;
     return sites?.controls;
   }
 
-  public oboSitesByCareSetting(careSettingCode: number): FormArray {
-    const sites: FormArray = this.fb.array([]);
+  public oboSitesByCareSetting(careSettingCode: number): UntypedFormArray {
+    const sites: UntypedFormArray = this.fb.array([]);
     if (this.oboSites?.length) {
       this.oboSites.controls.forEach((site, i) => {
         if (site.value.careSettingCode === careSettingCode) {
-          sites.push(site as FormGroup);
+          sites.push(site as UntypedFormGroup);
         }
       });
     }
-    return sites as FormArray;
+    return sites as UntypedFormArray;
   }
 
   public addOboSite(careSettingCode: number, healthAuthorityCode?: number) {
@@ -178,7 +178,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
         break;
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        const sitesOfHealthAuthority = this.healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
+        const sitesOfHealthAuthority = this.healthAuthoritySites.get(`${healthAuthorityCode}`) as UntypedFormArray;
         if (sitesOfHealthAuthority) {
           sitesOfHealthAuthority.removeAt(index);
         }
@@ -329,7 +329,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
     this.deviceProviderSites.controls.forEach((site) => this.oboSites.push(site));
     Object.keys(this.healthAuthoritySites.controls).forEach(healthAuthorityCode => {
-      const sitesOfHealthAuthority = this.healthAuthoritySites.get(healthAuthorityCode) as FormArray;
+      const sitesOfHealthAuthority = this.healthAuthoritySites.get(healthAuthorityCode) as UntypedFormArray;
       sitesOfHealthAuthority.controls.forEach((site) => this.oboSites.push(site));
     });
     this.removeCareSettingSites();
@@ -351,7 +351,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
    */
   private removeIncompleteOboSites(noEmptyOboSites: boolean = false) {
     this.oboSites.controls
-      .forEach((control: FormGroup, index: number) => {
+      .forEach((control: UntypedFormGroup, index: number) => {
         const value = control.get('physicalAddress').value.city;
         const careSetting = control.get('careSettingCode').value;
         const healthAuthCode = control.get('healthAuthorityCode').value;
@@ -398,7 +398,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     this.deviceProviderSites.clear();
 
     Object.keys(this.healthAuthoritySites.controls).forEach(healthAuthorityCode => {
-      const sitesOfHealthAuthority = this.healthAuthoritySites.get(healthAuthorityCode) as FormArray;
+      const sitesOfHealthAuthority = this.healthAuthoritySites.get(healthAuthorityCode) as UntypedFormArray;
       sitesOfHealthAuthority.clearValidators();
       sitesOfHealthAuthority.updateValueAndValidity();
       sitesOfHealthAuthority.clear();
@@ -416,7 +416,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
 
         let jobSiteHAs = [];
 
-        Object.values(this.healthAuthoritySites.controls).forEach((formArray: FormArray) => {
+        Object.values(this.healthAuthoritySites.controls).forEach((formArray: UntypedFormArray) => {
           jobSiteHAs = [...jobSiteHAs, ...formArray.value.map((s) => s.healthAuthorityCode)];
         });
 

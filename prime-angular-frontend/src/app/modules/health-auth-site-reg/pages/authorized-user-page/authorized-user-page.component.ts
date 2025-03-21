@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { map } from 'rxjs/operators';
@@ -50,7 +50,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     private authService: AuthService,
     private configService: ConfigService,
     private authorizedUserService: AuthorizedUserService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -144,7 +144,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.ACCESS_REQUESTED);
   }
 
-  private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl): void {
+  private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: UntypedFormControl, preferredLastName: UntypedFormControl): void {
     if (!hasPreferredName) {
       this.formUtilsService.resetAndClearValidators(preferredFirstName);
       this.formUtilsService.resetAndClearValidators(preferredLastName);
@@ -154,7 +154,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     }
   }
 
-  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
+  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: UntypedFormGroup, shouldToggle: boolean = true): void {
     if (!shouldToggle) {
       return;
     }
@@ -164,11 +164,11 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
       : this.setAddressValidator(addressLine);
   }
 
-  private clearAddressValidator(addressLine: FormGroup): void {
+  private clearAddressValidator(addressLine: UntypedFormGroup): void {
     this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems);
   }
 
-  private setAddressValidator(addressLine: FormGroup): void {
+  private setAddressValidator(addressLine: UntypedFormGroup): void {
     this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
   }
 }

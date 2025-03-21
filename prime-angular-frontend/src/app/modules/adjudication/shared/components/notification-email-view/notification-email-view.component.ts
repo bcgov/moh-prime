@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { EMPTY, Subscription } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
@@ -26,12 +26,12 @@ export class NotificationEmailViewComponent implements OnInit {
   public titleEditable: boolean;
   public descriptionEditable: boolean;
   public recipientEditable: boolean;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
 
   public Role = Role;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private dialog: MatDialog,
     private emailTemplateResource: EmailTemplateResourceService,
     private route: ActivatedRoute,
@@ -39,24 +39,24 @@ export class NotificationEmailViewComponent implements OnInit {
     this.templateEditable = false;
   }
 
-  public get template(): FormControl {
-    return this.form.get('template') as FormControl;
+  public get template(): UntypedFormControl {
+    return this.form.get('template') as UntypedFormControl;
   }
 
-  public get subject(): FormControl {
-    return this.form.get('subject') as FormControl;
+  public get subject(): UntypedFormControl {
+    return this.form.get('subject') as UntypedFormControl;
   }
 
-  public get emailTitle(): FormControl {
-    return this.form.get("emailTitle") as FormControl;
+  public get emailTitle(): UntypedFormControl {
+    return this.form.get("emailTitle") as UntypedFormControl;
   }
 
-  public get description(): FormControl {
-    return this.form.get("description") as FormControl;
+  public get description(): UntypedFormControl {
+    return this.form.get("description") as UntypedFormControl;
   }
 
-  public get recipient(): FormControl {
-    return this.form.get("recipient") as FormControl;
+  public get recipient(): UntypedFormControl {
+    return this.form.get("recipient") as UntypedFormControl;
   }
 
   public saveTemplate(): void {

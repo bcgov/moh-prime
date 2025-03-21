@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 
@@ -9,23 +9,23 @@ export class BusinessLicenceRenewalPageFormState extends AbstractFormState<Busin
   private businessLicence: BusinessLicence;
 
   public constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get filename(): FormControl {
-    return this.formInstance.get('filename') as FormControl;
+  public get filename(): UntypedFormControl {
+    return this.formInstance.get('filename') as UntypedFormControl;
   }
 
-  public get businessLicenceGuid(): FormControl {
-    return this.formInstance.get('businessLicenceGuid') as FormControl;
+  public get businessLicenceGuid(): UntypedFormControl {
+    return this.formInstance.get('businessLicenceGuid') as UntypedFormControl;
   }
 
-  public get businessLicenceExpiry(): FormControl {
-    return this.formInstance.get('expiryDate') as FormControl;
+  public get businessLicenceExpiry(): UntypedFormControl {
+    return this.formInstance.get('expiryDate') as UntypedFormControl;
   }
 
   public get json(): BusinessLicenceRenewalForm {

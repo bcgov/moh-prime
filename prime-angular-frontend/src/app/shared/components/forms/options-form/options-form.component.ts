@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -17,7 +17,7 @@ export class OptionsFormComponent implements OnInit {
    * @description
    * Instance of form.
    */
-  @Input() public form: FormGroup;
+  @Input() public form: UntypedFormGroup;
   /**
    * @description
    * Form field label.

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, pipe, UnaryFunction } from 'rxjs';
@@ -26,7 +26,7 @@ export class AdministratorsPageComponent extends AbstractContactsPage implements
     protected route: ActivatedRoute,
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected healthAuthResource: HealthAuthorityResource,
     protected utilsService: UtilsService,
     router: Router

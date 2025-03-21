@@ -46,7 +46,7 @@
                 <mat-label>Opens at</mat-label>
                 <input matInput
                        mask="AB:CB"
-                       [patterns]="businessHoursTimePattern"
+                       patterns="businessHoursTimePattern"
                        formControlName="startTime"
                        placeholder="00:00"
                        [errorStateMatcher]="lessThanErrorStateMatcher">
@@ -62,7 +62,7 @@
                 <mat-label>Closes at</mat-label>
                 <input matInput
                        mask="AB:CB"
-                       [patterns]="businessHoursTimePattern"
+                       patterns="businessHoursTimePattern"
                        formControlName="endTime"
                        placeholder="00:00"
                        [errorStateMatcher]="lessThanErrorStateMatcher">

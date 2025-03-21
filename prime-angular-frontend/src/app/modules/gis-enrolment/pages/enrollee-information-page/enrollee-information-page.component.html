@@ -3,20 +3,20 @@
         (ngSubmit)="onSubmit()"
         novalidate
         autocomplete="off">
-  <app-page-header>{{ title }}</app-page-header>
+    <app-page-header>{{ title }}</app-page-header>
 
-  <app-gis-enrolment-progress-indicator [inProgress]="true"></app-gis-enrolment-progress-indicator>
+    <app-gis-enrolment-progress-indicator [inProgress]="true"></app-gis-enrolment-progress-indicator>
 
-  <app-page-section>
-    <app-page-subheader2 [showUnderline]="false">
-      <ng-container appPageSubheader2Title>
-        Enrollee Information
-      </ng-container>
-      <ng-container appPageSubheader2Summary>
-        This information comes from your Health Authority credential.
-        Please provide missing information or update your information.
-      </ng-container>
-    </app-page-subheader2>
+    <app-page-section>
+      <app-page-subheader2 [showUnderline]="false">
+        <ng-container appPageSubheader2Title>
+          Enrollee Information
+        </ng-container>
+        <ng-container appPageSubheader2Summary>
+          This information comes from your Health Authority credential.
+          Please provide missing information or update your information.
+        </ng-container>
+      </app-page-subheader2>
 
       <div class="row">
         <div class="col-12">
@@ -27,7 +27,7 @@
                    placeholder="Phone Number"
                    formControlName="phone"
                    mask="(000) 000-0000"
-                   [showMaskTyped]="false">
+                   showMaskTyped="false">
             <mat-error *ngIf="formState.phone.hasError('required')">Required</mat-error>
             <mat-error *ngIf="formState.phone.hasError('phone')">Must be a valid phone number</mat-error>
           </mat-form-field>

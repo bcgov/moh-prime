@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
@@ -37,8 +37,8 @@ describe('EmailFormComponent', () => {
       .compileComponents();
   });
 
-  beforeEach(inject([FormBuilder, FormUtilsService],
-    (fb: FormBuilder, formUtilsService: FormUtilsService) => {
+  beforeEach(inject([UntypedFormBuilder, FormUtilsService],
+    (fb: UntypedFormBuilder, formUtilsService: FormUtilsService) => {
       fixture = TestBed.createComponent(EmailFormComponent);
       component = fixture.componentInstance;
       component.form = fb.group({ email: ['', []] });

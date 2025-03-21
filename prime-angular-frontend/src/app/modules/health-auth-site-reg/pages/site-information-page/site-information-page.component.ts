@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -44,7 +44,7 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
     protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
     protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
     protected siteResource: SiteResource,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private configService: ConfigService,
     router: Router
   ) {

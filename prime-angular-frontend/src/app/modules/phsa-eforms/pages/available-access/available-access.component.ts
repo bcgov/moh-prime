@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -18,7 +18,7 @@ import { PhsaEformsFormStateService } from '@phsa/shared/services/phsa-eforms-fo
   styleUrls: ['./available-access.component.scss']
 })
 export class AvailableAccessComponent implements OnInit {
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public busy: Subscription;
   public showProgress: boolean;
   public availablePartyTypes: PartyTypeEnum[];
@@ -27,7 +27,7 @@ export class AvailableAccessComponent implements OnInit {
   private routeUtils: RouteUtils;
 
   constructor(
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected route: ActivatedRoute,
     protected router: Router,
     private phsaEformsResource: PhsaEformsResource,
@@ -37,8 +37,8 @@ export class AvailableAccessComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, PhsaEformsRoutes.MODULE_PATH);
   }
 
-  public get partyTypes(): FormGroup {
-    return this.form.get('partyTypes') as FormGroup;
+  public get partyTypes(): UntypedFormGroup {
+    return this.form.get('partyTypes') as UntypedFormGroup;
   }
 
   public onSubmit(): void {

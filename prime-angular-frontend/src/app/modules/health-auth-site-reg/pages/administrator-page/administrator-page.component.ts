@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 
 import { BehaviorSubject } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
@@ -40,7 +40,7 @@ export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegis
     protected healthAuthoritySiteService: HealthAuthoritySiteService,
     protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
     protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private healthAuthorityService: HealthAuthorityService,
     router: Router
   ) {

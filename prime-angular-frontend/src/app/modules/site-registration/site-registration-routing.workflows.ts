@@ -28,13 +28,14 @@ import { OrganizationAgreementPageComponent } from '@registration/pages/organiza
 import { ElectronicOrganizationAgreementPageComponent } from '@registration/pages/electronic-organization-agreement-page/electronic-organization-agreement-page.component';
 import { OverviewPageComponent } from '@registration/pages/overview-page/overview-page.component';
 import { NextStepsPageComponent } from '@registration/pages/next-steps-page/next-steps-page.component';
+import { Routes } from "@angular/router";
 
 /**
  * @description
  * Routing workflow used as the default workflow for
  * create an organization and their associated sites.
  */
-export const defaultCommunitySiteWorkflow = [
+export const defaultCommunitySiteWorkflow: Routes = [
   {
     path: SiteRoutes.COLLECTION_NOTICE,
     component: CollectionNoticePageComponent,
@@ -213,7 +214,7 @@ export const defaultCommunitySiteWorkflow = [
  * Routing workflow for changing an organization's
  * signing authority.
  */
-export const changeSigningAuthorityWorkflow = [
+export const changeSigningAuthorityWorkflow: Routes = [
   {
     path: SiteRoutes.COLLECTION_NOTICE,
     component: CollectionNoticePageComponent,

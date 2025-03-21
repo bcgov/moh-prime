@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -8,7 +8,7 @@ import { PrivacyOffice } from '@lib/models/privacy-office.model';
 
 export class PrivacyOfficePageFormState extends AbstractFormState<PrivacyOffice> {
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtilsService: FormUtilsService
   ) {
     super();
@@ -16,20 +16,20 @@ export class PrivacyOfficePageFormState extends AbstractFormState<PrivacyOffice>
     this.buildForm();
   }
 
-  public get email(): FormControl {
-    return this.formInstance.get('email') as FormControl;
+  public get email(): UntypedFormControl {
+    return this.formInstance.get('email') as UntypedFormControl;
   }
 
-  public get phone(): FormControl {
-    return this.formInstance.get('phone') as FormControl;
+  public get phone(): UntypedFormControl {
+    return this.formInstance.get('phone') as UntypedFormControl;
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.formInstance.get('physicalAddress') as FormGroup;
+  public get physicalAddress(): UntypedFormGroup {
+    return this.formInstance.get('physicalAddress') as UntypedFormGroup;
   }
 
-  public get privacyOfficer(): FormGroup {
-    return this.formInstance.get('privacyOfficer') as FormGroup;
+  public get privacyOfficer(): UntypedFormGroup {
+    return this.formInstance.get('privacyOfficer') as UntypedFormGroup;
   }
 
   public get json(): PrivacyOffice {

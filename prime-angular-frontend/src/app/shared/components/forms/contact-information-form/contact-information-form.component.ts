@@ -1,5 +1,5 @@
 import { Component, ContentChildren, Input, OnInit, QueryList } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 
@@ -15,7 +15,7 @@ export class ContactInformationFormComponent implements OnInit {
    * @description
    * Contact information form instance.
    */
-  @Input() public form: FormGroup;
+  @Input() public form: UntypedFormGroup;
   /**
    * @description
    * Mode for displaying the form fields where full includes
@@ -40,20 +40,20 @@ export class ContactInformationFormComponent implements OnInit {
     this.contactDescription = 'Provide a phone number that may be used to contact you.';
   }
 
-  public get phone(): FormControl {
-    return this.form.get('phone') as FormControl;
+  public get phone(): UntypedFormControl {
+    return this.form.get('phone') as UntypedFormControl;
   }
 
-  public get phoneExtension(): FormControl {
-    return this.form.get('phoneExtension') as FormControl;
+  public get phoneExtension(): UntypedFormControl {
+    return this.form.get('phoneExtension') as UntypedFormControl;
   }
 
-  public get email(): FormControl {
-    return this.form.get('email') as FormControl;
+  public get email(): UntypedFormControl {
+    return this.form.get('email') as UntypedFormControl;
   }
 
-  public get smsPhone(): FormControl {
-    return this.form.get('smsPhone') as FormControl;
+  public get smsPhone(): UntypedFormControl {
+    return this.form.get('smsPhone') as UntypedFormControl;
   }
 
   public get hasCustomNotificationInfoSummary(): boolean {

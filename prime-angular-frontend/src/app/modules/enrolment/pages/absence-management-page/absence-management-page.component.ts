@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { EMPTY, Observable, Subscription } from 'rxjs';
 import moment from 'moment';
 
@@ -34,7 +34,7 @@ export class AbsenceManagementPageComponent extends AbstractEnrolmentPage implem
   constructor(
     protected formUtils: FormUtilsService,
     protected dialog: MatDialog,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
     private formatDatePipe: FormatDatePipe

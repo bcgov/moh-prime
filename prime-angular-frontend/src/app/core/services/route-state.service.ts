@@ -30,9 +30,9 @@ export class RouteStateService {
    * @description
    * Listener for the route navigation start event.
    */
-  public onNavigationStart(): Observable<RouterEvent> {
+  public onNavigationStart(): Observable<NavigationStart> {
     return this.router.events.pipe(
-      filter((event: RouterEvent) => event instanceof NavigationStart)
+      filter((event): event is NavigationStart => event instanceof NavigationStart)
     );
   }
 
@@ -40,9 +40,9 @@ export class RouteStateService {
    * @description
    * Listener for the route navigation stop events.
    */
-  public onNavigationStop(): Observable<RouterEvent> {
+  public onNavigationStop(): Observable<NavigationEnd | NavigationCancel | NavigationError> {
     return this.router.events.pipe(
-      filter((event: RouterEvent) =>
+      filter((event): event is NavigationEnd | NavigationCancel | NavigationError =>
         event instanceof NavigationEnd ||
         event instanceof NavigationCancel ||
         event instanceof NavigationError
@@ -54,9 +54,9 @@ export class RouteStateService {
    * @description
    * Listener for the route navigation end event.
    */
-  public onNavigationEnd(): Observable<RouterEvent> {
+  public onNavigationEnd(): Observable<NavigationEnd> {
     return this.router.events.pipe(
-      filter((event: RouterEvent) => event instanceof NavigationEnd)
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
     );
   }
 }

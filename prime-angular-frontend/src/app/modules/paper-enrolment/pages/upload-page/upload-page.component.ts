@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -40,7 +40,7 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private utilsService: UtilsService,
     private route: ActivatedRoute,

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -49,8 +49,8 @@ export class AccessCodeComponent extends BaseEnrolmentProfilePage implements OnI
     );
   }
 
-  public get accessCode(): FormControl {
-    return this.form.get('accessCode') as FormControl;
+  public get accessCode(): UntypedFormControl {
+    return this.form.get('accessCode') as UntypedFormControl;
   }
 
   public ngOnInit() {

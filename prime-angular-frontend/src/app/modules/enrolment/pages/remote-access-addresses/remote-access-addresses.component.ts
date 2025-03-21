@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -59,8 +59,8 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
     ];
   }
 
-  public get remoteAccessLocations(): FormArray {
-    return this.form.get('remoteAccessLocations') as FormArray;
+  public get remoteAccessLocations(): UntypedFormArray {
+    return this.form.get('remoteAccessLocations') as UntypedFormArray;
   }
 
   public addLocation() {
@@ -87,7 +87,7 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
    */
   private removeIncompleteLocations() {
     this.remoteAccessLocations.controls
-      .forEach((control: FormGroup, index: number) => {
+      .forEach((control: UntypedFormGroup, index: number) => {
         if (!control.get('internetProvider').value || control.invalid) {
           this.remoteAccessLocations.removeAt(index);
         }

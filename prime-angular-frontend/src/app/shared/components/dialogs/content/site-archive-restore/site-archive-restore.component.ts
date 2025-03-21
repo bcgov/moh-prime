@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -18,7 +18,7 @@ export enum SiteActionEnum {
   styleUrls: ['./site-archive-restore.component.scss']
 })
 export class SiteArchiveRestoreComponent implements OnInit {
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public siteCloseReasons: Config<number>[];
   public siteId: number;
   public action: SiteActionEnum;
@@ -28,7 +28,7 @@ export class SiteArchiveRestoreComponent implements OnInit {
   public message: string;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private dialogRef: MatDialogRef<ConfirmDialogComponent>,
     protected formUtilsService: FormUtilsService,
     protected siteResource: SiteResource,
@@ -45,8 +45,8 @@ export class SiteArchiveRestoreComponent implements OnInit {
       this.isRestore ? 'Restore Site' : 'NA';
   }
 
-  public get note(): FormControl {
-    return this.form.get('note') as FormControl;
+  public get note(): UntypedFormControl {
+    return this.form.get('note') as UntypedFormControl;
   }
 
   public get isArchive(): boolean {

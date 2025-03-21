@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 
@@ -8,15 +8,15 @@ interface OrganizationAgreementPageDataModel {
 
 export class OrganizationAgreementPageFormState extends AbstractFormState<OrganizationAgreementPageDataModel> {
   public constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get organizationAgreementGuid(): FormControl {
-    return this.formInstance.get('organizationAgreementGuid') as FormControl;
+  public get organizationAgreementGuid(): UntypedFormControl {
+    return this.formInstance.get('organizationAgreementGuid') as UntypedFormControl;
   }
 
   public get json(): OrganizationAgreementPageDataModel {

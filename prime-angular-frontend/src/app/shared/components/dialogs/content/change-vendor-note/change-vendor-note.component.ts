@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { SiteResource } from '@core/resources/site-resource.service';
@@ -19,12 +19,12 @@ export class ChangeVendorNoteComponent implements OnInit {
   public title: string;
   public vendorChangeText: string;
   public vendorCode: number;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public changeVendorClicked: boolean;
 
   constructor(
     private siteResource: SiteResource,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogOptions,
   ) {
@@ -35,12 +35,12 @@ export class ChangeVendorNoteComponent implements OnInit {
     this.vendorChanged = new EventEmitter<boolean>();
   }
 
-  public get note(): FormControl {
-    return this.form.get('note') as FormControl;
+  public get note(): UntypedFormControl {
+    return this.form.get('note') as UntypedFormControl;
   }
 
-  public get requester(): FormControl {
-    return this.form.get('requester') as FormControl;
+  public get requester(): UntypedFormControl {
+    return this.form.get('requester') as UntypedFormControl;
   }
 
   public onCancel() {

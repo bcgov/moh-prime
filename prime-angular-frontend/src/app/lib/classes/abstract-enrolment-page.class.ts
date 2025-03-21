@@ -1,4 +1,4 @@
-import { FormArray, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, Subscription } from 'rxjs';
@@ -77,7 +77,7 @@ export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>
    * @deprecated
    * Use the formState to access the form
    */
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   /**
    * @description
    * Form state
@@ -200,7 +200,7 @@ export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>
    * Check the validity of the form, as well as, perform
    * additional validation.
    */
-  protected checkValidity(form: FormGroup | FormArray): boolean {
+  protected checkValidity(form: UntypedFormGroup | UntypedFormArray): boolean {
     return this.formUtilsService.checkValidity(form) && this.additionalValidityChecks(form.getRawValue());
   }
 

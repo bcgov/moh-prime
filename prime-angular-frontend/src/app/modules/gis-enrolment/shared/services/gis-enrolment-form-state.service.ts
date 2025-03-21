@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormBuilder } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { RouteStateService } from '@core/services/route-state.service';
@@ -22,7 +22,7 @@ export class GisEnrolmentFormStateService extends AbstractFormStateService<GisEn
   private bcscUser: Omit<BcscUser, 'verifiedAddress'>;
 
   constructor(
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected routeStateService: RouteStateService,
     protected logger: ConsoleLoggerService
   ) {

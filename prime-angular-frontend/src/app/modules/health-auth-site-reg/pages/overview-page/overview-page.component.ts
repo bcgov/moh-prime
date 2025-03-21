@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 import { Subscription, EMPTY, of } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
@@ -67,7 +67,7 @@ export class OverviewPageComponent implements OnInit {
     }
 
     if (!this.healthAuthoritySiteFormStateService.isValidSubmission) {
-      this.healthAuthoritySiteFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
+      this.healthAuthoritySiteFormStateService.forms.forEach((form: UntypedFormGroup) => this.formUtilsService.logFormErrors(form));
       this.toastService.openErrorToast('Your site has an error that needs to be corrected before you will be able to submit');
       return;
     }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 
 import { forkJoin, merge, of } from 'rxjs';
 import { catchError, exhaustMap, map } from 'rxjs/operators';
@@ -31,7 +31,7 @@ export class NextStepsPageComponent extends AbstractEnrolmentPage implements OnI
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private utilsService: UtilsService,
     private route: ActivatedRoute,

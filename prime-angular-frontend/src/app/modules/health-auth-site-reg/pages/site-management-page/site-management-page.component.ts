@@ -19,7 +19,7 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-site-management-page',
@@ -37,11 +37,11 @@ export class SiteManagementPageComponent implements OnInit {
   public SiteStatusType = SiteStatusType;
   public vendors: Config<number>[];
   public careTypes: string[];
-  public form: FormGroup;
+  public form: UntypedFormGroup;
 
   constructor(
     private route: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private router: Router,
     private authorizedUserService: AuthorizedUserService,
     private authorizedUserResource: AuthorizedUserResource,
@@ -57,12 +57,12 @@ export class SiteManagementPageComponent implements OnInit {
       .sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  public get vendorCode(): FormControl {
-    return this.form.get('vendorCode') as FormControl;
+  public get vendorCode(): UntypedFormControl {
+    return this.form.get('vendorCode') as UntypedFormControl;
   }
 
-  public get careTypeCode(): FormControl {
-    return this.form.get('careTypeCode') as FormControl;
+  public get careTypeCode(): UntypedFormControl {
+    return this.form.get('careTypeCode') as UntypedFormControl;
   }
 
   public viewAuthorizedUser(healthAuthorityId: number): void {

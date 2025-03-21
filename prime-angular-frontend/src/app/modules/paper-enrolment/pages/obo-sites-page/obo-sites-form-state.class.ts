@@ -1,4 +1,4 @@
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
@@ -9,7 +9,7 @@ import { OboSitesForm } from './obo-sites-form.model';
 
 export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtilsService: FormUtilsService
   ) {
     super();
@@ -17,20 +17,20 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
     this.buildForm();
   }
 
-  public get communityHealthSites(): FormArray {
-    return this.form.get('communityHealthSites') as FormArray;
+  public get communityHealthSites(): UntypedFormArray {
+    return this.form.get('communityHealthSites') as UntypedFormArray;
   }
 
-  public get communityPharmacySites(): FormArray {
-    return this.form.get('communityPharmacySites') as FormArray;
+  public get communityPharmacySites(): UntypedFormArray {
+    return this.form.get('communityPharmacySites') as UntypedFormArray;
   }
 
-  public get deviceProviderSites(): FormArray {
-    return this.form.get('deviceProviderSites') as FormArray;
+  public get deviceProviderSites(): UntypedFormArray {
+    return this.form.get('deviceProviderSites') as UntypedFormArray;
   }
 
-  public get healthAuthoritySites(): FormGroup {
-    return this.form.get('healthAuthoritySites') as FormGroup;
+  public get healthAuthoritySites(): UntypedFormGroup {
+    return this.form.get('healthAuthoritySites') as UntypedFormGroup;
   }
 
   /**
@@ -40,8 +40,8 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
    * NOTE: The health authority control may not exist
    * if no sites exists.
    */
-  public healthAuthorityCodeSites(healthAuthorityCode: number): FormArray | null {
-    return this.healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
+  public healthAuthorityCodeSites(healthAuthorityCode: number): UntypedFormArray | null {
+    return this.healthAuthoritySites.get(`${healthAuthorityCode}`) as UntypedFormArray;
   }
 
   public get json(): OboSitesForm {
@@ -155,11 +155,11 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
     }
   }
 
-  private addNonHealthAuthorityOboSite(site: FormGroup, sites: FormArray) {
+  private addNonHealthAuthorityOboSite(site: UntypedFormGroup, sites: UntypedFormArray) {
     sites.push(site);
   }
 
-  private addHealthAuthorityOboSite(site: FormGroup, sites: FormGroup, healthAuthorityCode: number) {
+  private addHealthAuthorityOboSite(site: UntypedFormGroup, sites: UntypedFormGroup, healthAuthorityCode: number) {
     // Check for health authority control and associated sites, otherwise
     // add the health authority with validations before appending the site
     let healthAuthoritySites = this.healthAuthorityCodeSites(healthAuthorityCode);
@@ -168,11 +168,11 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
       healthAuthoritySites.setValidators([FormArrayValidators.atLeast(1)]);
       sites.setControl(`${healthAuthorityCode}`, healthAuthoritySites);
     }
-    this.formUtilsService.setValidators(site.get('facilityName') as FormControl, [Validators.required]);
+    this.formUtilsService.setValidators(site.get('facilityName') as UntypedFormControl, [Validators.required]);
     healthAuthoritySites.push(site);
   }
 
-  private buildOboSiteForm(): FormGroup {
+  private buildOboSiteForm(): UntypedFormGroup {
     return this.fb.group({
       careSettingCode: [null, []],
       healthAuthorityCode: [null, []],

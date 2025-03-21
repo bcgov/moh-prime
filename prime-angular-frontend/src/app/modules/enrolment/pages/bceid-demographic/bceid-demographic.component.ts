@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -82,12 +82,12 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     this.maxDateOfBirth = moment().subtract(MINIMUM_AGE, 'years');
   }
 
-  public get mailingAddress(): FormGroup {
-    return this.form.get('mailingAddress') as FormGroup;
+  public get mailingAddress(): UntypedFormGroup {
+    return this.form.get('mailingAddress') as UntypedFormGroup;
   }
 
-  public get dateOfBirth(): FormControl {
-    return this.form.get('dateOfBirth') as FormControl;
+  public get dateOfBirth(): UntypedFormControl {
+    return this.form.get('dateOfBirth') as UntypedFormControl;
   }
 
   public ngOnInit() {

@@ -1,4 +1,4 @@
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 /**
  * @description
@@ -6,13 +6,13 @@ import { FormGroup } from '@angular/forms';
  * adaptation between the business model and form model.
  */
 export abstract class AbstractFormState<T> {
-  protected formInstance: FormGroup;
+  protected formInstance: UntypedFormGroup;
 
   /**
    * @description
    * Get the reactive form instance.
    */
-  public get form(): FormGroup | null {
+  public get form(): UntypedFormGroup | null {
     return this.formInstance ?? null;
   }
 

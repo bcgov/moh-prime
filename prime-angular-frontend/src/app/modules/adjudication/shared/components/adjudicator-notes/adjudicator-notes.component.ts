@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription, BehaviorSubject, pipe, Observable, UnaryFunction } from 'rxjs';
@@ -26,7 +26,7 @@ export class AdjudicatorNotesComponent implements OnInit {
   @Input() public noteType: NoteType;
 
   public busy: Subscription;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public columns: string[];
   public adjudicatorNotes$: BehaviorSubject<DateContent[]>;
   public hasActions: boolean;
@@ -39,7 +39,7 @@ export class AdjudicatorNotesComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     protected router: Router,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private adjudicationResource: AdjudicationResource,
     private siteResource: SiteResource,
     private permissionService: PermissionService
@@ -50,8 +50,8 @@ export class AdjudicatorNotesComponent implements OnInit {
     this.adjudicatorNotes$ = new BehaviorSubject<DateContent[]>(null);
   }
 
-  public get note(): FormControl {
-    return this.form.get('note') as FormControl;
+  public get note(): UntypedFormControl {
+    return this.form.get('note') as UntypedFormControl;
   }
 
   public onSubmit(): void {

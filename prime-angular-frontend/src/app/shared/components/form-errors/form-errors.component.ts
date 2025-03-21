@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 
@@ -13,7 +13,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
   styleUrls: ['./form-errors.component.scss']
 })
 export class FormErrorsComponent implements OnInit {
-  @Input() form: FormGroup;
+  @Input() form: UntypedFormGroup;
 
   constructor(
     private formUtilsService: FormUtilsService

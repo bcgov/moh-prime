@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { UntypedFormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -37,7 +37,7 @@ describe('PaginatorComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PaginatorComponent);
     component = fixture.componentInstance;
-    component.form = new FormControl(1, [
+    component.form = new UntypedFormControl(1, [
       Validators.required,
       FormControlValidators.numeric,
       Validators.min(1),

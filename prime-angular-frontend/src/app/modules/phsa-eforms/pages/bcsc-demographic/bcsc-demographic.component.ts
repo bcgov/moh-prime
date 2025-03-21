@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, Subscription } from 'rxjs';
@@ -25,7 +25,7 @@ import { PhsaEformsFormStateService } from '@phsa/shared/services/phsa-eforms-fo
 })
 export class BcscDemographicComponent implements OnInit {
   public enrollee: PhsaEnrollee;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public busy: Subscription;
   public hasVerifiedAddress: boolean;
   public hasMailingAddress: boolean;
@@ -34,7 +34,7 @@ export class BcscDemographicComponent implements OnInit {
   private routeUtils: RouteUtils;
 
   public constructor(
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected route: ActivatedRoute,
     protected router: Router,
     private enrolmentFormStateService: PhsaEformsFormStateService,
@@ -45,16 +45,16 @@ export class BcscDemographicComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, PhsaEformsRoutes.MODULE_PATH);
   }
 
-  public get verifiedAddress(): FormGroup {
-    return this.form.get('verifiedAddress') as FormGroup;
+  public get verifiedAddress(): UntypedFormGroup {
+    return this.form.get('verifiedAddress') as UntypedFormGroup;
   }
 
-  public get mailingAddress(): FormGroup {
-    return this.form.get('mailingAddress') as FormGroup;
+  public get mailingAddress(): UntypedFormGroup {
+    return this.form.get('mailingAddress') as UntypedFormGroup;
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.form.get('physicalAddress') as FormGroup;
+  public get physicalAddress(): UntypedFormGroup {
+    return this.form.get('physicalAddress') as UntypedFormGroup;
   }
 
   public onSubmit(): void {
@@ -103,7 +103,7 @@ export class BcscDemographicComponent implements OnInit {
     }
   }
 
-  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
+  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: UntypedFormGroup, shouldToggle: boolean = true): void {
     if (!shouldToggle) {
       return;
     }
@@ -113,11 +113,11 @@ export class BcscDemographicComponent implements OnInit {
       : this.setAddressValidator(addressLine);
   }
 
-  private clearAddressValidator(addressLine: FormGroup): void {
+  private clearAddressValidator(addressLine: UntypedFormGroup): void {
     this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems);
   }
 
-  private setAddressValidator(addressLine: FormGroup): void {
+  private setAddressValidator(addressLine: UntypedFormGroup): void {
     this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
   }
 

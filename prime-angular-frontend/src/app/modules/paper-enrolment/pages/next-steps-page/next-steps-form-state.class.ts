@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -7,15 +7,15 @@ import { NextStepsForm } from './next-steps-form.model';
 
 export class NextStepsFormState extends AbstractFormState<NextStepsForm> {
   public constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get emails(): FormControl {
-    return this.form.get('emails') as FormControl;
+  public get emails(): UntypedFormControl {
+    return this.form.get('emails') as UntypedFormControl;
   }
 
   public get json(): NextStepsForm {

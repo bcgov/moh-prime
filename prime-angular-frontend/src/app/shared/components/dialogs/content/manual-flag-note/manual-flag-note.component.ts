@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, UntypedFormControl } from '@angular/forms';
 
 import { debounceTime } from 'rxjs/operators';
 
@@ -18,13 +18,13 @@ export class ManualFlagNoteOutput {
 export class ManualFlagNoteComponent implements OnInit {
   @Output() public output: EventEmitter<ManualFlagNoteOutput>;
 
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public isEmpty: boolean;
   public enrollee: HttpEnrollee;
   public outputValue: ManualFlagNoteOutput;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
   ) {
     this.output = new EventEmitter<ManualFlagNoteOutput>();
   }
@@ -33,12 +33,12 @@ export class ManualFlagNoteComponent implements OnInit {
     this.enrollee = enrollee;
   }
 
-  public get note(): FormControl {
-    return this.form.get('note') as FormControl;
+  public get note(): UntypedFormControl {
+    return this.form.get('note') as UntypedFormControl;
   }
 
-  public get alwaysManual(): FormControl {
-    return this.form.get('alwaysManual') as FormControl;
+  public get alwaysManual(): UntypedFormControl {
+    return this.form.get('alwaysManual') as UntypedFormControl;
   }
 
   public ngOnInit() {

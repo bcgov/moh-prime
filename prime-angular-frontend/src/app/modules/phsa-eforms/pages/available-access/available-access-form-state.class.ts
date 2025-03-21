@@ -1,4 +1,4 @@
-import { AbstractControl, FormArray, FormBuilder } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormBuilder } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
@@ -13,7 +13,7 @@ export class AvailableAccessFormState extends AbstractFormState<PartyTypeFormMod
   private availablePartyTypes: PartyTypeEnum[];
 
   public constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
 
@@ -45,7 +45,7 @@ export class AvailableAccessFormState extends AbstractFormState<PartyTypeFormMod
   }
 
   public buildAvailableAccessFormControls(availablePartyTypes: PartyTypeEnum[]): void {
-    const formArray = this.formInstance.get('partyTypes') as FormArray;
+    const formArray = this.formInstance.get('partyTypes') as UntypedFormArray;
 
     // Store the available types for use when exporting as JSON
     this.availablePartyTypes = availablePartyTypes;

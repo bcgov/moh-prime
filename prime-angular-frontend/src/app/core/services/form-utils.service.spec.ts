@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { Person } from '@lib/models/person.model';
@@ -9,7 +9,7 @@ import { FormUtilsService } from './form-utils.service';
 
 describe('FormUtilsService', () => {
   let service: FormUtilsService;
-  const fb: FormBuilder = new FormBuilder();
+  const fb: UntypedFormBuilder = new UntypedFormBuilder();
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -48,8 +48,8 @@ describe('FormUtilsService', () => {
     expect(service.checkValidity(forms[0])).toBe(false, 'form should be invalid');
     expect(service.checkValidity(forms[1])).toBe(true, 'form should be valid');
 
-    expect(service.checkValidity(new FormArray(forms))).toBe(false, 'formArray should be invalid');
-    expect(service.checkValidity(new FormArray([forms[1]]))).toBe(true, 'formArray should be valid');
+    expect(service.checkValidity(new UntypedFormArray(forms))).toBe(false, 'formArray should be invalid');
+    expect(service.checkValidity(new UntypedFormArray([forms[1]]))).toBe(true, 'formArray should be valid');
   });
 
   it('should toPersonFormModel', () => {

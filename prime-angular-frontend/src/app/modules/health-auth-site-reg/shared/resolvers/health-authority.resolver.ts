@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -11,7 +11,7 @@ import { HealthAuthorityService } from '@health-auth/shared/services/health-auth
 @Injectable({
   providedIn: 'root'
 })
-export class HealthAuthorityResolver implements Resolve<HealthAuthority> {
+export class HealthAuthorityResolver  {
   constructor(
     private healthAuthorityService: HealthAuthorityService,
     private healthAuthorityResource: HealthAuthorityResource

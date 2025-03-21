@@ -1,6 +1,6 @@
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { Location } from '@angular/common';
@@ -45,7 +45,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private location: Location,
     private enrolmentResource: SatEformsEnrolmentResource,
     private enrolleeService: SatEnrolleeService,
@@ -144,7 +144,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     this.routeUtils.routeRelativeTo(['../', enrolleeId, SatEformsRoutes.REGULATORY]);
   }
 
-  private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl): void {
+  private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: UntypedFormControl, preferredLastName: UntypedFormControl): void {
     if (!hasPreferredName) {
       this.formUtilsService.resetAndClearValidators(preferredFirstName);
       this.formUtilsService.resetAndClearValidators(preferredLastName);
@@ -154,7 +154,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     }
   }
 
-  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
+  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: UntypedFormGroup, shouldToggle: boolean = true): void {
     if (!shouldToggle) {
       return;
     }
@@ -164,11 +164,11 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
       : this.setAddressValidator(addressLine);
   }
 
-  private clearAddressValidator(addressLine: FormGroup): void {
+  private clearAddressValidator(addressLine: UntypedFormGroup): void {
     this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems);
   }
 
-  private setAddressValidator(addressLine: FormGroup): void {
+  private setAddressValidator(addressLine: UntypedFormGroup): void {
     this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormArray, UntypedFormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -67,16 +67,16 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     this.hasNoHealthAuthoritiesError = false;
   }
 
-  public get careSettings(): FormArray {
-    return this.form.get('careSettings') as FormArray;
+  public get careSettings(): UntypedFormArray {
+    return this.form.get('careSettings') as UntypedFormArray;
   }
 
   /**
    * @description
    *  Representing possible health authorities to select from and whether a given one was selected
    */
-  public get enrolleeHealthAuthorities(): FormArray {
-    return this.form.get('enrolleeHealthAuthorities') as FormArray;
+  public get enrolleeHealthAuthorities(): UntypedFormArray {
+    return this.form.get('enrolleeHealthAuthorities') as UntypedFormArray;
   }
 
   public onSubmit() {
@@ -124,7 +124,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     this.setHealthAuthorityValidator();
   }
 
-  public filterCareSettingTypes(careSetting: FormGroup) {
+  public filterCareSettingTypes(careSetting: UntypedFormGroup) {
     // Create a list of filtered care settings
     if (this.careSettings.length) {
       // All the currently chosen care settings
@@ -249,7 +249,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
    */
   private removeOboSites(careSettingCode: number): void {
     const form = this.enrolmentFormStateService.oboSitesForm;
-    const oboSites = form.get('oboSites') as FormArray;
+    const oboSites = form.get('oboSites') as UntypedFormArray;
 
     for (var i = oboSites.length - 1; i >= 0; i--) {
       if (oboSites.value[i].careSettingCode === careSettingCode) {
@@ -257,7 +257,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       }
     }
 
-    const clear = (fa: FormArray) => {
+    const clear = (fa: UntypedFormArray) => {
       fa.clear();
       fa.clearValidators();
       fa.updateValueAndValidity();
@@ -265,15 +265,15 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        return clear(form.get('communityHealthSites') as FormArray);
+        return clear(form.get('communityHealthSites') as UntypedFormArray);
       }
       case CareSettingEnum.COMMUNITY_PHARMACIST: {
-        return clear(form.get('communityPharmacySites') as FormArray);
+        return clear(form.get('communityPharmacySites') as UntypedFormArray);
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        const healthAuthoritySites = form.get('healthAuthoritySites') as FormGroup;
+        const healthAuthoritySites = form.get('healthAuthoritySites') as UntypedFormGroup;
         Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => {
-          const sitesOfHealthAuthority = healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
+          const sitesOfHealthAuthority = healthAuthoritySites.get(`${healthAuthorityCode}`) as UntypedFormArray;
           sitesOfHealthAuthority.clearValidators();
           sitesOfHealthAuthority.updateValueAndValidity();
           healthAuthoritySites.removeControl(healthAuthorityCode);
@@ -284,7 +284,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   private setHealthAuthorityValidator(): void {
     this.hasSelectedHACareSetting()
-      ? this.enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, (control: FormControl) => control.value))
+      ? this.enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, (control: UntypedFormControl) => control.value))
       : this.enrolleeHealthAuthorities.clearValidators();
   }
 }

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroupDirective } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, FormGroupDirective } from '@angular/forms';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Location } from '@angular/common';
@@ -22,7 +22,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { BannerMaintenanceFormState } from './banner-maintenance-form-state.class';
 
 export class IsSameOrBeforeErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
-  public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
+  public isErrorState(control: UntypedFormControl | null, form: FormGroupDirective | null): boolean {
     const invalidCtrl = super.isErrorState(control, form);
     // Apply custom validation from parent form group
     const dirtyOrSubmitted = (control?.dirty || form?.submitted || control?.touched);
@@ -68,7 +68,7 @@ export class BannerMaintenanceComponent extends AbstractEnrolmentPage implements
   constructor(
     protected formUtils: FormUtilsService,
     protected dialog: MatDialog,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     private bannerResource: BannerResourceService,
     private location: Location,

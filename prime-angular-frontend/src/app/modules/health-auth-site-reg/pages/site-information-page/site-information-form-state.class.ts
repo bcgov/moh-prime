@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators, UntypedFormGroup } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -8,7 +8,7 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
   private siteId: number;
 
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtilsService: FormUtilsService
   ) {
     super();
@@ -16,20 +16,20 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
     this.buildForm();
   }
 
-  public get siteName(): FormControl {
-    return this.formInstance.get('siteName') as FormControl;
+  public get siteName(): UntypedFormControl {
+    return this.formInstance.get('siteName') as UntypedFormControl;
   }
 
-  public get mnemonic(): FormControl {
-    return this.formInstance.get('mnemonic') as FormControl;
+  public get mnemonic(): UntypedFormControl {
+    return this.formInstance.get('mnemonic') as UntypedFormControl;
   }
 
-  public get pec(): FormControl {
-    return this.formInstance.get('pec') as FormControl;
+  public get pec(): UntypedFormControl {
+    return this.formInstance.get('pec') as UntypedFormControl;
   }
 
-  public get securityGroupCode(): FormControl {
-    return this.formInstance.get('securityGroupCode') as FormControl;
+  public get securityGroupCode(): UntypedFormControl {
+    return this.formInstance.get('securityGroupCode') as UntypedFormControl;
   }
 
   public get json(): SiteInformationForm {
@@ -40,8 +40,8 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
     return this.formInstance.getRawValue();
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.formInstance.get('physicalAddress') as FormGroup;
+  public get physicalAddress(): UntypedFormGroup {
+    return this.formInstance.get('physicalAddress') as UntypedFormGroup;
   }
 
   public patchValue(model: SiteInformationForm, siteId: number): void {

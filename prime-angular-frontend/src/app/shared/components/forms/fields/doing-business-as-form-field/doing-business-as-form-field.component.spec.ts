@@ -2,7 +2,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormControl, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -38,12 +38,12 @@ describe('DoingBusinessAsFormFieldComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DoingBusinessAsFormFieldComponent);
     component = fixture.componentInstance;
-    component.doingBusinessAs = new FormControl('INPUT_BINDING');
+    component.doingBusinessAs = new UntypedFormControl('INPUT_BINDING');
     fixture.detectChanges();
   });
 
   it('should create', () => {
-    component.doingBusinessAs = new FormControl();
+    component.doingBusinessAs = new UntypedFormControl();
     expect(component).toBeTruthy();
   });
 });

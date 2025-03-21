@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import moment from 'moment';
 
@@ -14,7 +14,7 @@ import { RegulatoryFormState } from '@paper-enrolment/pages/regulatory-page/regu
   styleUrls: ['./unlisted-college-licence-form.component.scss']
 })
 export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
-  @Input() public form: FormGroup;
+  @Input() public form: UntypedFormGroup;
   @Input() public formState: RegulatoryFormState;
   @Input() public index: number;
   @Input() public total: number;
@@ -36,20 +36,20 @@ export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
     return this.viewportService.isMobile;
   }
 
-  public get collegeName(): FormControl {
-    return this.form.get('collegeName') as FormControl;
+  public get collegeName(): UntypedFormControl {
+    return this.form.get('collegeName') as UntypedFormControl;
   }
 
-  public get licenceNumber(): FormControl {
-    return this.form.get('licenceNumber') as FormControl;
+  public get licenceNumber(): UntypedFormControl {
+    return this.form.get('licenceNumber') as UntypedFormControl;
   }
 
-  public get renewalDate(): FormControl {
-    return this.form.get('renewalDate') as FormControl;
+  public get renewalDate(): UntypedFormControl {
+    return this.form.get('renewalDate') as UntypedFormControl;
   }
 
-  public get licenceClass(): FormControl {
-    return this.form.get('licenceClass') as FormControl;
+  public get licenceClass(): UntypedFormControl {
+    return this.form.get('licenceClass') as UntypedFormControl;
   }
 
   public removeUnlistedCertification(): void {

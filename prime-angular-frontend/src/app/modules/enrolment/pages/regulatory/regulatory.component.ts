@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormArray, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -179,7 +179,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       );
 
     // Check if there is validation error, mark as touched to show the error message
-    this.formState.certifications.controls.forEach((c: FormGroup) => {
+    this.formState.certifications.controls.forEach((c: UntypedFormGroup) => {
       Object.keys(c.controls).forEach(key => {
         if (c.get(key).errors) {
           c.get(key).markAsTouched();
@@ -276,7 +276,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
    */
   private removeIncompleteCertifications(noEmptyCert: boolean = false) {
     this.formState.certifications.controls
-      .forEach((control: FormGroup, index: number) => {
+      .forEach((control: UntypedFormGroup, index: number) => {
         // Remove if college code is "None" or the group is invalid
         if (!control.get('collegeCode').value || (control.invalid && !this.enrolmentService.isProfileComplete)) {
           this.removeCertification(index);
@@ -292,7 +292,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
   private removeIncompleteUnlistedCertification() {
     this.formState.unlistedCertifications.controls
-      .forEach((control: FormGroup, index: number) => {
+      .forEach((control: UntypedFormGroup, index: number) => {
         // Remove if college code is "None" or the group is invalid
         if (!control.get('collegeName').value || (control.invalid && !this.enrolmentService.isProfileComplete)) {
           this.formState.unlistedCertifications.removeAt(index);
@@ -310,7 +310,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
     if (this.formState.certifications.length || (this.isDeviceProvider && this.formState.deviceProviderRoleCode.value !== 15)) {
       const form = this.enrolmentFormStateService.oboSitesForm;
-      const oboSites = form.get('oboSites') as FormArray;
+      const oboSites = form.get('oboSites') as UntypedFormArray;
       oboSites.clear();
     }
   }
@@ -344,9 +344,9 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
   private removeRemoteAccessData(): void {
     const remoteAccessForm = this.enrolmentFormStateService.remoteAccessForm;
-    const remoteAccessSites = remoteAccessForm.get('remoteAccessSites') as FormArray;
-    const enrolleeRemoteUsers = remoteAccessForm.get('enrolleeRemoteUsers') as FormArray;
-    const remoteLocations = this.enrolmentFormStateService.remoteAccessLocationsForm.get('remoteAccessLocations') as FormArray;
+    const remoteAccessSites = remoteAccessForm.get('remoteAccessSites') as UntypedFormArray;
+    const enrolleeRemoteUsers = remoteAccessForm.get('enrolleeRemoteUsers') as UntypedFormArray;
+    const remoteLocations = this.enrolmentFormStateService.remoteAccessLocationsForm.get('remoteAccessLocations') as UntypedFormArray;
     [remoteAccessSites, enrolleeRemoteUsers, remoteLocations].forEach(f => f.clear());
   }
 

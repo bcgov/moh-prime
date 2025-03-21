@@ -1,4 +1,4 @@
-import { FormArray, FormBuilder, FormControl } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -8,51 +8,51 @@ import { SelfDeclarationForm } from './self-declaration-form.model';
 
 export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationForm> {
   public constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get hasConviction(): FormControl {
-    return this.form.get('hasConviction') as FormControl;
+  public get hasConviction(): UntypedFormControl {
+    return this.form.get('hasConviction') as UntypedFormControl;
   }
 
-  public get hasConvictionDetails(): FormControl {
-    return this.form.get('hasConvictionDetails') as FormControl;
+  public get hasConvictionDetails(): UntypedFormControl {
+    return this.form.get('hasConvictionDetails') as UntypedFormControl;
   }
 
-  public get hasRegistrationSuspended(): FormControl {
-    return this.form.get('hasRegistrationSuspended') as FormControl;
+  public get hasRegistrationSuspended(): UntypedFormControl {
+    return this.form.get('hasRegistrationSuspended') as UntypedFormControl;
   }
 
-  public get hasRegistrationSuspendedDetails(): FormControl {
-    return this.form.get('hasRegistrationSuspendedDetails') as FormControl;
+  public get hasRegistrationSuspendedDetails(): UntypedFormControl {
+    return this.form.get('hasRegistrationSuspendedDetails') as UntypedFormControl;
   }
 
-  public get hasRegistrationSuspendedDeviceProvider(): FormControl {
-    return this.form.get('hasRegistrationSuspendedDeviceProvider') as FormControl;
+  public get hasRegistrationSuspendedDeviceProvider(): UntypedFormControl {
+    return this.form.get('hasRegistrationSuspendedDeviceProvider') as UntypedFormControl;
   }
 
-  public get hasRegistrationSuspendedDeviceProviderDetails(): FormControl {
-    return this.form.get('hasRegistrationSuspendedDeviceProviderDetails') as FormControl;
+  public get hasRegistrationSuspendedDeviceProviderDetails(): UntypedFormControl {
+    return this.form.get('hasRegistrationSuspendedDeviceProviderDetails') as UntypedFormControl;
   }
 
-  public get hasDisciplinaryAction(): FormControl {
-    return this.form.get('hasDisciplinaryAction') as FormControl;
+  public get hasDisciplinaryAction(): UntypedFormControl {
+    return this.form.get('hasDisciplinaryAction') as UntypedFormControl;
   }
 
-  public get hasDisciplinaryActionDetails(): FormControl {
-    return this.form.get('hasDisciplinaryActionDetails') as FormControl;
+  public get hasDisciplinaryActionDetails(): UntypedFormControl {
+    return this.form.get('hasDisciplinaryActionDetails') as UntypedFormControl;
   }
 
-  public get hasPharmaNetSuspended(): FormControl {
-    return this.form.get('hasPharmaNetSuspended') as FormControl;
+  public get hasPharmaNetSuspended(): UntypedFormControl {
+    return this.form.get('hasPharmaNetSuspended') as UntypedFormControl;
   }
 
-  public get hasPharmaNetSuspendedDetails(): FormControl {
-    return this.form.get('hasPharmaNetSuspendedDetails') as FormControl;
+  public get hasPharmaNetSuspendedDetails(): UntypedFormControl {
+    return this.form.get('hasPharmaNetSuspendedDetails') as UntypedFormControl;
   }
 
   public get json(): SelfDeclarationForm {
@@ -147,7 +147,7 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
    * Add document GUIDs to the self declaration form.
    */
   public addSelfDeclarationDocumentGuid(controlName: string, value: string) {
-    const control = this.formInstance.get(controlName) as FormArray;
+    const control = this.formInstance.get(controlName) as UntypedFormArray;
     control.push(this.fb.control(value));
   }
 
@@ -156,7 +156,7 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
    * Remove document GUIDs to the self declaration form.
    */
   public removeSelfDeclarationDocumentGuid(controlName: string, documentGuid: string) {
-    const control = this.formInstance.get(controlName) as FormArray;
+    const control = this.formInstance.get(controlName) as UntypedFormArray;
     control.removeAt(control.value.findIndex((guid: string) => guid === documentGuid));
   }
 
@@ -172,7 +172,7 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
       'hasDisciplinaryActionDocumentGuids',
       'hasPharmaNetSuspendedDocumentGuids'
     ]
-      .map((formArrayName: string) => this.form.get(formArrayName) as FormArray)
-      .forEach((formArray: FormArray) => formArray.clear());
+      .map((formArrayName: string) => this.form.get(formArrayName) as UntypedFormArray)
+      .forEach((formArray: UntypedFormArray) => formArray.clear());
   }
 }

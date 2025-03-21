@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { debounceTime } from 'rxjs/operators';
@@ -24,7 +24,7 @@ export class SearchFormComponent implements OnInit {
   @Output() public filter: EventEmitter<number>;
   @Output() public refresh: EventEmitter<void>;
 
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public enrolleeStatuses: Config<number>[];
   public siteStatuses: Config<number>[];
 
@@ -34,7 +34,7 @@ export class SearchFormComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private configService: ConfigService,
     private localStorage: LocalStorageService
   ) {
@@ -57,16 +57,16 @@ export class SearchFormComponent implements OnInit {
     this.refresh = new EventEmitter<void>();
   }
 
-  public get textSearch(): FormControl {
-    return this.form.get('textSearch') as FormControl;
+  public get textSearch(): UntypedFormControl {
+    return this.form.get('textSearch') as UntypedFormControl;
   }
 
-  public get enrolleeStatusCode(): FormControl {
-    return this.form.get('enrolleeStatusCode') as FormControl;
+  public get enrolleeStatusCode(): UntypedFormControl {
+    return this.form.get('enrolleeStatusCode') as UntypedFormControl;
   }
 
-  public get siteStatusCode(): FormControl {
-    return this.form.get('siteStatusCode') as FormControl;
+  public get siteStatusCode(): UntypedFormControl {
+    return this.form.get('siteStatusCode') as UntypedFormControl;
   }
 
   public get useSiteStatuses(): boolean {

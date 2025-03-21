@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 
@@ -8,15 +8,15 @@ interface LdapUserPageDataModel {
 
 export class LdapUserPageFormState extends AbstractFormState<LdapUserPageDataModel> {
   public constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get ldapUser(): FormControl {
-    return this.formInstance.get('ldapUser') as FormControl;
+  public get ldapUser(): UntypedFormControl {
+    return this.formInstance.get('ldapUser') as UntypedFormControl;
   }
 
   /**

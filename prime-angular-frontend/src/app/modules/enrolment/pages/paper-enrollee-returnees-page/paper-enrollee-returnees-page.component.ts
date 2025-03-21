@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 
 import { exhaustMap } from 'rxjs/operators';
 import { noop, Observable, of } from 'rxjs';
@@ -135,7 +135,7 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
       .createOrUpdateLinkedGpid(enrolmentId, paperEnrolleeGpid);
   }
 
-  private togglePaperEnrolleeReturneeValidator(isMatchingPaperEnrollee: boolean, paperEnrolmentGpid: FormControl): void {
+  private togglePaperEnrolleeReturneeValidator(isMatchingPaperEnrollee: boolean, paperEnrolmentGpid: UntypedFormControl): void {
     (isMatchingPaperEnrollee)
       ? this.formUtilsService.setValidators(paperEnrolmentGpid, [
         Validators.required,

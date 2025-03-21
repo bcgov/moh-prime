@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, FormControl } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -36,7 +36,7 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     protected route: ActivatedRoute,
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected healthAuthResource: HealthAuthorityResource,
     protected utilsService: UtilsService,
     protected configService: ConfigService,
@@ -49,16 +49,16 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
   }
 
 
-  public get vendors(): FormArray {
-    return this.formState.form.get('vendors') as FormArray;
+  public get vendors(): UntypedFormArray {
+    return this.formState.form.get('vendors') as UntypedFormArray;
   }
 
   public get anyVendorsChecked(): boolean {
-    return this.vendors.controls.some((vendorCheckbox: FormControl) => vendorCheckbox.value);
+    return this.vendors.controls.some((vendorCheckbox: UntypedFormControl) => vendorCheckbox.value);
   }
 
   public onNoVendors(change: MatCheckboxChange): void {
-    this.vendors.controls.forEach((vendorCheckbox: FormControl) => {
+    this.vendors.controls.forEach((vendorCheckbox: UntypedFormControl) => {
       vendorCheckbox.setValue(false);
     });
   }

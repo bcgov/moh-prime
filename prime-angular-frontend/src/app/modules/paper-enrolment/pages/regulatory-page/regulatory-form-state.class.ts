@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ConfigService } from '@config/config.service';
 import { RegulatoryFormState as BaseRegulatoryPageFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
@@ -12,7 +12,7 @@ import { RegulatoryForm } from './regulatory-form.model';
 export class RegulatoryFormState extends BaseRegulatoryPageFormState {
 
   public constructor(
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected configService: ConfigService
   ) {
     super(fb, configService);
@@ -28,8 +28,8 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     this.addCollegeCertification();
   }
 
-  public get unlistedCertifications(): FormArray {
-    return this.formInstance.get('unlistedCertifications') as FormArray;
+  public get unlistedCertifications(): UntypedFormArray {
+    return this.formInstance.get('unlistedCertifications') as UntypedFormArray;
   }
 
   public get json(): RegulatoryForm {
@@ -97,7 +97,7 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     });
   }
 
-  public buildUnlistedCollegeCertificationForm(): FormGroup {
+  public buildUnlistedCollegeCertificationForm(): UntypedFormGroup {
     return this.fb.group({
       collegeName: ['', []],
       licenceNumber: ['', []],
@@ -137,7 +137,7 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
    */
   public removeIncompleteCertifications(noEmptyCert: boolean = false): void {
     this.certifications.controls
-      .forEach((control: FormGroup, index: number) => {
+      .forEach((control: UntypedFormGroup, index: number) => {
         // Remove if college code is "None" or the group is invalid
         if (!control.get('collegeCode').value || control.invalid) {
           this.removeCertification(index);
@@ -153,7 +153,7 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
 
   public removeIncompleteUnlistedCertifications(): void {
     this.unlistedCertifications.controls
-      .forEach((control: FormGroup, index: number) => {
+      .forEach((control: UntypedFormGroup, index: number) => {
         // Remove if college code is null or the group is invalid
         if (!control.get('licenceNumber').value || control.invalid) {
           this.removeUnlistedCertification(index);
