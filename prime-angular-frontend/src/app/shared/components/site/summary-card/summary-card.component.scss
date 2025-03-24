@@ -5,6 +5,7 @@
     margin-left: -1rem;
     padding-top: .2rem;
   }
+
   .mat-card-content {
     div {
       color: theme-palette(blue, light);
@@ -20,7 +21,16 @@
       }
     }
   }
+
   .mat-card-actions {
     text-align: right;
   }
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
+strong {
+  margin-right: 10px;
 }

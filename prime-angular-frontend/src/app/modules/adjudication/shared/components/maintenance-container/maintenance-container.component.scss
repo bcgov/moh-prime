@@ -5,11 +5,17 @@
     margin-left: -1rem;
     padding-top: .2rem;
   }
+
   .mat-card-content {
     color: theme-palette(blue);
     font-weight: 500;
   }
+
   .mat-card-actions {
     text-align: right;
   }
+}
+
+.card {
+  margin-bottom: 20px;
 }
