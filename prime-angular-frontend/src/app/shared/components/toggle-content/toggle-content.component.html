@@ -4,7 +4,7 @@
                     [checked]="checked"
                     [disabled]="disabled"
                     (change)="onChange($event)">
-    <span class="label">{{ label }}</span>
+    {{ label }}
   </mat-slide-toggle>
 
   <div *ngIf="checked"
