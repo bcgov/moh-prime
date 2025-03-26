@@ -1,0 +1,14 @@
+C:\Users\178180\Documents\=Projects\Ministry of Health\PRIME\PRIME-2799 Load Practitioner data\Practitioner CSV to SQL converter\CSVtoSQL\bin\Debug\net8.0\CSVtoSQL.exe
+C:\Users\178180\Documents\=Projects\Ministry of Health\PRIME\PRIME-2799 Load Practitioner data\Practitioner CSV to SQL converter\CSVtoSQL\bin\Debug\net8.0\CSVtoSQL.deps.json
+C:\Users\178180\Documents\=Projects\Ministry of Health\PRIME\PRIME-2799 Load Practitioner data\Practitioner CSV to SQL converter\CSVtoSQL\bin\Debug\net8.0\CSVtoSQL.runtimeconfig.json
+C:\Users\178180\Documents\=Projects\Ministry of Health\PRIME\PRIME-2799 Load Practitioner data\Practitioner CSV to SQL converter\CSVtoSQL\bin\Debug\net8.0\CSVtoSQL.dll
+C:\Users\178180\Documents\=Projects\Ministry of Health\PRIME\PRIME-2799 Load Practitioner data\Practitioner CSV to SQL converter\CSVtoSQL\bin\Debug\net8.0\CSVtoSQL.pdb
+C:\Users\178180\Documents\=Projects\Ministry of Health\PRIME\PRIME-2799 Load Practitioner data\Practitioner CSV to SQL converter\CSVtoSQL\obj\Debug\net8.0\CSVtoSQL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\178180\Documents\=Projects\Ministry of Health\PRIME\PRIME-2799 Load Practitioner data\Practitioner CSV to SQL converter\CSVtoSQL\obj\Debug\net8.0\CSVtoSQL.AssemblyInfoInputs.cache
+C:\Users\178180\Documents\=Projects\Ministry of Health\PRIME\PRIME-2799 Load Practitioner data\Practitioner CSV to SQL converter\CSVtoSQL\obj\Debug\net8.0\CSVtoSQL.AssemblyInfo.cs
+C:\Users\178180\Documents\=Projects\Ministry of Health\PRIME\PRIME-2799 Load Practitioner data\Practitioner CSV to SQL converter\CSVtoSQL\obj\Debug\net8.0\CSVtoSQL.csproj.CoreCompileInputs.cache
+C:\Users\178180\Documents\=Projects\Ministry of Health\PRIME\PRIME-2799 Load Practitioner data\Practitioner CSV to SQL converter\CSVtoSQL\obj\Debug\net8.0\CSVtoSQL.dll
+C:\Users\178180\Documents\=Projects\Ministry of Health\PRIME\PRIME-2799 Load Practitioner data\Practitioner CSV to SQL converter\CSVtoSQL\obj\Debug\net8.0\refint\CSVtoSQL.dll
+C:\Users\178180\Documents\=Projects\Ministry of Health\PRIME\PRIME-2799 Load Practitioner data\Practitioner CSV to SQL converter\CSVtoSQL\obj\Debug\net8.0\CSVtoSQL.pdb
+C:\Users\178180\Documents\=Projects\Ministry of Health\PRIME\PRIME-2799 Load Practitioner data\Practitioner CSV to SQL converter\CSVtoSQL\obj\Debug\net8.0\CSVtoSQL.genruntimeconfig.cache
+C:\Users\178180\Documents\=Projects\Ministry of Health\PRIME\PRIME-2799 Load Practitioner data\Practitioner CSV to SQL converter\CSVtoSQL\obj\Debug\net8.0\ref\CSVtoSQL.dll
