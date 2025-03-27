@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "88iUeacLdWI=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\178180\\Documents\\=Projects\\Ministry of Health\\PRIME\\PRIME-2347 Load HA Sites\\HASiteScriptGen\\HASiteScriptGen.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\178180\\.nuget\\packages\\documentformat.openxml\\2.20.0\\documentformat.openxml.2.20.0.nupkg.sha512",
+    "C:\\Users\\178180\\.nuget\\packages\\system.io.packaging\\4.7.0\\system.io.packaging.4.7.0.nupkg.sha512"
+  ],
+  "logs": []
+}
