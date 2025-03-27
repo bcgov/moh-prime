@@ -19,7 +19,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AuthorizedUserPageComponent } from './authorized-user-page.component';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 describe('AuthorizedUserPageComponent', () => {
   let component: AuthorizedUserPageComponent;
@@ -36,7 +36,8 @@ describe('AuthorizedUserPageComponent', () => {
         ReactiveFormsModule,
         NgxMaterialModule,
         BrowserAnimationsModule,
-        NgxMaskModule.forRoot()
+        NgxMaskDirective,
+        NgxMaskPipe
       ],
       declarations: [
         AuthorizedUserPageComponent
@@ -60,7 +61,8 @@ describe('AuthorizedUserPageComponent', () => {
           useClass: MockOrganizationService
         },
         OrganizationFormStateService,
-        CapitalizePipe
+        CapitalizePipe,
+        provideNgxMask()
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();

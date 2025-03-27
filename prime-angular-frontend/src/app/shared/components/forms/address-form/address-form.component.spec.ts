@@ -4,7 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { KeycloakService } from 'keycloak-angular';
 
 import { MockAuthService } from 'test/mocks/mock-auth.service';
@@ -30,8 +30,9 @@ describe('AddressFormComponent', () => {
           HttpClientTestingModule,
           RouterTestingModule,
           NgxMaterialModule,
-          NgxMaskModule.forRoot(),
-          ReactiveFormsModule
+          ReactiveFormsModule,
+          NgxMaskDirective,
+          NgxMaskPipe
         ],
         declarations: [
           AddressFormComponent
@@ -50,7 +51,8 @@ describe('AddressFormComponent', () => {
             useValue: MockAuthService
           },
           EnrolmentFormStateService,
-          KeycloakService
+          KeycloakService,
+          provideNgxMask()
         ],
         schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }

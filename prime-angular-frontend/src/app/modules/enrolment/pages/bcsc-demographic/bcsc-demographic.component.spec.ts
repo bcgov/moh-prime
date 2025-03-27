@@ -4,7 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { KeycloakService } from 'keycloak-angular';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
@@ -36,10 +36,11 @@ describe('BcscDemographicComponent', () => {
           HttpClientTestingModule,
           NgxBusyModule,
           NgxContextualHelpModule,
-          NgxMaskModule.forRoot(),
           NgxMaterialModule,
           ReactiveFormsModule,
-          RouterTestingModule
+          RouterTestingModule,
+          NgxMaskDirective,
+          NgxMaskPipe
         ],
         declarations: [BcscDemographicComponent, AddressFormComponent],
         providers: [
@@ -59,7 +60,8 @@ describe('BcscDemographicComponent', () => {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
           },
-          KeycloakService
+          KeycloakService,
+          provideNgxMask()
         ],
         schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
