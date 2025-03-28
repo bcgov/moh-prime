@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -55,8 +55,8 @@ export class IdSubmissionComponent extends BaseEnrolmentProfilePage implements O
     this.uploadedFile = false;
   }
 
-  public get identificationDocumentGuid(): FormControl {
-    return this.form.get('identificationDocumentGuid') as FormControl;
+  public get identificationDocumentGuid(): UntypedFormControl {
+    return this.form.get('identificationDocumentGuid') as UntypedFormControl;
   }
 
   public onUpload(document: BaseDocument) {

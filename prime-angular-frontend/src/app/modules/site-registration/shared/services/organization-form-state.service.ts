@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, AbstractControl } from '@angular/forms';
+import { UntypedFormBuilder, AbstractControl } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { RouteStateService } from '@core/services/route-state.service';
@@ -23,7 +23,7 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
   public organizationClaimPageFormState: OrganizationClaimPageFormState;
 
   constructor(
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected routeStateService: RouteStateService,
     protected logger: ConsoleLoggerService,
     private formUtilsService: FormUtilsService

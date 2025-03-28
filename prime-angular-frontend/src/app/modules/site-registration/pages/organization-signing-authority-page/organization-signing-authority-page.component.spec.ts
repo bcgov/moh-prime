@@ -21,7 +21,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 describe('OrganizationSigningAuthorityPageComponent', () => {
   let component: OrganizationSigningAuthorityPageComponent;
@@ -43,7 +43,8 @@ describe('OrganizationSigningAuthorityPageComponent', () => {
         RouterTestingModule,
         ReactiveFormsModule,
         NgxMaterialModule,
-        NgxMaskModule.forRoot()
+        NgxMaskDirective,
+        NgxMaskPipe
       ],
       providers: [
         {
@@ -62,7 +63,8 @@ describe('OrganizationSigningAuthorityPageComponent', () => {
           provide: AuthService,
           useClass: MockAuthService
         },
-        OrganizationFormStateService
+        OrganizationFormStateService,
+        provideNgxMask()
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();

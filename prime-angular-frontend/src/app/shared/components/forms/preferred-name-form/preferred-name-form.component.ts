@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-preferred-name-form',
@@ -11,7 +11,7 @@ export class PreferredNameFormComponent implements OnInit {
    * @description
    * Preferred name form.
    */
-  @Input() public form: FormGroup;
+  @Input() public form: UntypedFormGroup;
   /**
    * @description
    * Mode for displaying the form fields as a

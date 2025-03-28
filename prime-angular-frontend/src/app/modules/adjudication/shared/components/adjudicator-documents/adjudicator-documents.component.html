@@ -35,11 +35,11 @@
                          class="d-block text-mute font-weight-normal mb-2">
                       {{ document.uploadedDate | formatDate: 'h:mm a' }}
                     </small>
-              <mat-chip-list [selectable]="false">
+              <mat-chip-listbox [selectable]="false">
                 <mat-chip selected
                           color="primary"
                           [disableRipple]="true">{{ document.adjudicator.idir | replace: '@idir': '' }}</mat-chip>
-              </mat-chip-list>
+              </mat-chip-listbox>
             </th>
             <td>
               <button mat-stroked-button

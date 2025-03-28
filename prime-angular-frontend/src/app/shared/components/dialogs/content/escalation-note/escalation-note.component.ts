@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { BehaviorSubject } from 'rxjs';
@@ -29,12 +29,12 @@ export class EscalationNoteComponent implements OnInit {
   public id: number;
   public type: EscalationType;
   public adjudicators$: BehaviorSubject<Admin[]>;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
 
   constructor(
     private adjudicationResource: AdjudicationResource,
     private siteResource: SiteResource,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogOptions,
   ) {
@@ -43,8 +43,8 @@ export class EscalationNoteComponent implements OnInit {
     this.adjudicators$ = new BehaviorSubject<Admin[]>([]);
   }
 
-  public get note(): FormControl {
-    return this.form.get('note') as FormControl;
+  public get note(): UntypedFormControl {
+    return this.form.get('note') as UntypedFormControl;
   }
 
   public onCancel() {
