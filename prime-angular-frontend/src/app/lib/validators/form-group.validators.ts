@@ -1,4 +1,4 @@
-import { FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 import * as moment from 'moment';
 
@@ -9,7 +9,7 @@ export class FormGroupValidators {
    * Checks two form control values are equal within a form group.
    */
   public static match(inputKey: string, confirmInputKey: string): ValidatorFn {
-    return (group: FormGroup): ValidationErrors | null => {
+    return (group: UntypedFormGroup): ValidationErrors | null => {
       const input = group.controls[inputKey];
       const confirmInput = group.controls[confirmInputKey];
       if (!input || !confirmInput) { return null; }
@@ -23,7 +23,7 @@ export class FormGroupValidators {
    * Checks that at least one field has been chosen within a form group.
    */
   public static atLeastOne(validator: ValidatorFn = Validators.required, allowlist: string[] = []): ValidatorFn {
-    return (group: FormGroup): ValidationErrors | null => {
+    return (group: UntypedFormGroup): ValidationErrors | null => {
       const atLeastOne = group && group.controls &&
         Object.keys(group.controls)
           .filter(key => allowlist.indexOf(key) !== -1)
@@ -37,7 +37,7 @@ export class FormGroupValidators {
    * Checks that the start key value is less than end key value.
    */
   public static lessThan(startKey: string, endKey: string): ValidatorFn {
-    return (group: FormGroup): ValidationErrors | null => {
+    return (group: UntypedFormGroup): ValidationErrors | null => {
       const start = +group.controls[startKey].value;
       const end = +group.controls[endKey].value;
       if (!start || !end) { return null; }
@@ -51,7 +51,7 @@ export class FormGroupValidators {
    * Checks that the start key dateTime is before the end key value.
    */
   public static isDateTimeBefore(startKey: string, endKey: string): ValidatorFn {
-    return (group: FormGroup): ValidationErrors | null => {
+    return (group: UntypedFormGroup): ValidationErrors | null => {
       const start = moment(group.controls[startKey].value);
       const end = moment(group.controls[endKey].value);
       if (!start || !end) { return null; }
@@ -64,7 +64,7 @@ export class FormGroupValidators {
    * Checks that the start key dateTime is same or before the end key value.
    */
   public static isDateTimeSameOrBefore(startKey: string, endKey: string): ValidatorFn {
-    return (group: FormGroup): ValidationErrors | null => {
+    return (group: UntypedFormGroup): ValidationErrors | null => {
       const start = moment(group.controls[startKey].value);
       const end = moment(group.controls[endKey].value);
       if (!start || !end) { return null; }
@@ -77,7 +77,7 @@ export class FormGroupValidators {
    * Compares date range start and end.
    */
   public static dateRange(rangeStartKey: string, rangeEndKey: string, rangeName: string): ValidatorFn {
-    return (group: FormGroup): ValidationErrors | null => {
+    return (group: UntypedFormGroup): ValidationErrors | null => {
       const start = group.controls[rangeStartKey];
       const end = group.controls[rangeEndKey];
 

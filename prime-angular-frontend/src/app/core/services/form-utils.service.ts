@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormGroup, FormControl, ValidatorFn, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormGroup, UntypedFormControl, ValidatorFn, UntypedFormArray, UntypedFormBuilder, Validators } from '@angular/forms';
 
 import { Person } from '@lib/models/person.model';
 import { AddressLine } from '@lib/models/address.model';
@@ -12,7 +12,7 @@ import { ConsoleLoggerService } from './console-logger.service';
 })
 export class FormUtilsService {
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private logger: ConsoleLoggerService
   ) { }
 
@@ -20,7 +20,7 @@ export class FormUtilsService {
    * @description
    * Checks the validity of a form, and triggers validation messages when invalid.
    */
-  public checkValidity(form: FormGroup | FormArray): boolean {
+  public checkValidity(form: UntypedFormGroup | UntypedFormArray): boolean {
     if (form.valid) {
       return true;
     } else {
@@ -35,13 +35,13 @@ export class FormUtilsService {
    * @description
    * Sets FormControl validators.
    */
-  public setValidators(control: FormControl | FormGroup, validators: ValidatorFn | ValidatorFn[], blacklist: string[] = []): void {
-    if (control instanceof FormGroup) {
+  public setValidators(control: UntypedFormControl | UntypedFormGroup, validators: ValidatorFn | ValidatorFn[], blacklist: string[] = []): void {
+    if (control instanceof UntypedFormGroup) {
       // Assumes that FormGroups will not be deeply nested
       Object.keys(control.controls).forEach((key: string) => {
         // Skip blacklisted keys from having validators updated
         if (!blacklist.includes(key)) {
-          this.setValidators(control.controls[key] as FormControl, validators, blacklist);
+          this.setValidators(control.controls[key] as UntypedFormControl, validators, blacklist);
         }
       });
     } else {
@@ -54,12 +54,12 @@ export class FormUtilsService {
    * @description
    * Resets FormControl value(s) and clears associated validators.
    */
-  public resetAndClearValidators(control: FormControl | FormGroup, blacklist: string[] = []): void {
-    if (control instanceof FormGroup) {
+  public resetAndClearValidators(control: UntypedFormControl | UntypedFormGroup, blacklist: string[] = []): void {
+    if (control instanceof UntypedFormGroup) {
       // Assumes that FormGroups will not be deeply nested
       Object.keys(control.controls).forEach((key: string) => {
         if (!blacklist.includes(key)) {
-          this.resetAndClearValidators(control.controls[key] as FormControl);
+          this.resetAndClearValidators(control.controls[key] as UntypedFormControl);
         }
       });
     } else {
@@ -81,7 +81,7 @@ export class FormUtilsService {
    * isRequired('arrayName')
    * isRequired('arrayName[#].groupName.controlName')
    */
-  public isRequired(form: FormGroup, path: string): boolean {
+  public isRequired(form: UntypedFormGroup, path: string): boolean {
     const control = form.get(path);
 
     if (control.validator) {
@@ -106,7 +106,7 @@ export class FormUtilsService {
   // TODO allow for push of FormGroups onto the FormArray
   // TODO allow for child JSON arrays to be created recursively
   // TODO allow for configuration of JSON with validators
-  public formArrayPush(array: FormArray, models: any | any[], type: 'group' | 'control' = 'group') {
+  public formArrayPush(array: UntypedFormArray, models: any | any[], type: 'group' | 'control' = 'group') {
     const push = (control: AbstractControl) => array.push(control);
     (Array.isArray(models))
       ? models.forEach(m => push(this.fb[type](m)))
@@ -117,7 +117,7 @@ export class FormUtilsService {
    * @description
    * Get all the errors contained within a form.
    */
-  public getFormErrors(form: FormGroup | FormArray): { [key: string]: any; } | null {
+  public getFormErrors(form: UntypedFormGroup | UntypedFormArray): { [key: string]: any; } | null {
     if (!form) {
       return null;
     }
@@ -125,7 +125,7 @@ export class FormUtilsService {
     let hasError = false;
     const result = Object.keys(form?.controls).reduce((acc, key) => {
       const control = form.get(key);
-      const errors = (control instanceof FormGroup || control instanceof FormArray)
+      const errors = (control instanceof UntypedFormGroup || control instanceof UntypedFormArray)
         ? this.getFormErrors(control)
         : control.errors;
       if (errors) {
@@ -141,7 +141,7 @@ export class FormUtilsService {
    * @description
    * Helper for quickly logging form errors.
    */
-  public logFormErrors(form: FormGroup | FormArray) {
+  public logFormErrors(form: UntypedFormGroup | UntypedFormArray) {
     const formErrors = this.getFormErrors(form);
     if (formErrors) {
       this.logger.error('FORM_INVALID', formErrors);
@@ -163,7 +163,7 @@ export class FormUtilsService {
     areDisabled?: AddressLine[],
     useDefaults?: Extract<AddressLine, 'provinceCode' | 'countryCode'>[],
     exclude?: AddressLine[];
-  } = null): FormGroup {
+  } = null): UntypedFormGroup {
     const controlsConfig = {
       id: [
         0,
@@ -228,7 +228,7 @@ export class FormUtilsService {
    * Convert party JSON to form model for reactive forms.
    */
   // TODO use case has changed and should be refactored
-  public toPersonFormModel<P extends Person>([formGroup, data]: [FormGroup, P]): void {
+  public toPersonFormModel<P extends Person>([formGroup, data]: [UntypedFormGroup, P]): void {
     if (data) {
       const { physicalAddress, mailingAddress, ...person } = data;
 

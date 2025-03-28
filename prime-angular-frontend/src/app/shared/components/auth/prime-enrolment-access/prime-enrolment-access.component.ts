@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, OnIn
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder, Validators } from '@angular/forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
@@ -32,7 +32,7 @@ export class PrimeEnrolmentAccessComponent implements OnInit, AfterViewInit {
 
   @Input() public mode: 'enrolment' | 'community' | 'health-authority';
   @Output() public login: EventEmitter<void>;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public locationCode: BannerLocationCode;
   public bcscMobileSetupUrl: string;
   public loginCancelled: boolean;
@@ -47,7 +47,7 @@ export class PrimeEnrolmentAccessComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     protected router: Router,
     private dialog: MatDialog,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private collectionNoticeService: CollectionNoticeService,
     private healthAuthorityResource: HealthAuthorityResource,
   ) {
@@ -69,8 +69,8 @@ export class PrimeEnrolmentAccessComponent implements OnInit, AfterViewInit {
     });
   }
 
-  public get passcode(): FormControl {
-    return this.form.get('passcode') as FormControl;
+  public get passcode(): UntypedFormControl {
+    return this.form.get('passcode') as UntypedFormControl;
   }
 
   public get isMobile(): boolean {

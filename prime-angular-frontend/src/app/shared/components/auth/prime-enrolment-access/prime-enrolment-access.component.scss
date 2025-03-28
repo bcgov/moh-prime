@@ -183,3 +183,13 @@ h2 {
 ::ng-deep label.ng-star-inserted {
   transform: translateY(-0.59375em) scale(0.75) !important;
 }
+
+.mat-mdc-input-element,
+.mat-select-value {
+  color: #ffffff !important;
+}
+
+.large {
+  width: 300px;
+  height: 46px;
+}

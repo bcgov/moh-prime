@@ -8,7 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HoursOperationPageComponent } from './hours-operation-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { MatInputModule } from '@angular/material/input';
 
 describe('HoursOperationPageComponent', () => {
@@ -26,14 +26,16 @@ describe('HoursOperationPageComponent', () => {
         RouterTestingModule,
         ReactiveFormsModule,
         NgxMaterialModule,
-        NgxMaskModule.forRoot(),
-        MatInputModule
+        MatInputModule,
+        NgxMaskDirective,
+        NgxMaskPipe
       ],
       providers: [
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        }
+        },
+        provideNgxMask()
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();

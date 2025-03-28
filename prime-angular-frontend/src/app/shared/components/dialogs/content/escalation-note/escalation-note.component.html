@@ -1,15 +1,14 @@
-<div class="d-flex align-items-stretch mb-3">
-  <mat-icon color="primary"
-            class="mr-4 title-icon">help</mat-icon>
-  <h1 mat-dialog-title
-      class="underline font-weight-bold flex-grow-1 mb-0">
+<h2 mat-dialog-title
+    class="d-flex align-items-stretch">
+  <mat-icon color="primary">help</mat-icon>
+  <span class="flex-grow-1">
     Escalation
-  </h1>
-</div>
+  </span>
+</h2>
 <mat-dialog-content>
-  <h2 class="h5 mb-3">
+  <p>
     What are the reasons for escalation?
-  </h2>
+  </p>
 
   <form [formGroup]="form">
     <mat-form-field class="w-100">

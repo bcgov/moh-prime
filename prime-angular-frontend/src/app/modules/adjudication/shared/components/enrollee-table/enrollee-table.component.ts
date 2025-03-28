@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -53,7 +53,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
 
   public busy: Subscription;
   public dataSource: MatTableDataSource<EnrolleeListViewModel>;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public columns: string[];
   public hasAppliedDateRange: boolean;
   public hasRenewalDateRange: boolean;
@@ -72,7 +72,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private authService: AuthService,
     private localStorageService: LocalStorageService,
     router: Router

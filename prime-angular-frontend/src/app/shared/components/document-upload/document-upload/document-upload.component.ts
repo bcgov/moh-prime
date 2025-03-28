@@ -2,9 +2,10 @@ import { Component, OnInit, ViewChild, Input, Output, Inject } from '@angular/co
 import { EventEmitter } from '@angular/core';
 
 import { FilePondErrorDescription, FilePondFile, FilePondOptions, ProcessServerConfigFunction } from 'filepond';
-import { FilePondPluginFileValidateTypeProps } from 'filepond-plugin-file-validate-type';
-import { FilePondPluginFileValidateSizeProps } from 'filepond-plugin-file-validate-size';
-import { FilePondComponent } from 'ngx-filepond/filepond.component';
+import { FilePondModule, registerPlugin, FilePondComponent } from 'ngx-filepond';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+registerPlugin(FilePondPluginFileValidateType);
+
 import tus from 'tus-js-client';
 
 import { EnumUtils } from '@lib/utils/enum-utils.class';
@@ -38,7 +39,7 @@ export class DocumentUploadComponent implements OnInit {
   @Output() public remove: EventEmitter<string>;
   @ViewChild('filePond') public filePondComponent: FilePondComponent;
   public filePondFiles: FilePondFile[];
-  public filePondOptions: FilePondOptions & FilePondPluginFileValidateSizeProps & FilePondPluginFileValidateTypeProps;
+  public filePondOptions: FilePondOptions;
 
   private jwt: string;
 

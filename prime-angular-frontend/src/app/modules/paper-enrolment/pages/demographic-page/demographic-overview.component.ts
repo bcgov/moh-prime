@@ -117,7 +117,7 @@ import { DemographicForm } from './demographic-form.model';
       </button>
     </app-page-section>
   `,
-  styles: ['mat-icon { font-size: 1.2em; }'],
+  styles: ['mat-icon { font-size: 1em; }'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DemographicOverviewComponent extends AbstractOverview {
