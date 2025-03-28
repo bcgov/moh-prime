@@ -13,7 +13,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
 import { HoursOperationPageComponent } from './hours-operation-page.component';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -43,9 +43,10 @@ describe('HoursOperationPageComponent', () => {
         ReactiveFormsModule,
         MatDialogModule,
         MatSnackBarModule,
-        NgxMaskModule.forRoot(),
         MatInputModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        NgxMaskDirective,
+        NgxMaskPipe
       ],
       providers: [
         {
@@ -60,7 +61,8 @@ describe('HoursOperationPageComponent', () => {
           provide: HealthAuthoritySiteService,
           useClass: MockHealthAuthoritySiteService
         },
-        CapitalizePipe
+        CapitalizePipe,
+        provideNgxMask()
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();

@@ -1,6 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -26,14 +26,14 @@ interface HealthAuthorityCareTypeMap {
 export class HealthAuthCareTypesPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public isInitialEntry: boolean;
   public filteredCareTypes: BehaviorSubject<HealthAuthorityCareTypeMap[]>;
 
   private routeUtils: RouteUtils;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private healthAuthResource: HealthAuthorityResource,
     private formUtilsService: FormUtilsService,
     private configService: ConfigService,
@@ -52,8 +52,8 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
     this.filteredCareTypes = new BehaviorSubject<HealthAuthorityCareTypeMap[]>(this.configService.careTypes as HealthAuthorityCareTypeMap[]);
   }
 
-  public get careTypes(): FormArray {
-    return this.form.get('careTypes') as FormArray;
+  public get careTypes(): UntypedFormArray {
+    return this.form.get('careTypes') as UntypedFormArray;
   }
 
   public onSubmit() {

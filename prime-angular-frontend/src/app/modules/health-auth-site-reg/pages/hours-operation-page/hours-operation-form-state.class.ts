@@ -1,4 +1,4 @@
-import { FormArray, FormBuilder } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
@@ -9,15 +9,15 @@ import { HoursOperationForm } from './hours-operation-form.model';
 
 export class HoursOperationFormState extends AbstractFormState<HoursOperationForm> {
   public constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get businessDays(): FormArray {
-    return this.formInstance.get('businessDays') as FormArray;
+  public get businessDays(): UntypedFormArray {
+    return this.formInstance.get('businessDays') as UntypedFormArray;
   }
 
   public get json(): HoursOperationForm {

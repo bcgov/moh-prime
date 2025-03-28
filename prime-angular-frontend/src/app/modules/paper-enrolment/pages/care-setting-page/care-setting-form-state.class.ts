@@ -1,4 +1,4 @@
-import { FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { ConfigService } from '@config/config.service';
@@ -10,7 +10,7 @@ import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private configService: ConfigService
   ) {
     super();
@@ -18,12 +18,12 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
     this.buildForm();
   }
 
-  public get enrolleeCareSettings(): FormArray {
-    return this.form.get('enrolleeCareSettings') as FormArray;
+  public get enrolleeCareSettings(): UntypedFormArray {
+    return this.form.get('enrolleeCareSettings') as UntypedFormArray;
   }
 
-  public get enrolleeHealthAuthorities(): FormArray {
-    return this.form.get('enrolleeHealthAuthorities') as FormArray;
+  public get enrolleeHealthAuthorities(): UntypedFormArray {
+    return this.form.get('enrolleeHealthAuthorities') as UntypedFormArray;
   }
 
   public get json(): any {
@@ -54,7 +54,7 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
     }
 
     if (pageModel.enrolleeCareSettings.length) {
-      const enrolleeCareSettings = this.formInstance.get('enrolleeCareSettings') as FormArray;
+      const enrolleeCareSettings = this.formInstance.get('enrolleeCareSettings') as UntypedFormArray;
       enrolleeCareSettings.clear();
       pageModel.enrolleeCareSettings.forEach((s: CareSetting) => {
         const careSetting = this.buildCareSettingForm();
@@ -84,13 +84,13 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
     });
   }
 
-  public buildCareSettingForm(code: number = null): FormGroup {
+  public buildCareSettingForm(code: number = null): UntypedFormGroup {
     return this.fb.group({
       careSettingCode: [code, [Validators.required]]
     });
   }
 
-  public buildEnrolleeHealthAuthorityFormControl(checkState: boolean): FormControl {
+  public buildEnrolleeHealthAuthorityFormControl(checkState: boolean): UntypedFormControl {
     return this.fb.control(checkState);
   }
 
@@ -109,7 +109,7 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
     return this.enrolleeCareSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
   }
 
-  public filterCareSettingTypes(careSetting: FormGroup) {
+  public filterCareSettingTypes(careSetting: UntypedFormGroup) {
     // Create a list of filtered care settings
     if (this.enrolleeCareSettings.length) {
       // All the currently chosen care settings
@@ -137,7 +137,7 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
 
   public removeIncompleteCareSettings(): void {
     this.enrolleeCareSettings.controls
-      .forEach((control: FormGroup, index: number) => {
+      .forEach((control: UntypedFormGroup, index: number) => {
         const value = control.get('careSettingCode').value;
 
         // Remove if care setting is empty or the group is invalid
@@ -155,7 +155,7 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
 
   private setHealthAuthorityValidator(): void {
     this.hasSelectedHACareSetting()
-      ? this.enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, (control: FormControl) => control.value))
+      ? this.enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, (control: UntypedFormControl) => control.value))
       : this.enrolleeHealthAuthorities.clearValidators();
 
     this.enrolleeHealthAuthorities.updateValueAndValidity();

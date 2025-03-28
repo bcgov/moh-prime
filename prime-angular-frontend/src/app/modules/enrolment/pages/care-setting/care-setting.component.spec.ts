@@ -1,7 +1,7 @@
 import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { KeycloakService } from 'keycloak-angular';
@@ -104,7 +104,7 @@ describe('CareSettingComponent', () => {
 
     describe('with adding a care setting but without making a selection', () => {
       it('should return a list shorter than the list of all care setting types', () => {
-        const mockCareTypeFormGroup = (component as any).enrolmentFormStateService.buildCareSettingForm() as FormGroup;
+        const mockCareTypeFormGroup = (component as any).enrolmentFormStateService.buildCareSettingForm() as UntypedFormGroup;
         component.addCareSetting();
         component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACIST });
 
@@ -114,7 +114,7 @@ describe('CareSettingComponent', () => {
 
     describe('with adding one care setting and making one selection', () => {
       it('should return a list shorter than the list of all care setting types', () => {
-        const mockCareTypeFormGroup = (component as any).enrolmentFormStateService.buildCareSettingForm() as FormGroup;
+        const mockCareTypeFormGroup = (component as any).enrolmentFormStateService.buildCareSettingForm() as UntypedFormGroup;
         mockCareTypeFormGroup.setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACIST });
         component.addCareSetting();
         component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACIST });

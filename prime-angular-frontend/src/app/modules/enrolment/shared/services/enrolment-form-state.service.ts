@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, Validators, UntypedFormGroup, UntypedFormArray, AbstractControl, UntypedFormControl } from '@angular/forms';
 
 import moment from 'moment';
 
@@ -40,19 +40,19 @@ import { PaperEnrolleeReturneeFormState } from '@enrolment/pages/paper-enrollee-
   providedIn: 'root'
 })
 export class EnrolmentFormStateService extends AbstractFormStateService<Enrolment> {
-  public accessForm: FormGroup;
-  public identityDocumentForm: FormGroup;
+  public accessForm: UntypedFormGroup;
+  public identityDocumentForm: UntypedFormGroup;
   public paperEnrolleeReturneeFormState: PaperEnrolleeReturneeFormState;
   public bceidDemographicFormState: BceidDemographicFormState;
   public bcscDemographicFormState: BcscDemographicFormState;
   public regulatoryFormState: RegulatoryFormState;
-  public deviceProviderForm: FormGroup;
-  public oboSitesForm: FormGroup;
-  public remoteAccessForm: FormGroup;
-  public remoteAccessLocationsForm: FormGroup;
-  public selfDeclarationForm: FormGroup;
-  public careSettingsForm: FormGroup;
-  public accessAgreementForm: FormGroup;
+  public deviceProviderForm: UntypedFormGroup;
+  public oboSitesForm: UntypedFormGroup;
+  public remoteAccessForm: UntypedFormGroup;
+  public remoteAccessLocationsForm: UntypedFormGroup;
+  public selfDeclarationForm: UntypedFormGroup;
+  public careSettingsForm: UntypedFormGroup;
+  public accessAgreementForm: UntypedFormGroup;
 
   public selfDeclarationCompletedDate: string;
 
@@ -61,7 +61,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   private userId: string;
 
   constructor(
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected routeStateService: RouteStateService,
     protected logger: ConsoleLoggerService,
     protected formUtilsService: FormUtilsService,
@@ -315,7 +315,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    * Form Builders and Helpers
    */
 
-  private buildAccessForm(): FormGroup {
+  private buildAccessForm(): UntypedFormGroup {
     return this.fb.group({
       accessCode: ['', [
         Validators.required,
@@ -324,13 +324,13 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
-  private buildIdentityDocumentForm(): FormGroup {
+  private buildIdentityDocumentForm(): UntypedFormGroup {
     return this.fb.group({
       identificationDocumentGuid: [null, [Validators.required]]
     });
   }
 
-  public buildOboSitesForm(): FormGroup {
+  public buildOboSitesForm(): UntypedFormGroup {
     return this.fb.group({
       // lastUpdateDatetime is used to keep track if user has updated the obo sites or not.
       lastUpdatedDatetime: [null, []],
@@ -342,7 +342,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
-  public buildOboSiteForm(): FormGroup {
+  public buildOboSiteForm(): UntypedFormGroup {
     return this.fb.group({
       careSettingCode: [null, []],
       healthAuthorityCode: [null, []],
@@ -363,11 +363,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       oboSites = [];
     }
 
-    const oboSitesFormArray = this.oboSitesForm.get('oboSites') as FormArray;
-    const communityHealthSites = this.oboSitesForm.get('communityHealthSites') as FormArray;
-    const communityPharmacySites = this.oboSitesForm.get('communityPharmacySites') as FormArray;
-    const deviceProviderSites = this.oboSitesForm.get('deviceProviderSites') as FormArray;
-    const healthAuthoritySites = this.oboSitesForm.get('healthAuthoritySites') as FormGroup;
+    const oboSitesFormArray = this.oboSitesForm.get('oboSites') as UntypedFormArray;
+    const communityHealthSites = this.oboSitesForm.get('communityHealthSites') as UntypedFormArray;
+    const communityPharmacySites = this.oboSitesForm.get('communityPharmacySites') as UntypedFormArray;
+    const deviceProviderSites = this.oboSitesForm.get('deviceProviderSites') as UntypedFormArray;
+    const healthAuthoritySites = this.oboSitesForm.get('healthAuthoritySites') as UntypedFormGroup;
 
     oboSitesFormArray.clear();
     communityHealthSites.clear();
@@ -376,11 +376,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => healthAuthoritySites.removeControl(healthAuthorityCode));
 
     oboSites.forEach((s: OboSite) => {
-      const careSettings = this.careSettingsForm.get('careSettings') as FormArray;
+      const careSettings = this.careSettingsForm.get('careSettings') as UntypedFormArray;
       //add existing obo job site back to the form only if the care setting is selected
       if (careSettings && (careSettings.value.length === 0 || careSettings.value.filter((c) => c.careSettingCode === s.careSettingCode).length > 0)) {
 
-        const site = this.buildOboSiteForm() as FormGroup;
+        const site = this.buildOboSiteForm() as UntypedFormGroup;
         site.patchValue(s);
         oboSitesFormArray.push(site);
 
@@ -410,7 +410,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
-  public buildRemoteAccessForm(): FormGroup {
+  public buildRemoteAccessForm(): UntypedFormGroup {
     return this.fb.group({
       remoteAccessSites: this.fb.array([]),
       enrolleeRemoteUsers: this.fb.array([])
@@ -422,7 +422,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       enrolleeRemoteUsers = [];
     }
 
-    const enrolleeRemoteUsersFormArray = this.remoteAccessForm.get('enrolleeRemoteUsers') as FormArray;
+    const enrolleeRemoteUsersFormArray = this.remoteAccessForm.get('enrolleeRemoteUsers') as UntypedFormArray;
     enrolleeRemoteUsersFormArray.clear();
     enrolleeRemoteUsers.forEach((eru: EnrolleeRemoteUser) => {
       const enrolleeRemoteUser = this.enrolleeRemoteUserFormGroup();
@@ -434,12 +434,12 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       remoteAccessSites = [];
     }
 
-    const remoteAccessSitesFormArray = this.remoteAccessForm.get('remoteAccessSites') as FormArray;
+    const remoteAccessSitesFormArray = this.remoteAccessForm.get('remoteAccessSites') as UntypedFormArray;
     remoteAccessSitesFormArray.clear();
     remoteAccessSites.forEach((ras: RemoteAccessSite) => {
       const remoteAccessSite = this.remoteAccessSiteFormGroup();
       // Add the vendors, and then patch the remaining fields
-      const siteVendors = remoteAccessSite.get('siteVendors') as FormArray;
+      const siteVendors = remoteAccessSite.get('siteVendors') as UntypedFormArray;
       ras.site.siteVendors
         .forEach(v => siteVendors.push(this.fb.group({ vendorCode: v.vendorCode })));
 
@@ -452,14 +452,14 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
-  public enrolleeRemoteUserFormGroup(): FormGroup {
+  public enrolleeRemoteUserFormGroup(): UntypedFormGroup {
     return this.fb.group({
       enrolleeId: [null, []],
       remoteUserId: [null, []]
     });
   }
 
-  public remoteAccessSiteFormGroup(): FormGroup {
+  public remoteAccessSiteFormGroup(): UntypedFormGroup {
     return this.fb.group({
       enrolleeId: [null, []],
       siteId: [null, []],
@@ -472,7 +472,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
-  public buildRemoteAccessLocationsForm(): FormGroup {
+  public buildRemoteAccessLocationsForm(): UntypedFormGroup {
     return this.fb.group({
       remoteAccessLocations: this.fb.array([])
     });
@@ -483,7 +483,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       remoteAccessLocations = [];
     }
 
-    const remoteAccessLocationsFormArray = this.remoteAccessLocationsForm.get('remoteAccessLocations') as FormArray;
+    const remoteAccessLocationsFormArray = this.remoteAccessLocationsForm.get('remoteAccessLocations') as UntypedFormArray;
     remoteAccessLocationsFormArray.clear();
     remoteAccessLocations.forEach((ral: RemoteAccessLocation) => {
       const remoteAccessLocation = this.remoteAccessLocationFormGroup();
@@ -492,7 +492,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
-  public remoteAccessLocationFormGroup(): FormGroup {
+  public remoteAccessLocationFormGroup(): UntypedFormGroup {
     return this.fb.group({
       internetProvider: [
         null,
@@ -507,14 +507,14 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
-  private buildCareSettingsForm(): FormGroup {
+  private buildCareSettingsForm(): UntypedFormGroup {
     return this.fb.group({
       careSettings: this.fb.array([]),
       enrolleeHealthAuthorities: this.fb.array([])
     });
   }
 
-  public buildCareSettingForm(code: number = null): FormGroup {
+  public buildCareSettingForm(code: number = null): UntypedFormGroup {
     return this.fb.group({
       careSettingCode: [code, [Validators.required]]
     });
@@ -527,7 +527,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       careSettings = [];
     }
 
-    const careSettingsFormArray = this.careSettingsForm.get('careSettings') as FormArray;
+    const careSettingsFormArray = this.careSettingsForm.get('careSettings') as UntypedFormArray;
     careSettingsFormArray.clear();
     careSettings.forEach((s: CareSetting) => {
       const careSetting = this.buildCareSettingForm();
@@ -541,7 +541,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
     // Initialize Health Authority form even if it might not be used by end user:
     // Create checkboxes for each known Health Authority, according to order of Health Authority list.
-    const enrolleeHealthAuthoritiesFormArray = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    const enrolleeHealthAuthoritiesFormArray = this.careSettingsForm.get('enrolleeHealthAuthorities') as UntypedFormArray;
     enrolleeHealthAuthoritiesFormArray.clear();
     // Set value of checkboxes according to previous selections, if any
     this.configService.healthAuthorities.forEach(ha => {
@@ -550,12 +550,12 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
-  public buildEnrolleeHealthAuthorityFormControl(checkState: boolean): FormControl {
+  public buildEnrolleeHealthAuthorityFormControl(checkState: boolean): UntypedFormControl {
     return this.fb.control(checkState);
   }
 
   public removeHealthAuthorities() {
-    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as UntypedFormArray;
     enrolleeHealthAuthorities.controls.forEach(checkbox => {
       checkbox.setValue(false);
     });
@@ -566,7 +566,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     this.remoteAccessLocationsForm = this.buildRemoteAccessLocationsForm();
   }
 
-  private buildSelfDeclarationForm(): FormGroup {
+  private buildSelfDeclarationForm(): UntypedFormGroup {
     return this.fb.group({
       hasConviction: [null, [FormControlValidators.requiredBoolean]],
       hasConvictionDetails: [null, []],
@@ -614,7 +614,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     this.selfDeclarationForm.patchValue(selfDeclarationForm);
   }
 
-  private buildAccessAgreementForm(): FormGroup {
+  private buildAccessAgreementForm(): UntypedFormGroup {
     return this.fb.group({
       accessAgreementGuid: [
         '',
@@ -623,8 +623,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
-  public addNonHealthAuthorityOboSite(siteForm: FormGroup, siteFormList: FormArray) {
-    const siteName = siteForm.get('siteName') as FormControl;
+  public addNonHealthAuthorityOboSite(siteForm: UntypedFormGroup, siteFormList: UntypedFormArray) {
+    const siteName = siteForm.get('siteName') as UntypedFormControl;
     this.formUtilsService.setValidators(siteName, [Validators.required]);
     siteFormList.push(siteForm);
   }
@@ -635,12 +635,12 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    * works, contains a FormArray. This nested FormArray contains a FormGroup for each facility that the enrollee works
    * at, in that Health Authority
    */
-  public addHealthAuthorityOboSite(haSiteForm: FormGroup, healthAuthoritySites: FormGroup, healthAuthorityCode?: number) {
-    const facilityName = haSiteForm.get('facilityName') as FormControl;
+  public addHealthAuthorityOboSite(haSiteForm: UntypedFormGroup, healthAuthoritySites: UntypedFormGroup, healthAuthorityCode?: number) {
+    const facilityName = haSiteForm.get('facilityName') as UntypedFormControl;
     this.formUtilsService.setValidators(facilityName, [Validators.required]);
-    const healthAuthorityControl = haSiteForm.get('healthAuthorityCode') as FormControl;
+    const healthAuthorityControl = haSiteForm.get('healthAuthorityCode') as UntypedFormControl;
     this.formUtilsService.setValidators(healthAuthorityControl, [Validators.required]);
-    let sitesOfHealthAuthority = healthAuthoritySites.get(String(healthAuthorityCode)) as FormArray;
+    let sitesOfHealthAuthority = healthAuthoritySites.get(String(healthAuthorityCode)) as UntypedFormArray;
     if (!sitesOfHealthAuthority) {
       sitesOfHealthAuthority = this.fb.array([]);
       sitesOfHealthAuthority.setValidators([FormArrayValidators.atLeast(1)]);
@@ -651,14 +651,14 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   public removeUnselectedHAOboSites() {
     // Obo Sites need to be removed from two different collections
-    const oboSites = this.oboSitesForm.get('oboSites') as FormArray;
-    const healthAuthoritySites = this.oboSitesForm.get('healthAuthoritySites') as FormGroup;
-    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    const oboSites = this.oboSitesForm.get('oboSites') as UntypedFormArray;
+    const healthAuthoritySites = this.oboSitesForm.get('healthAuthoritySites') as UntypedFormGroup;
+    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as UntypedFormArray;
     // If the checkbox for the health authority is not selected, remove the corresponding Obo Sites
     this.configService.healthAuthorities.forEach((healthAuthority, index) => {
       if (!enrolleeHealthAuthorities.at(index).value) {
         for (let i = oboSites.controls.length - 1; i >= 0; i--) {
-          const oboSiteForm = oboSites.controls[i] as FormGroup;
+          const oboSiteForm = oboSites.controls[i] as UntypedFormGroup;
           if (oboSiteForm.controls.healthAuthorityCode.value === healthAuthority.code) {
             oboSites.removeAt(i);
           }
@@ -683,11 +683,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    * Document Upload Helpers
    */
 
-  public addSelfDeclarationDocumentGuid(control: FormArray, value: string) {
+  public addSelfDeclarationDocumentGuid(control: UntypedFormArray, value: string) {
     control.push(this.fb.control(value));
   }
 
-  public removeSelfDeclarationDocumentGuid(control: FormArray, documentGuid: string) {
+  public removeSelfDeclarationDocumentGuid(control: UntypedFormArray, documentGuid: string) {
     control.removeAt(control.value.findIndex((guid: string) => guid === documentGuid));
   }
 
@@ -699,8 +699,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       'hasDisciplinaryActionDocumentGuids',
       'hasPharmaNetSuspendedDocumentGuids'
     ]
-      .map((formArrayName: string) => this.selfDeclarationForm.get(formArrayName) as FormArray)
-      .forEach((formArray: FormArray) => formArray.clear());
+      .map((formArrayName: string) => this.selfDeclarationForm.get(formArrayName) as UntypedFormArray)
+      .forEach((formArray: UntypedFormArray) => formArray.clear());
   }
 
   /**
