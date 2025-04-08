@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, Validators, FormGroupDirective, FormArray } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators, FormGroupDirective, UntypedFormArray } from '@angular/forms';
 import { WeekDay } from '@angular/common';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,7 +20,7 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { HoursOperationPageFormModel, HoursOperationPageFormState } from './hours-operation-page-form-state.class';
 
 export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
-  public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
+  public isErrorState(control: UntypedFormControl | null, form: FormGroupDirective | null): boolean {
     const invalidCtrl = super.isErrorState(control, form);
     // Apply custom validation from parent form group
     const dirtyOrSubmitted = (control?.dirty || form?.submitted);
@@ -77,18 +77,18 @@ export class HoursOperationPageComponent extends AbstractCommunitySiteRegistrati
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
   }
 
-  public hasDay(group: FormGroup): boolean {
+  public hasDay(group: UntypedFormGroup): boolean {
     return group.get('startTime').value !== null;
   }
 
-  public is24Hours(group: FormGroup): boolean {
+  public is24Hours(group: UntypedFormGroup): boolean {
     return (
       group.get('startTime').value === this.business24Hours.startTime &&
       group.get('endTime').value === this.business24Hours.endTime
     );
   }
 
-  public on24Hours(change: MatCheckboxChange, group: FormGroup): void {
+  public on24Hours(change: MatCheckboxChange, group: UntypedFormGroup): void {
     (change.checked)
       ? group.patchValue(this.business24Hours)
       : group.patchValue(this.businessRegularHours);
@@ -96,7 +96,7 @@ export class HoursOperationPageComponent extends AbstractCommunitySiteRegistrati
     this.allowEditingHours(group, !change.checked);
   }
 
-  public onDayToggle(group: FormGroup, change: MatSlideToggleChange): void {
+  public onDayToggle(group: UntypedFormGroup, change: MatSlideToggleChange): void {
     if (change.checked) {
       this.hasNoBusinessHoursError = false;
     }
@@ -137,14 +137,14 @@ export class HoursOperationPageComponent extends AbstractCommunitySiteRegistrati
     this.siteFormStateService.setForm(site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
 
-    this.formState.businessDays.controls.forEach((group: FormGroup) => {
+    this.formState.businessDays.controls.forEach((group: UntypedFormGroup) => {
       if (this.is24Hours(group)) {
         this.allowEditingHours(group, false);
       }
     });
   }
 
-  protected checkValidity(form: FormGroup | FormArray): boolean {
+  protected checkValidity(form: UntypedFormGroup | UntypedFormArray): boolean {
     // Form being disabled indicates that every day of the week is 24 hours
     return (form.disabled || this.formUtilsService.checkValidity(form)) && this.additionalValidityChecks(form.getRawValue());
   }
@@ -185,9 +185,9 @@ export class HoursOperationPageComponent extends AbstractCommunitySiteRegistrati
     this.routeUtils.routeRelativeTo(routePath);
   }
 
-  private allowEditingHours(group: FormGroup, isEditable: boolean = true) {
-    const startTime = group.get('startTime') as FormControl;
-    const endTime = group.get('endTime') as FormControl;
+  private allowEditingHours(group: UntypedFormGroup, isEditable: boolean = true) {
+    const startTime = group.get('startTime') as UntypedFormControl;
+    const endTime = group.get('endTime') as UntypedFormControl;
 
     if (isEditable) {
       startTime.enable();

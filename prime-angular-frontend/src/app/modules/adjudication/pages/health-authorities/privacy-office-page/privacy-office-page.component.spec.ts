@@ -9,7 +9,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { PrivacyOfficePageComponent } from './privacy-office-page.component';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 describe('PrivacyOfficePageComponent', () => {
   let component: PrivacyOfficePageComponent;
@@ -23,7 +23,8 @@ describe('PrivacyOfficePageComponent', () => {
         ReactiveFormsModule,
         MatDialogModule,
         MatSnackBarModule,
-        NgxMaskModule.forRoot()
+        NgxMaskDirective,
+        NgxMaskPipe
       ],
       declarations: [
         PrivacyOfficePageComponent
@@ -33,7 +34,8 @@ describe('PrivacyOfficePageComponent', () => {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
         },
-        CapitalizePipe
+        CapitalizePipe,
+        provideNgxMask()
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();

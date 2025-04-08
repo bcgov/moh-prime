@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, UntypedFormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
@@ -31,7 +31,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements OnInit {
   @ViewChild('requestAccess') public requestAccess: MatSlideToggle;
 
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public remoteAccessSearch: RemoteAccessSearch[];
 
   constructor(
@@ -47,7 +47,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     protected authService: AuthService,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super(
       route,
@@ -73,24 +73,24 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
    * Used with the checkboxes to indicate remote access where if
    * checked is used to create the submission payload.
    */
-  public get sites(): FormArray {
-    return this.form.get('sites') as FormArray;
+  public get sites(): UntypedFormArray {
+    return this.form.get('sites') as UntypedFormArray;
   }
 
   /**
    * @description
    * Sites that were recently selected by the enrollee.
    */
-  public get remoteAccessSites(): FormArray {
-    return this.form.get('remoteAccessSites') as FormArray;
+  public get remoteAccessSites(): UntypedFormArray {
+    return this.form.get('remoteAccessSites') as UntypedFormArray;
   }
 
   /**
    * @description
    * Enrollee remote users constructed from
    */
-  public get enrolleeRemoteUsers(): FormArray {
-    return this.form.get('enrolleeRemoteUsers') as FormArray;
+  public get enrolleeRemoteUsers(): UntypedFormArray {
+    return this.form.get('enrolleeRemoteUsers') as UntypedFormArray;
   }
 
   public onSubmit() {
@@ -119,7 +119,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
           doingBusinessAs: ras.siteDoingBusinessAs,
           physicalAddress: ras.siteAddress,
         });
-        const siteVendors = remoteAccessSite.get("siteVendors") as FormArray;
+        const siteVendors = remoteAccessSite.get("siteVendors") as UntypedFormArray;
         siteVendors.push(this.fb.group({ vendorCode: ras.vendorCodes[0] }));
 
         this.remoteAccessSites.push(remoteAccessSite);
@@ -222,7 +222,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
    */
   private removeRemoteAccessLocations() {
     const form = this.enrolmentFormStateService.remoteAccessLocationsForm;
-    const locations = form.get('remoteAccessLocations') as FormArray;
+    const locations = form.get('remoteAccessLocations') as UntypedFormArray;
     locations.clear();
   }
 }

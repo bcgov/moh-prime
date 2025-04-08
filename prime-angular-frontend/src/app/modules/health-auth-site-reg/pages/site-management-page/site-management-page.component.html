@@ -152,6 +152,8 @@
   <ng-template #healthAuthorityMenu
                let-healthAuthority="healthAuthority">
     <button mat-icon-button
+            class="dot-button"
+            [disableRipple]="true"
             [matMenuTriggerFor]="rootMenu">
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -170,6 +172,8 @@
                let-healthAuthoritySite="healthAuthoritySite"
                let-healthAuthorityId="healthAuthorityId">
     <button mat-icon-button
+            class="dot-button"
+            [disableRipple]="true"
             [matMenuTriggerFor]="menu">
       <mat-icon>more_vert</mat-icon>
     </button>

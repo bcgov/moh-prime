@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -16,7 +16,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 })
 export class LimitsConditionsClausesComponent implements OnInit {
   public busy: Subscription;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public columns: string[];
   public preview: string;
   public hasActions: boolean;
@@ -25,7 +25,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private adjudicationResource: AdjudicationResource,
   ) {
     this.hasActions = false;
@@ -39,8 +39,8 @@ export class LimitsConditionsClausesComponent implements OnInit {
     };
   }
 
-  public get note(): FormControl {
-    return this.form.get('note') as FormControl;
+  public get note(): UntypedFormControl {
+    return this.form.get('note') as UntypedFormControl;
   }
 
   public onSubmit() {

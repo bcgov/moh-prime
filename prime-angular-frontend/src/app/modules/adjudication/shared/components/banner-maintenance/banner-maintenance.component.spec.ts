@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { KeycloakService } from 'keycloak-angular';
 
 import { MockAuthService } from 'test/mocks/mock-auth.service';
@@ -29,11 +29,12 @@ describe('BannerMaintenanceComponent', () => {
         HttpClientTestingModule,
         ReactiveFormsModule,
         RouterTestingModule,
-        NgxMaskModule.forRoot(),
         NgxMaterialModule,
         BrowserAnimationsModule,
         MatInputModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        NgxMaskDirective,
+        NgxMaskPipe
       ],
       providers: [
         KeycloakService,
@@ -48,7 +49,8 @@ describe('BannerMaintenanceComponent', () => {
         {
           provide: PermissionService,
           useClass: MockPermissionService
-        }
+        },
+        provideNgxMask()
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();

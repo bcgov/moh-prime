@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import moment from 'moment';
 
 import { MINIMUM_AGE } from '@lib/constants';
@@ -30,7 +30,7 @@ import { DeviceProviderPageFormState } from './device-provider-page-form-state.c
 })
 export class DeviceProviderPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: DeviceProviderPageFormState;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
 
   public currentIndex: number;
 
@@ -48,7 +48,7 @@ export class DeviceProviderPageComponent extends AbstractCommunitySiteRegistrati
   private site: Site;
 
   constructor(
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     protected siteService: SiteService,

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable } from 'rxjs';
@@ -156,7 +156,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     super.nextRouteAfterSubmit(nextRoutePath);
   }
 
-  private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl): void {
+  private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: UntypedFormControl, preferredLastName: UntypedFormControl): void {
     if (!hasPreferredName) {
       this.formUtilsService.resetAndClearValidators(preferredFirstName);
       this.formUtilsService.resetAndClearValidators(preferredLastName);
@@ -166,7 +166,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     }
   }
 
-  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
+  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: UntypedFormGroup, shouldToggle: boolean = true): void {
     if (!shouldToggle) {
       return;
     }
@@ -176,11 +176,11 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       : this.setAddressValidator(addressLine);
   }
 
-  private clearAddressValidator(addressLine: FormGroup): void {
+  private clearAddressValidator(addressLine: UntypedFormGroup): void {
     this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems);
   }
 
-  private setAddressValidator(addressLine: FormGroup): void {
+  private setAddressValidator(addressLine: UntypedFormGroup): void {
     this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
   }
 }

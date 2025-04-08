@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 
 import { Observable, UnaryFunction } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
@@ -37,7 +37,7 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
     protected route: ActivatedRoute,
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected healthAuthResource: HealthAuthorityResource,
     protected utilsService: UtilsService,
     router: Router

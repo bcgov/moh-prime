@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -8,7 +8,7 @@ import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authori
 
 export class HealthAuthCareTypeFormState extends AbstractFormState<HealthAuthCareTypeForm> {
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private healthAuthorityService: HealthAuthorityService
   ) {
     super();
@@ -16,12 +16,12 @@ export class HealthAuthCareTypeFormState extends AbstractFormState<HealthAuthCar
     this.buildForm();
   }
 
-  public get healthAuthorityVendorId(): FormControl {
-    return this.formInstance.get('healthAuthorityVendorId') as FormControl;
+  public get healthAuthorityVendorId(): UntypedFormControl {
+    return this.formInstance.get('healthAuthorityVendorId') as UntypedFormControl;
   }
 
-  public get healthAuthorityCareTypeId(): FormControl {
-    return this.formInstance.get('healthAuthorityCareTypeId') as FormControl;
+  public get healthAuthorityCareTypeId(): UntypedFormControl {
+    return this.formInstance.get('healthAuthorityCareTypeId') as UntypedFormControl;
   }
 
   public get json(): HealthAuthCareTypeForm {

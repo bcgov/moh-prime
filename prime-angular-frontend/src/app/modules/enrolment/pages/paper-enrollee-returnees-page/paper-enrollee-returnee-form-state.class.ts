@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -7,15 +7,15 @@ import { PaperEnrolleeForm } from './paper-enrollee-returnee-form.model';
 
 export class PaperEnrolleeReturneeFormState extends AbstractFormState<PaperEnrolleeForm> {
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get paperEnrolleeGpid(): FormControl {
-    return this.formInstance.get('paperEnrolleeGpid') as FormControl;
+  public get paperEnrolleeGpid(): UntypedFormControl {
+    return this.formInstance.get('paperEnrolleeGpid') as UntypedFormControl;
   }
 
   public get json(): PaperEnrolleeForm {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, AbstractControl } from '@angular/forms';
+import { UntypedFormBuilder, AbstractControl } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
@@ -20,7 +20,7 @@ export class PhsaEformsFormStateService extends AbstractFormStateService<PhsaEnr
   public availableAccessFormState: AvailableAccessFormState;
 
   constructor(
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected routeStateService: RouteStateService,
     protected logger: ConsoleLoggerService,
     private formUtilsService: FormUtilsService

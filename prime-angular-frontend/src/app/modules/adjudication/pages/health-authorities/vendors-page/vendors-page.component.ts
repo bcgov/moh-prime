@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
@@ -27,7 +27,7 @@ interface HealthAuthorityVendorMap extends VendorConfig {
 export class VendorsPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public isInitialEntry: boolean;
   public filteredVendors: BehaviorSubject<HealthAuthorityVendorMap[]>;
   public healthAuthorityVendors: HealthAuthorityVendorMap[];
@@ -35,7 +35,7 @@ export class VendorsPageComponent implements OnInit {
   private routeUtils: RouteUtils;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private healthAuthResource: HealthAuthorityResource,
     private formUtilsService: FormUtilsService,
     private configService: ConfigService,
@@ -58,8 +58,8 @@ export class VendorsPageComponent implements OnInit {
     this.filteredVendors = new BehaviorSubject<HealthAuthorityVendorMap[]>(this.healthAuthorityVendors);
   }
 
-  public get vendors(): FormArray {
-    return this.form.get('vendors') as FormArray;
+  public get vendors(): UntypedFormArray {
+    return this.form.get('vendors') as UntypedFormArray;
   }
 
   public onSubmit() {
