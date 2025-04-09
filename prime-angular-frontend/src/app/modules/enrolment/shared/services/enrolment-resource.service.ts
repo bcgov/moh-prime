@@ -35,6 +35,7 @@ import { SelfDeclarationVersion } from '@shared/models/self-declaration-version.
 import { EmailsForCareSetting } from '@shared/models/email-for-care-setting.model';
 import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
 import { DeviceProviderSite } from "@shared/models/device-provider-site.model";
+import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +60,8 @@ export class EnrolmentResource {
               .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
             certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrollee.id}/certifications`)
               .pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
+            unlistedCertifications: this.apiResource.get<UnlistedCertification[]>(`enrollees/${enrollee.id}/unlisted-certifications`)
+              .pipe(map((response: ApiHttpResponse<UnlistedCertification[]>) => response.result)),
             enrolleeDeviceProviders: this.apiResource.get<EnrolleeDeviceProvider[]>(`enrollees/${enrollee.id}/device-providers`)
               .pipe(map((response: ApiHttpResponse<EnrolleeDeviceProvider[]>) => response.result)),
             enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrollee.id}/remote-users`)
@@ -184,6 +187,22 @@ export class EnrolmentResource {
       );
   }
 
+  public returnToEditing(enrolleeId: number): Observable<HttpEnrollee> {
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${enrolleeId}/status-actions/return-to-editing`)
+      .pipe(
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap((enrollee: HttpEnrollee) => {
+          this.toastService.openErrorToast('Enrolment is now editable');
+          this.logger.info('UPDATED_ENROLLEE', enrollee);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolment status could not be updated');
+          this.logger.error('[Enrolment] EnrolmentResource::returnToEditing error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getCurrentStatus(enrolleeId: number): Observable<EnrolmentStatusAdmin> {
     return this.apiResource.get<EnrolmentStatusAdmin>(`enrollees/${enrolleeId}/current-status`)
       .pipe(
@@ -217,12 +236,12 @@ export class EnrolmentResource {
 
   public sendProvisionerAccessLink(
     emailPairs: EmailsForCareSetting[] = [], enrolleeId: number
-  ): Observable<EnrolmentCertificateAccessToken> {
+  ): Observable<EnrolmentCertificateAccessToken[]> {
     return this.apiResource
-      .post<EnrolmentCertificateAccessToken>(`enrollees/${enrolleeId}/provisioner-access/send-link`, emailPairs)
+      .post<EnrolmentCertificateAccessToken[]>(`enrollees/${enrolleeId}/provisioner-access/send-link`, emailPairs)
       .pipe(
-        map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
-        tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),
+        map((response: ApiHttpResponse<EnrolmentCertificateAccessToken[]>) => response.result),
+        tap((token: EnrolmentCertificateAccessToken[]) => this.logger.info('ACCESS_TOKEN', token)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Email could not be sent');
           this.logger.error('[Enrolment] EnrolmentResource::sendProvisionerAccessLink error has occurred: ', error);

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder } from '@angular/forms';
 
 import { EMPTY } from 'rxjs';
 import { debounceTime, exhaustMap, switchMap } from 'rxjs/operators';
@@ -18,11 +18,11 @@ export class AddressAutocompleteComponent implements OnInit {
   @Input() inBc: boolean;
   @Output() autocompleteAddress: EventEmitter<Address>;
 
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public addressAutocompleteFields: AddressAutocompleteFindResponse[];
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private addressAutocompleteResource: AddressAutocompleteResource,
     private toastService: ToastService
   ) {
@@ -30,8 +30,8 @@ export class AddressAutocompleteComponent implements OnInit {
     this.inBc = false;
   }
 
-  public get autocomplete(): FormControl {
-    return this.form.get('autocomplete') as FormControl;
+  public get autocomplete(): UntypedFormControl {
+    return this.form.get('autocomplete') as UntypedFormControl;
   }
 
   public onAutocomplete(id: string) {

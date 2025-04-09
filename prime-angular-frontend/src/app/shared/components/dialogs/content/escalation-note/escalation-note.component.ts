@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { BehaviorSubject } from 'rxjs';
@@ -13,6 +13,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '../../dialog-options.model';
+import { AdminStatusType } from '@adjudication/shared/models/admin-status.enum';
 
 export enum EscalationType {
   ENROLLEE = 1,
@@ -28,12 +29,12 @@ export class EscalationNoteComponent implements OnInit {
   public id: number;
   public type: EscalationType;
   public adjudicators$: BehaviorSubject<Admin[]>;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
 
   constructor(
     private adjudicationResource: AdjudicationResource,
     private siteResource: SiteResource,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogOptions,
   ) {
@@ -42,8 +43,8 @@ export class EscalationNoteComponent implements OnInit {
     this.adjudicators$ = new BehaviorSubject<Admin[]>([]);
   }
 
-  public get note(): FormControl {
-    return this.form.get('note') as FormControl;
+  public get note(): UntypedFormControl {
+    return this.form.get('note') as UntypedFormControl;
   }
 
   public onCancel() {
@@ -85,7 +86,7 @@ export class EscalationNoteComponent implements OnInit {
 
   private getAdjudicators() {
     this.adjudicationResource.getAdjudicators()
-      .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators));
+      .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators.filter(a => a.status !== AdminStatusType.DISABLED)));
   }
 
   private createSiteRegistrationEscalation(assigneeId) {

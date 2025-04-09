@@ -39,6 +39,10 @@ export abstract class AbstractBaseHealthAuthoritySite implements BaseHealthAutho
     return HealthAuthoritySiteUtils.isApproved(this);
   }
 
+  public isArchived(): boolean {
+    return HealthAuthoritySiteUtils.isArchived(this);
+  }
+
   public withinRenewalPeriod(): boolean {
     return HealthAuthoritySiteUtils.withinRenewalPeriod(this);
   }

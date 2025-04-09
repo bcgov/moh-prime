@@ -27,6 +27,10 @@ export class HealthAuthoritySiteUtils {
       && !!healthAuthoritySite.approvedDate;
   }
 
+  public static isArchived(healthAuthoritySite: BaseHealthAuthoritySite): boolean {
+    return healthAuthoritySite.status === SiteStatusType.ARCHIVED;
+  }
+
   public static withinRenewalPeriod(healthAuthoritySite: BaseHealthAuthoritySite): boolean {
     return DateUtils.withinRenewalPeriod(HealthAuthoritySiteUtils.getExpiryDate(healthAuthoritySite));
   }

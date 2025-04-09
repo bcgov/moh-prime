@@ -134,7 +134,8 @@ export class SiteManagementPageComponent implements OnInit {
         key: 'Site Address',
         value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode'])
       },
-      { key: 'Vendor', value: this.configCodePipe.transform(siteVendorCode, 'vendors') }
+      { key: 'Vendor', value: this.configCodePipe.transform(siteVendorCode, 'vendors') },
+      { key: 'Site ID', value: site.pec }
     ];
   }
 
@@ -150,8 +151,8 @@ export class SiteManagementPageComponent implements OnInit {
   public getRenewalRequiredSiteNotificationProperties(organizationId: number, site: SiteListViewModel) {
     return {
       icon: 'notification_important',
-      text: 'This site requires renewal including this year\'s business licence.',
-      label: 'Renew Site',
+      text: 'Please update your business licence.',
+      label: 'Update Site',
       route: () => this.viewSite(organizationId, site)
     };
   }
@@ -178,6 +179,10 @@ export class SiteManagementPageComponent implements OnInit {
 
   public isLocked(site: SiteListViewModel): boolean {
     return site.status === SiteStatusType.LOCKED;
+  }
+
+  public isArchived(site: SiteListViewModel): boolean {
+    return site.status === SiteStatusType.ARCHIVED;
   }
 
   public getLockedSiteNotificationProperties() {

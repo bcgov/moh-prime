@@ -24,7 +24,8 @@ namespace PrimeTests.Utils
         protected InMemoryDbTest()
         {
             var options = new DbContextOptionsBuilder<ApiDbContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                // To avoid errors like:  "Required properties '{'ProfileSnapshot'}' are missing for the instance of entity type 'Submission'"
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString(), b => b.EnableNullChecks(false))
                 .Options;
 
             // Only used for the CreatedBy and UpdatedBy fields

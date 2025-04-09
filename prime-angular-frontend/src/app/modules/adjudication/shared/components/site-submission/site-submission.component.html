@@ -1,0 +1,292 @@
+<h6 class="text-green text-italic">Submitted {{ submission?.submittedDate | formatDate }}</h6>
+<app-page-subheader>
+  <ng-container appPageSubheaderTitle><mat-icon class="mr-2">store</mat-icon>Site Submission</ng-container>
+</app-page-subheader>
+
+<app-page-section *ngIf="submission?.healthAuthorityCareType">
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Health Authority Care Type</ng-container>
+  </app-page-subheader>
+
+  <ng-container>
+    <app-enrollee-property *ngIf="submission?.healthAuthorityCareType"
+                           title="CareType">
+      {{ submission?.healthAuthorityCareType.careType | default }}
+    </app-enrollee-property>
+    <app-enrollee-property *ngIf="submission?.healthAuthorityVendor"
+                           title="Vendor">
+      {{ submission?.healthAuthorityVendor?.vendor.name | default }}
+    </app-enrollee-property>
+  </ng-container>
+</app-page-section>
+
+<app-page-section>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>
+      {{ submission?.healthAuthorityCareType ? 'Site Details' : 'Care Setting'}}</ng-container>
+  </app-page-subheader>
+
+  <ng-container>
+    <app-enrollee-property *ngIf="submission?.careSettingCode && !submission?.healthAuthorityCareType"
+                           title="Care Setting">
+      {{ submission?.careSettingCode | configCode: 'careSettings' | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property *ngIf="submission?.siteVendors"
+                           title="Vendor">
+      {{ submission?.siteVendors[0].vendorCode | configCode: 'vendors' | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property *ngIf="submission?.siteName"
+                           title="Site Name">
+      {{ submission?.siteName | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property *ngIf="submission?.healthAuthorityCareType"
+                           title="Site ID/PEC Code">
+      {{ submission?.pec| default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property *ngIf="submission?.mnemonic"
+                           title="Mnemonic">
+      {{ submission?.mnemonic | default }}
+    </app-enrollee-property>
+
+
+    <app-enrollee-property *ngIf="submission?.deviceProviderId"
+                           title="Device Provider ID">
+      {{ submission?.deviceProviderId | default}}
+    </app-enrollee-property>
+  </ng-container>
+</app-page-section>
+
+<app-page-section *ngIf="submission?.businessLicence">
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Site Business Licence</ng-container>
+  </app-page-subheader>
+
+  <app-enrollee-property *ngIf="submission?.doingBusinessAs"
+                         title="Site Name">
+    {{ submission?.doingBusinessAs | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Site ID">
+    {{ submission?.pec| default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="submission?.businessLicence?.expiryDate"
+                         title="Expiry">
+    {{ submission?.businessLicence?.expiryDate | formatDate | default}}
+  </app-enrollee-property>
+
+  <ng-container *ngIf="submission?.businessLicence?.businessLicenceDocument">
+    <app-enrollee-property title="Filename">
+      <button *ngIf="submission?.businessLicence?.businessLicenceDocument.filename"
+              mat-stroked-button
+              color="primary"
+              class="pl-2 mb-2 mt-2"
+              (click)="downloadBusinessLicenceDocument(submission?.businessLicence?.siteId, submission?.businessLicence?.businessLicenceDocument.businessLicenceId)">
+        <mat-icon class="mr-1">attachment</mat-icon>
+        {{ submission?.businessLicence?.businessLicenceDocument.filename | default }}
+      </button>
+    </app-enrollee-property>
+
+    <app-enrollee-property *ngIf="submission?.businessLicence?.businessLicenceDocument.uploadedDate"
+                           title="Upload Date">
+      {{ submission?.businessLicence?.businessLicenceDocument.uploadedDate | formatDate | default }}
+    </app-enrollee-property>
+  </ng-container>
+
+  <app-enrollee-property *ngIf="submission?.businessLicence?.deferredLicenceReason"
+                         title="Deferred Business Licence Reason">
+    {{ submission?.businessLicence?.deferredLicenceReason | default}}
+  </app-enrollee-property>
+</app-page-section>
+
+<app-page-section *ngIf="submission?.physicalAddress">
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Site Address</ng-container>
+  </app-page-subheader>
+
+  <ng-container [ngTemplateOutlet]="address"
+                [ngTemplateOutletContext]="{
+      address: submission.physicalAddress
+    }"></ng-container>
+</app-page-section>
+
+<app-page-section *ngIf="submission?.businessHours">
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Hours of Operation</ng-container>
+  </app-page-subheader>
+  <ng-container *ngFor="let businessHour of submission.businessHours;">
+    <app-enrollee-property [title]="businessHour?.day | weekday">
+      {{ formatTime(businessHour.startTime) }} to {{ formatTime(businessHour.endTime) }}
+    </app-enrollee-property>
+  </ng-container>
+</app-page-section>
+
+<app-page-section *ngIf="submission?.remoteUsers &&
+  submission?.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE">
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Remote Users</ng-container>
+  </app-page-subheader>
+  <ng-container *ngIf="!submission?.remoteUsers || submission?.remoteUsers.length === 0">
+    None
+  </ng-container>
+  <ng-container *ngFor=" let remoteUser of submission.remoteUsers;">
+    <ng-container>
+      <app-enrollee-property *ngIf="remoteUser?.firstName"
+                             title="First Name">
+        {{ remoteUser?.firstName | default }}
+      </app-enrollee-property>
+
+      <app-enrollee-property *ngIf="remoteUser?.lastName"
+                             title="Last Name">
+        {{ remoteUser?.lastName | default }}
+      </app-enrollee-property>
+
+      <app-enrollee-property *ngIf="remoteUser?.email"
+                             title="Email">
+        {{ remoteUser?.email | default }}
+      </app-enrollee-property>
+
+      <ng-container *ngIf="remoteUser.remoteUserCertification">
+        <div class="mb-3">
+          <strong>College Licence Information</strong>
+        </div>
+
+        <div class="ml-4 mb-3">
+          <app-enrollee-property *ngIf="remoteUser.remoteUserCertification?.collegeCode"
+                                 title="College">
+            {{ remoteUser.remoteUserCertification?.collegeCode | configCode:'colleges' | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property *ngIf="remoteUser.remoteUserCertification?.licenseCode"
+                                 title="License Class">
+            {{ remoteUser.remoteUserCertification?.licenseCode | configCode:'licenses' | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property *ngIf="remoteUser.remoteUserCertification?.licenseNumber"
+                                 [title]="remoteUser.remoteUserCertification?.collegeCode | licenseNumberLabel">
+            {{ remoteUser.remoteUserCertification?.licenseNumber | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property *ngIf="remoteUser.remoteUserCertification?.practitionerId"
+                                 title="Practitioner ID">
+            {{ remoteUser.remoteUserCertification?.practitionerId | default }}
+          </app-enrollee-property>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</app-page-section>
+
+<app-overview-section *ngIf="submission?.administratorPharmaNet"
+                      title="PharmaNet Administrator"
+                      [showEditRedirect]="false">
+  <app-party-review [party]="submission?.administratorPharmaNet"></app-party-review>
+</app-overview-section>
+
+<app-overview-section *ngIf="submission?.healthAuthorityPharmanetAdministrator"
+                      title="PharmaNet Administrator"
+                      [showEditRedirect]="false">
+  <app-party-review [party]="submission?.healthAuthorityPharmanetAdministrator.contact"></app-party-review>
+</app-overview-section>
+
+<app-overview-section *ngIf="submission?.privacyOfficer"
+                      title="Privacy Officer"
+                      [showEditRedirect]="false">
+  <app-party-review [party]="submission?.privacyOfficer"></app-party-review>
+</app-overview-section>
+
+<app-overview-section *ngIf="submission?.technicalSupport"
+                      title="Technical Support"
+                      [showEditRedirect]="false">
+  <app-party-review [party]="submission?.technicalSupport"></app-party-review>
+</app-overview-section>
+
+<app-overview-section *ngIf="submission?.healthAuthorityTechnicalSupport"
+                      title="Technical Support"
+                      [showEditRedirect]="false">
+  <app-party-review [party]="submission?.healthAuthorityTechnicalSupport.contact"></app-party-review>
+</app-overview-section>
+
+<ng-template #contact
+             let-contact="contact">
+
+  <app-enrollee-property *ngIf="contact?.firstName"
+                         title="First Name">
+    {{ contact?.firstName | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="contact?.lastName"
+                         title="Last Name">
+    {{ contact?.lastName | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="contact?.jobRoleTitle"
+                         title="Job Title">
+    {{ contact?.jobRoleTitle | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="contact?.email"
+                         title="Email">
+    {{ contact?.email | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="contact?.phone"
+                         title="Phone">
+    {{ contact?.phone | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="contact?.fax"
+                         title="Fax">
+    {{ contact?.fax | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="contact?.smsPhone"
+                         title="Cell Phone">
+    {{ contact?.smsPhone | default }}
+  </app-enrollee-property>
+
+  <ng-container *ngIf="contact?.physicalAddress">
+    <div class="mb-3">
+      <strong>Physical Address</strong>
+    </div>
+    <div class="ml-4 mb-3">
+      <ng-container [ngTemplateOutlet]="address"
+                    [ngTemplateOutletContext]="{
+        address: contact?.physicalAddress
+      }"></ng-container>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #address
+             let-address="address">
+  <app-enrollee-property *ngIf="submission?.physicalAddress.street"
+                         title="Address">
+    {{ submission?.physicalAddress.street | default }}
+  </app-enrollee-property>
+  <app-enrollee-property *ngIf="submission?.physicalAddress.street2"
+                         title="Address 2">
+    {{ submission?.physicalAddress.street2 | default }}
+  </app-enrollee-property>
+  <app-enrollee-property *ngIf="submission?.physicalAddress.city"
+                         title="City">
+    {{ submission?.physicalAddress.city | default }}
+  </app-enrollee-property>
+  <app-enrollee-property *ngIf="submission?.physicalAddress.provinceCode"
+                         title="Province">
+    {{ submission?.physicalAddress.provinceCode | configCode: 'provinces'| default }}
+  </app-enrollee-property>
+  <app-enrollee-property *ngIf="submission?.physicalAddress.postal"
+                         title="Postal">
+    {{ submission?.physicalAddress.postal | default }}
+  </app-enrollee-property>
+  <app-enrollee-property *ngIf="submission?.physicalAddress.countryCode"
+                         title="Country">
+    {{ submission?.physicalAddress.countryCode | configCode: 'countries'| default }}
+  </app-enrollee-property>
+</ng-template>

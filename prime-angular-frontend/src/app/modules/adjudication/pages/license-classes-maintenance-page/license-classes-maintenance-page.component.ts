@@ -21,6 +21,8 @@ export class LicenseMaintenanceConfig implements IWeightedConfig {
   validate?: boolean;
   prescriberIdType?: PrescriberIdTypeEnum;
   weight: number;
+  collegeLicenseGroupingCode: number;
+  multijurisdictional?: boolean;
 }
 
 @Component({
@@ -50,7 +52,8 @@ export class LicenseClassesMaintenancePageComponent implements OnInit {
       'manual',
       'validate',
       'prescriberIdType',
-      'allowRequestRemoteAccess'
+      'allowRequestRemoteAccess',
+      'multijurisdictional'
     ];
     this.dataSource = new MatTableDataSource<LicenseMaintenanceConfig>([]);
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
@@ -69,9 +72,10 @@ export class LicenseClassesMaintenancePageComponent implements OnInit {
             collegeName: college.name,
             licenseCode: collegeLicense.licenseCode,
             discontinued: collegeLicense.discontinued,
+            collegeLicenseGroupingCode: collegeLicense.collegeLicenseGroupingCode,
             ...license
           } as LicenseMaintenanceConfig;
-        }).sort(this.utilsService.sortByKey<LicenseMaintenanceConfig>('weight'))
+        }).sort((a: LicenseMaintenanceConfig, b: LicenseMaintenanceConfig) => a.weight - b.weight)
         : { collegeName: college.name } as LicenseMaintenanceConfig;
     });
 

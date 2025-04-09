@@ -12,14 +12,14 @@ jobs:
     defaults:
       run:
         working-directory: ./prime-angular-frontend
-  
+
     if: github.ref != 'develop' || (github.ref == 'develop' && github.event.pull_request.merged == true)
 
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [18.x]
 
     steps:
       - uses: actions/checkout@v1
@@ -59,15 +59,15 @@ jobs:
       - name: Collect Frontend Report
         run: |
           cc-test-reporter format-coverage -t lcov -o coverage/frontend.json coverage/lcov.info
-      
+
       - name: Create frontend coverage file artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: frontend
           path: ./prime-angular-frontend/coverage/frontend.json
           retention-days: 1
 
-  
+
   collect-backend-coverage:
     defaults:
       run:
@@ -79,7 +79,7 @@ jobs:
 
     strategy:
       matrix:
-        dotnet-version: ['5.0']
+        dotnet-version: ['8.0']
 
     steps:
       - uses: actions/checkout@v2
@@ -87,11 +87,11 @@ jobs:
       - name: set-date
         run: |
           echo "GIT_COMMITTED_AT=$(date +%s)" >> ${GITHUB_ENV}
-      - name: Setup .NET Core 5.0
+      - name: Setup .NET Core 8.0
         uses: actions/setup-dotnet@v1
         with:
           # Semantic version range syntax or exact version of a dotnet version
-          dotnet-version: '5.0'
+          dotnet-version: '8.0'
 
       - name: Install dependencies
         run: |
@@ -100,8 +100,8 @@ jobs:
       - name: Install ReportGenerator
         run: |
           cd ../
-          dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.1.26
-        
+          dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.3.6
+
       - uses: amancevice/setup-code-climate@v0
         with:
           cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
@@ -122,12 +122,12 @@ jobs:
           cd ../prime-dotnet-webapi
           cc-test-reporter format-coverage -t lcov -o ../prime-dotnet-webapi-tests/coverage/backend.json ../prime-dotnet-webapi-tests/coverage/lcov.info -p /home/runner/work/moh-prime/moh-prime/prime-dotnet-webapi
       - name: Create backend coverage file artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: backend
           path: ./prime-dotnet-webapi-tests/coverage/backend.json
           retention-days: 1
-          
+
 
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
@@ -146,24 +146,24 @@ jobs:
           cc_test_reporter_version: latest  # optional
 
       - name: Download frontend artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: frontend
           # path: frontend/
 
       - name: Download backend artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: backend
           # path: backend/
 
       - name: Sum files
-        run: |          
+        run: |
           cc-test-reporter sum-coverage -p 2 frontend.json backend.json
           cc-test-reporter upload-coverage -i ./coverage/codeclimate.json
-      
+
       - name: Create summed report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: summed
           path: ./coverage/codeclimate.json

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, UntypedFormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { KeyValue } from '@angular/common';
 
@@ -22,6 +22,7 @@ import { AbstractCommunitySiteRegistrationPage } from '@registration/shared/clas
 import { RemoteUsersPageFormState } from './remote-users-page-form-state.class';
 import { LicenseNumberLabelPipe } from '@shared/pipes/license-number-label.pipe';
 import { CollegeNamePipe } from '@shared/pipes/college-name.pipe';
+import { ConfigCodePipe } from '@config/config-code.pipe';
 
 @UntilDestroy()
 @Component({
@@ -49,6 +50,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     protected siteResource: SiteResource,
     protected licenseNumberLabelPipe: LicenseNumberLabelPipe,
     protected collegeNamePipe: CollegeNamePipe,
+    protected configCodePipe: ConfigCodePipe,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -60,12 +62,16 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public getRemoteUserProperties(remoteUser: FormGroup): KeyValue<string, string>[] {
-    const remoteUserCertification = remoteUser.controls?.remoteUserCertification as FormGroup;
+  public getRemoteUserProperties(remoteUser: UntypedFormGroup): KeyValue<string, string>[] {
+    const remoteUserCertification = remoteUser.controls?.remoteUserCertification as UntypedFormGroup;
     return [
       {
         key: 'College',
         value: this.collegeNamePipe.transform(remoteUserCertification.value.collegeCode),
+      },
+      {
+        key: 'Licence Class',
+        value: this.configCodePipe.transform(remoteUserCertification.value.licenseCode, 'licenses')
       },
       {
         key: this.licenseNumberLabelPipe.transform(remoteUserCertification.value.collegeCode),

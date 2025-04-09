@@ -1,0 +1,46 @@
+<mat-form-field (selectionChange)="onChange($event)">
+  <mat-label>Filter By Year</mat-label>
+  <mat-select [value]="selectedYear"
+              (selectionChange)="onChange($event)">
+    <mat-option *ngFor="let year of years"
+                [value]="year">
+      {{ year }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<ng-container *ngFor="let submission of submissions; let first = first; let last = last">
+  <ng-container [ngTemplateOutlet]="card"
+                [ngTemplateOutletContext]="{
+                    isCurrent: submission.id === currentSubmissionId,
+                    submittedDate: submission.createdDate,
+                    submissionId: submission.id,
+                    submissionRoute: [submission.id, AdjudicationRoutes.SITE_SUBMISSION],
+                    isLast: last
+                  }">
+  </ng-container>
+</ng-container>
+<ng-container>
+
+  <ng-template #card
+               let-isCurrent="isCurrent"
+               let-submittedDate="submittedDate"
+               let-submissionId="submissionId"
+               let-submissionRoute="submissionRoute"
+               let-isLast="isLast">
+    <mat-card class="has-hover col-md-6"
+              [class.mb-3]="isLast">
+      <mat-card-content class="mb-0">
+        <div class="card-title">
+          <small>Submitted {{ submittedDate | formatDate: 'MMMM Do YYYY' }}</small>
+          <small *ngIf="isCurrent">CURRENT</small>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button
+                color="primary"
+                [routerLink]="submissionRoute">View Submission</button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-template>
+</ng-container>

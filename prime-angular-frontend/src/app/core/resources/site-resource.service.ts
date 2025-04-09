@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import { forkJoin, Observable, of } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { DateUtils } from '@lib/utils/date-utils.class';
-import { RemoteUser } from '@lib/models/remote-user.model';
 import { BusinessDay } from '@lib/models/business-day.model';
-import { BusinessDayHours } from '@lib/models/business-day-hours.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
@@ -29,6 +27,7 @@ import { SiteAdjudicationDocument } from '@registration/shared/models/adjudicati
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { IndividualDeviceProvider } from '@registration/shared/models/individual-device-provider.model';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
+import { SiteSubmission } from '@shared/models/site-submission.model';
 
 @Injectable({
   providedIn: 'root'
@@ -58,7 +57,7 @@ export class SiteResource {
   }
 
   public getPaginatedSites(
-    queryParam: { textSearch?: string, careSettingCode?: CareSettingEnum, page?: number }
+    queryParam: { textSearch?: string, careSettingCode?: CareSettingEnum, page?: number, organizationId?: number }
   ): Observable<PaginatedList<SiteRegistrationListViewModel>> {
     const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
     return this.apiResource.get<PaginatedList<SiteRegistrationListViewModel>>('sites', params)
@@ -99,6 +98,29 @@ export class SiteResource {
       );
   }
 
+  public getSiteSubmissions(siteId: number): Observable<SiteSubmission[]> {
+    return this.apiResource.get<SiteSubmission[]>(`sites/${siteId}/site-submissions`, null, null, true)
+      .pipe(
+        tap((siteSubmissions: SiteSubmission[]) => this.logger.info('SITE_SUBMISSIONS', siteSubmissions)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site Submissions could not be retrieved');
+          this.logger.error('[SiteSubmissions] getSiteSubmissions::getSiteSubmissions error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getSiteSubmission(siteId: number, siteSubmissionId: number): Observable<SiteSubmission> {
+    return this.apiResource.get<SiteSubmission>(`sites/${siteId}/site-submission/${siteSubmissionId}`, null, null, true)
+      .pipe(
+        tap((siteSubmission: SiteSubmission) => this.logger.info('SITE_SUBMISSION', siteSubmission)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site Submission could not be retrieved');
+          this.logger.error('[SiteSubmission] getSiteSubmission::getSiteSubmission error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
   public getSiteContacts(siteId: number): Observable<{ label: string, email: string }[]> {
     return this.getSiteById(siteId)
       .pipe(
@@ -602,6 +624,39 @@ export class SiteResource {
         map((response: ApiHttpResponse<boolean>) => response.result),
         catchError((error: any) => {
           this.logger.error('[SiteRegistration] SiteResource::pecExistsWithinHa error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public archiveSite(siteId: number, note: string): NoContent {
+    return this.apiResource.post<NoContent>(`sites/${siteId}/archive`, { note })
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::archiveSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public restoreArchivedSite(siteId: number, note: string): NoContent {
+    return this.apiResource.post<NoContent>(`sites/${siteId}/restore`, { note })
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::restoreArchivedSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public canRestoreSite(siteId: number): Observable<boolean> {
+    return this.apiResource.get<boolean>(`sites/${siteId}/can-restore`)
+      .pipe(
+        map((response: ApiHttpResponse<boolean>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::canRestoreSite error has occurred: ', error);
           throw error;
         })
       );

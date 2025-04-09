@@ -13,20 +13,15 @@
 
 <h2 class="mb-2">Remote Users</h2>
 
-@foreach (var name in Model.RemoteUserNames)
+@foreach (var remoteUser in Model.RemoteUsers)
 {
-  <div class="ml-2 mb-2">
-    <h5>Name</h5>
-    <span class="ml-2">@name</span>
-  </div>
+  <p>
+    <span class="ml-2">@remoteUser</span>
+  </p>
 }
 
 <h2 class="mb-2">Site Information</h2>
 
 <p>
   See the attached registration and organization agreement for more information.
-  @if (!string.IsNullOrWhiteSpace(Model.DocumentUrl))
-  {
-    @("To access the Business Licence, click this") <a href="@Model.DocumentUrl" target="_blank">link</a>@(".")
-  }
 </p>

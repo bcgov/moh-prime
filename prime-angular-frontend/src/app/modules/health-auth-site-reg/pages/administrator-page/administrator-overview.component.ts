@@ -14,13 +14,15 @@ import { AdministratorForm } from './administrator-form.model';
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="HealthAuthSiteRegRoutes.ADMINISTRATOR"
                           (route)="onRoute($event)">
-      {{ administratorName ? (administratorName | default) : (pharmanetAdministrator | fullname) }}
+      <app-party-review *ngIf="pharmanetAdministrator"
+                        [party]="pharmanetAdministrator"></app-party-review>
     </app-overview-section>
     <app-overview-section title="Technical Support"
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="HealthAuthSiteRegRoutes.ADMINISTRATOR"
                           (route)="onRoute($event)">
-      {{ technicalSupportName ? (technicalSupportName | default) : (technicalSupportContact | fullname) }}
+      <app-party-review *ngIf="technicalSupportContact"
+                        [party]="technicalSupportContact"></app-party-review>
     </app-overview-section>
   `,
   styles: [],
@@ -29,8 +31,6 @@ import { AdministratorForm } from './administrator-form.model';
 export class AdministratorOverviewComponent extends AbstractOverview implements OnInit {
   @Input() administrator: AdministratorForm;
   @Input() pharmanetAdministrators: Contact[];
-  @Input() administratorName: string;
-  @Input() technicalSupportName: string;
   @Input() technicalSupports: Contact[];
 
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;

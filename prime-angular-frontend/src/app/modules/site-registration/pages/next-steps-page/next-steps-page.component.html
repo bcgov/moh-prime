@@ -2,20 +2,6 @@
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
-  <div class="mb-4">
-    <app-alert type="success"
-               icon="check_circle_outline">
-      <ng-container #alertTitle
-                    class="alert-title">
-        You have accepted the Organization Agreement for PharmaNet Use.
-      </ng-container>
-      <ng-container #alertContent
-                    class="alert-content">
-        Questions: Health Insurance BC toll free at 1-844-397-7463
-      </ng-container>
-    </app-alert>
-  </div>
-
   <section class="mb-3">
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>{{ title }}</ng-container>

@@ -3,7 +3,7 @@ from .config import Config
 from .healthcheck import *
 
 from flask_jwt_oidc.exceptions import AuthError
-from flask_restplus import Resource
+from flask_restx import Resource
 from healthcheck import HealthCheck
 
 

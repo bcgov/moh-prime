@@ -15,7 +15,7 @@
 }
 
 .mid-gary {
-  background-color: #606B75;
+  background-color: #38598A;
   color: #fff;
 }
 
@@ -31,24 +31,34 @@
 
 .tab,
 .tab-mid {
-  border-top: 1px solid #606B75;
+  border-top: 1px solid #38598A;
   padding: 15px 55px 15px 55px;
-  color: #606B75;
+  color: #fff;
   font-weight: 500;
   font-size: 1.25rem;
+  background-color: #748BAE;
   cursor: pointer;
 }
 
 .tab {
-  border-left: 1px solid #606B75;
-  border-right: 1px solid #606B75;
+  border-left: 1px solid #38598A;
+  border-right: 1px solid #38598A;
 }
 
 .selected-tab,
 .selected-tab .tab-link {
   color: #ffffff;
-  background-color: #606B75;
+  background-color: #38598A;
   cursor: inherit;
+}
+
+.selected-tab:before {
+  content: '\203A';
+  font-size: 2rem;
+  position: absolute;
+  left: 40px;
+  top: 3px;
+  font-weight: normal;
 }
 
 .mid-content {
@@ -136,7 +146,12 @@ a.tab-link:visited {
   color: #ffffff;
 }
 
-.mat-input-element,
+.mat-mdc-input-element,
 .mat-select-value {
   color: #ffffff !important;
+}
+
+.large {
+  width: 300px;
+  height: 46px;
 }

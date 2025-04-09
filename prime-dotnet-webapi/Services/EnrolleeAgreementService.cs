@@ -233,5 +233,19 @@ namespace Prime.Services
                 .Select(a => (AgreementType?)a.AgreementVersion.AgreementType)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task DeleteObsoleteEnrolleeAgreementAsync(int enrolleeId)
+        {
+            var agreement = await GetCurrentAgreementAsync(enrolleeId);
+            if (agreement.AcceptedDate == null)
+            {
+                _context.Remove(agreement);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new InvalidOperationException("Current Agreement was expected to be unaccepted.");
+            }
+        }
     }
 }

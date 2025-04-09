@@ -11,7 +11,7 @@ on:
       
 jobs:
   build-document-manager-backend:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     environment: Tools
     env:
       BUILD_LOGLEVEL: "2"
@@ -50,7 +50,7 @@ jobs:
           docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:tools
 
   build-backend:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     environment: Tools
     env:
       SERVICE_NAME: dotnet-webapi
@@ -99,7 +99,7 @@ jobs:
           docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:tools
 
   build-frontend:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     environment: Tools
     env:
       SERVICE_NAME: nginx-angular
@@ -146,7 +146,7 @@ jobs:
           docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:tools
 
   apply-oc-template:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     environment: Tools
     steps:
       - name: "Use the OpenShift template"

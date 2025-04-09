@@ -59,6 +59,7 @@ namespace Prime.Configuration.Environment
                 "CHES_CLIENT_ID" => "ChesApi__ClientId",
                 "CHES_CLIENT_SECRET" => "ChesApi__ClientSecret",
                 "CHES_TOKEN_URL" => "ChesApi__TokenUrl",
+                "CHES_RETRY_WITHIN_HOURS" => "ChesApi__RetryWithinHours",
 
                 "VERIFIABLE_CREDENTIAL_API_URL" => "VerifiableCredentialApi__Url",
                 "VERIFIABLE_CREDENTIAL_API_KEY" => "VerifiableCredentialApi__Key",
@@ -74,6 +75,8 @@ namespace Prime.Configuration.Environment
                 "PLR_INTEGRATION_CLIENT_CERT_THUMBPRINT" => "PlrIntegration__ClientCertThumbprint",
 
                 "LDAP_API_URL" => "LdapApi__Url",
+
+                "PROVIDER_ENROLMENT_TEAM_EMAIL" => "ProviderEnrolmentTeam__EmailAddress",
 
                 _ => envKey
             };

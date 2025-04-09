@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators, ValidatorFn, FormGroup, ValidationErrors } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators, ValidatorFn, UntypedFormGroup, ValidationErrors } from '@angular/forms';
 
 import { Observable, of } from 'rxjs';
 
@@ -11,6 +11,8 @@ import { BusinessLicenceDocument } from '@registration/shared/models/business-li
 import { BusinessLicenceForm } from './business-licence-form.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { SiteService } from '@registration/shared/services/site.service';
+import { Site } from '@registration/shared/models/site.model';
 
 export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceForm> {
   private siteId: number;
@@ -18,37 +20,42 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
   private businessLicenceUpdated: boolean;
 
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private siteResource: SiteResource,
     private formUtilsService: FormUtilsService,
+    private siteService: SiteService,
   ) {
     super();
     this.businessLicenceUpdated = false;
     this.buildForm();
   }
 
-  public get businessLicenceGuid(): FormControl {
-    return this.formInstance.get('businessLicenceGuid') as FormControl;
+  public get filename(): UntypedFormControl {
+    return this.formInstance.get('filename') as UntypedFormControl;
   }
 
-  public get businessLicenceExpiry(): FormControl {
-    return this.formInstance.get('expiryDate') as FormControl;
+  public get businessLicenceGuid(): UntypedFormControl {
+    return this.formInstance.get('businessLicenceGuid') as UntypedFormControl;
   }
 
-  public get deferredLicenceReason(): FormControl {
-    return this.formInstance.get('deferredLicenceReason') as FormControl;
+  public get businessLicenceExpiry(): UntypedFormControl {
+    return this.formInstance.get('expiryDate') as UntypedFormControl;
   }
 
-  public get doingBusinessAs(): FormControl {
-    return this.formInstance.get('doingBusinessAs') as FormControl;
+  public get deferredLicenceReason(): UntypedFormControl {
+    return this.formInstance.get('deferredLicenceReason') as UntypedFormControl;
   }
 
-  public get pec(): FormControl {
-    return this.formInstance.get('pec') as FormControl;
+  public get doingBusinessAs(): UntypedFormControl {
+    return this.formInstance.get('doingBusinessAs') as UntypedFormControl;
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.formInstance.get('physicalAddress') as FormGroup;
+  public get pec(): UntypedFormControl {
+    return this.formInstance.get('pec') as UntypedFormControl;
+  }
+
+  public get physicalAddress(): UntypedFormGroup {
+    return this.formInstance.get('physicalAddress') as UntypedFormGroup;
   }
 
   public get json(): BusinessLicenceForm {
@@ -121,6 +128,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
+      filename: [null, []],
       businessLicenceGuid: [
         // Will never be patched when the form is built, and is
         // only updated based on a document upload occurring.
@@ -187,7 +195,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
   }
 
   public validateMinOneCheckboxChecked(): ValidatorFn {
-    return (form: FormGroup): ValidationErrors | null => {
+    return (form: UntypedFormGroup): ValidationErrors | null => {
 
       const isNewWSiteId = form.get("isNewWithSiteId");
       const isNewWOSiteId = form.get("isNewWithoutSiteId");
@@ -195,7 +203,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       const careSettingCode = form.get("careSettingCode");
 
       if ((careSettingCode.value === CareSettingEnum.COMMUNITY_PHARMACIST || careSettingCode.value === CareSettingEnum.DEVICE_PROVIDER) &&
-        !(isNewWOSiteId.value || isNewWSiteId.value || activeBeforeRegistration.value)) {
+        !(isNewWOSiteId.value || isNewWSiteId.value || activeBeforeRegistration.value) && this.siteService.site?.approvedDate === null) {
         return { 'checkboxRequired': true };
       }
 

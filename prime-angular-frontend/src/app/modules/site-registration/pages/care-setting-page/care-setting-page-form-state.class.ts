@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -10,19 +10,19 @@ export class CareSettingPageFormState extends AbstractFormState<CareSettingPageD
   private siteId: number;
 
   public constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get careSettingCode(): FormControl {
-    return this.formInstance.get('careSettingCode') as FormControl;
+  public get careSettingCode(): UntypedFormControl {
+    return this.formInstance.get('careSettingCode') as UntypedFormControl;
   }
 
-  public get vendorCode(): FormControl {
-    return this.formInstance.get('vendorCode') as FormControl;
+  public get vendorCode(): UntypedFormControl {
+    return this.formInstance.get('vendorCode') as UntypedFormControl;
   }
 
   public get json(): CareSettingPageDataModel {

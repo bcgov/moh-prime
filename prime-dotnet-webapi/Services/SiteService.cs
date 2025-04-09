@@ -38,13 +38,13 @@ namespace Prime.Services
 
         public async Task<bool> SiteExistsAsync(int siteId)
         {
-            return await _context.Sites.AnyAsync(s => s.Id == siteId);
+            return await _context.Sites.AnyAsync(s => s.Id == siteId && s.DeletedDate == null);
         }
 
         public async Task<SiteStatusType> GetSiteCurrentStatusAsync(int siteId)
         {
             return await _context.Sites
-                .Where(s => s.Id == siteId)
+                .Where(s => s.Id == siteId && s.DeletedDate == null)
                 .Select(s => s.Status)
                 .DecompileAsync()
                 .SingleOrDefaultAsync();
@@ -54,7 +54,7 @@ namespace Prime.Services
         {
             var siteDto = await _context.Sites
                 .AsNoTracking()
-                .Where(site => site.Id == siteId)
+                .Where(site => site.Id == siteId && site.DeletedDate == null)
                 .Select(site => new
                 {
                     site.PEC,
@@ -70,14 +70,29 @@ namespace Prime.Services
             if (siteDto.healthAuthorityId.HasValue)
             {
                 var sites = await _context.Sites
-                    .Where(s => s.PEC == pec && s.CareSettingCode != (int)CareSettingType.HealthAuthority)
+                    .Where(s => s.PEC == pec && s.CareSettingCode != (int)CareSettingType.HealthAuthority && s.DeletedDate == null)
                     .AnyAsync();
+
+                // add exception for checking duplicate site ID
+                // only VCH and PHSA can share same site ID
+                var exceptionHAList = new List<int>();
+
+                if (siteDto.healthAuthorityId == (int)HealthAuthorityCode.VancouverCoastalHealth)
+                {
+                    exceptionHAList.Add((int)HealthAuthorityCode.ProvincialHealthServicesAuthority);
+                }
+                else if (siteDto.healthAuthorityId == (int)HealthAuthorityCode.ProvincialHealthServicesAuthority)
+                {
+                    exceptionHAList.Add((int)HealthAuthorityCode.VancouverCoastalHealth);
+                }
 
                 var otherHealthAuthoritySites = await _context.HealthAuthoritySites
                     .AsNoTracking()
                     .Where(
                         s => s.PEC == pec
                         && s.HealthAuthorityOrganizationId != siteDto.healthAuthorityId
+                        && !exceptionHAList.Contains(s.HealthAuthorityOrganizationId)
+                        && s.DeletedDate == null
                         )
                     .AnyAsync();
 
@@ -86,24 +101,22 @@ namespace Prime.Services
 
             return !await _context.Sites
                 .AsNoTracking()
-                .Where(s => s.PEC != "BC00000")
+                .Where(s => s.PEC != "BC00000" && s.ArchivedDate == null && s.DeletedDate == null)
                 .AnyAsync(site => site.PEC == pec);
         }
 
         public async Task<bool> PecExistsWithinHAAsync(int siteId, string pec)
         {
-            var site = await _context.HealthAuthoritySites.Where(s => s.Id == siteId).SingleAsync();
+            var site = await _context.HealthAuthoritySites.Where(s => s.Id == siteId && s.DeletedDate == null).SingleAsync();
 
             return await _context.Sites
                 .Where(s => (s as HealthAuthoritySite).HealthAuthorityOrganizationId == site.HealthAuthorityOrganizationId
-                    && s.Id != siteId && s.PEC == pec).AnyAsync();
+                    && s.Id != siteId && s.PEC == pec && s.DeletedDate == null).AnyAsync();
         }
 
         public async Task UpdateCompletedAsync(int siteId, bool completed)
         {
-            var site = await _context.Sites
-                .SingleOrDefaultAsync(s => s.Id == siteId);
-
+            var site = await GetSiteAsync(siteId);
             if (site == null)
             {
                 throw new ArgumentException($"Could not set Completed on Site {siteId}, it doesn't exist.");
@@ -116,9 +129,7 @@ namespace Prime.Services
 
         public async Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null)
         {
-            var site = await _context.Sites
-                .SingleOrDefaultAsync(s => s.Id == siteId);
-
+            var site = await GetSiteAsync(siteId);
             if (site == null)
             {
                 throw new ArgumentException($"Could not Update Adjudicator on Site {siteId}, it doesn't exist.");
@@ -132,18 +143,19 @@ namespace Prime.Services
 
         public async Task UpdatePecCode(int siteId, string pecCode)
         {
-            var site = await _context.Sites
-                .SingleOrDefaultAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
+
+            var eventMessage = $"Site ID changed from {site.PEC} to {pecCode}";
 
             site.PEC = pecCode;
 
             await _context.SaveChangesAsync();
-            await _businessEventService.CreateSiteEventAsync(site.Id, "Site ID (PEC Code) associated with site");
+            await _businessEventService.CreateSiteEventAsync(site.Id, eventMessage);
         }
 
         public async Task UpdateVendor(int siteId, int vendorCode, string rationale)
         {
-            var site = await _context.Sites.Where(s => s.Id == siteId).SingleOrDefaultAsync();
+            var site = await GetSiteAsync(siteId);
 
             if (site.CareSettingCode.Value == (int)CareSettingType.HealthAuthority)
             {
@@ -171,34 +183,21 @@ namespace Prime.Services
 
         public async Task DeleteSiteAsync(int siteId)
         {
-            var site = await _context.Sites
-                .Include(site => site.PhysicalAddress)
-                .SingleOrDefaultAsync(s => s.Id == siteId);
-
+            var site = await GetSiteAsync(siteId);
             if (site != null)
             {
                 await _businessEventService.CreateSiteEventAsync(siteId, "Site Deleted");
 
-                if (site.PhysicalAddress != null)
-                {
-                    _context.Addresses.Remove(site.PhysicalAddress);
-                }
+                site.DeletedDate = DateTime.UtcNow;
 
-                if (site is CommunitySite communitySite)
-                {
-                    await DeleteContactFromSite(communitySite.AdministratorPharmaNetId);
-                    await DeleteContactFromSite(communitySite.TechnicalSupportId);
-                    await DeleteContactFromSite(communitySite.PrivacyOfficerId);
-                }
-
-                _context.Sites.Remove(site);
+                _context.Update(site);
                 await _context.SaveChangesAsync();
             }
         }
 
         public async Task<Site> ApproveSite(int siteId)
         {
-            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
 
             site.AddStatus(SiteStatusType.Editable);
             site.ApprovedDate = DateTimeOffset.Now;
@@ -211,7 +210,7 @@ namespace Prime.Services
 
         public async Task<Site> DeclineSite(int siteId)
         {
-            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
             site.AddStatus(SiteStatusType.Locked);
             site.ApprovedDate = null;
             await _context.SaveChangesAsync();
@@ -223,7 +222,7 @@ namespace Prime.Services
 
         public async Task<Site> UnrejectSite(int siteId)
         {
-            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
             site.AddStatus(SiteStatusType.InReview);
             await _context.SaveChangesAsync();
 
@@ -234,7 +233,7 @@ namespace Prime.Services
 
         public async Task<Site> EnableEditingSite(int siteId)
         {
-            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
             site.ApprovedDate = null;
             site.AddStatus(SiteStatusType.Editable);
             await _context.SaveChangesAsync();
@@ -246,7 +245,7 @@ namespace Prime.Services
 
         public async Task<Site> SubmitRegistrationAsync(int siteId)
         {
-            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
             site.SubmittedDate = DateTimeOffset.Now;
             site.AddStatus(SiteStatusType.InReview);
             _context.Update(site);
@@ -290,14 +289,16 @@ namespace Prime.Services
             {
                 // For BCCNM (college code = 3), matching license number to practitioner ID.
                 matchesAnyCert.Or(ruc => ruc.CollegeCode == searchedCert.CollegeCode &&
-                    ((ruc.LicenseNumber == searchedCert.LicenceNumber && searchedCert.CollegeCode != 3) ||
-                    (ruc.PractitionerId == searchedCert.PractitionerId && searchedCert.CollegeCode == 3)));
+                    ruc.LicenseCode == searchedCert.LicenseCode &&
+                    ((ruc.LicenseNumber == searchedCert.LicenceNumber && searchedCert.CollegeCode != CollegeCode.BCCNM) ||
+                    (ruc.PractitionerId == searchedCert.PractitionerId && searchedCert.CollegeCode == CollegeCode.BCCNM)));
             }
 
             IEnumerable<RemoteAccessSearchDto> searchResults = await _context.RemoteUserCertifications
                 .AsNoTracking()
                 .AsExpandable()
-                .Where(ruc => ruc.RemoteUser.Site.ApprovedDate.HasValue)
+                .Where(ruc => ruc.RemoteUser.Site.ApprovedDate.HasValue &&
+                    ruc.RemoteUser.Site.DeletedDate == null && ruc.RemoteUser.Site.ArchivedDate == null)
                 .Where(matchesAnyCert)
                 .ProjectTo<RemoteAccessSearchDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -308,24 +309,6 @@ namespace Prime.Services
                 .Select(group => group.First());
 
             return _mapper.Map<IEnumerable<RemoteAccessSearchViewModel>>(searchResults);
-        }
-
-        private async Task DeleteContactFromSite(int? contactId)
-        {
-            if (contactId == null)
-            {
-                return;
-            }
-
-            var contact = await _context.Contacts
-                .Include(contact => contact.PhysicalAddress)
-                .SingleAsync(contact => contact.Id == contactId);
-
-            if (contact.PhysicalAddress != null)
-            {
-                _context.Addresses.Remove(contact.PhysicalAddress);
-            }
-            _context.Contacts.Remove(contact);
         }
 
         public async Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId)
@@ -403,8 +386,7 @@ namespace Prime.Services
 
         public async Task UpdateSiteFlag(int siteId, bool flagged)
         {
-            var site = await _context.Sites
-                .SingleAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
 
             site.Flagged = flagged;
             await _context.SaveChangesAsync();
@@ -412,8 +394,7 @@ namespace Prime.Services
 
         public async Task UpdateSiteIsNew(int siteId, bool isNew)
         {
-            var site = await _context.Sites
-                .SingleAsync(s => s.Id == siteId);
+            var site = await GetSiteAsync(siteId);
 
             site.IsNew = isNew;
             await _context.SaveChangesAsync();
@@ -511,7 +492,7 @@ namespace Prime.Services
                 .Include(e => e.Admin)
                 .Where(e => businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
                 .Where(e => e.SiteId == siteId
-                        || e.Organization.Sites.Any(s => s.Id == siteId))
+                        || e.Organization.Sites.Any(s => s.Id == siteId && s.DeletedDate == null))
                 .OrderByDescending(e => e.EventDate)
                 .ProjectTo<SiteBusinessEventViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -520,9 +501,89 @@ namespace Prime.Services
         public async Task<string> GetSitePecAsync(int siteId)
         {
             return await _context.Sites
-                .Where(s => s.Id == siteId)
+                .Where(s => s.Id == siteId && s.DeletedDate == null)
                 .Select(s => s.PEC)
                 .SingleOrDefaultAsync();
+        }
+
+        public async Task<List<Site>> GetSitesByPecAsync(string pec)
+        {
+            return await _context.Sites
+                .Where(s => s.PEC == pec && s.DeletedDate == null)
+                .Select(s => s).ToListAsync();
+        }
+
+        public async Task ArchiveSite(int siteId, string note)
+        {
+            var site = await GetSiteAsync(siteId);
+
+            site.AddStatus(SiteStatusType.Archived);
+            site.ArchivedDate = DateTime.Now;
+
+            _context.Update(site);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not archive the site.");
+            }
+
+            await _businessEventService.CreateSiteEventAsync(siteId, $"Site has been archived (Note: {note})");
+        }
+
+        public async Task RestoreArchivedSite(int siteId, string note)
+        {
+            var site = await GetSiteAsync(siteId);
+
+            var siteStatusList = await _context.SiteStatuses
+                .Where(ss => ss.SiteId == siteId)
+                .OrderByDescending(ss => ss.Id)
+                .ToArrayAsync();
+
+            var previousStatus = siteStatusList[1];
+            // restore site with the previous status/state
+            site.AddStatus(previousStatus.StatusType);
+
+            site.ArchivedDate = null;
+            _context.Update(site);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not restore the site.");
+            }
+
+            await _businessEventService.CreateSiteEventAsync(siteId, $"Site has been restored (Note: {note})");
+        }
+
+        public async Task<bool> CanBeRestored(int siteId)
+        {
+            //check if the site ID (PEC) is used by other site with editable status
+            var site = await _context.Sites.Where(s => s.Id == siteId && s.DeletedDate == null).Select(s => s).FirstAsync();
+
+            if (site.PEC == null)
+            {
+                return true;
+            }
+
+            var sites = await _context.Sites
+                    .Include(s => s.SiteStatuses)
+                .Where(s => s.PEC == site.PEC).Select(s => s)
+                .ToListAsync();
+
+            return sites.Count() == 0 || !sites.Where(s => s.Status == SiteStatusType.Editable || s.Status == SiteStatusType.InReview).Any();
+        }
+
+        public async Task<Site> GetSiteAsync(int siteId)
+        {
+            return await GetBaseSiteQuery()
+                .SingleOrDefaultAsync(s => s.Id == siteId);
+        }
+
+        private IQueryable<Site> GetBaseSiteQuery()
+        {
+            return _context.Sites
+                .Where(s => s.DeletedDate == null);
         }
     }
 }

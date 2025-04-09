@@ -82,6 +82,19 @@ import { SiteOverviewPageComponent } from './pages/health-authorities/site-overv
 import { SiteEventsPageComponent } from './pages/health-authorities/site-events-page/site-events-page.component';
 import { SiteNotesPageComponent } from './pages/health-authorities/site-notes-page/site-notes-page.component';
 import { SiteDocumentsPageComponent } from './pages/health-authorities/site-documents-page/site-documents-page.component';
+import { CommunitySiteSubmissionPageComponent } from './pages/community-site-submission-page/community-site-submission-page.component';
+import { CommunitySiteSubmissionListPageComponent } from './pages/community-site-submission-list-page/community-site-submission-list-page.component';
+import { HaSiteSubmissionListPageComponent } from './pages/health-authorities/ha-site-submission-list-page/ha-site-submission-list-page.component';
+import { HaSiteSubmissionPageComponent } from './pages/health-authorities/ha-site-submission-page/ha-site-submission-page.component';
+import { SiteSubmissionListComponent } from './shared/components/site-submission-list/site-submission-list.component';
+import { SiteSubmissionComponent } from './shared/components/site-submission/site-submission.component';
+import { AdminUsersContainerComponent } from './shared/components/admin-users-container/admin-users-container.component';
+import { AdminUsersPageComponent } from './pages/admin-users-page/admin-users-page.component';
+import { AdminUsersTableComponent } from './shared/components/admin-users-table/admin-users-table.component';
+import { OrganizationsComponent } from './pages/organizations/organizations.component';
+import { OrganizationTableComponent } from './shared/components/organization-table/organization-table.component';
+import { OrganizationContainerComponent } from './shared/components/organization-container/organization-container.component';
+import { OrganizationSitesComponent } from './pages/organization-sites/organization-sites.component';
 
 @NgModule({
   declarations: [
@@ -157,7 +170,20 @@ import { SiteDocumentsPageComponent } from './pages/health-authorities/site-docu
     SiteOverviewPageComponent,
     SiteEventsPageComponent,
     SiteNotesPageComponent,
-    SiteDocumentsPageComponent
+    SiteDocumentsPageComponent,
+    CommunitySiteSubmissionPageComponent,
+    CommunitySiteSubmissionListPageComponent,
+    HaSiteSubmissionListPageComponent,
+    HaSiteSubmissionPageComponent,
+    SiteSubmissionComponent,
+    SiteSubmissionListComponent,
+    AdminUsersContainerComponent,
+    AdminUsersPageComponent,
+    AdminUsersTableComponent,
+    OrganizationsComponent,
+    OrganizationTableComponent,
+    OrganizationContainerComponent,
+    OrganizationSitesComponent,
   ],
   imports: [
     AdjudicationRoutingModule,

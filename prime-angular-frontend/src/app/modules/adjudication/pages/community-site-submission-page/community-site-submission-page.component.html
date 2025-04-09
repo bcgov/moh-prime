@@ -1,0 +1,19 @@
+<app-site-registration-container [content]="content"
+                                 [hasActions]="hasActions">
+  <app-page-header>Site Information</app-page-header>
+</app-site-registration-container>
+
+<ng-template #content>
+  <app-site-submission [siteId]="siteId"
+                       [siteSubmissionId]="siteSubmissionId"></app-site-submission>
+</ng-template>
+
+<div class="row justify-content-between">
+  <div class="col pt-4">
+
+    <button mat-stroked-button
+            type="button"
+            (click)="routeRelativeTo(['../'])">Back</button>
+
+  </div>
+</div>

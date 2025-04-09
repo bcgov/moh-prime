@@ -21,6 +21,7 @@ import { SiteRegistrationNote } from '@shared/models/site-registration-note.mode
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '../services/adjudication-resource.service';
+import { SiteActionEnum, SiteArchiveRestoreComponent } from '@shared/components/dialogs/content/site-archive-restore/site-archive-restore.component';
 
 export abstract class AbstractSiteAdminPage {
   public abstract busy: Subscription;
@@ -198,7 +199,7 @@ export abstract class AbstractSiteAdminPage {
       message: 'Are you sure you want to reject this Site Registration?',
       actionText: 'Reject Site Registration',
       actionType: 'warn',
-      component: NoteComponent
+      component: NoteComponent,
     };
 
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
@@ -223,6 +224,54 @@ export abstract class AbstractSiteAdminPage {
         )
       )
       .subscribe(() => this.onRefresh());
+  }
+
+  public onArchive(siteId: number): void {
+    const data: DialogOptions = {
+      data: {
+        siteId: siteId,
+        action: SiteActionEnum.Archive,
+      }
+    };
+
+    this.busy = this.dialog.open(SiteArchiveRestoreComponent, { data })
+      .afterClosed()
+      .subscribe((result: { reload: boolean }) => (result?.reload) ?
+        this.getDataset(this.route.snapshot.queryParams) : noop);
+  }
+
+  public onRestore(siteId: number): void {
+
+    this.siteResource.canRestoreSite(siteId)
+      .subscribe((value: boolean) => {
+
+        if (value) {
+          const data: DialogOptions = {
+            data: {
+              siteId: siteId,
+              action: SiteActionEnum.Restore,
+            }
+          };
+
+          this.busy = this.dialog.open(SiteArchiveRestoreComponent, { data })
+            .afterClosed()
+            .subscribe((result: { reload: boolean }) => (result?.reload) ?
+              this.getDataset(this.route.snapshot.queryParams) : noop);
+
+        } else {
+          const data: DialogOptions = {
+            title: 'Restore Archived Site',
+            message: 'Site ID has been used in a different site. This Site can\'t be restored.',
+            cancelText: "Close",
+            actionType: 'warn',
+            actionHide: true
+          };
+
+          this.dialog.open(ConfirmDialogComponent, { data })
+            .afterClosed()
+            .subscribe();
+        }
+      });
   }
 
   public onEnableEditing(siteId: number): void {

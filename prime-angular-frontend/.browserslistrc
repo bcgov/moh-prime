@@ -10,7 +10,4 @@ last 2 versions
 Firefox ESR
 not dead
 not IE 9-11
-# Following to address errors like "BrowserslistError: Unknown version 92 of android"
-# with upgraded versions in package.json
-not android 92
-not op_mob 64
+

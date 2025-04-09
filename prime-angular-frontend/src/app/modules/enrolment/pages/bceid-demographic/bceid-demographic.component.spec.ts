@@ -1,7 +1,7 @@
 import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { KeycloakService } from 'keycloak-angular';
@@ -58,8 +58,8 @@ describe('BceidDemographicComponent', () => {
   }));
 
   beforeEach(inject(
-    [FormBuilder, FormUtilsService],
-    (fb: FormBuilder, formUtilsService: FormUtilsService) => {
+    [UntypedFormBuilder, FormUtilsService],
+    (fb: UntypedFormBuilder, formUtilsService: FormUtilsService) => {
       fixture = TestBed.createComponent(BceidDemographicComponent);
       component = fixture.componentInstance;
       const bceidDemographicFormState = new BceidDemographicFormState(fb, formUtilsService);

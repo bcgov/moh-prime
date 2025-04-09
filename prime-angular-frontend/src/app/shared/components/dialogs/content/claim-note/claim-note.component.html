@@ -14,7 +14,7 @@
                 rows="10"
                 formControlName="note"></textarea>
       <mat-hint [ngClass]="{ 'text-green': !!note.value }">
-        {{ (note.value) ? 'Your note will be saved upon submission.' : 'A note is required when assigning.' }}
+        {{ (note.value) ? 'Your note will be saved upon submission.' : '' }}
       </mat-hint>
     </mat-form-field>
   </form>

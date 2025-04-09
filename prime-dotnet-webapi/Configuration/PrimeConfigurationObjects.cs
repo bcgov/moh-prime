@@ -59,6 +59,7 @@ namespace Prime.Configuration.Internal
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public string TokenUrl { get; set; }
+        public int RetryWithinHours { get; set; }
     }
 
     /// <summary>
@@ -107,5 +108,10 @@ namespace Prime.Configuration.Internal
     public class SentryConfiguration
     {
         public string Dsn { get; set; }
+    }
+
+    public class ProviderEnrolmentTeamConfiguration
+    {
+        public string EmailAddress { get; set; }
     }
 }

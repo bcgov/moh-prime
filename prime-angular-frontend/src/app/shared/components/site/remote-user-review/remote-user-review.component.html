@@ -10,6 +10,11 @@
           {{ remoteUser | fullname | default }}
         </app-enrollee-property>
       </div>
+      <div class="mb-3">
+        <app-enrollee-property title="Email">
+          {{ remoteUser.email }}
+        </app-enrollee-property>
+      </div>
 
       <div class="mb-3">
         <strong>College Licence Information</strong>
@@ -18,6 +23,10 @@
       <div class="ml-4 mb-3">
         <app-enrollee-property title="College">
           {{ remoteUser.remoteUserCertification.collegeCode | configCode: 'colleges' | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Licence Class">
+          {{ remoteUser.remoteUserCertification.licenseCode | configCode: 'licenses' | default }}
         </app-enrollee-property>
 
         <app-enrollee-property *ngIf="remoteUser.remoteUserCertification.licenseNumber"

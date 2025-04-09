@@ -5,7 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { KeycloakService } from 'keycloak-angular';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
@@ -32,10 +32,11 @@ describe('UnlistedCollegeLicenceFormComponent', () => {
         NgxContextualHelpModule,
         HttpClientTestingModule,
         RouterTestingModule,
-        NgxMaskModule.forRoot(),
         NgxMaterialModule,
         ReactiveFormsModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        NgxMaskDirective,
+        NgxMaskPipe
       ],
       declarations: [UnlistedCollegeLicenceFormComponent],
       providers: [
@@ -52,7 +53,8 @@ describe('UnlistedCollegeLicenceFormComponent', () => {
           useClass: MockAuthService
         },
         RegulatoryFormState,
-        KeycloakService
+        KeycloakService,
+        provideNgxMask()
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })

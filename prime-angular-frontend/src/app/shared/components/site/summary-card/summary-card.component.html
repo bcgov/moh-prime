@@ -1,4 +1,4 @@
-<mat-card class="has-hover">
+<mat-card class="has-hover card">
   <mat-card-header>
     <div mat-card-avatar>
       <mat-icon color="primary">{{ icon }}</mat-icon>
@@ -9,10 +9,12 @@
                   [ngTemplateOutletContext]="menuOutletContext"></ng-container>
   </mat-card-header>
   <mat-card-content>
-    <ng-container *ngFor="let prop of properties"
-                  [ngTemplateOutlet]="property"
-                  [ngTemplateOutletContext]="{ property: prop }">
-    </ng-container>
+    <div class="row">
+      <ng-container *ngFor="let prop of properties"
+                    [ngTemplateOutlet]="property"
+                    [ngTemplateOutletContext]="{ property: prop }">
+      </ng-container>
+    </div>
 
     <ng-content></ng-content>
   </mat-card-content>
@@ -29,8 +31,14 @@
 
 <ng-template #property
              let-property="property">
-  <div *ngIf="property.value">
+  <div *ngIf="property.value"
+       [ngClass]="property._50 ? 'col-md-6' : 'col-12'">
+    <!-- if _50 is true, take 50% wide by using col-md-6, otherwise 100% wide -->
     <strong>{{ property.key }}</strong>
-    <span [ngClass]="{ 'text-danger font-weight-bold' : property.danger }">{{ property.value | default }}</span>
+    <span [ngClass]="
+       { 'text-danger font-weight-bold'
+       :
+       property.danger
+       }">{{ property.value | default }}</span>
   </div>
 </ng-template>

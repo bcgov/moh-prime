@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { EMPTY, of } from 'rxjs';
@@ -14,8 +14,8 @@ import { ViewportService } from '@core/services/viewport.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { NonNursingLicenseGrouping, NursingLicenseGrouping } from '@shared/enums/college-licence-grouping.enum';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -23,15 +23,17 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
   styleUrls: ['./college-certification-form.component.scss']
 })
 export class CollegeCertificationFormComponent implements OnInit {
-  @Input() public form: FormGroup;
+  @Input() public form: UntypedFormGroup;
   @Input() public index: number;
   @Input() public total: number;
   @Input() public selectedColleges: number[];
+  @Input() public selectedLicenses: number[];
   @Input() public collegeFilterPredicate: (collegeConfig: CollegeConfig) => boolean;
   @Input() public licenceFilterPredicate: (licenceConfig: LicenseConfig) => boolean;
   @Input() public condensed: boolean;
   @Input() public defaultOption: boolean;
   @Output() public remove: EventEmitter<number>;
+  @Output() public licenceCodeSelected: EventEmitter<number>;
   public isPrescribing: boolean;
   public colleges: CollegeConfig[];
   public licenses: LicenseConfig[];
@@ -60,6 +62,17 @@ export class CollegeCertificationFormComponent implements OnInit {
   public CollegeLicenceClassEnum = CollegeLicenceClassEnum;
   public PrescriberIdTypeEnum = PrescriberIdTypeEnum;
 
+  public licenseGrouping = [...NursingLicenseGrouping, ...NonNursingLicenseGrouping];
+  public nursingLicenseGrouping = NursingLicenseGrouping;
+  public nonNursingLicenseGrouping = NonNursingLicenseGrouping;
+
+  /**
+   * 21 - College of Health and Care Professionals of BC
+   * 22 - College of Complementary Health Professionals of BC
+   */
+  public allowDupAmalgamatedColleges: number[] =
+    [CollegeLicenceClassEnum.HealthCareProfessionals, CollegeLicenceClassEnum.ComplementaryHealthProfessionals];
+
   constructor(
     private configService: ConfigService,
     private viewportService: ViewportService,
@@ -67,6 +80,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     private enrolmentService: EnrolmentService
   ) {
     this.remove = new EventEmitter<number>();
+    this.licenceCodeSelected = new EventEmitter<number>();
     // copy the master list of license lookup from configService to local
     this.licenses = this.configService.licenses.map(x => Object.assign({}, x));
 
@@ -97,20 +111,20 @@ export class CollegeCertificationFormComponent implements OnInit {
     return this.viewportService.isMobile;
   }
 
-  public get collegeCode(): FormControl {
-    return this.form.get('collegeCode') as FormControl;
+  public get collegeCode(): UntypedFormControl {
+    return this.form.get('collegeCode') as UntypedFormControl;
   }
 
-  public get category(): FormControl {
-    return this.form.get('category') as FormControl;
+  public get category(): UntypedFormControl {
+    return this.form.get('category') as UntypedFormControl;
   }
 
-  public get licenseNumber(): FormControl {
-    return this.form.get('licenseNumber') as FormControl;
+  public get licenseNumber(): UntypedFormControl {
+    return this.form.get('licenseNumber') as UntypedFormControl;
   }
 
-  public get licenseCode(): FormControl {
-    return this.form.get('licenseCode') as FormControl;
+  public get licenseCode(): UntypedFormControl {
+    return this.form.get('licenseCode') as UntypedFormControl;
   }
 
   /**
@@ -118,20 +132,24 @@ export class CollegeCertificationFormComponent implements OnInit {
    * ID of a practitioner, but also known as prescriberId
    * when applied to nurses.
    */
-  public get practitionerId(): FormControl {
-    return this.form.get('practitionerId') as FormControl;
+  public get practitionerId(): UntypedFormControl {
+    return this.form.get('practitionerId') as UntypedFormControl;
   }
 
-  public get renewalDate(): FormControl {
-    return this.form.get('renewalDate') as FormControl;
+  public get renewalDate(): UntypedFormControl {
+    return this.form.get('renewalDate') as UntypedFormControl;
   }
 
-  public get practiceCode(): FormControl {
-    return this.form.get('practiceCode') as FormControl;
+  public get practiceCode(): UntypedFormControl {
+    return this.form.get('practiceCode') as UntypedFormControl;
   }
 
   public getGrouping(collegeCode: string): CollegeLicenseGroupingConfig[] {
-    let groupingCodes = this.colleges.find((c) => c.code === +collegeCode).collegeLicenses.map((l) => l.collegeLicenseGroupingCode);
+    const college = this.colleges.find((c) => c.code === +collegeCode);
+    const selectedGroupCodes = college.collegeLicenses
+      .filter((l) => this.selectedLicenses.includes(l.licenseCode) && l.licenseCode !== this.licenseCode.value).map((l) => l.collegeLicenseGroupingCode);
+    const groupingCodes = college.collegeLicenses.filter((l) => !selectedGroupCodes.includes(l.collegeLicenseGroupingCode))
+      .map((l) => l.collegeLicenseGroupingCode);
     return this.licenseGroups.filter((g) => groupingCodes.some((gc) => gc === g.code));
   }
 
@@ -146,7 +164,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public get filteredColleges(): CollegeConfig[] {
     return this.colleges.filter((college: CollegeConfig) =>
       // Allow the currently chosen value to persist
-      this.collegeCode.value === college.code || !this.selectedColleges?.includes(college.code)
+      this.collegeCode.value === college.code || !this.selectedColleges?.includes(college.code) || this.allowDupAmalgamatedColleges.includes(college.code)
     );
   }
 
@@ -166,13 +184,8 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.remove.emit(this.index);
   }
 
-  public shouldShowPractices(): boolean {
-    // Only display Advanced Practices for certain nursing licences
-    return CollegeCertification.hasPractice(this.collegeCode.value, this.licenseCode.value);
-  }
-
   public showLicenceClass(): boolean {
-    return this.filteredLicenses.some(l => l.name !== 'Not Displayed');
+    return this.filteredLicenses && this.filteredLicenses.some(l => l.name !== 'Not Displayed');
   }
 
   /**
@@ -217,9 +230,9 @@ export class CollegeCertificationFormComponent implements OnInit {
         .subscribe((licenseCode: number) => {
           if (licenseCode) {
             this.setPractitionerInformation(licenseCode);
+            this.licenceCodeSelected.emit(licenseCode);
           }
         });
-
       const initialNursingCategory = +this.category.value ?? null;
       this.category.valueChanges
         .pipe(
@@ -232,7 +245,11 @@ export class CollegeCertificationFormComponent implements OnInit {
           )
         )
         .subscribe((collegeLicenseGroupingCode: number) => {
-          this.setNursingCategoryValidators();
+          if (this.nursingLicenseGrouping.some(g => g === collegeLicenseGroupingCode)) {
+            this.setNursingCategoryValidators();
+          } else if (this.nonNursingLicenseGrouping.some(g => g === collegeLicenseGroupingCode)) {
+            this.setNonNursingLicenseGroupingValidators();
+          }
           this.loadLicensesByCategory(collegeLicenseGroupingCode);
         });
     } else {
@@ -253,13 +270,17 @@ export class CollegeCertificationFormComponent implements OnInit {
     }
   }
 
+
   private setCollegeCertification(collegeCode: number): void {
     if (!collegeCode) {
       this.removeValidations();
       return;
     }
 
-    if ((collegeCode === CollegeLicenceClassEnum.BCCNM || collegeCode === CollegeLicenceClassEnum.OralHealth) && !this.condensed) {
+    if ((collegeCode === CollegeLicenceClassEnum.BCCNM ||
+      collegeCode === CollegeLicenceClassEnum.OralHealth ||
+      collegeCode === CollegeLicenceClassEnum.HealthCareProfessionals ||
+      collegeCode === CollegeLicenceClassEnum.ComplementaryHealthProfessionals) && !this.condensed) {
       this.formUtilsService.setValidators(this.category, [Validators.required]);
       return;
     }
@@ -319,15 +340,24 @@ export class CollegeCertificationFormComponent implements OnInit {
         this.renewalDate.reset(null);
       }
       this.practiceCode.reset(null);
-    } else {
-      this.prescriberIdType = PrescriberIdTypeEnum.NA;
     }
+
+    this.prescriberIdType = PrescriberIdTypeEnum.NA;
     this.removeValidations();
   }
 
   private setNursingCategoryValidators(): void {
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
     this.formUtilsService.setValidators(this.practitionerId, [Validators.required, FormControlValidators.alphanumeric]);
+
+    if (!this.condensed) {
+      this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
+      this.formUtilsService.setValidators(this.renewalDate, [Validators.required, FormControlValidators.mustBeFutureDate]);
+    }
+  }
+
+  private setNonNursingLicenseGroupingValidators(): void {
+    this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
 
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);

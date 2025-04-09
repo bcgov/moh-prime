@@ -40,6 +40,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentStatusFilterEnum, PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
 import { DateOfBirthComponent } from '@shared/components/dialogs/content/date-of-birth/date-of-birth.component';
+import { ChangeTermsOfAccessComponent } from '@shared/components/dialogs/content/terms-of-access/terms-of-access.component';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -430,6 +431,21 @@ export class AdjudicationContainerComponent implements OnInit {
           })
         )
         .subscribe(() => this.action.emit());
+    }
+  }
+
+  public onChangeToA(enrolleeId: number) {
+    const data: DialogOptions = {
+      data: {
+        enrollee: this.enrollees[0]
+      }
+    };
+
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
+      this.busy = this.dialog.open(ChangeTermsOfAccessComponent, { data })
+        .afterClosed()
+        .subscribe((result: { reload: boolean }) => (result?.reload) ?
+          this.getDataset(this.route.snapshot.params.id, this.route.snapshot.queryParams) : noop);
     }
   }
 

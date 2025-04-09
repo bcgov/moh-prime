@@ -80,17 +80,21 @@ namespace Prime.Services
                     // Select PlrProviders that match a certification on both college AND license number
                     .Where(p => _context.CollegeForPlrRoleTypes.Where(rt2c => rt2c.ProviderRoleType == p.ProviderRoleType).Select(rt2c => rt2c.CollegeCode).Contains(cert.CollegeCode)
                         && p.CollegeId == cert.LicenseNumber)
-                    .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider, new { plrRoleTypes, plrStatusReasons })
                     .ToListAsync();
                 if (matches.Count > 0)
                 {
                     foreach (var match in matches)
                     {
+                        // Encountering problems with AutoMapper ProjectTo and existing data
+                        PlrViewModel plrViewModel = _mapper.Map<PlrProvider, PlrViewModel>(match);
+
+                        plrViewModel.ProviderRoleType = await plrRoleTypes.Where(rt => rt.Code == match.ProviderRoleType).Select(rt => rt.Name).SingleAsync();
+                        plrViewModel.StatusReasonCode = await plrStatusReasons.Where(sr => sr.Code == match.StatusReasonCode).Select(rt => rt.Name).SingleAsync();
                         // If a PlrViewModel has ExpertiseCodes, translate the codes to human-readable text
-                        // PlrProvider's Expertise array does not play well with automapper ProjectTo, map manually before return
-                        match.Expertise = string.Join(", ", _context.Set<PlrExpertise>().Where(e =>
-                            (match.ExpertiseCode != null && match.ExpertiseCode.Contains(e.Code))).Select(e => e.Name));
-                        plrProviders.Add(match);
+                        plrViewModel.Expertise = string.Join(", ", _context.Set<PlrExpertise>().Where(e =>
+                            plrViewModel.ExpertiseCode != null && plrViewModel.ExpertiseCode.Contains(e.Code)).Select(e => e.Name));
+
+                        plrProviders.Add(plrViewModel);
                     }
                 }
             }

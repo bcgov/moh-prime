@@ -30,7 +30,28 @@ namespace Prime.Configuration.Database
                     new College { Code = 17, Name = "College of Speech and Hearing Health Professionals of BC", Weight = 160                       },
                     new College { Code = 18, Name = "College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC", Weight = 170 },
                     new College { Code = 19, Name = "BC College of Social Workers", Weight = 180                                                   },
-                    new College { Code = 20, Name = "BC College of Oral Health Professionals", Weight = 40                                         }
+                    new College { Code = 20, Name = "BC College of Oral Health Professionals", Weight = 40                                         },
+
+                    /*
+                    College of Health and Care Professionals of BC is replacing the following colleges:
+                    College of Dietitians of BC
+                    College of Occupational Therapists of BC
+                    College of Optometrists of BC
+                    College of Opticians of BC
+                    College of Physical Therapists of BC
+                    College of Psychologists of BC
+                    College of Speech and Hearing Health Professionals of BC
+                    */
+                    new College { Code = 21, Name = "College of Health and Care Professionals of BC", Weight = 70                                   },
+
+                    /*
+                    College of Complementary Health Professionals of British Columbia is replacing the following colleges:
+                    College of Chiropractors of BC
+                    College of Massage Therapists of BC
+                    College of Naturopathic Physicians of BC
+                    College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC
+                    */
+                    new College { Code = 22, Name = "College of Complementary Health Professionals of BC", Weight = 50                              }
                 };
             }
         }

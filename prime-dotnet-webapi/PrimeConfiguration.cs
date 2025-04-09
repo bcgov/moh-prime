@@ -51,6 +51,8 @@ namespace Prime
 
         public SentryConfiguration Sentry { get; set; }
 
+        public ProviderEnrolmentTeamConfiguration ProviderEnrolmentTeam { get; set; }
+
         private static LogEventLevel ParseLogLevel()
         {
             if (int.TryParse(Environment.GetEnvironmentVariable("LogLevel"), out var logLevel))

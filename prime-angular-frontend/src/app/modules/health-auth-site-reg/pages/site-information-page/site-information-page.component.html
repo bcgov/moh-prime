@@ -53,10 +53,11 @@
             <mat-form-field class="w-100">
               <mat-label></mat-label>
               <input matInput
-                     [formControl]="formState.pec" />
+                     [formControl]="formState.pec"
+                     appToUppercase />
               <mat-error *ngIf="formState.pec.hasError('required')">Required</mat-error>
               <mat-error *ngIf="formState.pec.hasError('assignable')">
-                Site ID/PEC Code exists in another Health Authority
+                Site ID/PEC Code exists in another organization
               </mat-error>
             </mat-form-field>
           </div>

@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Address } from '@lib/models/address.model';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { Site } from '@registration/shared/models/site.model';
+import { RemoteAccessTypeEnum } from '@shared/enums/remote-access-type.enum';
 
 export class MockCommunitySiteService {
   // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
@@ -84,7 +85,11 @@ export class MockCommunitySiteService {
       activeBeforeRegistration: false,
       isNew: false,
       individualDeviceProviders: [],
-      deviceProviderId: null
+      deviceProviderId: null,
+      currentSubmission: null,
+      siteSubmissions: [],
+      missingBusinessLicence: false,
+      remoteAccessTypeCode: RemoteAccessTypeEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
     });
   }
 

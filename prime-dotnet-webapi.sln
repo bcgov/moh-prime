@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimeTests", "prime-dotnet-webapi-tests\PrimeTests.csproj", "{EFE286F1-F4F2-4709-946A-381B99A06C87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimeTests", "prime-dotnet-webapi-tests\PrimeTests.csproj", "{EFE286F1-F4F2-4709-946A-381B99A06C87}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prime", "prime-dotnet-webapi\prime.csproj", "{B8F5319C-0B10-44EC-A714-3B5B3A291A89}"
 EndProject

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
-import { FormGroup, ValidationErrors } from '@angular/forms';
+import { UntypedFormGroup, ValidationErrors } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable, of, noop, EMPTY } from 'rxjs';
@@ -31,7 +31,9 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
+import { CertSearch } from '@enrolment/shared/models/cert-search.model';
+import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-search.model';
+import { SiteResource } from '@core/resources/site-resource.service';
 
 
 @Component({
@@ -53,6 +55,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public hasOboToRuAgreementTypeChange: boolean;
+  public hasMatchingRemoteUser: boolean;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -67,7 +70,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     private toastService: ToastService,
     private formUtilsService: FormUtilsService,
     private busyService: BusyService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    protected siteResource: SiteResource,
   ) {
     super(route, router);
 
@@ -85,7 +89,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
   public onSubmit(): void {
     if (!this.enrolmentFormStateService.isValidSubmission || this.isMissingPharmaNetId(this.enrolment.certifications)) {
-      this.enrolmentFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
+      this.enrolmentFormStateService.forms.forEach((form: UntypedFormGroup) => this.formUtilsService.logFormErrors(form));
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
       return;
     }
@@ -109,12 +113,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       });
   }
 
-  public canRequestRemoteAccess(): boolean {
-    const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
-    const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
-
-    return this.enrolmentService
-      .canRequestRemoteAccess(certifications, careSettings);
+  public showRequestRemoteAccessButton(): boolean {
+    return this.hasMatchingRemoteUser && this.currentStatus === this.EnrolmentStatus.EDITABLE;
   }
 
   public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}): void {
@@ -143,6 +143,10 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     return (this.enrolmentErrors) ? Object.values(this.enrolmentErrors).some(value => value) : false;
   }
 
+  public requireLicenceUpdate(): boolean {
+    return (this.enrolmentErrors) ? this.enrolmentErrors.requiresLicenceUpdate : false;
+  }
+
   public ngOnInit(): void {
     this.isMatchingPaperEnrollee = this.enrolmentService.isMatchingPaperEnrollee;
     this.authService.getUser$()
@@ -163,7 +167,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
             // to review, but maintain a subset of immutable properties
             const { selfDeclarationDocuments,
               selfDeclarationCompletedDate,
-              requireRedoSelfDeclaration } = enrolment;
+              requireRedoSelfDeclaration,
+              appliedDate } = enrolment;
 
             const stateSelfDeclarationCompletedDate = this.enrolmentFormStateService.selfDeclarationCompletedDate;
 
@@ -174,6 +179,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
                 stateSelfDeclarationCompletedDate : selfDeclarationCompletedDate,
               requireRedoSelfDeclaration: !stateSelfDeclarationCompletedDate && requireRedoSelfDeclaration,
               expiryDate: this.enrolmentService.enrolment.expiryDate,
+              appliedDate,
             };
             enrolment.enrollee.gpid = this.enrolmentService.enrolment.enrollee.gpid;
           }
@@ -182,7 +188,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           // regardless of whether they visited the demographic view to make adjustments
           const form = this.enrolmentFormStateService.bcscDemographicFormState.form;
           if (!verifiedAddress) {
-            this.formUtilsService.resetAndClearValidators(form.get('verifiedAddress') as FormGroup);
+            this.formUtilsService.resetAndClearValidators(form.get('verifiedAddress') as UntypedFormGroup);
             verifiedAddress = new Address();
           }
 
@@ -200,6 +206,34 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           this.enrolmentErrors = this.getEnrolmentErrors(enrolment);
 
           this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
+
+          const { careSettings } = enrolment;
+
+          if (careSettings.some(cs => cs.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE)) {
+
+            const certSearch: CertSearch[] = enrolment.certifications
+              .map(c => ({
+                collegeCode: c.collegeCode,
+                licenseCode: c.licenseCode,
+                licenceNumber: c.licenseNumber,
+                practitionerId: c.practitionerId
+              }));
+
+            if (certSearch.length) {
+              this.siteResource.getSitesByRemoteUserInfo(certSearch)
+                .subscribe(
+                  (remoteAccessSearch: RemoteAccessSearch[]) => {
+                    if (remoteAccessSearch.length) {
+                      this.hasMatchingRemoteUser = true
+                    } else {
+                      this.hasMatchingRemoteUser = this.hasMatchingRemoteUser || false
+                    }
+                  });
+            } else {
+              this.hasMatchingRemoteUser = false;
+            }
+          }
+
         }),
         exhaustMap(_ =>
           (this.isMatchingPaperEnrollee)
@@ -214,6 +248,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
         ),
         exhaustMap(() => this.enrolmentResource.getCurrentEnrolleeAbsence(this.enrolment.id))
       ).subscribe((enrolleeAbsence: EnrolleeAbsence) => this.enrolleeAbsence = enrolleeAbsence);
+
   }
 
   /**

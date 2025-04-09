@@ -15,10 +15,14 @@ namespace Prime.Controllers
     public class JobsController : PrimeControllerBase
     {
         private readonly IReportingService _reportingService;
+        private readonly IOrganizationService _organizationService;
+
         public JobsController(
-            IReportingService reportingService)
+            IReportingService reportingService,
+            IOrganizationService organizationService)
         {
             _reportingService = reportingService;
+            _organizationService = organizationService;
         }
 
         // POST: api/jobs/populate/practitioner
@@ -53,7 +57,6 @@ namespace Prime.Controllers
             return Ok(result);
         }
 
-
         // POST: api/jobs/populate/transaction-log-temp
         /// <summary>
         /// copy transaction log to temp table for reporting.
@@ -75,6 +78,21 @@ namespace Prime.Controllers
             }
 
             var result = await _reportingService.PopulateTransactionLogTempAsync(numberOfDays);
+            return Ok(result);
+        }
+
+        // POST: api/jobs/populate/organization-registration-id
+        /// <summary>
+        /// execute job to update organization registration ID where the registration ID is missing, then return the number of organizations updated.
+        /// </summary>
+        [HttpPost("populate/organization-registration-id", Name = nameof(UpdateMissingRegistrationIds))]
+        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdateMissingRegistrationIds()
+        {
+            var result = await _organizationService.UpdateMissingRegistrationIds();
             return Ok(result);
         }
     }

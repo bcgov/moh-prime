@@ -25,29 +25,60 @@
     </app-summary-card>
 
     <hr class="divider">
+    <div class="row">
+      <div class="col-8">
 
-    <div class="add-site">
-      <button mat-button
-              type="button"
-              color="primary"
-              (click)="addSite()">
-        <mat-icon>add_business</mat-icon>
-        Add Site
-      </button>
+        <form [formGroup]="form"
+              novalidate>
+          <mat-form-field class="filter">
+            <mat-label>Vendor</mat-label>
+            <mat-select formControlName="vendorCode">
+              <mat-option value="all">All</mat-option>
+              <mat-option *ngFor="let vendor of vendors"
+                          [value]="vendor.code">
+                {{ vendor.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="filter">
+            <mat-label>Care Type</mat-label>
+            <mat-select formControlName="careTypeCode">
+              <mat-option value="all">All</mat-option>
+              <mat-option *ngFor="let careType of careTypes"
+                          [value]="careType">
+                {{ careType }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </form>
+      </div>
+      <div class="col-4">
+        <div class="add-site">
+          <button mat-button
+                  type="button"
+                  color="primary"
+                  (click)="addSite()">
+            <mat-icon>add_business</mat-icon>
+            Add Site
+          </button>
+        </div>
+      </div>
     </div>
 
   </ng-container>
 
-  <ng-container *ngFor="let healthAuthoritySite of healthAuthoritySites$ | async; trackBy: trackBySiteId">
+  <ng-container *ngFor="let healthAuthoritySite of healthAuthoritySites ; trackBy: trackBySiteId">
 
     <app-summary-card icon="store"
                       title="Site Information"
                       [menu]="healthAuthoritySiteMenu"
                       [menuOutletContext]="{ healthAuthoritySite: healthAuthoritySite, healthAuthorityId: healthAuthorityId }"
                       [properties]="[
-                            { key: 'Site Name', value: healthAuthoritySite?.siteName },
-                            { key: 'Site ID', value: healthAuthoritySite?.pec },
-                            { key: 'Vendor', value: healthAuthoritySite?.healthAuthorityVendor?.vendorCode | configCode : 'vendors' },
+                            { key: 'Site Name', value: healthAuthoritySite?.siteName, _50: true },
+                            { key: 'Site ID', value: healthAuthoritySite?.pec, _50: true },
+                            { key: 'Care Type', value: healthAuthoritySite?.healthAuthorityCareType?.careType, _50: true },
+                            { key: 'Vendor', value: healthAuthoritySite?.healthAuthorityVendor?.vendorCode | configCode : 'vendors', _50: true },
                             { key: healthAuthoritySite?.submittedDate ? 'Last Submitted by' : 'Last Updated by', value: getLastUpdatedUser(healthAuthoritySite?.authorizedUserName, healthAuthoritySite?.updatedTimeStamp)},
                       ]">
       <ng-container *ngIf="healthAuthoritySite.isIncomplete()"
@@ -121,6 +152,8 @@
   <ng-template #healthAuthorityMenu
                let-healthAuthority="healthAuthority">
     <button mat-icon-button
+            class="dot-button"
+            [disableRipple]="true"
             [matMenuTriggerFor]="rootMenu">
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -139,6 +172,8 @@
                let-healthAuthoritySite="healthAuthoritySite"
                let-healthAuthorityId="healthAuthorityId">
     <button mat-icon-button
+            class="dot-button"
+            [disableRipple]="true"
             [matMenuTriggerFor]="menu">
       <mat-icon>more_vert</mat-icon>
     </button>

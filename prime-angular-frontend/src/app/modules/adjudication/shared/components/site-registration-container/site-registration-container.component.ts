@@ -202,6 +202,7 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
         signingAuthority,
         signingAuthorityName: `${signingAuthority.firstName ? signingAuthority.firstName : ''} ${signingAuthority.lastName}`,
         organizationName: name,
+        duplicatePecSiteCount: 0,
         name,
         organizationDoingBusinessAs: doingBusinessAs,
         hasClaim,
@@ -226,7 +227,8 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
       status,
       businessLicence,
       flagged,
-      isNew
+      isNew,
+      missingBusinessLicence
     } = site;
 
     return {
@@ -244,7 +246,8 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
       status,
       businessLicence,
       flagged,
-      isNew
+      isNew,
+      missingBusinessLicence
     };
   }
 }

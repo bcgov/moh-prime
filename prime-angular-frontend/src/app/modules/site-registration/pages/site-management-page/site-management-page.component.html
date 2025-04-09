@@ -3,7 +3,7 @@
     <!-- Work around for ngProjectAs not passing class reference to alert when applied to ng-content -->
     <ng-container #alertTitle
                   class="alert-title">
-      One or more sites requires renewal.
+      One or more sites requires updating.
     </ng-container>
     <ng-container #alertContent
                   class="alert-content">
@@ -157,6 +157,7 @@
         <span class="text-red">{{ props.text }}</span>
       </div>
       <button mat-flat-button
+              *ngIf="props.label"
               color="primary"
               class="ml-auto"
               (click)="props.route()">{{ props.label }}</button>
@@ -174,25 +175,29 @@
 
   <ng-template #organizationMenu
                let-organization="organization">
-    <button mat-icon-button
-            [matMenuTriggerFor]="rootMenu"
-            [disabled]="isPendingTransfer()">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-
-    <mat-menu #rootMenu="matMenu"
-              aria-label="Organization actions menu">
-      <button mat-menu-item
+    <div class="mat-header-button-group">
+      <button mat-button
+              class="title_button"
+              type="button"
+              color="primary"
+              title="View/Update Organization Information"
+              [disabled]="isPendingTransfer()"
               (click)="viewOrganization(organization)">
-        <span>View/Update Organization</span>
+        <mat-icon>description</mat-icon>
+        <span class="icon-text">Organization Info</span>
       </button>
 
-      <button mat-menu-item
+      <button mat-button
+              class="title_button"
+              type="button"
+              color="primary"
+              title="Download Organization Agreement"
               [matMenuTriggerFor]="subMenu"
-              [disabled]="!organizationAgreements?.length">
-        <span>Download Organization Agreement</span>
+              [disabled]="!organizationAgreements?.length || isPendingTransfer()">
+        <mat-icon>cloud_download</mat-icon>
+        <span class="icon-text">Organization Agreements</span>
       </button>
-    </mat-menu>
+    </div>
 
     <mat-menu #subMenu="matMenu">
       <button *ngFor="let agreement of organizationAgreements"
@@ -201,31 +206,34 @@
         <span>{{ AgreementType[agreement.agreementType] | case: 'snake' : 'space' | capitalize: true }}</span>
       </button>
     </mat-menu>
-
   </ng-template>
 
   <ng-template #siteMenu
                let-site="site"
                let-organizationId="organizationId">
-    <button mat-icon-button
-            [matMenuTriggerFor]="menu"
-            [disabled]="isPendingTransfer()">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-
-    <mat-menu #menu="matMenu"
-              aria-label="Site actions menu">
-      <button mat-menu-item
+    <div class="mat-header-button-group">
+      <button mat-button
+              class="title_button"
+              type="button"
+              color="primary"
+              title="View/Update Site Information"
+              [disabled]="isPendingTransfer()"
               (click)="viewSite(organizationId, site)">
-        <span>View/Update Site Information</span>
+        <mat-icon>description</mat-icon>
+        <span class="icon-text">Site Info</span>
       </button>
-      <button *ngIf="site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE"
-              mat-menu-item
-              [disabled]="!site.completed || site.status === SiteStatusType.IN_REVIEW"
+      <button mat-button
+              class="title_button"
+              type="button"
+              color="primary"
+              title="View/Update Remote Practitioners"
+              *ngIf="site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE"
+              [disabled]="isPendingTransfer() || !site.completed || site.status === SiteStatusType.IN_REVIEW || site.status === SiteStatusType.LOCKED"
               (click)="viewSiteRemoteUsers(organizationId, site)">
-        <span>View/Update Remote Practitioners</span>
+        <mat-icon>folder_shared</mat-icon>
+        <span class="icon-text">Remote Practitioners</span>
       </button>
-    </mat-menu>
+    </div>
   </ng-template>
 
 </app-page>

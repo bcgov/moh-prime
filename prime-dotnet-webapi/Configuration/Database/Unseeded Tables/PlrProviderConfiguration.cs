@@ -23,14 +23,14 @@ namespace Prime.Configuration.Database
             // and https://docs.microsoft.com/en-us/ef/core/modeling/value-comparers?tabs=ef5#overriding-the-default-comparer
             builder.Property(e => e.Credentials)
                 .HasConversion(
-                    val => JsonSerializer.Serialize(val, null),
-                    val => JsonSerializer.Deserialize<List<string>>(val, null))
+                    val => JsonSerializer.Serialize(val, (JsonSerializerOptions)null),
+                    val => JsonSerializer.Deserialize<List<string>>(val, (JsonSerializerOptions)null))
                 .Metadata.SetValueComparer(
                     strCollectionComparer);
             builder.Property(e => e.Expertise)
                 .HasConversion(
-                    val => JsonSerializer.Serialize(val, null),
-                    val => JsonSerializer.Deserialize<List<string>>(val, null))
+                    val => JsonSerializer.Serialize(val, (JsonSerializerOptions)null),
+                    val => JsonSerializer.Deserialize<List<string>>(val, (JsonSerializerOptions)null))
                 .Metadata.SetValueComparer(
                     strCollectionComparer);
 

@@ -32,7 +32,8 @@ import { SearchHAFormComponent } from '../search-ha-form/search-ha-form.componen
 export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage implements OnInit {
   public busy: Subscription;
   @Input() public refresh: Observable<boolean>;
-  @ViewChild('searchHaForm') searchHaForm: SearchHAFormComponent;
+  @ViewChild('searchHaSiteForm') searchHaSiteForm: SearchHAFormComponent;
+  @ViewChild('searchComSiteForm') searchComSiteForm: SearchHAFormComponent;
 
   public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
   public healthAuthoritySites: HealthAuthoritySiteAdminList[];
@@ -129,9 +130,14 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     this.routeUtils.removeQueryParams({ careSetting: this.tabIndexToCareSettingMap[tabChangeEvent.index], page: null });
   }
 
-  public onTextSearch(textSearch: string | null): void {
+  public onTextSearchHaSite(textSearch: string | null): void {
     this.routeUtils.updateQueryParams({ textSearch, page: null });
-    this.searchHaForm.textSearch.setValue(textSearch);
+    this.searchHaSiteForm.textSearch.setValue(textSearch);
+  }
+
+  public onTextSearchComSite(textSearch: string | null): void {
+    this.routeUtils.updateQueryParams({ textSearch, page: null });
+    this.searchComSiteForm.textSearch.setValue(textSearch);
   }
 
   public ngOnInit(): void {
@@ -166,10 +172,6 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
       const { textSearch, careType, statusId, vendorId, assignToMe } = queryParams;
       this.healthAuthResource.getHealthAuthoritySitesByQuery({ textSearch, careType, statusId, vendorId, assignToMe })
         .subscribe((sites: HealthAuthoritySiteAdminList[]) => {
-          sites.forEach((s: HealthAuthoritySiteAdminList) => {
-            s.duplicatePecSiteCount = sites.filter((innerSite: HealthAuthoritySiteAdminList) => innerSite.id !== s.id
-              && innerSite.pec && innerSite.pec === s.pec).length;
-          });
           this.healthAuthoritySites = sites;
         })
     } else {

@@ -12,6 +12,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public string SiteName { get; set; }
         public string PEC { get; set; }
         public HealthAuthorityVendorViewModel HealthAuthorityVendor { get; set; }
+        public HealthAuthorityCareTypeViewModel HealthAuthorityCareType { get; set; }
         public bool Completed { get; set; }
         public DateTimeOffset? SubmittedDate { get; set; }
         public DateTimeOffset? ApprovedDate { get; set; }

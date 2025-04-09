@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, ValidationErrors } from '@angular/forms';
+import { UntypedFormGroup, ValidationErrors } from '@angular/forms';
 
 import { EMPTY, Observable, of, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
@@ -43,6 +43,7 @@ export class OverviewPageComponent implements OnInit {
   public routeUtils: RouteUtils;
   public siteErrors: ValidationErrors;
   public isBusinessLicenceUpdated: boolean;
+  public uploadedFilename: string;
   public isCompleted: boolean;
 
   public SiteRoutes = SiteRoutes;
@@ -89,7 +90,7 @@ export class OverviewPageComponent implements OnInit {
     }
 
     if (!this.siteFormStateService.isValidSubmission) {
-      this.siteFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
+      this.siteFormStateService.forms.forEach((form: UntypedFormGroup) => this.formUtilsService.logFormErrors(form));
       this.toastService.openErrorToast('Your site has an error that needs to be corrected before you will be able to submit');
       return;
     }
@@ -205,6 +206,8 @@ export class OverviewPageComponent implements OnInit {
 
     this.isBusinessLicenceUpdated = this.siteFormStateService.businessLicenceFormState.isBusinessLicenceUpdated
       || (this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value && !this.site.businessLicence?.businessLicenceDocument);
+
+    this.uploadedFilename = this.siteFormStateService.businessLicenceFormState.filename.value;
 
     this.siteErrors = this.getSiteErrors(site);
   }

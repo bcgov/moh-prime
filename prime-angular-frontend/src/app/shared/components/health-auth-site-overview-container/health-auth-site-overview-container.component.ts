@@ -16,14 +16,6 @@ export class HealthAuthSiteOverviewContainerComponent implements OnInit {
   public isIncomplete: boolean;
   public isApproved: boolean;
 
-  public get pharmanetAdministratorName(): string {
-    return (this.healthAuthoritySite as HealthAuthoritySiteAdmin)?.pharmanetAdministratorName;
-  }
-
-  public get technicalSupportName(): string {
-    return (this.healthAuthoritySite as HealthAuthoritySiteAdmin)?.technicalSupportName;
-  }
-
   constructor() {
     this.pharmanetAdministrators = [];
     this.technicalSupports = [];
@@ -33,5 +25,4 @@ export class HealthAuthSiteOverviewContainerComponent implements OnInit {
     this.isIncomplete = this.healthAuthoritySite?.isIncomplete();
     this.isApproved = this.healthAuthoritySite?.isApproved();
   }
-
 }

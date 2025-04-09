@@ -33,7 +33,7 @@ namespace Prime.Services
         {
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
-                .Where(s => s.Id == siteId)
+                .Where(s => s.Id == siteId && s.DeletedDate == null)
                 .Select(s => new PermissionsRecord { Username = s.AuthorizedUser.Party.Username })
                 .SingleOrDefaultAsync();
         }
@@ -41,21 +41,21 @@ namespace Prime.Services
         public async Task<bool> AllowToSubmitSite(int siteId, string username)
         {
             var healthAuthorityCode = (int)await _context.AuthorizedUsers
-            .Where(au => au.Party.Username == username)
-            .Select(au => au.HealthAuthorityCode)
-            .SingleOrDefaultAsync();
+                .Where(au => au.Party.Username == username)
+                .Select(au => au.HealthAuthorityCode)
+                .SingleOrDefaultAsync();
 
             return await _context.HealthAuthoritySites
-            .AsNoTracking()
-            .Where(s => s.Id == siteId)
-            .Where(s => s.HealthAuthorityOrganization.Id == healthAuthorityCode).AnyAsync();
+                .AsNoTracking()
+                .Where(s => s.Id == siteId && s.DeletedDate == null)
+                .Where(s => s.HealthAuthorityOrganization.Id == healthAuthorityCode).AnyAsync();
         }
 
         public async Task<bool> SiteExistsAsync(int healthAuthorityId, int siteId)
         {
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
-                .AnyAsync(s => s.Id == siteId && s.HealthAuthorityOrganizationId == healthAuthorityId);
+                .AnyAsync(s => s.Id == siteId && s.HealthAuthorityOrganizationId == healthAuthorityId && s.DeletedDate == null);
         }
 
         public async Task<bool> SiteIsEditableAsync(int healthAuthorityId, int siteId)
@@ -65,7 +65,8 @@ namespace Prime.Services
                 .DecompileAsync()
                 .AnyAsync(s => s.Id == siteId
                    && s.HealthAuthorityOrganizationId == healthAuthorityId
-                   && s.Status == SiteStatusType.Editable);
+                   && s.Status == SiteStatusType.Editable
+                   && s.DeletedDate == null);
         }
 
         public async Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, HealthAuthoritySiteCreateModel createModel)
@@ -90,13 +91,23 @@ namespace Prime.Services
 
         public async Task<IEnumerable<HealthAuthoritySiteAdminListViewModel>> GetSitesAsync(int? healthAuthorityId = null, int? healthAuthoritySiteId = null)
         {
-            return await _context.HealthAuthoritySites
+            var siteList = await _context.HealthAuthoritySites
                 .AsNoTracking()
+                .Where(has => has.DeletedDate == null)
                 .If(healthAuthorityId.HasValue, q => q.Where(site => site.HealthAuthorityOrganizationId == healthAuthorityId))
                 .If(healthAuthoritySiteId.HasValue, q => q.Where(site => site.Id == healthAuthoritySiteId))
-                .ProjectTo<HealthAuthoritySiteAdminListViewModel>(_mapper.ConfigurationProvider)
+                .Include(has => has.SiteSubmissions)
+                .Include(has => has.HealthAuthorityVendor)
+                    .ThenInclude(hav => hav.Vendor)
+                .Include(has => has.HealthAuthorityOrganization)
+                .Include(has => has.HealthAuthorityCareType)
+                .Include(has => has.AuthorizedUser)
+                    .ThenInclude(au => au.Party)
+                .Include(has => has.Adjudicator)
+                .Include(has => has.SiteStatuses)
                 .DecompileAsync()
                 .ToListAsync();
+            return _mapper.Map<List<HealthAuthoritySiteAdminListViewModel>>(siteList);
         }
 
         public async Task<IEnumerable<HealthAuthoritySiteAdminListViewModel>> GetSitesAsync(HealthAuthoritySiteSearchOptions searchOptions)
@@ -120,6 +131,7 @@ namespace Prime.Services
 
             var query = _context.HealthAuthoritySites
                 .AsNoTracking()
+                .Where(s => s.DeletedDate == null)
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch),
                     q => q.Search(
                         s => s.SiteName,
@@ -149,22 +161,49 @@ namespace Prime.Services
                 .DecompileAsync()
                 .OrderBy(s => s.SiteName);
 
-            return await query.ToListAsync();
+            var matchingHASites = await query.ToListAsync();
+            // check for duplicate site id
+            foreach (var site in matchingHASites)
+            {
+                site.DuplicatePecSiteCount = await GetDuplicatePecCount(site.PEC, site.HealthAuthorityOrganizationId, site.Id);
+            }
+
+            return matchingHASites;
         }
 
-        public async Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
+        private async Task<int> GetDuplicatePecCount(string pec, int originalHASiteId, int originalSiteId)
+        {
+            return await _context.HealthAuthoritySites
+                    .Where(s => s.PEC != null && s.PEC == pec && s.HealthAuthorityOrganizationId == originalHASiteId && originalSiteId != s.Id && s.DeletedDate == null)
+                    .CountAsync();
+        }
+
+        public async Task<HealthAuthoritySiteViewModel> GetSiteViewModelAsync(int siteId)
         {
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
+                .Where(s => s.DeletedDate == null)
                 .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .SingleOrDefaultAsync(has => has.Id == siteId);
+        }
+
+        public async Task<HealthAuthoritySite> GetHealthAuthoritySiteAsync(int siteId)
+        {
+            return await _context.HealthAuthoritySites
+                .AsNoTracking()
+                .Include(s => s.HealthAuthorityOrganization)
+                .Include(s => s.HealthAuthorityVendor)
+                    .ThenInclude(v => v.Vendor)
+                .Where(s => s.Id == siteId && s.DeletedDate == null)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<HealthAuthoritySiteAdminViewModel> GetAdminSiteAsync(int siteId)
         {
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
+                .Where(s => s.DeletedDate == null)
                 .ProjectTo<HealthAuthoritySiteAdminViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .SingleOrDefaultAsync(has => has.Id == siteId);
@@ -175,7 +214,7 @@ namespace Prime.Services
             var site = await _context.HealthAuthoritySites
                 .Include(site => site.PhysicalAddress)
                 .Include(site => site.BusinessHours)
-                .SingleOrDefaultAsync(has => has.Id == siteId);
+                .SingleOrDefaultAsync(has => has.Id == siteId && has.DeletedDate == null);
 
             site.AuthorizedUserId = authorizedUserId;
 
@@ -201,8 +240,7 @@ namespace Prime.Services
 
         public async Task SetSiteCompletedAsync(int siteId)
         {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
+            var site = await GetSiteAsync(siteId);
 
             site.Completed = true;
 
@@ -211,8 +249,7 @@ namespace Prime.Services
 
         public async Task SiteSubmissionAsync(int siteId)
         {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
+            var site = await GetSiteAsync(siteId);
 
             site.SubmittedDate = DateTimeOffset.Now;
             site.AddStatus(SiteStatusType.InReview);
@@ -234,6 +271,18 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             return sites.Select(s => s.Id).ToList();
+        }
+
+        public async Task<Site> GetSiteAsync(int siteId)
+        {
+            return await GetBaseSiteQuery()
+                .SingleOrDefaultAsync(s => s.Id == siteId);
+        }
+
+        private IQueryable<Site> GetBaseSiteQuery()
+        {
+            return _context.HealthAuthoritySites
+                .Where(s => s.DeletedDate == null);
         }
     }
 }

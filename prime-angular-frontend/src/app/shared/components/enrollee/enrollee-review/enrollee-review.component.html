@@ -264,8 +264,9 @@
     </app-enrollee-property>
 
     <app-enrollee-property [hasError]="enrolmentErrors?.requiresLicenceUpdate"
-                           errorMessage="Licence class requires update."
+                           errorMessage="College licence information requires update."
                            title="Licence Class">
+      {{ getLicenceClassCategory(certification) }}
       {{ certification.licenseCode | configCode: 'licenses' | default }}
     </app-enrollee-property>
 
@@ -309,7 +310,7 @@
   </button>
 </app-page-section>
 
-<app-page-section *ngIf="isPaperEnrollee(enrollee)">
+<app-page-section *ngIf="enrolment?.unlistedCertifications?.length">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Other College Licence Information</ng-container>
@@ -334,6 +335,11 @@
       <app-enrollee-property title="College Name"
                              [makeBold]="true">
         {{ unlistedCertification.collegeName | default }}
+      </app-enrollee-property>
+
+      <app-enrollee-property title="Licence Class"
+                             [makeBold]="true">
+        {{ unlistedCertification.licenceClass | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="College Licence"

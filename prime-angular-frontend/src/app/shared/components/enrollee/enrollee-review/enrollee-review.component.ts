@@ -16,6 +16,7 @@ import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-loc
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
 import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
+import { ConfigService } from '@config/config.service';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -38,7 +39,8 @@ export class EnrolleeReviewComponent {
 
   constructor(
     private authService: AuthService,
-    private enrolmentService: EnrolmentService
+    private enrolmentService: EnrolmentService,
+    private configService: ConfigService,
   ) {
     this.showEditRedirect = false;
     this.admin = false;
@@ -116,6 +118,16 @@ export class EnrolleeReviewComponent {
       : null;
 
     return (healthAuthorities?.length) ? healthAuthorities : [];
+  }
+
+  public getLicenceClassCategory(certification: CollegeCertification): string {
+    let grouping = this.configService.licenses.find(l => l.code === certification.licenseCode).collegeLicenses.map(cl => cl.collegeLicenseGroupingCode);
+
+    if (grouping && grouping.length > 0 && grouping[0]) {
+      return `${this.configService.collegeLicenseGroupings.find(g => g.code === grouping[0]).name} - `;
+    } else {
+      return '';
+    }
   }
 
   public get isRequestingRemoteAccess(): boolean {

@@ -93,7 +93,7 @@
         [class.editable]="row.status === SiteStatusType.EDITABLE && !row.approvedDate"
         [class.under-review]="row.status === SiteStatusType.IN_REVIEW"
         [class.approved]="row.status === SiteStatusType.EDITABLE && !!row.approvedDate"
-        [class.declined]="row.status === SiteStatusType.LOCKED">
+        [class.declined]="row.status === SiteStatusType.LOCKED || row.status === SiteStatusType.ARCHIVED">
       <div class="d-flex align-items-center">
         <span class="mr-1">{{ SiteStatusType[row.status] | case : 'snake' : 'space' | capitalize : true | default: 'Editable' }}</span>
         <mat-icon *ngIf="row?.flagged"
@@ -109,7 +109,17 @@
         *matHeaderCellDef
         scope="col"> Site ID </th>
     <td mat-cell
-        *matCellDef="let row;"> {{ row.pec | default }} </td>
+        *matCellDef="let row;">
+      <div class="d-flex align-items-center">
+        {{ row.pec | default }}
+        <mat-icon *ngIf="row?.duplicatePecSiteCount && row?.duplicatePecSiteCount > 0"
+                  [matTooltip]="getDuplicatePecText(row)"
+                  class="pec-alert"
+                  (click)="onPecFilter(row.pec)"
+                  matTooltipPosition="after">info
+        </mat-icon>
+      </div>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="remoteUsers">
@@ -132,8 +142,7 @@
         *matHeaderCellDef
         scope="col"> Missing Business Licence </th>
     <td mat-cell
-        *matCellDef="let row;"> {{ ((row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
-      ? row.missingBusinessLicence : null) | yesNo | default: 'N/A' }} </td>
+        *matCellDef="let row;"> {{ displayMissingBusinessLicence(row) }} </td>
   </ng-container>
 
   <ng-container matColumnDef="actions">
@@ -209,6 +218,11 @@
             (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.id])">
       <mat-icon>all_inclusive</mat-icon>
       <span>Overview</span>
+    </button>
+    <button mat-menu-item
+            (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.id, AdjudicationRoutes.SITE_SUBMISSION_LIST])">
+      <mat-icon>history</mat-icon>
+      <span>Site Submissions</span>
     </button>
     <button mat-menu-item
             (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.id, AdjudicationRoutes.EVENT_LOG])">

@@ -6,6 +6,7 @@ import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
 @Component({
   selector: 'app-collection-notice',
@@ -19,7 +20,8 @@ export class CollectionNoticeComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private enrolmentService: EnrolmentService
+    private enrolmentService: EnrolmentService,
+    private enrolmentResource: EnrolmentResource,
   ) {
     this.isFull = true;
   }
@@ -32,7 +34,13 @@ export class CollectionNoticeComponent implements OnInit {
         this.router.navigate([EnrolmentRoutes.SUBMISSION_CONFIRMATION], { relativeTo: this.route.parent });
         break;
       case EnrolmentStatusEnum.REQUIRES_TOA:
-        this.router.navigate([EnrolmentRoutes.PENDING_ACCESS_TERM], { relativeTo: this.route.parent });
+        if (this.enrolmentService.enrolment?.requireRedoSelfDeclaration) {
+          this.enrolmentResource.returnToEditing(this.enrolmentService.enrolment.id).subscribe(() =>
+            this.router.navigate([EnrolmentRoutes.OVERVIEW], { relativeTo: this.route.parent })
+          );
+        } else {
+          this.router.navigate([EnrolmentRoutes.PENDING_ACCESS_TERM], { relativeTo: this.route.parent });
+        }
         break;
       default:
         this.router.navigate([EnrolmentRoutes.OVERVIEW], { relativeTo: this.route.parent });

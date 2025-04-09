@@ -1,0 +1,82 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  annotations:
+    description: Template for job to refresh materialized view
+    tags: cronjob
+  name: refresh-materialized-view-template
+objects:
+  - apiVersion: batch/v1
+    kind: CronJob
+    metadata:
+      name: '${CRON_NAME}'
+    spec:
+      concurrencyPolicy: Forbid
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              containers:
+                - command:
+                  - bash
+                  - '-c'
+                  - >-
+                    #!/usr/bin/env bash
+
+                    function refreshMaterializedView() {
+                      echo -e "Refresh siteLastLog materialized view"
+                      psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -c 'REFRESH MATERIALIZED VIEW siteLastLog;'
+                    }
+
+                    function main() {
+                      echo -e "-------- STARTING CRON at $(date +"%B %d, %Y %T") UTC --------\n"
+
+                      echo -e "Connecting to database host:  _${PGHOST}_"
+                      echo
+
+                      refreshMaterializedView
+                    }
+
+                    main
+                  env:
+                    - name: PGHOST
+                      value: ${SVC_NAME}-patroni
+                    - name: PGDATABASE
+                      valueFrom:
+                        secretKeyRef:
+                          name: ${SVC_NAME}-patroni-secret
+                          key: app-db-name
+                    # If working with model changes during PR, specify PR database, but don't merge hard-coding into `develop`
+                    # - name: PGDATABASE
+                    #   value: prime-pr-1912
+                    - name: PGUSER
+                      valueFrom:
+                        secretKeyRef:
+                          name: ${SVC_NAME}-patroni-secret
+                          key: app-db-username
+                    - name: PGPASSWORD
+                      valueFrom:
+                        secretKeyRef:
+                          name: ${SVC_NAME}-patroni-secret
+                          key: app-db-password
+                  image: >-
+                    image-registry.apps.silver.devops.gov.bc.ca/9c33a9-tools/python-curl-psql:latest
+                  limits:
+                    cpu: 500m
+                    memory: 2Gi
+                  name: '${CRON_NAME}'
+                  requests:
+                    cpu: 100m
+                    memory: 512Mi
+                  resources: null
+              restartPolicy: Never
+      schedule: '${CRON_SCHEDULE}'
+parameters:
+  - description: 'Cron-like schedule expression'
+    name: CRON_SCHEDULE
+    value: '0 11 * * *'
+  - name: CRON_NAME
+    value: refresh-materialized-view-cronjob
+  - description: 'Environment name'
+    name: SVC_NAME
+    value: dev

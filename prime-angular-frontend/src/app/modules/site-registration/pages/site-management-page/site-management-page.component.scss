@@ -1,6 +1,33 @@
 @import 'palette';
 @import 'bootstrap/bootstrap-imports';
 
+/* Styles for screen widths lower than 1100px */
+.icon-text {
+  display: none;
+  padding-left: 5px;
+}
+
+.title_button {
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  min-width: 40px;
+}
+
+/* Styles for screens wider than 1100px */
+@media (min-width: 1100px) {
+  .icon-text {
+    display: block;
+    float: right;
+  }
+
+  .title_button {
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 64px;
+  }
+}
+
 .alert-message {
   max-width: 695px;
   margin-bottom: 1.75rem;
@@ -27,15 +54,15 @@ div.add-org {
   margin-bottom: 1rem;
 }
 
-.mat-card {
-  .mat-card-title {
+.mat-mdc-card {
+  .mat-mdc-card-title {
     color: theme-palette(blue);
     font-size: 1rem;
     margin-left: -1rem;
     padding-top: .2rem;
   }
 
-  .mat-card-content {
+  .mat-mdc-card-content {
     div {
       color: theme-palette(blue, light);
       padding-bottom: .4rem;
@@ -54,6 +81,12 @@ div.add-org {
   .mat-card-actions {
     text-align: right;
   }
+}
+
+.mat-header-button-group {
+  right: 5px;
+  top: 10px;
+  position: absolute;
 }
 
 .text-red {

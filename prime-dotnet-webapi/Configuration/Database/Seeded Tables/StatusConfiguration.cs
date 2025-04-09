@@ -15,7 +15,8 @@ namespace Prime.Configuration.Database
                     new Status { Code = 3, Name = "Requires TOA" },
                     new Status { Code = 4, Name = "Locked"       },
                     new Status { Code = 5, Name = "Declined"     },
-                    new Status { Code = 6, Name = "Disabled"     }
+                    new Status { Code = 6, Name = "Disabled"     },
+                    new Status { Code = 8, Name = "Archived"     },
                 };
             }
         }

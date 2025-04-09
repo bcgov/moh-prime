@@ -1,0 +1,56 @@
+export enum CollegeLicenceGroupingEnum {
+  LPN = 1,
+  RN = 2,
+  RPN = 3,
+  NP = 4,
+  MW = 5,
+  CertifiedDentalAssistant = 6,
+  DentalHygienist = 7,
+  DentalTechnician = 8,
+  DentalTherapist = 9,
+  Dentist = 10,
+  Denturist = 11,
+  HealthProfessionOfDietetics = 12,
+  HealthProfessionOfOccupationalTherapy = 13,
+  HealthProfessionOfOpticianry = 14,
+  HealthProfessionOfOptomety = 15,
+  HealthProfessionOfPhysicalTherapy = 16,
+  HealthProfessionOfPsychology = 17,
+  HealthProfessionOfAudiology = 18,
+  HealthProfessionOfHearingInstrumentDispensing = 19,
+  HealthProfessionOfSpeechLanguagePathology = 20,
+  HealthProfessionOfChiropractic = 21,
+  HealthProfessionOfMassageTherapy = 22,
+  HealthProfessionOfNaturopathicMedicine = 23,
+  HealthProfessionOfTraditionalChineseMedicineAcupuncture = 24
+}
+
+export const NursingLicenseGrouping: number[] = [
+  CollegeLicenceGroupingEnum.LPN,
+  CollegeLicenceGroupingEnum.RN,
+  CollegeLicenceGroupingEnum.RPN,
+  CollegeLicenceGroupingEnum.NP,
+  CollegeLicenceGroupingEnum.MW,
+]
+
+export const NonNursingLicenseGrouping: number[] = [
+  CollegeLicenceGroupingEnum.CertifiedDentalAssistant,
+  CollegeLicenceGroupingEnum.DentalHygienist,
+  CollegeLicenceGroupingEnum.DentalTechnician,
+  CollegeLicenceGroupingEnum.DentalTherapist,
+  CollegeLicenceGroupingEnum.Dentist,
+  CollegeLicenceGroupingEnum.Denturist,
+  CollegeLicenceGroupingEnum.HealthProfessionOfDietetics,
+  CollegeLicenceGroupingEnum.HealthProfessionOfOccupationalTherapy,
+  CollegeLicenceGroupingEnum.HealthProfessionOfOpticianry,
+  CollegeLicenceGroupingEnum.HealthProfessionOfOptomety,
+  CollegeLicenceGroupingEnum.HealthProfessionOfPhysicalTherapy,
+  CollegeLicenceGroupingEnum.HealthProfessionOfPsychology,
+  CollegeLicenceGroupingEnum.HealthProfessionOfAudiology,
+  CollegeLicenceGroupingEnum.HealthProfessionOfHearingInstrumentDispensing,
+  CollegeLicenceGroupingEnum.HealthProfessionOfSpeechLanguagePathology,
+  CollegeLicenceGroupingEnum.HealthProfessionOfChiropractic,
+  CollegeLicenceGroupingEnum.HealthProfessionOfMassageTherapy,
+  CollegeLicenceGroupingEnum.HealthProfessionOfNaturopathicMedicine,
+  CollegeLicenceGroupingEnum.HealthProfessionOfTraditionalChineseMedicineAcupuncture
+]

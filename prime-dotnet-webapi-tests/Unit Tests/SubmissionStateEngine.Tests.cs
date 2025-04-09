@@ -28,7 +28,8 @@ namespace PrimeTests.UnitTests
             var expectedAllowed = new[]
             {
                 EnrolleeStatusAction.LockProfile,
-                EnrolleeStatusAction.DeclineProfile
+                EnrolleeStatusAction.DeclineProfile,
+                EnrolleeStatusAction.ChangeToa,
             }.Contains(action);
 
             // Act

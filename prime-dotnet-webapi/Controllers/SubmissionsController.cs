@@ -20,15 +20,18 @@ namespace Prime.Controllers
         private readonly ISubmissionService _submissionService;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IBusinessEventService _businessEventService;
+        private readonly IEnrolleeAgreementService _enrolleeAgreementService;
 
         public SubmissionsController(
             ISubmissionService submissionService,
             IEnrolleeService enrolleeService,
-            IBusinessEventService businessEventService)
+            IBusinessEventService businessEventService,
+            IEnrolleeAgreementService enrolleeAgreementService)
         {
             _submissionService = submissionService;
             _enrolleeService = enrolleeService;
             _businessEventService = businessEventService;
+            _enrolleeAgreementService = enrolleeAgreementService;
         }
 
         // POST: api/enrollees/5/submissions
@@ -237,6 +240,34 @@ namespace Prime.Controllers
             return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.UnlockedProfile);
         }
 
+        // POST: api/enrollees/5/status-actions/return-to-editing
+        /// <summary>
+        /// Return the Enrollee back into an editable state if certain conditions apply
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/status-actions/return-to-editing", Name = nameof(ReturnToEditing))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> ReturnToEditing(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            if (enrollee.CurrentStatus.IsType(StatusType.RequiresToa) && enrollee.RequireRedoSelfDeclaration)
+            {
+                // Remove obsolete TOA
+                await _enrolleeAgreementService.DeleteObsoleteEnrolleeAgreementAsync(enrolleeId);
+
+                return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.EnableEditing);
+            }
+            else
+            {
+                return BadRequest("Enrollee not in valid state to execute request.");
+            }
+        }
+
         // POST: api/enrollees/rerun-rules
         /// <summary>
         /// Re-runs the automatic adjudication rules for all applicable Enrollees.
@@ -329,6 +360,45 @@ namespace Prime.Controllers
             var updatedEnrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
             return Ok(updatedEnrollee);
+        }
+
+        // PUT: api/enrollees/5/status-actions/change-toa
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="data"></param>
+        [HttpPut("{enrolleeId}/status-actions/change-toa", Name = nameof(ChangeToaAgreementType))]
+        [Authorize(Roles = Roles.ManageEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> ChangeToaAgreementType(int enrolleeId, ChangeToaUpdateViewModel data)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+
+            var assignedToaType = (data.AgreementType == 0) ? null : (AgreementType?)data.AgreementType;
+
+            if (assignedToaType.HasValue && !Enum.IsDefined(typeof(AgreementType), data.AgreementType))
+            {
+                return NotFound($"Agreement type not found with id {data.AgreementType}.");
+            }
+
+            if (assignedToaType.HasValue && !data.AgreementType.IsEnrolleeAgreement())
+            {
+                return BadRequest("Agreement type must be a TOA.");
+            }
+
+            if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable))
+            {
+                return BadRequest("Assigned agreement type may be updated only when the current status is Editable.");
+            }
+
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.ChangeToa, data);
         }
 
         // PUT: api/enrollees/5/always-manual

@@ -55,6 +55,13 @@ import { SiteOverviewPageComponent } from './pages/health-authorities/site-overv
 import { SiteEventsPageComponent } from './pages/health-authorities/site-events-page/site-events-page.component';
 import { SiteNotesPageComponent } from './pages/health-authorities/site-notes-page/site-notes-page.component';
 import { SiteDocumentsPageComponent } from './pages/health-authorities/site-documents-page/site-documents-page.component';
+import { HaSiteSubmissionListPageComponent } from './pages/health-authorities/ha-site-submission-list-page/ha-site-submission-list-page.component';
+import { HaSiteSubmissionPageComponent } from './pages/health-authorities/ha-site-submission-page/ha-site-submission-page.component';
+import { CommunitySiteSubmissionPageComponent } from './pages/community-site-submission-page/community-site-submission-page.component';
+import { CommunitySiteSubmissionListPageComponent } from './pages/community-site-submission-list-page/community-site-submission-list-page.component';
+import { AdminUsersPageComponent } from './pages/admin-users-page/admin-users-page.component';
+import { OrganizationsComponent } from './pages/organizations/organizations.component';
+import { OrganizationSitesComponent } from './pages/organization-sites/organization-sites.component';
 
 const routes: Routes = [
   {
@@ -310,7 +317,22 @@ const routes: Routes = [
                 path: AdjudicationRoutes.EVENT_LOG,
                 component: SiteEventsComponent,
                 data: { title: 'Event Log' }
-              }
+              },
+              {
+                path: AdjudicationRoutes.SITE_SUBMISSION_LIST,
+                children: [
+                  {
+                    path: '',
+                    component: CommunitySiteSubmissionListPageComponent,
+                    data: { title: 'Site Submission List' }
+                  },
+                  {
+                    path: `:ssid/${AdjudicationRoutes.SITE_SUBMISSION}`,
+                    component: CommunitySiteSubmissionPageComponent,
+                    data: { title: 'Site Submission' }
+                  }
+                ]
+              },
             ]
           },
           {
@@ -374,6 +396,7 @@ const routes: Routes = [
                   }
                 ]
               },
+
               {
                 // Site registrations is synonymous with site with regards
                 // to Health Authorities
@@ -398,7 +421,22 @@ const routes: Routes = [
                     path: AdjudicationRoutes.DOCUMENT_UPLOAD,
                     component: SiteDocumentsPageComponent,
                     data: { title: 'Adjudicator Documents' }
-                  }
+                  },
+                  {
+                    path: AdjudicationRoutes.SITE_SUBMISSION_LIST,
+                    children: [
+                      {
+                        path: '',
+                        component: HaSiteSubmissionListPageComponent,
+                        data: { title: 'Site Submission List' }
+                      },
+                      {
+                        path: `:ssid/${AdjudicationRoutes.SITE_SUBMISSION}`,
+                        component: HaSiteSubmissionPageComponent,
+                        data: { title: 'Site Submission' }
+                      }
+                    ]
+                  },
                 ]
               },
               {
@@ -409,6 +447,31 @@ const routes: Routes = [
             ]
           }
         ]
+      },
+      {
+        path: AdjudicationRoutes.ORGANIZATIONS,
+        children: [
+          {
+            path: '',
+            component: OrganizationsComponent,
+            data: { title: 'Organizations' }
+          },
+          {
+            path: ':id',
+            children: [
+              {
+                path: AdjudicationRoutes.ORGANIZATION_SITES,
+                component: OrganizationSitesComponent,
+                data: { title: 'Organization Sites' }
+              },
+            ]
+          }
+        ]
+      },
+      {
+        path: AdjudicationRoutes.ADMIN_USERS,
+        component: AdminUsersPageComponent,
+        data: { title: 'Administrator User List' }
       },
       {
         path: AdjudicationRoutes.METABASE_REPORTS,

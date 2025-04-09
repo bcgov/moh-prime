@@ -1,19 +1,22 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Serilog;
 
 using Prime.Configuration.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.HttpClients.Mail;
-using Newtonsoft.Json.Serialization;
 
 namespace Prime.Controllers
 {
@@ -66,7 +69,8 @@ namespace Prime.Controllers
             }
 
             //set health authority
-            if (certificate.HealthAuthories.Count() > 0)
+            if (certificate.CareSettings.Any(cs => cs.Code == (int)CareSettingType.HealthAuthority) &&
+                certificate.HealthAuthories != null && certificate.HealthAuthories.Count() > 0)
             {
                 var careSetting = certificate.CareSettings.First(cs => cs.Code == (int)CareSettingType.HealthAuthority);
                 careSetting.Name += $" - {string.Join(", ", certificate.HealthAuthories.Select(ha => ha.Name))}";
@@ -135,9 +139,10 @@ namespace Prime.Controllers
                 return BadRequest("The enrollee for this User Id is not in an editable state.");
             }
 
-            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolleeId);
+            EnrolmentCertificateAccessToken createdToken = null;
             foreach (var emailPair in providedEmails)
             {
+                createdToken = await _certificateService.CreateCertificateAccessTokenWithCareSettingAsync(enrolleeId, emailPair.CareSettingCode, emailPair.HealthAuthorityCode);
                 await _emailService.SendProvisionerLinkAsync(emailPair.Emails, createdToken, emailPair.CareSettingCode);
                 await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", emailPair.Emails)}");
             }
@@ -172,15 +177,25 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<GpidDetailLookup>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetGpidDetail()
         {
+            string accessToken = await HttpContext.GetTokenAsync("access_token");
+            JwtPayload jwtPayload = new JwtSecurityToken(accessToken).Payload;
+            string authorizedParty = jwtPayload.Azp;
+            var logId = await _vendorAPILogService.CreateLogAsync(authorizedParty, Request.Path.Value, null);
+
             var result = new GpidDetailLookup();
             var enrollee = await _enrolleeService.GetActiveGpidDetailAsync(User.GetPrimeUsername());
             if (enrollee != null)
             {
-                return Ok(_mapper.Map(enrollee, result));
+                _mapper.Map(enrollee, result);
+                await _vendorAPILogService.UpdateLogAsync(logId, SerializeObjectForLog(result));
+                var enrolleeStub = await _enrolleeService.GetEnrolleeStubAsync(User.GetPrimeUsername());
+                await _businessEventService.CreateEnrolleeEventAsync(enrolleeStub.Id,
+                    $"\"First-Time Provisioning API\" (aka GetGpidDetail) returned data to calling entity {TranslateAuthorizedParty(authorizedParty)}");
+                return Ok(result);
             }
+
             return Ok(enrollee);
         }
-
 
         // POST: api/provisioner-access/gpid-lookup
         /// <summary>
@@ -271,6 +286,26 @@ namespace Prime.Controllers
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
             return JsonConvert.SerializeObject(obj, serializerSettings);
+        }
+
+        /// <summary>
+        /// Translate given <paramref name="authorizedParty"/> to something PRIME administrator would understand
+        /// </summary>
+        /// <param name="authorizedParty"></param>
+        /// <returns></returns>
+        private string TranslateAuthorizedParty(string authorizedParty)
+        {
+            switch (authorizedParty)
+            {
+                case "PRIME-POS-GPID":
+                    return "Medinet";
+                case "PRIME-APPLICATION-LOCAL":
+                    return "PRIME (testing in `dev`)";
+                case "PRIME-APPLICATION-TEST":
+                    return "PRIME (testing in `test`)";
+                default:
+                    return "N/A";
+            }
         }
     }
 }

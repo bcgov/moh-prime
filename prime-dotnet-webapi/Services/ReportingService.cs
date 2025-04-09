@@ -54,10 +54,10 @@ namespace Prime.Services
                     .Where(l => l.TxDateTime >= startDate && l.TxDateTime <= endDate && l.CollegePrefix != null && l.PractitionerId != null)
                     .Where(l => !enrolleeLicences.Where(e =>
                         // for college BCCNM (code 3), compare PharmaNet ID of the college license to Practitioner Id of the log
-                        e.CollegeCode == 3 && e.PractitionerId == l.PractitionerId && e.Prefix == l.CollegePrefix).Any())
+                        e.CollegeCode == CollegeCode.BCCNM && e.PractitionerId == l.PractitionerId && e.Prefix == l.CollegePrefix).Any())
                     .Where(l => !enrolleeLicences.Where(e =>
                         //for other college, use License Number
-                        e.CollegeCode != 3 && e.LicenseNumber == l.PractitionerId && e.Prefix == l.CollegePrefix).Any())
+                        e.CollegeCode != CollegeCode.BCCNM && e.LicenseNumber == l.PractitionerId && e.Prefix == l.CollegePrefix).Any())
                     .Where(l => !_context.Practitioner.Where(p => p.PracRefId == l.CollegePrefix && p.CollegeId == l.PractitionerId).Any())
                     .Select(l => new
                     {
@@ -156,7 +156,7 @@ namespace Prime.Services
                 copySql.Append($"and \"TransactionId\" > '{maxTransactionId}' ");
             }
 
-            _context.Database.SetCommandTimeout(180);
+            _context.Database.SetCommandTimeout(300);
             int result = await _context.Database.ExecuteSqlRawAsync(copySql.ToString());
 
             return result;

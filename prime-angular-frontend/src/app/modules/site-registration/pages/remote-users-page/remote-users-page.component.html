@@ -25,6 +25,16 @@
 
   </form>
 
+  <button mat-button
+          *ngIf="formState.hasRemoteUsers.value"
+          type="button"
+          color="primary"
+          class="mb-3"
+          (click)="onAdd()">
+    <mat-icon class="add-icon">add</mat-icon>
+    Add Remote Practitioners
+  </button>
+
   <div class="mb-4"
        *ngIf="formState.form.dirty && !lastRemoteUserRemoved">
     <app-alert type="success"
@@ -70,6 +80,7 @@
       <ng-template #remoteUserMenu
                    let-remoteUser="remoteUser">
         <button type="button"
+                class="close-button"
                 mat-icon-button
                 color="primary"
                 matTooltip="Remove Remote User"
@@ -99,15 +110,7 @@
     </ng-container>
   </app-alert>
 
-  <button mat-button
-          *ngIf="formState.hasRemoteUsers.value"
-          type="button"
-          color="primary"
-          class="mb-3"
-          (click)="onAdd()">
-    <mat-icon class="add-icon">add</mat-icon>
-    Add Remote Practitioners
-  </button>
+
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
                    [primaryActionLabel]="(hasBeenSubmitted) ? 'Continue' : 'Save and Continue'"

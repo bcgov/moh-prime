@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Flurl;
+using Microsoft.Extensions.Logging;
 
 using Prime.Extensions;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
@@ -13,11 +14,14 @@ namespace Prime.HttpClients
     public class DocumentManagerClient : IDocumentManagerClient
     {
         private readonly HttpClient _client;
+        private readonly ILogger _logger;
 
-        public DocumentManagerClient(HttpClient httpClient)
+
+        public DocumentManagerClient(HttpClient httpClient, ILogger<DocumentManagerClient> logger)
         {
             // Credentials and Base Url are set in Startup.cs
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _logger = logger;
         }
 
         public async Task<HttpResponseMessage> InitializeUploadAsync(string filename, string fileSize)
@@ -58,6 +62,16 @@ namespace Prime.HttpClients
                 filename,
                 folder = destinationFolder
             });
+
+            try
+            {
+                _client.Timeout = TimeSpan.FromMinutes(5);
+            }
+            catch (InvalidOperationException e)
+            {
+                // Likely "System.InvalidOperationException: This instance has already started one or more requests. Properties can only be modified before sending the first request."
+                _logger.LogDebug(e.Message);
+            }
 
             var response = await _client.PostAsync(url, new StreamContent(document));
             var documentResponse = await response.Content.ReadAsAsync<DocumentGuidResponse>();

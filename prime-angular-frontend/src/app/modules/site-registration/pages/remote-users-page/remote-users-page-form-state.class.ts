@@ -1,4 +1,4 @@
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -6,23 +6,23 @@ import { RemoteUser } from '@lib/models/remote-user.model';
 
 export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
   public constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get remoteUsers(): FormArray {
-    return this.formInstance.get('remoteUsers') as FormArray;
+  public get remoteUsers(): UntypedFormArray {
+    return this.formInstance.get('remoteUsers') as UntypedFormArray;
   }
 
-  public get hasRemoteUsers(): FormControl {
-    return this.formInstance.get('hasRemoteUsers') as FormControl;
+  public get hasRemoteUsers(): UntypedFormControl {
+    return this.formInstance.get('hasRemoteUsers') as UntypedFormControl;
   }
 
-  public get remoteUserCertification(): FormGroup {
-    return this.formInstance.get('remoteUserCertification') as FormGroup;
+  public get remoteUserCertification(): UntypedFormGroup {
+    return this.formInstance.get('remoteUserCertification') as UntypedFormGroup;
   }
 
   public getRemoteUsers(): RemoteUser[] {
@@ -44,7 +44,7 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
       return;
     }
 
-    const remoteUsersFormArray = this.formInstance.get('remoteUsers') as FormArray;
+    const remoteUsersFormArray = this.formInstance.get('remoteUsers') as UntypedFormArray;
     remoteUsersFormArray.clear(); // Clear out existing indices
 
     if (remoteUsers?.length) {
@@ -79,7 +79,7 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
    * Create an empty remote user form group, and patch
    * it with a remote user if provided.
    */
-  public createEmptyRemoteUserFormAndPatch(remoteUser: RemoteUser = null): FormGroup {
+  public createEmptyRemoteUserFormAndPatch(remoteUser: RemoteUser = null): UntypedFormGroup {
     const group = this.remoteUserFormGroup();
 
     if (remoteUser) {
@@ -89,7 +89,7 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
     return group;
   }
 
-  private remoteUserFormGroup(): FormGroup {
+  private remoteUserFormGroup(): UntypedFormGroup {
     return this.fb.group({
       id: [
         0,

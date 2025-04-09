@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { debounceTime } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { debounceTime } from 'rxjs/operators';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { LocalStorageService } from '@core/services/local-storage.service';
-import { EnrolmentStatusFilterEnum, PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
+import { EnrolmentStatusFilterEnum, PaperStatusEnum } from '@shared/enums/status-filter.enum';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { SearchFormStatusType } from '@adjudication/shared/enums/search-form-status-type.enum';
 
@@ -24,7 +24,7 @@ export class SearchFormComponent implements OnInit {
   @Output() public filter: EventEmitter<number>;
   @Output() public refresh: EventEmitter<void>;
 
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public enrolleeStatuses: Config<number>[];
   public siteStatuses: Config<number>[];
 
@@ -34,7 +34,7 @@ export class SearchFormComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private configService: ConfigService,
     private localStorage: LocalStorageService
   ) {
@@ -57,16 +57,16 @@ export class SearchFormComponent implements OnInit {
     this.refresh = new EventEmitter<void>();
   }
 
-  public get textSearch(): FormControl {
-    return this.form.get('textSearch') as FormControl;
+  public get textSearch(): UntypedFormControl {
+    return this.form.get('textSearch') as UntypedFormControl;
   }
 
-  public get enrolleeStatusCode(): FormControl {
-    return this.form.get('enrolleeStatusCode') as FormControl;
+  public get enrolleeStatusCode(): UntypedFormControl {
+    return this.form.get('enrolleeStatusCode') as UntypedFormControl;
   }
 
-  public get siteStatusCode(): FormControl {
-    return this.form.get('siteStatusCode') as FormControl;
+  public get siteStatusCode(): UntypedFormControl {
+    return this.form.get('siteStatusCode') as UntypedFormControl;
   }
 
   public get useSiteStatuses(): boolean {
@@ -129,11 +129,14 @@ export class SearchFormComponent implements OnInit {
         textSearch: this.localStorage.get(this.textSearchKey),
         siteStatusCode: this.localStorage.getInteger(this.siteStatusCodeKey) || null,
       });
-    }
-    if (this.statusType === SearchFormStatusType.EnrolleeStatuses) {
+    } else if (this.statusType === SearchFormStatusType.EnrolleeStatuses) {
       this.form.patchValue({
         textSearch: this.localStorage.get(this.textSearchKey),
         enrolleeStatusCode: this.localStorage.getInteger(this.enrolleeStatusCodeKey) || null
+      });
+    } else {
+      this.form.patchValue({
+        textSearch: this.localStorage.get(this.textSearchKey)
       });
     }
   }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Serilog;
 
 namespace Prime.Configuration.Auth
 {
@@ -28,6 +29,8 @@ namespace Prime.Configuration.Auth
                 {
                     OnTokenValidated = async context => await OnTokenValidatedAsync(context)
                 };
+                // See https://learn.microsoft.com/en-us/dotnet/core/compatibility/aspnet-core/8.0/securitytoken-events#recommended-action
+                options.UseSecurityTokenValidators = true;
             })
             .AddJwtBearer(Schemes.MohJwt, options =>
             {
@@ -38,6 +41,8 @@ namespace Prime.Configuration.Auth
                 {
                     OnTokenValidated = async context => await OnTokenValidatedAsync(context)
                 };
+                // See https://learn.microsoft.com/en-us/dotnet/core/compatibility/aspnet-core/8.0/securitytoken-events#recommended-action
+                options.UseSecurityTokenValidators = true;
             });
 
             services.AddAuthorization(options =>
@@ -59,14 +64,12 @@ namespace Prime.Configuration.Auth
 
                 FlattenRealmAccessRoles(identity);
 
-                // // Don't rely on mapper in KeyCloak to assign `prime_user` role
-                // var idp = accessToken.Payload.GetValueOrDefault(Claims.IdentityProvider);
-                // if (AuthConstants.BCServicesCard.Equals(idp))
-                // {
-                //     identity.AddClaim(new Claim(ClaimTypes.Role, Roles.PrimeEnrollee));
-                // }
+                if (context.Request.Path.ToString().Contains("gpid-detail"))
+                {
+                    JwtPayload payload = ((JwtSecurityToken)context.SecurityToken).Payload;
+                    Log.Logger.Debug($"Token for gpid-detail:  Issuer: {payload.Iss}, Authorized Party: {payload.Azp}, Audiences: [{string.Join(",", payload.Aud.ToArray())}], Expires at: {payload.Expiration}, resource_access: {identity.Claims.SingleOrDefault(claim => claim.Type == Claims.ResourceAccess)?.Value}");
+                }
             }
-
             return Task.CompletedTask;
         }
 

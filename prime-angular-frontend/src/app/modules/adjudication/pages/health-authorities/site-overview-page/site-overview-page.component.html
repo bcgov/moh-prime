@@ -18,7 +18,9 @@
 
     <mat-card>
       <mat-card-content>
-        <app-health-auth-site-overview-container [healthAuthoritySite]="site"></app-health-auth-site-overview-container>
+        <app-health-auth-site-overview-container [healthAuthoritySite]="site"
+                                                 [pharmanetAdministrators]="pharmanetAdministrators"
+                                                 [technicalSupports]="technicalSupports"></app-health-auth-site-overview-container>
       </mat-card-content>
     </mat-card>
   </app-page-section>
@@ -30,7 +32,7 @@
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>Enter Site ID</ng-container>
       <ng-container appPageSubheader2Summary>
-        The Site ID will be sent to the Signing Authority, Administrator of PharmaNet onboarding and the
+        The Site ID will be sent to the Signing Authority, PharmaNet Administrator and the
         vendor associated to this submission.
       </ng-container>
     </app-page-subheader2>
@@ -45,12 +47,13 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Site ID"
-                   formControlName="pec">
+                   formControlName="pec"
+                   appToUppercase>
             <mat-error *ngIf="pec.hasError('required')">
               Required
             </mat-error>
             <mat-error *ngIf="pec.hasError('assignable')">
-              Site ID has already been used by another site
+              Site ID already used by another organization
             </mat-error>
           </mat-form-field>
 

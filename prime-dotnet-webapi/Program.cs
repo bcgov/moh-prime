@@ -76,7 +76,7 @@ namespace Prime
             }
 
             var name = Assembly.GetExecutingAssembly().GetName();
-            var outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+            var outputTemplate = "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy(new LoggingLevelSwitch() { MinimumLevel = PrimeConfiguration.LogLevel })

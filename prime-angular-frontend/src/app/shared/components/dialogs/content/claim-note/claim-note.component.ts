@@ -8,8 +8,9 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 
 import { Admin } from '@auth/shared/models/admin.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { AdminStatusType } from '@adjudication/shared/models/admin-status.enum';
 
 export class AssignAction {
   public action: AssignActionEnum;
@@ -36,14 +37,14 @@ export class ClaimNoteComponent implements OnInit {
   public title: string;
   public type: ClaimType;
   public reassign: boolean;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public adjudicators$: BehaviorSubject<Admin[]>;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogOptions,
     private adjudicationResource: AdjudicationResource,
     private dialogRef: MatDialogRef<ConfirmDialogComponent>,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private authService: AuthService,
   ) {
     this.title = data.title;
@@ -52,8 +53,8 @@ export class ClaimNoteComponent implements OnInit {
     this.adjudicators$ = new BehaviorSubject<Admin[]>([]);
   }
 
-  public get note(): FormControl {
-    return this.form.get('note') as FormControl;
+  public get note(): UntypedFormControl {
+    return this.form.get('note') as UntypedFormControl;
   }
 
   public onDisclaim(): void {
@@ -97,13 +98,13 @@ export class ClaimNoteComponent implements OnInit {
           value: '',
           disabled: false,
         },
-        [Validators.required]
+        []
       ]
     });
   }
 
   private getAdjudicators(): void {
     this.adjudicationResource.getAdjudicators()
-      .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators));
+      .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators.filter(a => a.status !== AdminStatusType.DISABLED)));
   }
 }

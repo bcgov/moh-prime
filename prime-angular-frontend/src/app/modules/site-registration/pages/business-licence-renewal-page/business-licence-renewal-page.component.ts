@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 
 import { noop, Observable, of } from 'rxjs';
 
@@ -46,7 +46,7 @@ export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRe
     protected siteService: SiteService,
     protected siteFormStateService: SiteFormStateService,
     protected siteResource: SiteResource,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private utilsService: UtilsService,
     private route: ActivatedRoute,
     router: Router
@@ -65,6 +65,7 @@ export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRe
     this.formState.businessLicenceGuid.patchValue(document.documentGuid);
     this.uploadedFile = true;
     this.hasNoBusinessLicenceError = false;
+    this.formState.filename.patchValue(document.filename);
   }
 
   public onRemoveDocument(_: string): void {
@@ -123,9 +124,11 @@ export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRe
   protected performSubmission(): Observable<void> {
     // Transfer business licence renewal updates
     // to the form state service for submission
-    const { businessLicenceGuid, businessLicenceExpiry } = this.siteFormStateService.businessLicenceFormState;
+    const { businessLicenceGuid, businessLicenceExpiry, filename, deferredLicenceReason } = this.siteFormStateService.businessLicenceFormState;
     businessLicenceGuid.patchValue(this.formState.businessLicenceGuid.value);
     businessLicenceExpiry.patchValue(this.formState.businessLicenceExpiry.value);
+    filename.patchValue(this.formState.filename.value);
+    deferredLicenceReason.patchValue("");
 
     this.siteFormStateService.businessLicenceFormState.flagBusinessLicenceUpdated();
 

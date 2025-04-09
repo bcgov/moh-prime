@@ -8,6 +8,8 @@ namespace Prime.Models
 
         //the status types below is used for filtering
         EditableNotApproved = 4,
-        Flagged = 5
+        Flagged = 5,
+
+        Archived = 8,
     }
 }

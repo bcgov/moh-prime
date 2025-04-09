@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -16,6 +16,10 @@ import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority
 import { HealthAuthoritySiteList } from '@health-auth/shared/models/health-authority-site-list.model';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
+import { Config } from '@config/config.model';
+import { ConfigService } from '@config/config.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-site-management-page',
@@ -27,20 +31,38 @@ export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public healthAuthorityId: number;
-  public healthAuthoritySites$: Observable<HealthAuthoritySiteList[] | null>;
+  public healthAuthoritySites: HealthAuthoritySiteList[];
   public routeUtils: RouteUtils;
   public HealthAuthorityEnum = HealthAuthorityEnum;
   public SiteStatusType = SiteStatusType;
+  public vendors: Config<number>[];
+  public careTypes: string[];
+  public form: UntypedFormGroup;
 
   constructor(
     private route: ActivatedRoute,
+    private fb: UntypedFormBuilder,
     private router: Router,
     private authorizedUserService: AuthorizedUserService,
     private authorizedUserResource: AuthorizedUserResource,
-    private formatDatePipe: FormatDatePipe
+    private formatDatePipe: FormatDatePipe,
+    private configService: ConfigService,
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
+
+    this.careTypes = ["All"];
+    this.vendors = this.configService.vendors
+      .filter(v => v.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  public get vendorCode(): UntypedFormControl {
+    return this.form.get('vendorCode') as UntypedFormControl;
+  }
+
+  public get careTypeCode(): UntypedFormControl {
+    return this.form.get('careTypeCode') as UntypedFormControl;
   }
 
   public viewAuthorizedUser(healthAuthorityId: number): void {
@@ -71,8 +93,8 @@ export class SiteManagementPageComponent implements OnInit {
   public getWithinRenewalPeriodSiteNotificationProperties(healthAuthoritySite: HealthAuthoritySite) {
     return {
       icon: 'notification_important',
-      text: 'This site requires renewal.',
-      label: 'Renew Site',
+      text: 'This site requires update.',
+      label: 'Update Site',
       route: () => this.viewSite(this.healthAuthorityId, healthAuthoritySite)
     };
   }
@@ -82,10 +104,61 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.createFormInstance();
+    this.initForm();
     const authorizedUser = this.authorizedUserService.authorizedUser;
     this.healthAuthorityId = authorizedUser.healthAuthorityCode;
-    this.healthAuthoritySites$ = this.authorizedUserResource.getAuthorizedUserSites(authorizedUser.id);
+    this.authorizedUserResource.getAuthorizedUserSites(authorizedUser.id)
+      .subscribe((sites: HealthAuthoritySiteList[]) => {
+        this.healthAuthoritySites = sites.sort((a, b) => a.siteName && b.siteName ? a.siteName.toLocaleLowerCase().localeCompare(b.siteName.toLocaleLowerCase()) : 0)
+
+        const haVendors = this.healthAuthoritySites.map((s) => {
+          return s.healthAuthorityVendor.vendorCode;
+        });
+
+        const haCareTypes = this.healthAuthoritySites.map((s) => {
+          return s.healthAuthorityCareType.careType;
+        });
+
+        this.careTypes = [... new Set(haCareTypes)].sort((a, b) => a.localeCompare(b));
+        this.vendors = this.vendors.filter((v) => haVendors.some((hav) => hav === v.code)).sort((a, b) => a.name.localeCompare(b.name));
+      });
   }
+
+  private createFormInstance() {
+    this.form = this.fb.group({
+      vendorCode: ['all', []],
+      careTypeCode: ['all', []],
+    });
+  }
+
+  private initForm() {
+    this.vendorCode.valueChanges.subscribe(() => {
+      this.filterSites();
+    });
+    this.careTypeCode.valueChanges.subscribe(() => {
+      this.filterSites();
+    })
+  }
+
+  public filterSites() {
+    const authorizedUser = this.authorizedUserService.authorizedUser;
+    this.authorizedUserResource.getAuthorizedUserSites(authorizedUser.id)
+      .subscribe((sites: HealthAuthoritySiteList[]) => {
+        this.healthAuthoritySites = sites.sort((a, b) => a.siteName && b.siteName ? a.siteName.toLocaleLowerCase().localeCompare(b.siteName.toLocaleLowerCase()) : 0);
+        if (this.careTypeCode.value !== "all") {
+          this.healthAuthoritySites = this.healthAuthoritySites.filter((s) => {
+            return s.healthAuthorityCareType.careType === this.careTypeCode.value;
+          })
+        }
+        if (this.vendorCode.value !== "all") {
+          this.healthAuthoritySites = this.healthAuthoritySites.filter((s) => {
+            return s.healthAuthorityVendor.vendorCode === this.vendorCode.value;
+          })
+        }
+      });
+  }
+
 
   private redirectTo(healthAuthorityId: number, healthAuthoritySiteId: number, pagePath: string): void {
     this.routeUtils.routeRelativeTo([

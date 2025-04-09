@@ -1,0 +1,69 @@
+<div class="row">
+  <div class="col">
+    <table mat-table
+           class="w-100"
+           [dataSource]="dataSource">
+
+      <ng-container matColumnDef="username">
+        <th mat-header-cell
+            *matHeaderCellDef> Username
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.username }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="firstname">
+        <th mat-header-cell
+            *matHeaderCellDef> First Name
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.firstName }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lastname">
+        <th mat-header-cell
+            *matHeaderCellDef> Last Name
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.lastName }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="siteassigned">
+        <th mat-header-cell
+            *matHeaderCellDef> Sites Assigned
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.sitesAssigned }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="enrolleeassigned">
+        <th mat-header-cell
+            *matHeaderCellDef> Enrollees Assigned
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.enrolleesAssigned }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell
+            *matHeaderCellDef> Status
+        </th>
+        <td mat-cell
+            *matCellDef="let row;">
+          <mat-slide-toggle color="primary"
+                            (change)="toggleStatus(row.id, $event)"
+                            [checked]="isEnabled(row.status)"
+                            [disabled]="!(Role.SUPER_ADMIN | inRole)">
+            {{ isEnabled(row.status) ? 'Enabled' : 'Disabled' }}
+          </mat-slide-toggle>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row
+          *matHeaderRowDef="displayColumns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayColumns;">
+      </tr>
+    </table>
+  </div>
+</div>

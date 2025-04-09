@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
@@ -264,7 +264,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     }
   }
 
-  private updateBusLicValidations(requiredControls: FormControl[], notRequiredControls: FormControl[]): void {
+  private updateBusLicValidations(requiredControls: UntypedFormControl[], notRequiredControls: UntypedFormControl[]): void {
     this.hasNoBusinessLicenceError = false;
     requiredControls.forEach(control => control.setValidators([Validators.required]));
     notRequiredControls.forEach(control => this.formUtilsService.resetAndClearValidators(control));
