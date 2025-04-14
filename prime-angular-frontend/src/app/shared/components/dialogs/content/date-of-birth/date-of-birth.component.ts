@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { MINIMUM_AGE } from '@lib/constants';
@@ -16,7 +16,7 @@ import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.comp
 export class DateOfBirthComponent implements OnInit {
   @Output() public output: EventEmitter<string>;
 
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public isEmpty: boolean;
   public enrollee: HttpEnrollee;
   public maxDateOfBirth: moment.Moment;
@@ -25,7 +25,7 @@ export class DateOfBirthComponent implements OnInit {
 
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtilsService: FormUtilsService,
     private dialogRef: MatDialogRef<ConfirmDialogComponent>,
   ) {
@@ -39,8 +39,8 @@ export class DateOfBirthComponent implements OnInit {
     this.enrollee = enrollee;
   }
 
-  public get dateOfBirth(): FormControl {
-    return this.form.get('dateOfBirth') as FormControl;
+  public get dateOfBirth(): UntypedFormControl {
+    return this.form.get('dateOfBirth') as UntypedFormControl;
   }
 
   public onSave() {

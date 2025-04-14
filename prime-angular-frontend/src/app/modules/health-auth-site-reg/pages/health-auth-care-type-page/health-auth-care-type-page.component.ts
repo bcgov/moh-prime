@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -44,7 +44,7 @@ export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySite
     protected healthAuthoritySiteService: HealthAuthoritySiteService,
     protected healthAuthoritySiteFormStateService: HealthAuthoritySiteFormStateService,
     protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private location: Location,
     private configService: ConfigService,
     private authorizedUserService: AuthorizedUserService,

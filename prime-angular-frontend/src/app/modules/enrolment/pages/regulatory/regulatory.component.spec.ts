@@ -4,7 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { KeycloakService } from 'keycloak-angular';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
@@ -47,10 +47,11 @@ describe('RegulatoryComponent', () => {
           RouterTestingModule,
           NgxBusyModule,
           NgxContextualHelpModule,
-          NgxMaskModule.forRoot(),
           NgxMaterialModule,
           ReactiveFormsModule,
-          EnrolmentModule
+          EnrolmentModule,
+          NgxMaskDirective,
+          NgxMaskPipe
         ],
         providers: [
           {
@@ -73,7 +74,8 @@ describe('RegulatoryComponent', () => {
             provide: AccessTokenService,
             useClass: MockAccessTokenService
           },
-          KeycloakService
+          KeycloakService,
+          provideNgxMask()
         ],
         schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }

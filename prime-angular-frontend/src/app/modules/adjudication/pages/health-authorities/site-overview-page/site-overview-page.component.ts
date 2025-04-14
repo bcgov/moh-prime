@@ -1,7 +1,7 @@
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, mergeMap, Observable, Subscription } from 'rxjs';
 
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
@@ -31,7 +31,7 @@ export class SiteOverviewPageComponent implements OnInit {
   public busy: Subscription;
   public site: HealthAuthoritySiteAdmin;
   public healthAuthoritySite: HealthAuthoritySite;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public healthAuthorityVendors: HealthAuthorityVendorMap[];
   public refresh: BehaviorSubject<boolean>;
   public pharmanetAdministrators: Contact[];
@@ -41,7 +41,7 @@ export class SiteOverviewPageComponent implements OnInit {
     private healthAuthorityResource: HealthAuthorityResource,
     private route: ActivatedRoute,
     private formUtilsService: FormUtilsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private configService: ConfigService,
     private siteResource: SiteResource,
     private dialog: MatDialog,
@@ -49,12 +49,12 @@ export class SiteOverviewPageComponent implements OnInit {
     this.refresh = new BehaviorSubject<boolean>(null);
   }
 
-  public get pec(): FormControl {
-    return this.form.get('pec') as FormControl;
+  public get pec(): UntypedFormControl {
+    return this.form.get('pec') as UntypedFormControl;
   }
 
-  public get vendors(): FormControl {
-    return this.form.get('vendors') as FormControl;
+  public get vendors(): UntypedFormControl {
+    return this.form.get('vendors') as UntypedFormControl;
   }
 
   public saveSiteId(): void {

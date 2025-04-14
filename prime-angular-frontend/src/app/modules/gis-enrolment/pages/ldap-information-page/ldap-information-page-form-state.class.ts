@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { LdapCredential } from '@gis/shared/models/ldap-credential.model';
@@ -12,19 +12,19 @@ interface LdapInformationPageFormModel extends LdapCredential {}
 
 export class LdapInformationPageFormState extends AbstractFormState<LdapInformationPageDataModel> {
   public constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get ldapUsername(): FormControl {
-    return this.formInstance.get('ldapUsername') as FormControl;
+  public get ldapUsername(): UntypedFormControl {
+    return this.formInstance.get('ldapUsername') as UntypedFormControl;
   }
 
-  public get ldapPassword(): FormControl {
-    return this.formInstance.get('ldapPassword') as FormControl;
+  public get ldapPassword(): UntypedFormControl {
+    return this.formInstance.get('ldapPassword') as UntypedFormControl;
   }
 
   /**

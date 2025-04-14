@@ -11,7 +11,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { KeycloakService } from 'keycloak-angular';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockPermissionService } from 'test/mocks/mock-permission.service';
 
@@ -27,12 +27,13 @@ describe('BusinessLicenceExpiryComponent', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        NgxMaskModule.forRoot(),
         NgxMaterialModule,
         BrowserAnimationsModule,
         MatInputModule,
         ReactiveFormsModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        NgxMaskDirective,
+        NgxMaskPipe
       ],
       providers: [
         KeycloakService,
@@ -47,7 +48,8 @@ describe('BusinessLicenceExpiryComponent', () => {
         {
           provide: PermissionService,
           useClass: MockPermissionService
-        }
+        },
+        provideNgxMask()
       ],
       declarations: [BusinessLicenceExpiryComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

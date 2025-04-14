@@ -154,10 +154,11 @@
         <td mat-cell
             *matCellDef="let row"
             [attr.colspan]="siteColumns.length - 2">
-          <button mat-icon-button
+          <button mat-button
                   title="Expand"
                   color="primary"
                   [disableRipple]="true"
+                  class="health_authority_btn"
                   [class]="{ 'mat-button-disabled': expandedHealthAuthId !== 0 && row.id !== expandedHealthAuthId }"
                   (click)="onExpandHeader(row)">
             {{ row.name }}

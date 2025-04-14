@@ -11,6 +11,7 @@
 .footer {
   border-top: 2px solid theme-palette(grey, lighter);
   padding-top: 1rem;
+  padding-bottom: 25px;
 }
 
 .mat-checkbox-inner-container {
@@ -20,8 +21,11 @@
 .mat-icon {
   color: theme-palette(blue);
   cursor: pointer;
-  font-size: 1.2em;
-  position: relative;
+  font-size: 1em;
+}
+
+.icon-button {
+  vertical-align: sub;
 }
 
 .link {

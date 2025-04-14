@@ -28,17 +28,25 @@
   }
 }
 
-.mat-nav-list {
+.mat-mdc-nav-list {
+
+
   &:not(:first-of-type) {
     padding-top: 0;
   }
 
-  .mat-list-item.disabled {
+  .mat-mdc-list-item.disabled {
     // Prevent interacting with the link
     pointer-events: none;
   }
 
-  .mat-list-item.deemphasize {
+  .mat-mdc-list-item {
+    a {
+      pointer-events: none;
+    }
+  }
+
+  .mat-mdc-list-item.deemphasize {
     // De-emphasize the link
     opacity: 0.4;
   }

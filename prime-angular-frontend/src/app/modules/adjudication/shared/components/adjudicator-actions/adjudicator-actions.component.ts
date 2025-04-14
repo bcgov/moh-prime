@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { noop } from 'rxjs';
@@ -43,7 +43,7 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   @Output() public changeToA: EventEmitter<number>;
 
 
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public termsOfAccessAgreements: { type: AgreementType, name: string }[];
 
   public EnrolmentStatus = EnrolmentStatusEnum;
@@ -53,7 +53,7 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
 
   constructor(
     private permissionService: PermissionService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
@@ -77,8 +77,8 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
     this.termsOfAccessAgreements = termsOfAccessAgreements;
   }
 
-  public get assignedTOAType(): FormControl {
-    return this.form.get('assignedTOAType') as FormControl;
+  public get assignedTOAType(): UntypedFormControl {
+    return this.form.get('assignedTOAType') as UntypedFormControl;
   }
 
   public get isUnderReview(): boolean {

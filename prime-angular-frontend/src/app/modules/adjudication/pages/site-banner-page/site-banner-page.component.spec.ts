@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { KeycloakService } from 'keycloak-angular';
 
 import { MockAuthService } from 'test/mocks/mock-auth.service';
@@ -27,9 +27,10 @@ describe('SiteBannerPageComponent', () => {
         HttpClientTestingModule,
         ReactiveFormsModule,
         RouterTestingModule,
-        NgxMaskModule.forRoot(),
         NgxMaterialModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        NgxMaskDirective,
+        NgxMaskPipe
       ],
       providers: [
         KeycloakService,
@@ -44,7 +45,8 @@ describe('SiteBannerPageComponent', () => {
         {
           provide: PermissionService,
           useClass: MockPermissionService
-        }
+        },
+        provideNgxMask()
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();

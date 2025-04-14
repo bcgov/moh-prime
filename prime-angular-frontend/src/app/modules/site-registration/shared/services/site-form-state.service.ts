@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, AbstractControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, AbstractControl, Validators } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { RouteStateService } from '@core/services/route-state.service';
@@ -47,7 +47,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   private site: Pick<Site, 'status' | 'completed' | 'submittedDate' | 'approvedDate' | 'careSettingCode'>;
 
   constructor(
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected routeStateService: RouteStateService,
     protected logger: ConsoleLoggerService,
     private formUtilsService: FormUtilsService,

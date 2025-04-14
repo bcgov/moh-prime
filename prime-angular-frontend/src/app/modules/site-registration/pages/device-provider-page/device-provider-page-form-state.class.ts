@@ -1,4 +1,4 @@
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -7,15 +7,15 @@ import { IndividualDeviceProvider } from '@registration/shared/models/individual
 
 export class DeviceProviderPageFormState extends AbstractFormState<IndividualDeviceProvider[]> {
   public constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get individualDeviceProviders(): FormArray {
-    return this.formInstance.get('individualDeviceProviders') as FormArray;
+  public get individualDeviceProviders(): UntypedFormArray {
+    return this.formInstance.get('individualDeviceProviders') as UntypedFormArray;
   }
 
   public get json(): IndividualDeviceProvider[] {
@@ -40,8 +40,8 @@ export class DeviceProviderPageFormState extends AbstractFormState<IndividualDev
     });
   }
 
-  public individualDeviceProviderAt(index: number): FormGroup {
-    return this.individualDeviceProviders.at(index) as FormGroup;
+  public individualDeviceProviderAt(index: number): UntypedFormGroup {
+    return this.individualDeviceProviders.at(index) as UntypedFormGroup;
   }
 
   public clearIndividualDeviceProviders(): void {
@@ -54,7 +54,7 @@ export class DeviceProviderPageFormState extends AbstractFormState<IndividualDev
     });
   }
 
-  public buildIndividualDeviceProvider(): FormGroup {
+  public buildIndividualDeviceProvider(): UntypedFormGroup {
     return this.fb.group({
       firstName: [null, [
         Validators.required

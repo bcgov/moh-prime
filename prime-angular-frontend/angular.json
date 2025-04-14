@@ -187,13 +187,14 @@
       }
     }
   },
-  "defaultProject": "angular-frontend",
   "cli": {
     "analytics": false,
     "packageManager": "yarn",
-    "defaultCollection": "@angular-eslint/schematics",
     "cache": {
       "enabled": false
-    }
+    },
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }

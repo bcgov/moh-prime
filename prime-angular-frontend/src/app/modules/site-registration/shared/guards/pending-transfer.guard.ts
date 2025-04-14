@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { CanActivate, CanActivateChild, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -8,7 +8,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
 @Injectable({
   providedIn: 'root'
 })
-export class PendingTransferGuard implements CanActivate, CanActivateChild {
+export class PendingTransferGuard  {
   constructor(
     private organizationService: OrganizationService,
     private router: Router,

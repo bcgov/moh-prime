@@ -14,7 +14,7 @@
     <div class="row">
       <ng-container *ngFor="let version of orgAgreementVersions">
         <div class="col-md-6 col-sm-12">
-          <app-summary-card class=""
+          <app-summary-card class="card"
                             icon="gavel"
                             [title]="AgreementType[version.agreementType] | replace: '_':' ' | capitalize: true"
                             [properties]="getToaCardProperties(version)"

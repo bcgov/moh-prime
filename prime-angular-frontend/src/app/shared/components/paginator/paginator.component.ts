@@ -1,5 +1,5 @@
 import { AfterContentInit, Component, ContentChild, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { UtilsService } from '@core/services/utils.service';
 
@@ -24,11 +24,11 @@ export class PaginatorComponent implements AfterContentInit, OnChanges {
   @Output() public changed: EventEmitter<{ pageIndex: number }>;
   @ContentChild(MatPaginator, { static: true }) public paginator: MatPaginator;
 
-  public form: FormControl;
+  public form: UntypedFormControl;
 
   constructor(
     private utilService: UtilsService,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) { }
 
   public get disabled(): boolean {

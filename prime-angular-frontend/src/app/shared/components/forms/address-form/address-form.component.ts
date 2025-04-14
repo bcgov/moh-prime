@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 
 import { pairwise, distinctUntilChanged, startWith } from 'rxjs/operators';
 
@@ -20,7 +20,7 @@ export class AddressFormComponent implements OnInit {
    * @description
    * Address line form.
    */
-  @Input() public form: FormGroup;
+  @Input() public form: UntypedFormGroup;
   /**
    * @description
    * List of address line controls that should be
@@ -75,16 +75,16 @@ export class AddressFormComponent implements OnInit {
     this.showAddressFields = true;
   }
 
-  public get countryCode(): FormControl {
-    return this.form.get('countryCode') as FormControl;
+  public get countryCode(): UntypedFormControl {
+    return this.form.get('countryCode') as UntypedFormControl;
   }
 
-  public get provinceCode(): FormControl {
-    return this.form.get('provinceCode') as FormControl;
+  public get provinceCode(): UntypedFormControl {
+    return this.form.get('provinceCode') as UntypedFormControl;
   }
 
-  public get postal(): FormControl {
-    return this.form.get('postal') as FormControl;
+  public get postal(): UntypedFormControl {
+    return this.form.get('postal') as UntypedFormControl;
   }
 
   public showFormControl(formControlName: AddressLine): boolean {

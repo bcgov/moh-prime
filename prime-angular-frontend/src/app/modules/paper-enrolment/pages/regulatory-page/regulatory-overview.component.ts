@@ -142,7 +142,7 @@ import { RegulatoryForm } from './regulatory-form.model';
       </button>
     </app-page-section>
   `,
-  styles: ['mat-icon { font-size: 1.2em; }'],
+  styles: ['mat-icon { font-size: 1em; }'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegulatoryOverviewComponent extends AbstractOverview {

@@ -10,9 +10,10 @@
 // responsiveness of the container dimensions or typography of the
 // content, which can be enforced at the component-level.
 
-.mat-card {
+.mat-mdc-card {
   border-bottom: 4px solid transparent;
   margin-bottom: .5rem;
+  font-size: 14px;
 
   // Apply .has-hover to mat-card container to add
   // a border underline to the mat-card container
@@ -20,10 +21,11 @@
     border-bottom-color: theme-palette(yellow);
   }
 
-  .mat-card-header {
+  .mat-mdc-card-header {
+
     // Apply .no-avatar to mat-card-header to remove spacing if
     // a mat-card-avatar is not being used
-    &.no-avatar .mat-card-header-text {
+    &.no-avatar .mat-mdc-card-header-text {
       margin-left: 0;
     }
 
@@ -38,14 +40,15 @@
       z-index: 100;
     }
 
-    .mat-card-title {
+    .mat-mdc-card-title {
       color: theme-palette(blue, light);
+      margin-left: 0;
     }
   }
 
   // NOTE: Updates to the mat-card-content component should most
   // likely be implemented at the component-level
-  .mat-card-content {
+  .mat-mdc-card-content {
     color: theme-palette(blue);
   }
 
@@ -54,7 +57,7 @@
       // Provide spacing from edge of card to align with card title and subtitle
       margin-left: .5rem;
     }
-    
+
     // Responsiveness of mat-card component actions are not optimally
     // aligned, and forces an approach that is not mobile-first through
     // the use of media-breakpoint-down to patch
@@ -62,6 +65,7 @@
       button {
         // Allow mat-buttons to left align when stacked on small viewports
         margin: 0;
+
         &:not(:last-child) {
           // Adjust spacing for small viewports
           margin-right: 1rem;

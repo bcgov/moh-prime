@@ -1,7 +1,7 @@
 @import 'palette';
 @import 'variables';
 
-.mat-card-title {
+.mat-mdc-card-title {
   font-weight: bold;
   font-size: 1em;
   color: $h3-colour;
@@ -11,6 +11,7 @@
   vertical-align: middle
 }
 
-.mat-card-content > div > div > span {
-  color: $h3-colour;;
+.mat-mdc-card-content>div>div>span {
+  color: $h3-colour;
+  ;
 }

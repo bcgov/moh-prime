@@ -35,8 +35,8 @@
                     [ngClass]="{ 'center-sidenav-icon': !isDesktop }">{{ item.icon }}</mat-icon>
 
           <a matLine
-             [ngClass]="{ 'extend-content-width': isDesktop }">
-            <span *ngIf="sideNavProps.showText">
+             [ngClass]="{ 'extend-content-width': isDesktop, 'disabled' : item.disabled }">
+            <span *ngIf="sideNavProps.showText" class="mat-list-item-text">
               {{ item.name }}
             </span>
           </a>

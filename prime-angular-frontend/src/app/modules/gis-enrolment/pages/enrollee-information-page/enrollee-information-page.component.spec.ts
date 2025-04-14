@@ -9,7 +9,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { EnrolleeInformationPageComponent } from './enrollee-information-page.component';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 describe('EnrolleeInformationPageComponent', () => {
   let component: EnrolleeInformationPageComponent;
@@ -23,14 +23,16 @@ describe('EnrolleeInformationPageComponent', () => {
         HttpClientTestingModule,
         BrowserAnimationsModule,
         NgxMaterialModule,
-        NgxMaskModule.forRoot()
+        NgxMaskDirective,
+        NgxMaskPipe
       ],
       declarations: [EnrolleeInformationPageComponent],
       providers: [
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        }
+        },
+        provideNgxMask()
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
