@@ -1,24 +1,24 @@
-<h2 mat-dialog-title
-    class="d-flex align-items-stretch">
-  <mat-icon color="warn">warning</mat-icon>
-  <span class="flex-grow-1">
-    Change Vendor
-  </span>
-</h2>
 <mat-dialog-content>
+  <h2 mat-dialog-title
+      class="d-flex align-items-stretch">
+    <mat-icon color="warn">warning</mat-icon>
+    <span class="flex-grow-1">
+  Change Vendor
+</span>
+  </h2>
   <p>
     Are you sure you want to change this site's vendor {{this.vendorChangeText}}?
   </p>
   <form [formGroup]="form">
     <mat-form-field class="w-100">
+      <mat-label>Requestor</mat-label>
       <input matInput
-             placeholder="Requestor"
              formControlName="requester">
       <mat-error *ngIf="form.get('requester').hasError('required')">Required</mat-error>
     </mat-form-field>
     <mat-form-field class="w-100">
+      <mat-label>Note</mat-label>
       <textarea matInput
-                placeholder="Note"
                 rows="5"
                 formControlName="note"></textarea>
       <mat-hint [ngClass]="{ 'text-green': !!note.value }">
@@ -27,8 +27,6 @@
       <mat-error *ngIf="form.get('note').hasError('required')">Required</mat-error>
     </mat-form-field>
   </form>
-</mat-dialog-content>
-<mat-dialog-content>
   <div class="mt-4">
     <button mat-stroked-button
             (click)="onCancel()"
