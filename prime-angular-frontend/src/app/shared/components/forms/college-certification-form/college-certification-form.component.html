@@ -86,11 +86,8 @@
              class="col-sm-12 pl-5">
 
           <mat-form-field class="w-100">
+            <mat-label>{{ getRegNumberFieldLabel(collegeCode.value) }}</mat-label>
             <input matInput
-                   [placeholder]="(collegeCode.value === CollegeLicenceClassEnum.CPBC
-                    || collegeCode.value === CollegeLicenceClassEnum.CDSBC
-                    || collegeCode.value === CollegeLicenceClassEnum.OptometryBC)
-                    ? 'Registration Number' : 'Registration ID'"
                    formControlName="licenseNumber">
             <mat-error *ngIf="licenseNumber.hasError('required')">Required</mat-error>
             <mat-error *ngIf="licenseNumber.hasError('alphanumeric')">
@@ -109,8 +106,8 @@
 
             <mat-form-field class="w-100"
                             subscriptSizing="dynamic">
+              <mat-label>Next Renewal Date</mat-label>
               <input matInput
-                     placeholder="Next Renewal Date"
                      [min]="minRenewalDate"
                      [matDatepicker]="picker"
                      formControlName="renewalDate"
@@ -160,8 +157,7 @@
             <mat-slide-toggle class="mr-4"
                               [checked]="practitionerId.value"
                               (change)="onPrescribing($event)">
-              Do you have a {{(collegeCode.value === CollegeLicenceClassEnum.BCCNM) ?
-              "PharmaNet ID/Prescriber ID":"PharmaNet ID"}} issued by the College?
+              Do you have a {{ getPNetIdFieldLabel(collegeCode.value) }} issued by the College?
             </mat-slide-toggle>
           </div>
 
@@ -169,8 +165,8 @@
 
             <app-form-icon-group>
               <mat-form-field class="w-100">
+                <mat-label>{{ getPNetIdFieldLabel(collegeCode.value) }}</mat-label>
                 <input matInput
-                       [placeholder]="(collegeCode.value === CollegeLicenceClassEnum.BCCNM) ?  'PharmaNet ID/Prescriber ID' : 'PharmaNet ID'"
                        formControlName="practitionerId"
                        class="uppercase"
                        maxlength="5"

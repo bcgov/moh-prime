@@ -1,6 +1,6 @@
 <mat-form-field class="w-100">
+  <mat-label>{{ label }}</mat-label>
   <input matInput
-         [placeholder]="label"
          [formControl]="doingBusinessAs"
          [matAutocomplete]="auto">
   <mat-autocomplete #auto="matAutocomplete">

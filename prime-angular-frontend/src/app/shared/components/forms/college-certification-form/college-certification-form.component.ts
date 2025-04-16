@@ -203,6 +203,17 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.practitionerId.patchValue(event.target.value.toUpperCase());
   }
 
+  public getRegNumberFieldLabel(collegeCode: CollegeLicenceClassEnum): string {
+    return (collegeCode === CollegeLicenceClassEnum.CPBC
+      || collegeCode === CollegeLicenceClassEnum.CDSBC
+      || collegeCode === CollegeLicenceClassEnum.OptometryBC)
+      ? 'Registration Number' : 'Registration ID';
+  }
+
+  public getPNetIdFieldLabel(collegeCode: CollegeLicenceClassEnum): string {
+    return (collegeCode === CollegeLicenceClassEnum.BCCNM) ? 'PharmaNet ID/Prescriber ID' : 'PharmaNet ID';
+  }
+
   // TODO decouple default and condensed modes in controller and template
   public ngOnInit() {
     this.checkLicenseIfDiscontinued();
