@@ -5,6 +5,11 @@ parameters:
   displayName: Application Name
   description: For grouping together utilities by scope
   value: utilities
+- name: OC_LICENSE_PLATE
+  displayName: OpenShift License Plate
+  description: Prepends your dev/test/prod URL
+  required: true
+  value: 9c33a9
 - name: MAILHOG_SERVICE_NAME
   displayName: Mailhog Service Name
   value: mailhog-server
@@ -16,7 +21,7 @@ parameters:
   required: false
 - name: MAILHOG_IMAGE
   displayName: Mailhog Docker Image
-  value: image-registry.openshift-image-registry.svc:5000/9c33a9-dev/mailhog-server:latest
+  value: image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/mailhog-server:latest
   description: The mailhog docker image to use in DeploymentConfig
   required: true
 - name: DOCKER_IMAGE
@@ -30,8 +35,6 @@ message: |-
 labels:
   template: mailhog-template
   app: ${APP_NAME}
-  app.kubernetes.io/component: ${APP_NAME}
-  app.kubernetes.io/instance: ${APP_NAME}
   app.kubernetes.io/part-of: ${APP_NAME}
 metadata:
   labels:
@@ -70,6 +73,7 @@ objects:
     labels:
       app: mailhog
       service: ${MAILHOG_SERVICE_NAME}
+      template: mailhog
   spec:
     ports:
     - name: "1025"
@@ -86,7 +90,7 @@ objects:
       targetPort: 8025
     selector:
       app: mailhog
-      deploymentconfig: ${MAILHOG_SERVICE_NAME}
+      template: mailhog
   status:
     loadBalancer: {}
 - apiVersion: v1
@@ -96,6 +100,7 @@ objects:
     labels:
       app: mailhog
       service: ${MAILHOG_SERVICE_NAME}
+      template: mailhog
   spec:
     host: ${MAILHOG_ROUTE_HOST}
     port:
@@ -106,31 +111,47 @@ objects:
     to:
       kind: Service
       name: ${MAILHOG_SERVICE_NAME}
-- apiVersion: v1
-  kind: DeploymentConfig
+- apiVersion: apps/v1
+  kind: Deployment
   metadata:
     name: ${MAILHOG_SERVICE_NAME}
     labels:
       app: mailhog
       service: ${MAILHOG_SERVICE_NAME}
       app.kubernetes.io/part-of: ${APP_NAME}
+    annotations:
+      image.openshift.io/triggers: |-
+        [
+          {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "${OC_LICENSE_PLATE}-tools",
+              "name": "${MAILHOG_SERVICE_NAME}:latest"
+            },
+            "fieldPath": "spec.template.spec.containers[0].image",
+            "paused": false
+          }
+        ]
   spec:
     replicas: 1
     selector:
-      deploymentconfig: ${MAILHOG_SERVICE_NAME}
+      matchLabels:
+        app: ${MAILHOG_SERVICE_NAME}
     strategy:
-      resources: {}
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
     template:
       metadata:
         labels:
           app: mailhog
           service: ${MAILHOG_SERVICE_NAME}
-          deploymentconfig: ${MAILHOG_SERVICE_NAME}
           template: mailhog
       spec:
         containers:
         - name: ${MAILHOG_SERVICE_NAME}
-          image: ${MAILHOG_IMAGE}
+          image: image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/mailhog-server:latest
           imagePullPolicy: Always
           ports:
           - containerPort: 8025
@@ -143,13 +164,4 @@ objects:
             name: mailhog-25
             protocol: TCP
         restartPolicy: Always
-    triggers:
-    - type: ConfigChange
-    - type: ImageChange
-      imageChangeParams:
-        automatic: true
-        containerNames:
-        - ${MAILHOG_SERVICE_NAME}
-        from:
-          kind: ImageStreamTag
-          name: ${MAILHOG_SERVICE_NAME}:latest
+

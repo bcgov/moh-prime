@@ -193,8 +193,8 @@ export class EnrolmentGuard extends BaseGuard {
       careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
     }
 
-    if (!this.enrolmentService.canRequestRemoteAccess(certifications, careSettings)) {
-      // No access to remote access if OBO or pharmacist
+    if (!this.enrolmentService.hasPossibleRemoteAccessCareSetting(careSettings)) {
+      // No access to remote access if enrollee does not have PCHP care setting
       deniedRoutes.push(EnrolmentRoutes.REMOTE_ACCESS);
     }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, FormBuilder, FormArray } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder, UntypedFormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { exhaustMap } from 'rxjs/operators';
@@ -34,7 +34,7 @@ import { ConfigService } from '@config/config.service';
 })
 export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
-  public emailForm: FormGroup;
+  public emailForm: UntypedFormGroup;
 
   public CareSettingEnum = CareSettingEnum;
   public HealthAuthorityEnum = HealthAuthorityEnum;
@@ -48,6 +48,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public currentAgreementGroup: AgreementTypeGroup;
 
   public initialEnrolment: boolean;
+  public isNextStep: boolean;
+  public isEnrolmentComplete: boolean;
   public complete: boolean;
   public healthAuthorities: Config<number>[];
 
@@ -56,7 +58,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     settingPlural: string,
     settingCode: number,
     healthAuthorityCode: number,
-    formArray: FormArray,
+    formArray: UntypedFormArray,
     formArrayName: string,
     subheaderContent: string;
   }[];
@@ -65,7 +67,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     protected route: ActivatedRoute,
     protected router: Router,
     @Inject(APP_CONFIG) private config: AppConfig,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
     private dialog: MatDialog,
@@ -101,40 +103,40 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       : null;
   }
 
-  public get communityHealthEmails(): FormArray {
-    return this.emailForm.get('communityHealthEmails') as FormArray;
+  public get communityHealthEmails(): UntypedFormArray {
+    return this.emailForm.get('communityHealthEmails') as UntypedFormArray;
   }
 
-  public get pharmacistEmails(): FormArray {
-    return this.emailForm.get('pharmacistEmails') as FormArray;
+  public get pharmacistEmails(): UntypedFormArray {
+    return this.emailForm.get('pharmacistEmails') as UntypedFormArray;
   }
 
-  public get healthAuthorityFraserEmails(): FormArray {
-    return this.emailForm.get('healthAuthorityFraserEmails') as FormArray;
+  public get healthAuthorityFraserEmails(): UntypedFormArray {
+    return this.emailForm.get('healthAuthorityFraserEmails') as UntypedFormArray;
   }
 
-  public get healthAuthorityNorthernEmails(): FormArray {
-    return this.emailForm.get('healthAuthorityNorthernEmails') as FormArray;
+  public get healthAuthorityNorthernEmails(): UntypedFormArray {
+    return this.emailForm.get('healthAuthorityNorthernEmails') as UntypedFormArray;
   }
 
-  public get healthAuthorityIslandEmails(): FormArray {
-    return this.emailForm.get('healthAuthorityIslandEmails') as FormArray;
+  public get healthAuthorityIslandEmails(): UntypedFormArray {
+    return this.emailForm.get('healthAuthorityIslandEmails') as UntypedFormArray;
   }
 
-  public get healthAuthorityInteriorEmails(): FormArray {
-    return this.emailForm.get('healthAuthorityInteriorEmails') as FormArray;
+  public get healthAuthorityInteriorEmails(): UntypedFormArray {
+    return this.emailForm.get('healthAuthorityInteriorEmails') as UntypedFormArray;
   }
 
-  public get healthAuthorityPHSAEmails(): FormArray {
-    return this.emailForm.get('healthAuthorityPHSAEmails') as FormArray;
+  public get healthAuthorityPHSAEmails(): UntypedFormArray {
+    return this.emailForm.get('healthAuthorityPHSAEmails') as UntypedFormArray;
   }
 
-  public get healthAuthorityVancouverCoastalEmails(): FormArray {
-    return this.emailForm.get('healthAuthorityVancouverCoastalEmails') as FormArray;
+  public get healthAuthorityVancouverCoastalEmails(): UntypedFormArray {
+    return this.emailForm.get('healthAuthorityVancouverCoastalEmails') as UntypedFormArray;
   }
 
-  public get deviceProviderEmails(): FormArray {
-    return this.emailForm.get('deviceProviderEmails') as FormArray;
+  public get deviceProviderEmails(): UntypedFormArray {
+    return this.emailForm.get('deviceProviderEmails') as UntypedFormArray;
   }
 
   public get GPID(): string {
@@ -145,7 +147,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
   }
 
-  public setShowEmail(careSettingCode: number, show: boolean, formControl: FormControl = null) {
+  public setShowEmail(careSettingCode: number, show: boolean, formControl: UntypedFormControl = null) {
     if (formControl) {
       formControl.reset();
     }
@@ -233,6 +235,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
           });
           this.toastService.openSuccessToast(`Email was successfully sent to ${emails.join(", ")}`);
           this.emailForm.reset();
+          this.router.navigate([this.EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY],
+            { relativeTo: this.route.parent, queryParams: { initialEnrolment: this.initialEnrolment, complete: 'true' } });
         });
     }
   }
@@ -266,12 +270,15 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   }
 
   public getTitle() {
-    if (!this.initialEnrolment) {
-      return 'Share my Global PharmaNet ID (GPID)';
-    } else if (this.complete) {
-      return 'PRIME Enrolment Complete';
+    if (this.isNextStep) {
+      return 'Next Steps to Get PharmaNet';
+    } else {
+      if (!this.initialEnrolment) {
+        return 'Share my Global PharmaNet ID (GPID)';
+      } else {
+        return 'PRIME Enrolment Complete';
+      }
     }
-    return 'Next Steps to Get PharmaNet';
   }
 
   public getAgreementDescription() {
@@ -285,8 +292,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     }
   }
 
-  public getEmailsGroup(careSettingCode: number, healthAuthorityCode: number): FormArray {
-    let formArray: FormArray;
+  public getEmailsGroup(careSettingCode: number, healthAuthorityCode: number): UntypedFormArray {
+    let formArray: UntypedFormArray;
 
     switch (careSettingCode) {
       case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
@@ -349,6 +356,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     this.createFormInstance();
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
     this.initialEnrolment = this.route.snapshot.queryParams?.initialEnrolment === 'true';
+    this.isNextStep = this.route.snapshot.url.some(v => v.path === "next-steps");
+    this.isEnrolmentComplete = this.route.snapshot.queryParams?.complete === 'true';
 
     this.enrolmentResource.getCurrentAgreementGroupForAnEnrollee(this.enrolment.id)
       .subscribe((group: AgreementTypeGroup) => this.currentAgreementGroup = group)
@@ -429,7 +438,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return "";
   }
 
-  protected addEmail(emailsArray: FormArray, email?: string): void {
+  protected addEmail(emailsArray: UntypedFormArray, email?: string): void {
 
     const emailForm = this.fb.group({
       email: ['', []]
@@ -458,7 +467,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     }
   }
 
-  private buildEmailGroup(): FormGroup {
+  private buildEmailGroup(): UntypedFormGroup {
     return this.fb.group({
       communityHealthEmails: this.fb.array([], []),
       pharmacistEmails: this.fb.array([], []),
@@ -476,9 +485,9 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     let emailFilled = false;
 
     Object.keys(this.emailForm.controls).forEach((emailArrayKey) => {
-      const emailArray = this.emailForm.controls[emailArrayKey] as FormArray;
+      const emailArray = this.emailForm.controls[emailArrayKey] as UntypedFormArray;
       Object.keys(emailArray.controls).forEach((emailKey) => {
-        let emailControl = emailArray.controls[emailKey] as FormGroup;
+        let emailControl = emailArray.controls[emailKey] as UntypedFormGroup;
         if (emailControl.controls['email'].value && emailControl.controls['email'].value !== "") {
           emailFilled = true;
         }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -39,7 +39,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private configService: ConfigService,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private route: ActivatedRoute,
@@ -122,22 +122,10 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     // When an individual health authority is deselected the OBO Sites should be removed
     oboSites = this.removeUnselectedHealthAuthOboSites(payload.healthAuthorities, oboSites);
 
-    return this.paperEnrolmentResource.updateCareSettings(this.enrollee.id, payload)
-      .pipe(
-        // Remove device provider identifier when care setting no longer selected
-        exhaustMap(() =>
-          (!payload.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER))
-            ? this.paperEnrolmentResource.updateDeviceProvider(this.enrollee.id, [])
-            : of(null)
-        ),
-        exhaustMap(() =>
-          (this.enrollee.oboSites.length !== oboSites.length)
-            ? this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites)
-              // Refresh obo sites for routing to the next view
-              .pipe(tap(() => this.enrollee.oboSites = oboSites))
-            : of(null)
-        )
-      );
+    this.paperEnrolmentResource.updateCareSettings(this.enrollee.id, payload)
+    .subscribe();
+
+    return of(null);
   }
 
   protected afterSubmitIsSuccessful(): void {

@@ -15,7 +15,7 @@
   background-color: theme-palette(blue, lightest);
   border-right: 1px solid theme-palette(blue);
 
-  .mat-list-item {
+  .mat-mdc-list-item {
     color: theme-palette(blue) !important;
 
     .extend-content-width {
@@ -27,6 +27,7 @@
   a,
   .mat-icon {
     color: theme-palette(blue) !important;
+    vertical-align: -webkit-baseline-middle;
   }
 
   // Active class applied by Angular based on the current route
@@ -41,7 +42,7 @@
   // TODO remove after DashboardV1Component is removed
   .force-active,
   .force-active:focus,
-  .mat-list-item:focus {
+  .mat-mdc-list-item:focus {
     background-color: theme-palette(blue, lighter) !important;
   }
 
@@ -52,12 +53,10 @@
       font-weight: bold !important;
     }
 
-    .mat-list-item-content {
-      border-right: 5px solid theme-palette(yellow) !important;
-    }
+    border-right: 5px solid theme-palette(yellow) !important;
   }
 
-  .mat-list-item-content {
+  .mdc-list-item__content {
     // Add a border for spacing to prevent the sidenav from jumping when an nav item is active
     border-right: 5px solid transparent !important;
     padding-left: 25px !important;
@@ -74,5 +73,10 @@
 
   .mat-divider {
     border-top-color: theme-palette(blue);
+  }
+
+  .mat-list-item-text {
+    padding-right: 0px;
+    padding-left: 16px;
   }
 }

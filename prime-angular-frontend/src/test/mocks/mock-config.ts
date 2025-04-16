@@ -664,6 +664,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Full - Family',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -671,7 +672,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 2,
@@ -684,6 +686,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Full - Specialty',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -691,7 +694,9 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
+
         },
         {
           'code': 3,
@@ -704,6 +709,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Special',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -711,7 +717,9 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
+
         },
         {
           'code': 4,
@@ -724,6 +732,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Osteopathic',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -731,7 +740,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 5,
@@ -744,6 +754,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Provisional - Family',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -751,7 +762,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 6,
@@ -764,6 +776,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Provisional - Specialty',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -771,7 +784,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 7,
@@ -784,6 +798,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Academic',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -791,7 +806,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 8,
@@ -804,6 +820,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Conditional - Practice Limitations',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -811,7 +828,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 9,
@@ -824,6 +842,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Conditional - Practice Setting',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -831,7 +850,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 10,
@@ -844,6 +864,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Conditional - Disciplined',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -851,7 +872,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 11,
@@ -864,6 +886,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Educational - Medical Student',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -871,7 +894,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 12,
@@ -884,6 +908,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Educational - Postgraduate Resident',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -891,7 +916,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 13,
@@ -904,6 +930,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Educational - Postgraduate Resident Elective',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -911,7 +938,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 14,
@@ -924,6 +952,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Educational - Postgraduate Fellow',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -931,7 +960,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 15,
@@ -944,6 +974,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Educational - Postgraduate Trainee',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -951,7 +982,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 16,
@@ -964,6 +996,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Clinical Observership',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -971,7 +1004,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 17,
@@ -984,6 +1018,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Visitor',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -991,7 +1026,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 18,
@@ -1004,6 +1040,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Emergency - Family',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -1011,7 +1048,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 19,
@@ -1024,6 +1062,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Emergency - Specialty',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -1031,7 +1070,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 20,
@@ -1044,6 +1084,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Retired - Life ',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -1051,7 +1092,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 21,
@@ -1064,6 +1106,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Temporarily Inactive',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -1071,7 +1114,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 22,
@@ -1084,6 +1128,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Surgical Assistant',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -1091,7 +1136,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 23,
@@ -1104,6 +1150,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Administrative',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -1111,7 +1158,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 24,
@@ -1124,6 +1172,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Assessment',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -1131,7 +1180,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 25,
@@ -1144,6 +1194,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Full Pharmacist',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 2,
@@ -1151,7 +1202,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 26,
@@ -1164,6 +1216,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Limited Pharmacist',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 2,
@@ -1171,7 +1224,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 27,
@@ -1184,6 +1238,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Temporary Pharmacist',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 2,
@@ -1191,7 +1246,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 28,
@@ -1204,6 +1260,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Student Pharmacist',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 2,
@@ -1211,7 +1268,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 29,
@@ -1224,6 +1282,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Pharmacy Technician',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 2,
@@ -1231,7 +1290,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 30,
@@ -1244,6 +1304,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Pharmacist',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 2,
@@ -1251,7 +1312,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 31,
@@ -1264,6 +1326,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Pharmacy Technician',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 2,
@@ -1271,7 +1334,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 32,
@@ -1284,6 +1348,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': 1,
           'name': 'Practicing Registered Nurse',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1291,7 +1356,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 2,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 33,
@@ -1304,6 +1370,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Provisional Registered Nurse',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1311,7 +1378,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 2,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 34,
@@ -1324,6 +1392,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Registered Nurse',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1331,7 +1400,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 2,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 35,
@@ -1344,6 +1414,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': 1,
           'name': 'Practicing Licensed Graduate Nurse',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1351,7 +1422,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 2,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 36,
@@ -1364,6 +1436,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Provisional Licensed Graduate Nurse',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1371,7 +1444,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 2,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 37,
@@ -1384,6 +1458,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Licensed Graduate Nurse',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1391,7 +1466,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 2,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 39,
@@ -1404,6 +1480,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': 1,
           'name': 'Temporary Registered Nurse (Emergency)',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1411,7 +1488,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 2,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 40,
@@ -1424,6 +1502,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Employed Student Nurse',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1431,7 +1510,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 2,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 41,
@@ -1444,6 +1524,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': 1,
           'name': 'Practicing Registered Psychiatric Nurse',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1451,7 +1532,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 3,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 42,
@@ -1464,6 +1546,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Provisional Registered Psychiatric Nurse',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1471,7 +1554,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 3,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 43,
@@ -1484,6 +1568,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Registered Psychiatric Nurse',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1491,7 +1576,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 3,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 45,
@@ -1504,6 +1590,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': 1,
           'name': 'Temporary Registered Psychiatric Nurse (Emergency)',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1511,7 +1598,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 3,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 46,
@@ -1524,6 +1612,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Employed Student Psychiatric Nurse',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1531,7 +1620,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 3,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 47,
@@ -1544,6 +1634,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': 2,
           'name': 'Practicing Nurse Practitioner',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1551,7 +1642,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 4,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 48,
@@ -1564,6 +1656,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': null,
           'name': 'Provisional Nurse Practitioner',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1571,7 +1664,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 4,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 49,
@@ -1584,6 +1678,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Nurse Practitioner',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1591,7 +1686,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 4,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 51,
@@ -1604,6 +1700,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': true,
           'prescriberIdType': 2,
           'name': 'Temporary Nurse Practitioner (Emergency)',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1611,7 +1708,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 4,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 52,
@@ -1624,6 +1722,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Practicing Licensed Practical Nurse',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1631,7 +1730,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 1,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 53,
@@ -1644,6 +1744,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Provisional Licensed Practical Nurse',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1651,7 +1752,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 1,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 54,
@@ -1664,6 +1766,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practicing Licensed Practical Nurse',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1671,7 +1774,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 1,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 55,
@@ -1684,6 +1788,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Temporary Licensed Practical Nurse (Emergency)',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1691,7 +1796,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 1,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 59,
@@ -1704,6 +1810,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Podiatric Surgeon',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -1711,7 +1818,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 60,
@@ -1724,6 +1832,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Practising Midwife',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1731,7 +1840,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 5,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 61,
@@ -1744,6 +1854,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Provisional Midwife',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1751,7 +1862,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 5,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 62,
@@ -1764,6 +1876,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Temporary Midwife (Emergency)',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1771,7 +1884,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 5,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 63,
@@ -1784,6 +1898,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Non-Practising Midwife',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1791,7 +1906,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 5,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 64,
@@ -1804,6 +1920,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Not Displayed',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 4,
@@ -1895,7 +2012,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 65,
@@ -1908,6 +2026,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Educational - Podiatric Surgeon Student (Elective)',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -1915,7 +2034,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 66,
@@ -1928,6 +2048,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Educational - Podiatric Surgeon Resident (Elective)',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -1935,7 +2056,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 67,
@@ -1948,6 +2070,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Conditional - Podiatric Surgeon Disciplined',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 1,
@@ -1955,7 +2078,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 68,
@@ -1968,6 +2092,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Temporary Pharmacy Technician',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 2,
@@ -1975,7 +2100,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': null,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         },
         {
           'code': 69,
@@ -1988,6 +2114,7 @@ export class MockConfig {
           'allowRequestRemoteAccess': false,
           'prescriberIdType': null,
           'name': 'Student Midwife',
+          'multijurisdictional': false,
           'collegeLicenses': [
             {
               'collegeCode': 3,
@@ -1995,7 +2122,8 @@ export class MockConfig {
               'collegeLicenseGroupingCode': 5,
               'discontinued': false
             }
-          ]
+          ],
+          'remoteAccessTypeLicenses': null
         }
       ],
       'careSettings': [

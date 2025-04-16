@@ -1,4 +1,4 @@
-import { AbstractControl, FormBuilder } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder } from '@angular/forms';
 import { RouterEvent } from '@angular/router';
 
 import { map, tap } from 'rxjs/operators';
@@ -17,7 +17,7 @@ export abstract class AbstractFormStateService<T> {
   protected patched: boolean;
 
   protected constructor(
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected routeStateService: RouteStateService,
     protected logger: ConsoleLoggerService
   ) { }

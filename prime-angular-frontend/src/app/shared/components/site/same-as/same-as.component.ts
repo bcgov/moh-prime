@@ -37,7 +37,7 @@ export class SameAsComponent implements OnInit {
       },
       {
         key: 'administratorPharmaNet',
-        display: 'Administrator of PharmaNet Onboarding',
+        display: 'PharmaNet Administrator',
         data: this.removeUniqueIds({ ...site?.administratorPharmaNet })
       },
       {

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { EMPTY, of } from 'rxjs';
@@ -23,7 +23,7 @@ import { NonNursingLicenseGrouping, NursingLicenseGrouping } from '@shared/enums
   styleUrls: ['./college-certification-form.component.scss']
 })
 export class CollegeCertificationFormComponent implements OnInit {
-  @Input() public form: FormGroup;
+  @Input() public form: UntypedFormGroup;
   @Input() public index: number;
   @Input() public total: number;
   @Input() public selectedColleges: number[];
@@ -33,6 +33,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   @Input() public condensed: boolean;
   @Input() public defaultOption: boolean;
   @Output() public remove: EventEmitter<number>;
+  @Output() public licenceCodeSelected: EventEmitter<number>;
   public isPrescribing: boolean;
   public colleges: CollegeConfig[];
   public licenses: LicenseConfig[];
@@ -79,6 +80,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     private enrolmentService: EnrolmentService
   ) {
     this.remove = new EventEmitter<number>();
+    this.licenceCodeSelected = new EventEmitter<number>();
     // copy the master list of license lookup from configService to local
     this.licenses = this.configService.licenses.map(x => Object.assign({}, x));
 
@@ -109,20 +111,20 @@ export class CollegeCertificationFormComponent implements OnInit {
     return this.viewportService.isMobile;
   }
 
-  public get collegeCode(): FormControl {
-    return this.form.get('collegeCode') as FormControl;
+  public get collegeCode(): UntypedFormControl {
+    return this.form.get('collegeCode') as UntypedFormControl;
   }
 
-  public get category(): FormControl {
-    return this.form.get('category') as FormControl;
+  public get category(): UntypedFormControl {
+    return this.form.get('category') as UntypedFormControl;
   }
 
-  public get licenseNumber(): FormControl {
-    return this.form.get('licenseNumber') as FormControl;
+  public get licenseNumber(): UntypedFormControl {
+    return this.form.get('licenseNumber') as UntypedFormControl;
   }
 
-  public get licenseCode(): FormControl {
-    return this.form.get('licenseCode') as FormControl;
+  public get licenseCode(): UntypedFormControl {
+    return this.form.get('licenseCode') as UntypedFormControl;
   }
 
   /**
@@ -130,16 +132,16 @@ export class CollegeCertificationFormComponent implements OnInit {
    * ID of a practitioner, but also known as prescriberId
    * when applied to nurses.
    */
-  public get practitionerId(): FormControl {
-    return this.form.get('practitionerId') as FormControl;
+  public get practitionerId(): UntypedFormControl {
+    return this.form.get('practitionerId') as UntypedFormControl;
   }
 
-  public get renewalDate(): FormControl {
-    return this.form.get('renewalDate') as FormControl;
+  public get renewalDate(): UntypedFormControl {
+    return this.form.get('renewalDate') as UntypedFormControl;
   }
 
-  public get practiceCode(): FormControl {
-    return this.form.get('practiceCode') as FormControl;
+  public get practiceCode(): UntypedFormControl {
+    return this.form.get('practiceCode') as UntypedFormControl;
   }
 
   public getGrouping(collegeCode: string): CollegeLicenseGroupingConfig[] {
@@ -201,6 +203,17 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.practitionerId.patchValue(event.target.value.toUpperCase());
   }
 
+  public getRegNumberFieldLabel(collegeCode: CollegeLicenceClassEnum): string {
+    return (collegeCode === CollegeLicenceClassEnum.CPBC
+      || collegeCode === CollegeLicenceClassEnum.CDSBC
+      || collegeCode === CollegeLicenceClassEnum.OptometryBC)
+      ? 'Registration Number' : 'Registration ID';
+  }
+
+  public getPNetIdFieldLabel(collegeCode: CollegeLicenceClassEnum): string {
+    return (collegeCode === CollegeLicenceClassEnum.BCCNM) ? 'PharmaNet ID/Prescriber ID' : 'PharmaNet ID';
+  }
+
   // TODO decouple default and condensed modes in controller and template
   public ngOnInit() {
     this.checkLicenseIfDiscontinued();
@@ -228,9 +241,9 @@ export class CollegeCertificationFormComponent implements OnInit {
         .subscribe((licenseCode: number) => {
           if (licenseCode) {
             this.setPractitionerInformation(licenseCode);
+            this.licenceCodeSelected.emit(licenseCode);
           }
         });
-
       const initialNursingCategory = +this.category.value ?? null;
       this.category.valueChanges
         .pipe(

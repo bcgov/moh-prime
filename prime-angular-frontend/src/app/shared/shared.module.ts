@@ -9,7 +9,7 @@ import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 
 registerPlugin(FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 import { ConfigModule } from '@config/config.module';
 import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
@@ -132,6 +132,7 @@ import { EmailFormComponent } from './components/forms/email-form/email-form.com
 import { ChangeVendorNoteComponent } from './components/dialogs/content/change-vendor-note/change-vendor-note.component';
 import { TransferHASiteComponent } from './components/dialogs/content/transfer-ha-site/transfer-ha-site.component';
 import { SiteArchiveRestoreComponent } from './components/dialogs/content/site-archive-restore/site-archive-restore.component';
+import { ChangeTermsOfAccessComponent } from './components/dialogs/content/terms-of-access/terms-of-access.component';
 
 @NgModule({
   declarations: [
@@ -245,6 +246,7 @@ import { SiteArchiveRestoreComponent } from './components/dialogs/content/site-a
     SelfDeclarationTermComponent,
     TransferHASiteComponent,
     SiteArchiveRestoreComponent,
+    ChangeTermsOfAccessComponent,
   ],
   imports: [
     CommonModule,
@@ -252,7 +254,8 @@ import { SiteArchiveRestoreComponent } from './components/dialogs/content/site-a
     ConfigModule,
     NgxBusyModule,
     NgxContextualHelpModule,
-    NgxMaskModule.forRoot(),
+    NgxMaskDirective,
+    NgxMaskPipe,
     NgxMaterialModule,
     FilePondModule,
     ReactiveFormsModule
@@ -263,7 +266,6 @@ import { SiteArchiveRestoreComponent } from './components/dialogs/content/site-a
     NgxBusyModule,
     NgxContextualHelpModule,
     NgxMaterialModule,
-    NgxMaskModule,
     ReactiveFormsModule,
     CapitalizePipe,
     CasePipe,
@@ -366,6 +368,7 @@ import { SiteArchiveRestoreComponent } from './components/dialogs/content/site-a
     CapitalizePipe,
     LicenseNumberLabelPipe,
     CollegeNamePipe,
+    provideNgxMask(),
   ]
 })
 export class SharedModule { }

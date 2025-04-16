@@ -14,3 +14,7 @@ h2 {
   // Page refreshes cause mat-icon to take precendence
   font-size: 3rem !important;
 }
+
+.mat-icon {
+  padding-right: 20px;
+}

@@ -8,6 +8,11 @@ namespace Prime.Services
         public const int BCCNM = 3;
     }
 
+    static class LicenseCode
+    {
+        public const int PharmacyTechnician = 29;
+    }
+
 
     public abstract class BaseService
     {

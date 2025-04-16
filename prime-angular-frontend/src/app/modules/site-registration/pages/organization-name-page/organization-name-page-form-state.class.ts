@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { Organization } from '@registration/shared/models/organization.model';
@@ -7,23 +7,23 @@ interface OrganizationNamePageDataModel extends Pick<Organization, 'id' | 'name'
 
 export class OrganizationNamePageFormState extends AbstractFormState<OrganizationNamePageDataModel> {
   public constructor(
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get name(): FormControl {
-    return this.formInstance.get('name') as FormControl;
+  public get name(): UntypedFormControl {
+    return this.formInstance.get('name') as UntypedFormControl;
   }
 
-  public get registrationId(): FormControl {
-    return this.formInstance.get('registrationId') as FormControl;
+  public get registrationId(): UntypedFormControl {
+    return this.formInstance.get('registrationId') as UntypedFormControl;
   }
 
-  public get doingBusinessAs(): FormControl {
-    return this.formInstance.get('doingBusinessAs') as FormControl;
+  public get doingBusinessAs(): UntypedFormControl {
+    return this.formInstance.get('doingBusinessAs') as UntypedFormControl;
   }
 
   public get json(): OrganizationNamePageDataModel {

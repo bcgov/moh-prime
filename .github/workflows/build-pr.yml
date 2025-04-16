@@ -19,7 +19,7 @@ on:
 
 jobs:
   build-document-manager-backend:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     environment: Development
     steps:
     - name: "Checkout the repo"
@@ -64,7 +64,7 @@ jobs:
         docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-${{steps.PR.outputs.number}}
 
   build-backend:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     environment: Development
     steps:
     - name: "Checkout the repo"
@@ -134,9 +134,9 @@ jobs:
     - name: "Checkout the repo"
       uses: actions/checkout@v3
 
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v4
       with:
-        node-version: '16.14.0'
+        node-version: '18.20.6'
         cache: 'yarn'
         cache-dependency-path: prime-angular-frontend/yarn.lock
 
@@ -196,7 +196,7 @@ jobs:
         docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
 
   apply-oc-template:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     environment: Development
     needs: [build-document-manager-backend, build-frontend, build-backend]
     steps:

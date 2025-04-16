@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { noop, Observable, of } from 'rxjs';
@@ -23,6 +23,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { RemoteUsersPageFormState } from '../remote-users-page/remote-users-page-form-state.class';
+import { Site } from '@registration/shared/models/site.model';
 
 @Component({
   selector: 'app-remote-user-page',
@@ -42,7 +43,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * not linked with the form state until submission where it
    * gets mirrored.
    */
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public isSubmitted: boolean;
@@ -53,6 +54,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    */
   public remoteUserIndex: string;
   public remoteUser: RemoteUser;
+  public site: Site;
   public licenses: LicenseConfig[];
   public formControlNames: AddressLine[];
   public SiteRoutes = SiteRoutes;
@@ -72,14 +74,15 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.licenses = this.configService.licenses;
     this.remoteUserIndex = route.snapshot.params.index;
+    this.site = siteService.site;
   }
 
   /**
    * @description
    * Remote user certifications specific to the local form.
    */
-  public get remoteUserCertification(): FormGroup {
-    return this.form.get('remoteUserCertification') as FormGroup;
+  public get remoteUserCertification(): UntypedFormGroup {
+    return this.form.get('remoteUserCertification') as UntypedFormGroup;
   }
 
   public onBack() {
@@ -92,8 +95,13 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public licenceFilterPredicate() {
-    return (licenceConfig: LicenseConfig) =>
-      this.enrolmentService.hasAllowedRemoteAccessLicences(licenceConfig);
+    if (this.site.remoteAccessTypeCode) {
+      return (licenceConfig: LicenseConfig) =>
+        licenceConfig.remoteAccessTypeLicenses.length &&
+        licenceConfig.remoteAccessTypeLicenses.some((r) => r.remoteAccessTypeCode === this.site.remoteAccessTypeCode);
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -168,7 +176,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     // Set the parent form for updating on submission, but otherwise use the
     // local form group for all changes prior to submission
     const parent = this.formState.form;
-    const remoteUsersFormArray = parent.get('remoteUsers') as FormArray;
+    const remoteUsersFormArray = parent.get('remoteUsers') as UntypedFormArray;
 
     if (this.remoteUserIndex !== 'new') {
       const remoteUserFormGroup = remoteUsersFormArray.at(+this.remoteUserIndex);

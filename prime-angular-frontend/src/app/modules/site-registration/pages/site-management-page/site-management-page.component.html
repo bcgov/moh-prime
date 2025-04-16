@@ -207,6 +207,7 @@
         <span class="text-red">{{ props.text }}</span>
       </div>
       <button mat-flat-button
+              *ngIf="props.label"
               color="primary"
               class="ml-auto"
               (click)="props.route()">{{ props.label }}</button>

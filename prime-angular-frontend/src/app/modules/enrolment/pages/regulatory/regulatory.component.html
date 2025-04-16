@@ -103,17 +103,6 @@
         </ng-container>
       </app-page-subheader>
 
-      <app-alert *ngIf="cannotRequestRemoteAccess"
-                 type="danger"
-                 icon="warning"
-                 class="mb-4">
-        <ng-container #alertContent
-                      class="alert-content">
-          Only physicians and practicing nurse practitioners are permitted to access PharmaNet remotely,
-          and your remote user information will be deleted from your enrolment if you choose a different license type.
-        </ng-container>
-      </app-alert>
-
       <div class="row">
         <div class="col col-sm-10 py-3"
              formArrayName="certifications">
@@ -125,12 +114,14 @@
                                             [index]="i"
                                             [total]="formState.certifications.controls.length"
                                             [selectedColleges]="selectedCollegeCodes"
+                                            (licenceCodeSelected)="licenceCodeSelected($event)"
                                             [selectedLicenses]="selectedLicenseCodes"
                                             (remove)="removeCertification($event)">
             </app-college-certification-form>
 
           </ng-container>
 
+          <br />
           <button mat-button
                   type="button"
                   color="primary"
@@ -141,7 +132,40 @@
 
         </div>
       </div>
+      <div class="row">
 
+        <div class="col col-sm-12 py-3"
+             formArrayName="unlistedCertifications">
+          <app-toggle-content label="I have a college licence in another jurisdiction or one not listed in the dropdown"
+                              [checked]="hasUnlistedCertification"
+                              [disabled]="disableUnlistedCertificationToggle"
+                              (toggle)="toggleUnlistedCertification($event)">
+            <p>
+              Please enter your college licence information without abbreviations.
+            </p>
+            <ng-container *ngFor="let unlistedCertificate of formState.unlistedCertifications.controls; let i = index;"
+                          [formGroupName]="i">
+              <app-unlisted-college-licence-form [form]="unlistedCertificate"
+                                                 [index]="i"
+                                                 [total]="formState.unlistedCertifications.controls.length"
+                                                 [formState]="formState"
+                                                 [validate]="hasUnlistedCertification"
+                                                 (remove)="removeUnlistedCertification($event)">
+
+              </app-unlisted-college-licence-form>
+            </ng-container>
+
+            <button mat-button
+                    type="button"
+                    color="primary"
+                    (click)="formState.addEmptyUnlistedCollegeCertification()">
+              <mat-icon>add</mat-icon>
+              Add additional licences
+            </button>
+
+          </app-toggle-content>
+        </div>
+      </div>
     </section>
 
   </form>

@@ -1,16 +1,15 @@
-
 <ng-container [formGroup]="form">
 
   <app-form-icon-group [show]="total >= 1"
-    (event)="removeUnlistedCertification()">
+                       (event)="removeUnlistedCertification()">
     <div class="row">
       <div class="col">
 
         <mat-form-field class="w-100">
+          <mat-label>College Name</mat-label>
           <input matInput
-                 placeholder="College Name"
                  formControlName="collegeName"
-                 maxlength="50">
+                 maxlength="160">
           <mat-error *ngIf="collegeName.errors?.['required']">Required</mat-error>
         </mat-form-field>
 
@@ -20,10 +19,22 @@
       <div class="col-sm-12 pl-5">
 
         <mat-form-field class="w-100">
+          <mat-label>Licence Class from this College</mat-label>
           <input matInput
-                 placeholder="College Licence"
+                 formControlName="licenceClass"
+                 maxlength="100">
+          <mat-error *ngIf="licenceNumber.hasError('required')">Required</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 pl-5">
+
+        <mat-form-field class="w-100">
+          <mat-label>College Licence Number</mat-label>
+          <input matInput
                  formControlName="licenceNumber"
-                 maxlength="7">
+                 maxlength="10">
           <mat-error *ngIf="licenceNumber.hasError('required')">Required</mat-error>
           <mat-error *ngIf="licenceNumber.hasError('alphanumeric')">
             Must contain only alphanumeric characters
@@ -36,8 +47,8 @@
       <div class="col-sm-12 pl-5">
 
         <mat-form-field class="w-100">
+          <mat-label>Next Renewal Date</mat-label>
           <input matInput
-                 placeholder="Next Renewal Date"
                  [min]="minRenewalDate"
                  [matDatepicker]="picker"
                  formControlName="renewalDate"
@@ -53,6 +64,6 @@
 
       </div>
     </div>
-</app-form-icon-group>
+  </app-form-icon-group>
 
 </ng-container>

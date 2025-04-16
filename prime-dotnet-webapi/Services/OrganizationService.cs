@@ -48,7 +48,7 @@ namespace Prime.Services
         {
             return await _context.Organizations
                 .AsNoTracking()
-                .AnyAsync(e => e.Id == organizationId);
+                .AnyAsync(o => o.Id == organizationId && o.DeletedDate == null);
         }
 
         public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId)
@@ -57,7 +57,8 @@ namespace Prime.Services
                 .Include(o => o.SigningAuthority)
                     .ThenInclude(sa => sa.Addresses)
                         .ThenInclude(pa => pa.Address)
-                .Where(o => o.SigningAuthorityId == partyId)
+                .Include(o => o.Sites.Where(s => s.DeletedDate == null))
+                .Where(o => o.SigningAuthorityId == partyId && o.DeletedDate == null)
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .ToListAsync();
@@ -87,10 +88,36 @@ namespace Prime.Services
             return orgs;
         }
 
+        public async Task<IEnumerable<OrganizationAdminListViewModel>> GetOrganizationAdminListViewAsync(string searchText)
+        {
+            return await _context.Organizations
+                .AsNoTracking()
+                .Where(o => o.DeletedDate == null)
+                .If(!string.IsNullOrWhiteSpace(searchText), q => q
+                    .Search(e => e.Name,
+                    e => e.DoingBusinessAs,
+                    e => e.SigningAuthority.FirstName,
+                    e => e.SigningAuthority.LastName)
+                    .Containing(searchText))
+                .ProjectTo<OrganizationAdminListViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
+                .ToListAsync();
+        }
+
+        public async Task<OrganizationAdminListViewModel> GetOrganizationAdminListViewByIdAsync(int id)
+        {
+            return await _context.Organizations
+                .AsNoTracking()
+                .Where(o => o.Id == id && o.DeletedDate == null)
+                .ProjectTo<OrganizationAdminListViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
+                .SingleOrDefaultAsync();
+        }
+
         public async Task<Organization> GetOrganizationAsync(int organizationId)
         {
             return await GetBaseOrganizationQuery()
-                .Include(o => o.Sites)
+                .Include(o => o.Sites.Where(s => s.DeletedDate == null))
                     .ThenInclude(s => s.SiteStatuses)
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
@@ -99,7 +126,7 @@ namespace Prime.Services
         {
             return await _context.Organizations
                 .AsNoTracking()
-                .Where(o => o.Id == organizationId)
+                .Where(o => o.Id == organizationId && o.DeletedDate == null)
                 .Select(o => o.SigningAuthorityId)
                 .SingleOrDefaultAsync();
         }
@@ -108,7 +135,7 @@ namespace Prime.Services
         {
             return await GetBaseOrganizationQuery()
                 .Include(o => o.Sites)
-                .Where(o => o.Sites.Any(s => s.PEC == pec && s.ArchivedDate == null))
+                .Where(o => o.Sites.Any(s => s.PEC == pec && s.ArchivedDate == null && s.DeletedDate == null))
                 .SingleOrDefaultAsync();
         }
 
@@ -152,8 +179,7 @@ namespace Prime.Services
 
         public async Task<int> UpdateCompletedAsync(int organizationId)
         {
-            var organization = await GetBaseOrganizationQuery()
-                .SingleOrDefaultAsync(o => o.Id == organizationId);
+            var organization = await GetOrganizationOnlyAsync(organizationId);
 
             organization.Completed = true;
 
@@ -178,7 +204,15 @@ namespace Prime.Services
                 return;
             }
 
-            _context.Organizations.Remove(organization);
+            var deletedDate = DateTime.UtcNow;
+            organization.DeletedDate = deletedDate;
+
+            foreach (var site in organization.Sites)
+            {
+                site.DeletedDate = deletedDate;
+            }
+
+            _context.Update(organization);
 
             await _context.SaveChangesAsync();
         }
@@ -199,7 +233,7 @@ namespace Prime.Services
         {
             var siteExists = await _context.CommunitySites
                 .AsNoTracking()
-                .Where(s => s.CareSettingCode == careSettingCode && s.OrganizationId == organizationId)
+                .Where(s => s.CareSettingCode == careSettingCode && s.OrganizationId == organizationId && s.DeletedDate == null)
                 .AnyAsync();
 
             if (!siteExists)
@@ -277,7 +311,7 @@ namespace Prime.Services
         public async Task<bool> IsOrganizationTransferCompleteAsync(int organizationId)
         {
             var signingAuthorityId = await _context.Organizations
-                .Where(o => o.Id == organizationId)
+                .Where(o => o.Id == organizationId && o.DeletedDate == null)
                 .Select(o => o.SigningAuthorityId)
                 .SingleOrDefaultAsync();
 
@@ -288,8 +322,7 @@ namespace Prime.Services
 
         public async Task FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(int organizationId)
         {
-            var organization = await _context.Organizations
-                .SingleAsync(o => o.Id == organizationId);
+            var organization = await GetOrganizationOnlyAsync(organizationId);
 
             var pendingCodes = await GetCareSettingCodesForPendingTransferAsync(organizationId, organization.SigningAuthorityId);
             if (pendingCodes.Any())
@@ -302,8 +335,7 @@ namespace Prime.Services
 
         public async Task FinalizeTransferAsync(int organizationId)
         {
-            var organization = await _context.Organizations
-                .SingleOrDefaultAsync(o => o.Id == organizationId);
+            var organization = await GetOrganizationOnlyAsync(organizationId);
 
             organization.PendingTransfer = false;
             await _context.SaveChangesAsync();
@@ -349,7 +381,7 @@ namespace Prime.Services
         public async Task<SignedAgreementDocument> GetLatestSignedAgreementAsync(int organizationId)
         {
             return await _context.Organizations
-                .Where(o => o.Id == organizationId)
+                .Where(o => o.Id == organizationId && o.DeletedDate == null)
                 .SelectMany(o => o.Agreements)
                 .Select(a => a.SignedAgreement)
                 .OrderByDescending(sa => sa.UploadedDate)
@@ -381,6 +413,7 @@ namespace Prime.Services
         private IQueryable<Organization> GetBaseOrganizationQuery()
         {
             return _context.Organizations
+                .Where(o => o.DeletedDate == null)
                 .Include(o => o.Agreements)
                     .ThenInclude(a => a.SignedAgreement)
                 .Include(o => o.SigningAuthority)
@@ -391,8 +424,7 @@ namespace Prime.Services
 
         public async Task SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId)
         {
-            var organization = await _context.Organizations
-                .SingleAsync(o => o.Id == organizationId);
+            var organization = await GetOrganizationOnlyAsync(organizationId);
 
             organization.SigningAuthorityId = newSigningAuthorityId;
 
@@ -413,7 +445,7 @@ namespace Prime.Services
         // update organization registration ID calling OrgBook API with organization name in PRIME, then return the number of organizations updated
         public async Task<int> UpdateMissingRegistrationIds()
         {
-            var targetOrganizations = await _context.Organizations.Where(o => o.RegistrationId == null)
+            var targetOrganizations = await _context.Organizations.Where(o => o.RegistrationId == null && o.DeletedDate == null)
                 .OrderBy(o => o.Id)
                 .ToListAsync();
             int numUpdated = 0;
@@ -433,6 +465,15 @@ namespace Prime.Services
             }
 
             return numUpdated;
+        }
+
+        private async Task<Organization> GetOrganizationOnlyAsync(int organizationId)
+        {
+            // Does not Include any related entities and
+            // is suitable for updates
+            return await _context.Organizations
+                .Where(o => o.DeletedDate == null)
+                .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
     }
 }

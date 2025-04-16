@@ -6,30 +6,29 @@ using Prime.ViewModels;
 
 namespace Prime.Services
 {
-    public interface IOrganizationService
-    {
-        Task<bool> OrganizationExistsAsync(int organizationId);
-        Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId);
-        Task<IEnumerable<OrganizationListViewModel>> GetOrganizationClaimsByPartyIdAsync(int partyId);
-        Task<Organization> GetOrganizationAsync(int organizationId);
-        Task<int> GetOrganizationSigningAuthorityIdAsync(int organizationId);
-        Task<Organization> GetOrganizationByPecAsync(string pec);
-        Task<int> CreateOrganizationAsync(int signingAuthorityId);
-        Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization);
-        Task<int> UpdateCompletedAsync(int organizationId);
-        Task DeleteOrganizationAsync(int organizationId);
-        Task<Organization> GetOrganizationNoTrackingAsync(int organizationId);
-        Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int careSettingCode, int signingAuthorityId);
-        Task AcceptOrgAgreementAsync(int organizationId, int agreementId);
-        Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid, string filename = "");
-        Task<SignedAgreementDocument> GetLatestSignedAgreementAsync(int organizationId);
-        Task<IEnumerable<CareSettingType>> GetCareSettingCodesForPendingTransferAsync(int organizationId, int signingAuthorityId);
-        Task FinalizeTransferAsync(int organizationId);
-        AgreementType OrgAgreementTypeForSiteSetting(int careSettingCode);
-        Task SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId);
-        Task RemoveUnsignedOrganizationAgreementsAsync(int organizationId);
-        Task<bool> IsOrganizationTransferCompleteAsync(int organizationId);
-        Task FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(int organizationId);
-        Task<int> UpdateMissingRegistrationIds();
-    }
+        public interface IOrganizationService
+        {
+                Task<bool> OrganizationExistsAsync(int organizationId);
+                Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId);
+                Task<Organization> GetOrganizationAsync(int organizationId);
+                Task<int> GetOrganizationSigningAuthorityIdAsync(int organizationId);
+                Task<Organization> GetOrganizationByPecAsync(string pec);
+                Task<int> CreateOrganizationAsync(int signingAuthorityId);
+                Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization);
+                Task<int> UpdateCompletedAsync(int organizationId);
+                Task DeleteOrganizationAsync(int organizationId);
+                Task<Organization> GetOrganizationNoTrackingAsync(int organizationId);
+                Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int careSettingCode, int signingAuthorityId);
+                Task AcceptOrgAgreementAsync(int organizationId, int agreementId);
+                Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid, string filename = "");
+                Task<SignedAgreementDocument> GetLatestSignedAgreementAsync(int organizationId);
+                Task<IEnumerable<CareSettingType>> GetCareSettingCodesForPendingTransferAsync(int organizationId, int signingAuthorityId);
+                Task FinalizeTransferAsync(int organizationId);
+                AgreementType OrgAgreementTypeForSiteSetting(int careSettingCode);
+                Task SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId);
+                Task RemoveUnsignedOrganizationAgreementsAsync(int organizationId);
+                Task<bool> IsOrganizationTransferCompleteAsync(int organizationId);
+                Task FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(int organizationId);
+                Task<int> UpdateMissingRegistrationIds();
+        }
 }
