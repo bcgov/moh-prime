@@ -9,8 +9,8 @@
 
   <form [formGroup]="form">
     <mat-form-field class="w-100">
+      <mat-label>Note</mat-label>
       <textarea matInput
-                placeholder="Note"
                 rows="10"
                 formControlName="note"></textarea>
       <mat-hint [ngClass]="{ 'text-green': !!note.value }">
