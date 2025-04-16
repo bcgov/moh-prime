@@ -31,8 +31,8 @@
         <div class="col-6">
 
           <mat-form-field class="w-100">
+            <mat-label>Optional Extension Number</mat-label>
             <input matInput
-                   placeholder="Optional Extension Number"
                    formControlName="phoneExtension"
                    maxlength="10">
             <mat-error *ngIf="phoneExtension.hasError('required')">Required</mat-error>
@@ -73,8 +73,8 @@
               <div class="col-6">
 
                 <mat-form-field class="w-100">
+                  <mat-label>Optional SMS Phone Number</mat-label>
                   <input matInput
-                         placeholder="Optional SMS Phone Number"
                          formControlName="smsPhone"
                          mask="(000) 000-0000"
                          [showMaskTyped]="false">
@@ -106,8 +106,8 @@
   <ng-template #phoneNumberField>
 
     <mat-form-field class="w-100">
+      <mat-label>Phone Number</mat-label>
       <input matInput
-             placeholder="Phone Number"
              formControlName="phone"
              mask="(000) 000-0000"
              [showMaskTyped]="false">
@@ -120,8 +120,8 @@
   <ng-template #emailField>
 
     <mat-form-field class="w-100">
+      <mat-label>Email</mat-label>
       <input matInput
-             placeholder="Email"
              formControlName="email">
       <mat-error *ngIf="email.hasError('required')">Required</mat-error>
       <mat-error *ngIf="email.hasError('email')">Must be a valid email address</mat-error>

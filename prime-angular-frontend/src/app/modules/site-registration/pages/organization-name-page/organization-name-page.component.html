@@ -20,9 +20,9 @@
         <div class="col">
 
           <mat-form-field class="w-100">
+            <mat-label>Organization Name (Legal Entity Operating Site)</mat-label>
             <input type="text"
                    matInput
-                   placeholder="Organization Name (Legal Entity Operating Site)"
                    formControlName="name"
                    [matAutocomplete]="nameAuto"
                    (input)="onInput()">
@@ -51,8 +51,8 @@
         <div class="row">
           <div class="col">
             <mat-form-field class="w-100">
+              <mat-label>Organization Registration ID</mat-label>
               <input matInput
-                     placeholder="Organization Registration ID"
                      formControlName="registrationId">
               <mat-error>Required</mat-error>
             </mat-form-field>
@@ -94,9 +94,9 @@
         <div class="col">
 
           <mat-form-field class="w-100">
+            <mat-label>Doing Business As (Optional)</mat-label>
             <input type="text"
                    matInput
-                   placeholder="Doing Business As (Optional)"
                    formControlName="doingBusinessAs"
                    [matAutocomplete]="doingBusinessAsAuto">
             <mat-autocomplete autoActiveFirstOption

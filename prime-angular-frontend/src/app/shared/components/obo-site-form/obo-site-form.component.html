@@ -9,8 +9,8 @@
         <div class="col-12">
 
           <mat-form-field class="w-100">
+            <mat-label>Site Name</mat-label>
             <input matInput
-                   placeholder="Site Name"
                    formControlName="siteName">
           </mat-form-field>
 
@@ -56,10 +56,10 @@
       </div>
 
       <mat-form-field class="w-100 mb-3">
+        <mat-label>Job Title</mat-label>
         <input matInput
                #input
                type="text"
-               placeholder="Job Title"
                formControlName="jobTitle"
                [matAutocomplete]="auto"
                (focus)="removeNone(input)">
