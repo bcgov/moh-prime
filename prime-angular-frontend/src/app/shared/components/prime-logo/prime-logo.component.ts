@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 
 type primeLogoFill = 'light' | 'dark';
-type primeLogoLabel = 'none' | 'bottom' | 'right';
+type primeLogoLabel = 'none' | 'bottom' | 'right' | 'left';
 type primeLogoSize = 'small' | 'medium' | 'large';
 
 interface PrimeLogoConfig {
@@ -71,7 +71,9 @@ export class PrimeLogoComponent implements OnInit, OnChanges {
       ? [100, 100]
       : (label === 'right')
         ? [212, 100]
-        : [100, 150];
+        : (label === 'left')
+          ? [212, 100]
+          : [100, 150];
 
     return [...vbCoords, ...vbDimensions];
   }
