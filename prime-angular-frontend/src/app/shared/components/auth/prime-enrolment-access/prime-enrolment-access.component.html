@@ -79,9 +79,10 @@
                 continue, or
                 update a site registration for a private community health practice, community pharmacy,
                 or device provider.</div>
-              <button mat-stroked-button
+              <button mat-flat-button
                       [disabled]="mode === 'health-authority'"
                       class="button"
+                      color="primary"
                       (click)="onSiteRegistrationClick()">Continue</button>
               <br/>
               <a href="#" class="ml-2" (click)="onHealthAuthoritySiteRegistrationClick($event)">Register site for a health authority
@@ -104,8 +105,9 @@
                     <mat-error *ngIf="passcode.hasError('required')">Required</mat-error>
                     <mat-error *ngIf="passcode.hasError('validPasscode')">Invalid Passcode</mat-error>
                   </mat-form-field>
-                  <button mat-stroked-button
+                  <button mat-flat-button
                           class="button"
+                          color="primary"
                           (click)="onPasscodeSubmit()">Continue</button>
                   <button mat-stroked-button
                           class="button"
@@ -168,9 +170,9 @@
               number or registration number, CPSID or PharmaNet ID, and next renewal date.
             </p>
             <p>
-              Once you are approved to access PharmaNet, you will enter the email address for the person in your
-              workplace who sets up PharmaNet accounts. PRIME will let them know you have been approved, and they will
-              get you connected to PharmaNet.
+              Once you are approved to access PharmaNet, you will need to email your approval email to the person at
+              your workplace who sets up PharmaNet user accounts. They will get you connected to PharmaNet using details
+              in the approval email.
             </p>
           </section>
         </div>
@@ -197,7 +199,8 @@
                 Privacy officer - responsible for the site’s adherence to privacy and security legislation
               </li>
               <li>
-                Technical support - familiar with full range of software in use at the site
+                Technical support - contact in event of technology-related issue. Should be familiar with network
+                structure, security mechanisms, and site internet connections.
               </li>
             </ul>
           </section>
