@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder, Validators } from '@angular/forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -15,7 +15,7 @@ import { CollectionNoticeService } from '@shared/services/collection-notice.serv
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { asyncValidator } from '@lib/validators/form-async.validators';
 import { Observable } from 'rxjs/internal/Observable';
-import { filter, first, from, tap } from 'rxjs';
+import { filter } from 'rxjs';
 
 @UntilDestroy()
 @Component({
