@@ -385,8 +385,7 @@ namespace Prime.Controllers
 
         private async Task<bool> HandleBusinessLicenseUpdateAsync(CommunitySite site, SiteBusinessLicenceViewModel newLicence)
         {
-            if (site.SubmittedDate == null
-                || (site.ApprovedDate.HasValue && !site.IsWithinRenewalPeriod()))
+            if (site.SubmittedDate == null)
             {
                 // First submission ever, or site is approved but not in renewal. No Licence updates.
                 return true;
