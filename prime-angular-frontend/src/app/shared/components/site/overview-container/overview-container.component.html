@@ -75,7 +75,7 @@
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
 
-    <button *ngIf="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW"
+    <button *ngIf="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW && site.status !== SiteStatusType.LOCKED"
             mat-flat-button
             color="primary"
             class="mb-4"
