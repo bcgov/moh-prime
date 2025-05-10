@@ -16,6 +16,15 @@
     </ng-container>
   </app-expiry-alert>
 
+  <app-alert *ngIf="isBusinessLicenceUpdated && this.site.status === SiteStatusType.EDITABLE"
+             type="warning"
+             icon="warning">
+    <ng-container #alertContent
+                  class="alert-content">
+      Submit the site registration to complete the update.
+    </ng-container>
+  </app-alert>
+
   <app-alert *ngIf="hasErrors()"
              type="danger"
              icon="error">
