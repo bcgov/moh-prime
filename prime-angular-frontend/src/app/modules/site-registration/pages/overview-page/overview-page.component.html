@@ -4,7 +4,7 @@
                                [inProgress]="!isCompleted"></app-site-progress-indicator>
 
   <app-expiry-alert [expiryDates]="siteExpiryDate"
-                    *ngIf="!isBusinessLicenceUpdated">
+                    *ngIf="!isBusinessLicenceUpdated && this.site.status === SiteStatusType.EDITABLE">
     <!-- Work around for ngProjectAs not passing class reference to alert when applied to ng-content -->
     <ng-container #alertTitle
                   class="alert-title">
