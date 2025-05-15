@@ -47,7 +47,14 @@ namespace Prime.Services
                 query = query.Where(s => s.OrganizationId == organizationId && s.Organization.DeletedDate == null);
             }
 
-            return await query.ToListAsync();
+            IEnumerable<CommunitySite> sites = await query.ToListAsync();
+            // For SQL performance reasons, retrieve these 1-to-many related entities separately from base query
+            foreach (var site in sites)
+            {
+                site.RemoteUsers = GetRemoteUsersOfSite(site.Id);
+                site.SiteStatuses = GetStatusesOfSite(site.Id);
+            }
+            return sites;
         }
 
         public async Task<PaginatedList<CommunitySiteAdminListViewModel>> GetSitesAsync(OrganizationSearchOptions searchOptions)
@@ -142,6 +149,9 @@ namespace Prime.Services
         {
             var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
+            // For SQL performance reasons, retrieve these 1-to-many related entities separately from base query
+            site.RemoteUsers = GetRemoteUsersOfSite(site.Id);
+            site.SiteStatuses = GetStatusesOfSite(site.Id);
 
             if (site.CareSettingCode.HasValue &&
                 site.CareSettingCode.Value == (int)CareSettingType.CommunityPractice &&
@@ -734,14 +744,26 @@ namespace Prime.Services
                 .Include(s => s.TechnicalSupport)
                     .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.BusinessHours.OrderBy(bh => bh.Day))
-                .Include(s => s.RemoteUsers)
-                    .ThenInclude(r => r.RemoteUserCertification)
-                        .ThenInclude(c => c.College)
                 .Include(s => s.BusinessLicences)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Include(s => s.Adjudicator)
-                .Include(s => s.SiteStatuses)
                 .Include(s => s.SiteSubmissions);
+        }
+
+        private ICollection<RemoteUser> GetRemoteUsersOfSite(int siteId)
+        {
+            return _context.RemoteUsers
+                .Where(ru => ru.SiteId == siteId)
+                .Include(r => r.RemoteUserCertification)
+                    .ThenInclude(c => c.College)
+                .ToList();
+        }
+
+        private ICollection<SiteStatus> GetStatusesOfSite(int siteId)
+        {
+            return _context.SiteStatuses
+                .Where(ss => ss.SiteId == siteId)
+                .ToList();
         }
 
         private async Task<ExceptionRemoteAccessSite> matchExceptionRemoteAccessSite(string siteId, string registrationId)
