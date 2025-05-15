@@ -88,10 +88,12 @@ namespace Prime.Services
             var paginatedList = await PaginatedList<CommunitySiteAdminListViewModel>.CreateAsync(query, searchOptions.Page ?? 1);
 
 
-            //check for duplicate site id
             foreach (var site in paginatedList)
             {
+                //check for duplicate site id
                 site.DuplicatePecSiteCount = await GetDuplicatePecCount(site.CareSettingCode, site.PEC, site.Id);
+                // Related to another Site?
+                site.IsLinked = await IsLinkedSite(site.Id);
             }
 
             GroupSitesToOrgVisually(paginatedList);
@@ -131,6 +133,16 @@ namespace Prime.Services
             return await _context.Sites
                     .Where(s => s.PEC != null && s.PEC == pec && s.CareSettingCode == careSettingCode && originalSiteId != s.Id)
                     .CountAsync();
+        }
+
+        private async Task<bool> IsLinkedSite(int siteId)
+        {
+            var intStream = _context.Database.SqlQueryRaw<int>(
+                "SELECT count(*) AS \"Value\" FROM \"PredecessorSiteToSuccessorSite\" pstss WHERE pstss.\"PredecessorSiteId\" = {0} OR pstss.\"SuccessorSiteId\" = {0}",
+                siteId);
+            // grab the first (and only) row
+            var count = await intStream.FirstAsync();
+            return count > 0;
         }
 
         public async Task<CommunitySite> GetSiteAsync(int siteId)
