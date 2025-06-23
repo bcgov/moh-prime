@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UntypedFormGroup, UntypedFormArray } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormArray, UntypedFormControl, AbstractControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { noop, Observable, of } from 'rxjs';
@@ -24,6 +24,7 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { RemoteUsersPageFormState } from '../remote-users-page/remote-users-page-form-state.class';
 import { Site } from '@registration/shared/models/site.model';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 @Component({
   selector: 'app-remote-user-page',
@@ -47,6 +48,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public isSubmitted: boolean;
+  public hasDuplicateError: boolean;
   /**
    * @description
    * URL parameter indicating the ID of the remote user, or
@@ -129,7 +131,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   public onSubmit(): void {
     this.hasAttemptedSubmission = true;
 
-    if (this.checkValidity(this.form)) {
+    if (this.checkValidity(this.form) && !this.checkDuplicate()) {
       this.onSubmitFormIsValid();
       this.busy = this.performSubmission()
         .pipe(tap((_) => this.form.markAsPristine()))
@@ -141,13 +143,38 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm();
+    this.initForm();
+  }
+
+  protected onSubmitFormIsInvalid() {
+    this.hasDuplicateError = true;
+  }
+
+  protected onSubmitFormIsValid() {
+    this.hasDuplicateError = false;
   }
 
   protected createFormInstance() {
     // Be aware that this is the parent form state and should only
     // be used for it's API and on submission
     this.formState = this.siteFormStateService.remoteUsersPageFormState;
+  }
+
+  protected initForm(): void {
+    this.patchForm();
+  }
+
+  protected checkDuplicate(): boolean {
+    const remoteUser = this.form.getRawValue();
+    return this.formState.form.get('remoteUsers').getRawValue().some(s =>
+      s.firstName.toLowerCase() === remoteUser.firstName.toLowerCase() &&
+      s.lastName.toLowerCase() === remoteUser.lastName.toLowerCase() &&
+      s.email.toLowerCase() === remoteUser.email.toLowerCase() &&
+      s.remoteUserCertification.collegeCode === remoteUser.remoteUserCertification.collegeCode &&
+      s.remoteUserCertification.licenseCode === remoteUser.remoteUserCertification.licenseCode &&
+      s.remoteUserCertification.licenseNumber === remoteUser.remoteUserCertification.licenseNumber &&
+      s.remoteUserCertification.practitionerId === remoteUser.remoteUserCertification.practitionerId
+    )
   }
 
   protected patchForm(): void {

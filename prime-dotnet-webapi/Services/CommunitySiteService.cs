@@ -462,12 +462,15 @@ namespace Prime.Services
             }
 
             var existingUsers = current.RemoteUsers.ToDictionary(x => x.Id, x => x);
+            var outputUsers = new List<SiteRemoteUserUpdateModel>();
 
             foreach (var updatedUser in updateRemoteUsers)
             {
                 if (existingUsers.TryGetValue(updatedUser.Id, out var existing))
                 {
                     existingUsers.Remove(updatedUser.Id);
+
+                    outputUsers.Add(updatedUser);
 
                     // Only considered an update if incoming and existing aren't equal
                     if (!updatedUser.Equals(existing))
@@ -485,12 +488,21 @@ namespace Prime.Services
                 }
                 else
                 {
-                    var newRemoteUser = _mapper.Map<RemoteUser>(updatedUser);
-                    newRemoteUser.Id = 0;
-                    newRemoteUser.SiteId = current.Id;
-                    _context.RemoteUsers.Add(newRemoteUser);
+                    if (!outputUsers.Where(u => updatedUser.Equals(_mapper.Map<RemoteUser>(u))).Any())
+                    {
+                        var newRemoteUser = _mapper.Map<RemoteUser>(updatedUser);
+                        newRemoteUser.Id = 0;
+                        newRemoteUser.SiteId = current.Id;
+                        _context.RemoteUsers.Add(newRemoteUser);
 
-                    result.Add($"Remote user '{updatedUser.FirstName} {updatedUser.LastName}' was added.");
+                        outputUsers.Add(updatedUser);
+
+                        result.Add($"Remote user '{updatedUser.FirstName} {updatedUser.LastName}' was added.");
+                    }
+                    else
+                    {
+                        result.Add($"Duplicate Remote user '{updatedUser.FirstName} {updatedUser.LastName}' was detected and skipped.");
+                    }
                 }
             }
 
