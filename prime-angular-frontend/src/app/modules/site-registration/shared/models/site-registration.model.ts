@@ -29,4 +29,5 @@ export interface SiteRegistrationListViewModel extends OrganizationListViewModel
   signingAuthorityName: string;
   organizationName: string;
   duplicatePecSiteCount: number;
+  isLinked: boolean;
 }
