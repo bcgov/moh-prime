@@ -766,6 +766,7 @@ namespace Prime.Services
         {
             return _context.RemoteUsers
                 .Where(ru => ru.SiteId == siteId)
+                .OrderByDescending(ru => ru.CreatedTimeStamp)
                 .Include(r => r.RemoteUserCertification)
                     .ThenInclude(c => c.College)
                 .ToList();
