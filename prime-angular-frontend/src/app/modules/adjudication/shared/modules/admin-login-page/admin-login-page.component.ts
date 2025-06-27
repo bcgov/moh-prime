@@ -17,7 +17,7 @@ export class AdminLoginPageComponent implements OnInit {
 
   public onLogin() {
     this.authService.login({
-      idpHint: IdentityProviderEnum.IDIR,
+      idpHint: IdentityProviderEnum.IDIR_AAD,
       redirectUri: this.config.loginRedirectUrl
     });
   }
