@@ -166,15 +166,21 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
   protected checkDuplicate(): boolean {
     const remoteUser = this.form.getRawValue();
-    return this.formState.form.get('remoteUsers').getRawValue().some(s =>
-      s.firstName.toLowerCase() === remoteUser.firstName.toLowerCase() &&
-      s.lastName.toLowerCase() === remoteUser.lastName.toLowerCase() &&
-      s.email.toLowerCase() === remoteUser.email.toLowerCase() &&
+    var remoteUserList = this.formState.form.get('remoteUsers').getRawValue();
+
+    if (this.remoteUserIndex !== "new") {
+      remoteUserList.splice(this.remoteUserIndex, 1);
+    }
+
+    return remoteUserList.filter(s =>
+      s.firstName.toLowerCase().trim() === remoteUser.firstName.toLowerCase().trim() &&
+      s.lastName.toLowerCase().trim() === remoteUser.lastName.toLowerCase().trim() &&
+      s.email.toLowerCase().trim() === remoteUser.email.toLowerCase().trim() &&
       s.remoteUserCertification.collegeCode === remoteUser.remoteUserCertification.collegeCode &&
       s.remoteUserCertification.licenseCode === remoteUser.remoteUserCertification.licenseCode &&
       s.remoteUserCertification.licenseNumber === remoteUser.remoteUserCertification.licenseNumber &&
       s.remoteUserCertification.practitionerId === remoteUser.remoteUserCertification.practitionerId
-    )
+    ).length > 0;
   }
 
   protected patchForm(): void {
