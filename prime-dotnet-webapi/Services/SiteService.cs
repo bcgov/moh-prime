@@ -273,7 +273,7 @@ namespace Prime.Services
         {
             return await _context.RemoteUsers
                 .Where(user => user.SiteId == siteId)
-                .OrderByDescending(user => user.CreatedDate)
+                .OrderByDescending(user => user.CreatedTimeStamp)
                 .ProjectTo<RemoteUserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }

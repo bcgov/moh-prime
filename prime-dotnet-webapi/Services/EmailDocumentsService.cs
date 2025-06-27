@@ -13,6 +13,7 @@ using Prime.Models.Documents;
 using Prime.Services.Razor;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.SiteRegistration.ReviewDocument;
+using Microsoft.AspNetCore.Builder.Extensions;
 
 namespace Prime.Services.EmailInternal
 {
@@ -115,16 +116,19 @@ namespace Prime.Services.EmailInternal
                         Name = sv.Vendor.Name,
                         Email = sv.Vendor.Email
                     }),
-                    RemoteUsers = s.RemoteUsers.Select(ru => new RemoteUserViewModel
-                    {
-                        FullName = $"{ru.FirstName} {ru.LastName}",
-                        Certification = new CertViewModel
+                    RemoteUsers = s.RemoteUsers
+                        .OrderByDescending(ru => ru.CreatedTimeStamp)
+                        .Select(ru => new RemoteUserViewModel
                         {
-                            CollegeName = ru.RemoteUserCertification.College.Name,
-                            LicenceNumber = ru.RemoteUserCertification.LicenseNumber,
-                            PharmanetId = ru.RemoteUserCertification.PractitionerId
-                        }
-                    }),
+                            FullName = $"{ru.FirstName} {ru.LastName}",
+                            CreatedDate = $"{ru.CreatedDate:dd MMM yyyy}",
+                            Certification = new CertViewModel
+                            {
+                                CollegeName = ru.RemoteUserCertification.College.Name,
+                                LicenceNumber = ru.RemoteUserCertification.LicenseNumber,
+                                PharmanetId = ru.RemoteUserCertification.PractitionerId
+                            }
+                        }),
                     SigningAuthority = new ContactViewModel
                     {
                         JobTitle = s.Provisioner.JobRoleTitle,
