@@ -173,9 +173,6 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     }
 
     return remoteUserList.filter(s =>
-      s.firstName.toLowerCase().trim() === remoteUser.firstName.toLowerCase().trim() &&
-      s.lastName.toLowerCase().trim() === remoteUser.lastName.toLowerCase().trim() &&
-      s.email.toLowerCase().trim() === remoteUser.email.toLowerCase().trim() &&
       s.remoteUserCertification.collegeCode === remoteUser.remoteUserCertification.collegeCode &&
       s.remoteUserCertification.licenseCode === remoteUser.remoteUserCertification.licenseCode &&
       s.remoteUserCertification.licenseNumber === remoteUser.remoteUserCertification.licenseNumber &&
