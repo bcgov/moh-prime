@@ -274,6 +274,7 @@ namespace Prime.Services
         {
             return await _context.RemoteUsers
                 .Where(user => user.SiteId == siteId)
+                .OrderByDescending(user => user.CreatedTimeStamp)
                 .ProjectTo<RemoteUserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
@@ -295,10 +296,11 @@ namespace Prime.Services
                     (ruc.PractitionerId == searchedCert.PractitionerId && searchedCert.CollegeCode == CollegeCode.BCCNM)));
             }
 
+            // Remote user needs to have been notified when site is approved, sit is not deleted or archived
             IEnumerable<RemoteAccessSearchDto> searchResults = await _context.RemoteUserCertifications
                 .AsNoTracking()
                 .AsExpandable()
-                .Where(ruc => ruc.RemoteUser.Site.ApprovedDate.HasValue &&
+                .Where(ruc => ruc.RemoteUser.Notified &&
                     ruc.RemoteUser.Site.DeletedDate == null && ruc.RemoteUser.Site.ArchivedDate == null)
                 .Where(matchesAnyCert)
                 .ProjectTo<RemoteAccessSearchDto>(_mapper.ConfigurationProvider)
