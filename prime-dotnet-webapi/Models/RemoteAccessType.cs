@@ -19,5 +19,6 @@ namespace Prime.Models
     {
         PrivateCommunityHealthPractice = 1,
         FNHA = 2,
+        FNHA_Clinic = 3
     }
 }

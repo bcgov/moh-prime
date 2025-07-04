@@ -90,8 +90,13 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public collegeFilterPredicate() {
-    return (collegeConfig: CollegeConfig) =>
-      (collegeConfig.code === CollegeLicenceClassEnum.CPSBC || collegeConfig.code === CollegeLicenceClassEnum.BCCNM);
+    if (this.site.remoteAccessTypeCode) {
+      var remoteUserLicense = this.licenses.filter(l => l.remoteAccessTypeLicenses.some(r => r.remoteAccessTypeCode === this.site.remoteAccessTypeCode));
+      return (collegeConfig: CollegeConfig) =>
+        collegeConfig.collegeLicenses.some(l => remoteUserLicense.some(rul => rul.collegeLicenses.some(r => r.licenseCode === l.licenseCode)));
+    } else {
+      return false;
+    }
   }
 
   public licenceFilterPredicate() {
