@@ -91,7 +91,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
   public collegeFilterPredicate() {
     if (this.site.remoteAccessTypeCode) {
-      var remoteUserLicense = this.licenses.filter(l => l.remoteAccessTypeLicenses.some(r => r.remoteAccessTypeCode === this.site.remoteAccessTypeCode));
+      var remoteUserLicense = this.licenses.filter(l => l.remoteAccessTypeLicenses && l.remoteAccessTypeLicenses.some(r => r.remoteAccessTypeCode === this.site.remoteAccessTypeCode));
       return (collegeConfig: CollegeConfig) =>
         collegeConfig.collegeLicenses.some(l => remoteUserLicense.some(rul => rul.collegeLicenses.some(r => r.licenseCode === l.licenseCode)));
     } else {
