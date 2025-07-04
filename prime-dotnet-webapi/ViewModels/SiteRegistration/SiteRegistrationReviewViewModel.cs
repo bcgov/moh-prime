@@ -39,6 +39,7 @@ namespace Prime.ViewModels.SiteRegistration.ReviewDocument
     public class RemoteUserViewModel
     {
         public string FullName { get; set; }
+        public string CreatedDate { get; set; }
         public CertViewModel Certification { get; set; }
     }
 
