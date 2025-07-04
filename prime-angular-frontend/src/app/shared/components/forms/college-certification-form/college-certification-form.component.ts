@@ -188,6 +188,10 @@ export class CollegeCertificationFormComponent implements OnInit {
     return this.filteredLicenses && this.filteredLicenses.some(l => l.name !== 'Not Displayed');
   }
 
+  public showRegistrationId(): boolean {
+    return (!this.condensed || this.collegeCode.value !== CollegeLicenceClassEnum.BCCNM) && this.collegeCode.value !== CollegeLicenceClassEnum.CPSBC
+  }
+
   /**
    * @description
    * Handle changes to prescriber opt-in/out, but will only ever
