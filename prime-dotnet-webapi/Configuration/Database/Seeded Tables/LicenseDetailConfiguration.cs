@@ -477,6 +477,9 @@ namespace Prime.Configuration.Database
                     //new licence class - Educational – Postgraduate Resident Clinical Associate
                     new LicenseDetail { Id = 376, LicenseCode = 179, Prefix = "91", Manual = false, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true,  EffectiveDate = AddPostgraduateResidentClinicalAssociate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
 
+                    //change CPSBC Conditional - Practice Setting to manual review
+                    new LicenseDetail { Id = 377, LicenseCode = 9, Prefix = "91", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = AdjustmentsToCPSBCAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
                     //change CPSBC Educational - Postgraduate Resident Elective to manual review
                     new LicenseDetail { Id = 378, LicenseCode = 13, Prefix = "91", Manual = true, Validate = true,  LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false,  EffectiveDate = LicenseClassChangeJuly2025, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
                 };
