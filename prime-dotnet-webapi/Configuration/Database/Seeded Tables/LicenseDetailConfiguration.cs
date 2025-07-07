@@ -31,6 +31,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime UpdatePharmacyTechnician = new(2024, 11, 12, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime AddMultijurisdictionalFlag = new(2024, 11, 12, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime AddPostgraduateResidentClinicalAssociate = new(2025, 03, 12, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime FNHAClinicUpdate = new(2025, 07, 01, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime LicenseClassChangeJuly2025 = new(2025, 7, 3, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
