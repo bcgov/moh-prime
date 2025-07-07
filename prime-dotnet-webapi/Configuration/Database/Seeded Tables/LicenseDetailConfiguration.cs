@@ -31,6 +31,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime UpdatePharmacyTechnician = new(2024, 11, 12, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime AddMultijurisdictionalFlag = new(2024, 11, 12, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime AddPostgraduateResidentClinicalAssociate = new(2025, 03, 12, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime FNHAClinicUpdate = new(2025, 07, 01, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
         {
@@ -477,7 +478,7 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id = 376, LicenseCode = 179, Prefix = "91", Manual = false, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true,  EffectiveDate = AddPostgraduateResidentClinicalAssociate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
 
                     // change CPSBC Conditional - Practice Setting to manual review
-                    new LicenseDetail { Id = 377, LicenseCode = 9, Prefix = "91", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = AdjustmentsToCPSBCAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 377, LicenseCode = 9, Prefix = "91", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = FNHAClinicUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
             }
         }
