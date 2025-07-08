@@ -52,6 +52,11 @@ export class OverviewContainerComponent implements OnInit {
     return this.site.careSettingCode === CareSettingEnum.DEVICE_PROVIDER;
   }
 
+  public showUpdateBusinessLicence(): boolean {
+    return this.showEditRedirect && this.site.status !== SiteStatusType.IN_REVIEW &&
+      this.site.status !== SiteStatusType.LOCKED && this.site.approvedDate !== null;
+  }
+
   public onRoute(routePath: string | (string | number)[]) {
     let navExtra: NavigationExtras;
     if (this.site) {
