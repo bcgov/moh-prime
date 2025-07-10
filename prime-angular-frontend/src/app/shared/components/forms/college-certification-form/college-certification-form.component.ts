@@ -188,6 +188,10 @@ export class CollegeCertificationFormComponent implements OnInit {
     return this.filteredLicenses && this.filteredLicenses.some(l => l.name !== 'Not Displayed');
   }
 
+  public showRegistrationId(): boolean {
+    return (!this.condensed || this.collegeCode.value !== CollegeLicenceClassEnum.BCCNM) && this.collegeCode.value !== CollegeLicenceClassEnum.CPSBC
+  }
+
   /**
    * @description
    * Handle changes to prescriber opt-in/out, but will only ever
@@ -201,6 +205,17 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   public onPractiionerIdChange(event: any): void {
     this.practitionerId.patchValue(event.target.value.toUpperCase());
+  }
+
+  public getRegNumberFieldLabel(collegeCode: CollegeLicenceClassEnum): string {
+    return (collegeCode === CollegeLicenceClassEnum.CPBC
+      || collegeCode === CollegeLicenceClassEnum.CDSBC
+      || collegeCode === CollegeLicenceClassEnum.OptometryBC)
+      ? 'Registration Number' : 'Registration ID';
+  }
+
+  public getPNetIdFieldLabel(collegeCode: CollegeLicenceClassEnum): string {
+    return (collegeCode === CollegeLicenceClassEnum.BCCNM) ? 'PharmaNet ID/Prescriber ID' : 'PharmaNet ID';
   }
 
   // TODO decouple default and condensed modes in controller and template
