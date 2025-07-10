@@ -230,25 +230,6 @@ services:
       - prime-net
 
 ###############################################################################
-###                            Backup Definition                            ###
-###############################################################################
-  backup:
-    container_name: backup
-    build:
-      context: prime-database-backup
-    ports:
-      - 6432:5432
-      - 9081:8081
-    depends_on:
-      - postgres
-      - mongo
-    volumes:
-      - db_backup_data:/opt/backup
-      - local_postgres_data:/var/lib/postgresql/data
-    networks:
-      - prime-net
-
-###############################################################################
 ###                       Document Manager Definition                       ###
 ###############################################################################
   document_manager_backend:

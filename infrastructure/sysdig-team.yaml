@@ -1,0 +1,17 @@
+apiVersion: ops.gov.bc.ca/v1alpha1
+kind: SysdigTeam
+metadata:
+  name: 9c33a9-sysdigteam
+  namespace: 9c33a9-tools
+spec:
+  team:
+    description: The Sysdig Team for the OpenShift Project Set 9c33a9 (PRIME)
+    users:
+      - name: roya.shourouni@nttdata.com
+        role: ROLE_TEAM_EDIT
+      - name: jason.aitchison@nttdata.com
+        role: ROLE_TEAM_EDIT
+      - name: jack.wong@nttdata.com
+        role: ROLE_TEAM_EDIT
+      - name: alan.leung@nttdata.com
+        role: ROLE_TEAM_EDIT
