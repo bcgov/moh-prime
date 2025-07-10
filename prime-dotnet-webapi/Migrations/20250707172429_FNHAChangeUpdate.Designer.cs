@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -11,9 +12,11 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250707172429_FNHAChangeUpdate")]
+    partial class FNHAChangeUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -13938,29 +13941,12 @@ namespace Prime.Migrations
                             AllowRequestRemoteAccess = true,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2023, 8, 28, 8, 0, 0, 0, DateTimeKind.Utc),
+                            EffectiveDate = new DateTime(2025, 7, 1, 8, 0, 0, 0, DateTimeKind.Utc),
                             LicenseCode = 9,
                             LicensedToProvideCare = true,
                             Manual = true,
                             Multijurisdictional = false,
                             NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 378,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2025, 7, 3, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 13,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Multijurisdictional = false,
-                            NamedInImReg = false,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -17956,6 +17942,15 @@ namespace Prime.Migrations
                         new
                         {
                             RemoteAccessTypeCode = 1,
+                            LicenseCode = 13,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 1,
                             LicenseCode = 14,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -18128,6 +18123,15 @@ namespace Prime.Migrations
                         {
                             RemoteAccessTypeCode = 2,
                             LicenseCode = 12,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 2,
+                            LicenseCode = 13,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),

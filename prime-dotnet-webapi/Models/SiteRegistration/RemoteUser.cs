@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DelegateDecompiler;
 using Newtonsoft.Json;
 
 namespace Prime.Models
@@ -29,6 +31,13 @@ namespace Prime.Models
         /// Whether there was an attempt to notify Remote User by email
         /// </summary>
         public bool Notified { get; set; }
+
+        [NotMapped]
+        [Computed]
+        public DateTimeOffset? CreatedDate
+        {
+            get => this.CreatedTimeStamp;
+        }
 
         public RemoteUserCertification RemoteUserCertification { get; set; }
     }
