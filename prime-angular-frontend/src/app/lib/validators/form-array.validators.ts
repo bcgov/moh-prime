@@ -1,4 +1,4 @@
-import { AbstractControl, FormArray, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup, UntypedFormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export class FormArrayValidators {
   /**
@@ -11,7 +11,7 @@ export class FormArrayValidators {
     minNumber: number,
     predicate: (control: AbstractControl) => boolean = (control: AbstractControl) => !!control
   ): ValidatorFn {
-    return (array: FormArray): ValidationErrors | null => {
+    return (array: UntypedFormArray): ValidationErrors | null => {
 
       const atLeast = array &&
         array.controls?.length &&

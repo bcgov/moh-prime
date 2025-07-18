@@ -31,6 +31,7 @@ import { BusinessLicenceRenewalPageComponent } from './pages/business-licence-re
 import { BusinessLicenceExpiryComponent } from './shared/components/business-licence-expiry/business-licence-expiry.component';
 import { ElectronicOrganizationAgreementPageComponent } from './pages/electronic-organization-agreement-page/electronic-organization-agreement-page.component';
 import { DeviceProviderPageComponent } from './pages/device-provider-page/device-provider-page.component';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,12 @@ import { DeviceProviderPageComponent } from './pages/device-provider-page/device
   imports: [
     SiteRegistrationRoutingModule,
     SharedModule,
-    DashboardModule
+    DashboardModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+  ],
+  providers: [
+    provideNgxMask(),
   ]
 })
 export class SiteRegistrationModule { }

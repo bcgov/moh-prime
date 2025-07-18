@@ -1,4 +1,4 @@
-import { FormArray, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, UntypedFormControl } from '@angular/forms';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 import { CollegeConfig } from '@config/config.model';
@@ -12,7 +12,7 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
   public colleges: CollegeConfig[];
 
   public constructor(
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected configService: ConfigService
   ) {
     super();
@@ -20,28 +20,28 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     this.colleges = this.configService.colleges;
   }
 
-  public get certifications(): FormArray {
-    return this.formInstance.get('certifications') as FormArray;
+  public get certifications(): UntypedFormArray {
+    return this.formInstance.get('certifications') as UntypedFormArray;
   }
 
-  public get deviceProviderIdentifier(): FormControl {
-    return this.formInstance.get('deviceProviderIdentifier') as FormControl;
+  public get deviceProviderIdentifier(): UntypedFormControl {
+    return this.formInstance.get('deviceProviderIdentifier') as UntypedFormControl;
   }
 
-  public get deviceProviderRoleCode(): FormControl {
-    return this.formInstance.get('deviceProviderRoleCode') as FormControl;
+  public get deviceProviderRoleCode(): UntypedFormControl {
+    return this.formInstance.get('deviceProviderRoleCode') as UntypedFormControl;
   }
 
-  public get deviceProviderId(): FormControl {
-    return this.formInstance.get('deviceProviderId') as FormControl;
+  public get deviceProviderId(): UntypedFormControl {
+    return this.formInstance.get('deviceProviderId') as UntypedFormControl;
   }
 
-  public get certificationNumber(): FormControl {
-    return this.formInstance.get('certificationNumber') as FormControl;
+  public get certificationNumber(): UntypedFormControl {
+    return this.formInstance.get('certificationNumber') as UntypedFormControl;
   }
 
-  public get unlistedCertifications(): FormArray {
-    return this.formInstance.get('unlistedCertifications') as FormArray;
+  public get unlistedCertifications(): UntypedFormArray {
+    return this.formInstance.get('unlistedCertifications') as UntypedFormArray;
   }
 
   /**
@@ -112,7 +112,7 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     });
   }
 
-  public buildCollegeCertificationForm(): FormGroup {
+  public buildCollegeCertificationForm(): UntypedFormGroup {
     return this.fb.group({
       // Force selection of "None" on new certifications
       collegeCode: ['', []],
@@ -164,7 +164,7 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     return college ? college.collegeLicenses.some((l) => l.collegeLicenseGroupingCode) : false;
   }
 
-  public buildUnlistedCollegeCertificationForm(): FormGroup {
+  public buildUnlistedCollegeCertificationForm(): UntypedFormGroup {
     return this.fb.group({
       collegeName: ['', []],
       licenceNumber: ['', []],

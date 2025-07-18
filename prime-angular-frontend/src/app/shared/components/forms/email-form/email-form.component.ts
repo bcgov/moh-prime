@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ViewportService } from '@core/services/viewport.service';
@@ -12,7 +12,7 @@ import { NextStepsFormState } from '@paper-enrolment/pages/next-steps-page/next-
 })
 export class EmailFormComponent implements OnInit {
 
-  @Input() public form: FormGroup;
+  @Input() public form: UntypedFormGroup;
   @Input() public formState: NextStepsFormState;
   @Input() public showRemoveButton: boolean = true;
   @Input() public index: number;
@@ -31,8 +31,8 @@ export class EmailFormComponent implements OnInit {
     return this.viewportService.isMobile;
   }
 
-  public get email(): FormControl {
-    return this.form.get('email') as FormControl;
+  public get email(): UntypedFormControl {
+    return this.form.get('email') as UntypedFormControl;
   }
 
   public removeEmailInput(): void {

@@ -20,7 +20,7 @@ import { SelfDeclarationForm } from './self-declaration-form.model';
       </button>
     </app-enrollee-self-declarations>
   `,
-  styles: ['mat-icon { font-size: 1.2em; }'],
+  styles: ['mat-icon { font-size: 1em; }'],
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class SelfDeclarationOverviewComponent extends AbstractOverview {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Validators, FormControl, FormBuilder } from '@angular/forms';
+import { Validators, UntypedFormControl, UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -41,7 +41,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private paperEnrolmentResource: PaperEnrolmentResource,
     protected enrolmentResource: EnrolmentResource,
     private utilsService: UtilsService,
@@ -160,7 +160,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
     this.routeUtils.routeRelativeTo(nextRoutePath);
   }
 
-  private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {
+  private toggleSelfDeclarationValidators(value: boolean, control: UntypedFormControl) {
     (!value)
       ? this.formUtilsService.resetAndClearValidators(control)
       : this.formUtilsService.setValidators(control, [Validators.required]);

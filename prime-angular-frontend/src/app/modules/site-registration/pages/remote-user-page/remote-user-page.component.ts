@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormArray, UntypedFormControl, AbstractControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { noop, Observable, of } from 'rxjs';
@@ -24,6 +24,7 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { RemoteUsersPageFormState } from '../remote-users-page/remote-users-page-form-state.class';
 import { Site } from '@registration/shared/models/site.model';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 @Component({
   selector: 'app-remote-user-page',
@@ -43,10 +44,11 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * not linked with the form state until submission where it
    * gets mirrored.
    */
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public isSubmitted: boolean;
+  public hasDuplicateError: boolean;
   /**
    * @description
    * URL parameter indicating the ID of the remote user, or
@@ -81,8 +83,8 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * @description
    * Remote user certifications specific to the local form.
    */
-  public get remoteUserCertification(): FormGroup {
-    return this.form.get('remoteUserCertification') as FormGroup;
+  public get remoteUserCertification(): UntypedFormGroup {
+    return this.form.get('remoteUserCertification') as UntypedFormGroup;
   }
 
   public onBack() {
@@ -90,8 +92,13 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public collegeFilterPredicate() {
-    return (collegeConfig: CollegeConfig) =>
-      (collegeConfig.code === CollegeLicenceClassEnum.CPSBC || collegeConfig.code === CollegeLicenceClassEnum.BCCNM);
+    if (this.site.remoteAccessTypeCode) {
+      var remoteUserLicense = this.licenses.filter(l => l.remoteAccessTypeLicenses && l.remoteAccessTypeLicenses.some(r => r.remoteAccessTypeCode === this.site.remoteAccessTypeCode));
+      return (collegeConfig: CollegeConfig) =>
+        collegeConfig.collegeLicenses.some(l => remoteUserLicense.some(rul => rul.collegeLicenses.some(r => r.licenseCode === l.licenseCode)));
+    } else {
+      return false;
+    }
   }
 
   public licenceFilterPredicate() {
@@ -129,7 +136,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   public onSubmit(): void {
     this.hasAttemptedSubmission = true;
 
-    if (this.checkValidity(this.form)) {
+    if (this.checkValidity(this.form) && !this.checkDuplicate()) {
       this.onSubmitFormIsValid();
       this.busy = this.performSubmission()
         .pipe(tap((_) => this.form.markAsPristine()))
@@ -141,13 +148,41 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm();
+    this.initForm();
+  }
+
+  protected onSubmitFormIsInvalid() {
+    this.hasDuplicateError = true;
+  }
+
+  protected onSubmitFormIsValid() {
+    this.hasDuplicateError = false;
   }
 
   protected createFormInstance() {
     // Be aware that this is the parent form state and should only
     // be used for it's API and on submission
     this.formState = this.siteFormStateService.remoteUsersPageFormState;
+  }
+
+  protected initForm(): void {
+    this.patchForm();
+  }
+
+  protected checkDuplicate(): boolean {
+    const remoteUser = this.form.getRawValue();
+    var remoteUserList = this.formState.form.get('remoteUsers').getRawValue();
+
+    if (this.remoteUserIndex !== "new") {
+      remoteUserList.splice(this.remoteUserIndex, 1);
+    }
+
+    return remoteUserList.filter(s =>
+      s.remoteUserCertification.collegeCode === remoteUser.remoteUserCertification.collegeCode &&
+      s.remoteUserCertification.licenseCode === remoteUser.remoteUserCertification.licenseCode &&
+      s.remoteUserCertification.licenseNumber === remoteUser.remoteUserCertification.licenseNumber &&
+      s.remoteUserCertification.practitionerId === remoteUser.remoteUserCertification.practitionerId
+    ).length > 0;
   }
 
   protected patchForm(): void {
@@ -176,7 +211,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     // Set the parent form for updating on submission, but otherwise use the
     // local form group for all changes prior to submission
     const parent = this.formState.form;
-    const remoteUsersFormArray = parent.get('remoteUsers') as FormArray;
+    const remoteUsersFormArray = parent.get('remoteUsers') as UntypedFormArray;
 
     if (this.remoteUserIndex !== 'new') {
       const remoteUserFormGroup = remoteUsersFormArray.at(+this.remoteUserIndex);
