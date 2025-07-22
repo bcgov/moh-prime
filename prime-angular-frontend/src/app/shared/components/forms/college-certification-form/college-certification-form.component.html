@@ -82,7 +82,7 @@
           </mat-form-field>
 
         </div>
-        <div *ngIf="!condensed && collegeCode.value !== CollegeLicenceClassEnum.CPSBC"
+        <div *ngIf="showRegistrationId()"
              class="col-sm-12 pl-5">
 
           <mat-form-field class="w-100">

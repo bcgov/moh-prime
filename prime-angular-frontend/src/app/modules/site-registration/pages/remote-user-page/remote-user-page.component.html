@@ -68,6 +68,15 @@
 
     </section>
 
+    <app-alert *ngIf="hasDuplicateError"
+               type="danger"
+               icon="warning">
+      <ng-container #alertContent
+                    class="alert-content">
+        College Licence Information already exists.
+      </ng-container>
+    </app-alert>
+
     <app-page-footer primaryActionLabel="Continue"
                      [hasSecondaryAction]="true"
                      (save)="onSubmit()"
