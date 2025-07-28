@@ -32,6 +32,7 @@ namespace Prime.Configuration.Database
                     new StatusReason { Code = (int)StatusReasonType.PossiblePaperEnrolmentMatch,  Name = "Possible match with paper enrolment(s)"                                         },
                     new StatusReason { Code = (int)StatusReasonType.UnableToLinkToPaperEnrolment, Name = "Unable to link enrollee to paper enrolment"                                     },
                     new StatusReason { Code = (int)StatusReasonType.HasUnlistedLicence,           Name = "Enrollee has unlisted (typically non-BC) licences"                                     },
+                    new StatusReason { Code = (int)StatusReasonType.PossibleDuplicate,            Name = "Enrollee has possible duplicate"                                     },
                 };
             }
         }
