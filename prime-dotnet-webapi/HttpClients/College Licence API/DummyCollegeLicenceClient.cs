@@ -24,7 +24,7 @@ namespace Prime.HttpClients
                 "3" => new { Date = "1998-08-08", Name = "THREE" },
                 "4" => new { Date = "1999-10-01", Name = "FOUR" },
                 "5" => new { Date = "1999-01-31", Name = "FIVE" },
-                "6" => new { Date = "2000-02-25", Name = "SIX" },
+                "6" => new { Date = "2000-02-25", Name = "SIXX" },
                 "7" => new { Date = "1999-03-14", Name = "SEVEN" },
                 "8" => new { Date = "1999-01-04", Name = "EIGHT" },
                 "9" => new { Date = "1997-10-12", Name = "NINE" },
