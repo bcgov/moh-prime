@@ -45,7 +45,7 @@ jobs:
       - name: install yarn
         run: npm install -g yarn
 
-      - uses: amancevice/setup-code-climate@v0
+      - uses: amancevice/setup-code-climate@v2
         with:
           cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
           cc_test_reporter_version: latest  # optional
@@ -102,7 +102,7 @@ jobs:
           cd ../
           dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.3.6
 
-      - uses: amancevice/setup-code-climate@v0
+      - uses: amancevice/setup-code-climate@v2
         with:
           cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
           cc_test_reporter_version: latest  # optional
@@ -140,7 +140,7 @@ jobs:
       - name: set-date
         run: |
           echo "GIT_COMMITTED_AT=$(date +%s)" >> ${GITHUB_ENV}
-      - uses: amancevice/setup-code-climate@v0
+      - uses: amancevice/setup-code-climate@v2
         with:
           cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
           cc_test_reporter_version: latest  # optional
