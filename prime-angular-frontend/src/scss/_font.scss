@@ -1,9 +1,19 @@
+@font-face {
+  font-family: 'BC Sans';
+  src: url('/assets/fonts/BCSans-Regular.woff2') format('woff2'),
+    url('/assets/fonts/BCSans-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 //
 // Fonts Palettes
 //
 
-$fonts: (header: #{"Roboto, Helvetica Neue, sans-serif"},
-  body: #{"Roboto, Helvetica Neue, sans-serif"});
+$fonts: (
+  header: #{"BC Sans"},
+  body: #{"BC Sans"}
+);
 
 //
 // Font Mapping Extractor
