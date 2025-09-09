@@ -36,7 +36,7 @@ jobs:
       #       ${{ runner.os }}-node-
 
       - name: Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'yarn'
@@ -45,7 +45,7 @@ jobs:
       - name: install yarn
         run: npm install -g yarn
 
-      - uses: amancevice/setup-code-climate@v1.1
+      - uses: amancevice/setup-code-climate@main
         with:
           cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
 
