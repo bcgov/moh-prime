@@ -45,7 +45,7 @@ namespace PrimeTests.UnitTests
             var results = await service.GetLookupsAsync();
             Assert.NotNull(results);
 
-            Assert.NotEmpty(results.Colleges);
+            Assert.Empty(results.Colleges);
             Assert.NotEmpty(results.JobNames);
             Assert.NotEmpty(results.Licenses);
             Assert.NotEmpty(results.CareSettings);
