@@ -1,4 +1,4 @@
-name: CodeClimate-Checks
+name: UnitTest-Checks
 on:
   pull_request:
     types: [opened, reopened, synchronize, closed]
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  collect-frontend-coverage:
+  frontend-test:
     defaults:
       run:
         working-directory: ./prime-angular-frontend
@@ -67,7 +67,7 @@ jobs:
       #     retention-days: 1
 
 
-  collect-backend-coverage:
+  backend-test:
     defaults:
       run:
         working-directory: ./prime-dotnet-webapi-tests

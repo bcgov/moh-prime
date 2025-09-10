@@ -43,6 +43,15 @@ describe('RegulatoryComponent', () => {
       {
         imports: [
           BrowserAnimationsModule,
+          HttpClientTestingModule,
+          RouterTestingModule,
+          NgxBusyModule,
+          NgxContextualHelpModule,
+          NgxMaterialModule,
+          ReactiveFormsModule,
+          EnrolmentModule,
+          NgxMaskDirective,
+          NgxMaskPipe
         ],
         providers: [
           {
