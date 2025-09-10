@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  frontend-test:
+  test-frontend:
     defaults:
       run:
         working-directory: ./prime-angular-frontend
@@ -67,7 +67,7 @@ jobs:
       #     retention-days: 1
 
 
-  backend-test:
+  test-backend:
     defaults:
       run:
         working-directory: ./prime-dotnet-webapi-tests
