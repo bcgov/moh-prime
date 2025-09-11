@@ -33,6 +33,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime AddPostgraduateResidentClinicalAssociate = new(2025, 03, 12, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime FNHAClinicUpdate = new(2025, 07, 01, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime LicenseClassChangeJuly2025 = new(2025, 7, 3, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime PhysicianLicenseClassChangeSept2025 = new(2025, 9, 11, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
         {
@@ -483,6 +484,9 @@ namespace Prime.Configuration.Database
 
                     //change CPSBC Educational - Postgraduate Resident Elective to manual review
                     new LicenseDetail { Id = 378, LicenseCode = 13, Prefix = "91", Manual = true, Validate = true,  LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false,  EffectiveDate = LicenseClassChangeJuly2025, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+
+                    //change CPSBC Educational - Postgraduate Resident Elective to manual review
+                    new LicenseDetail { Id = 379, LicenseCode = 180, Prefix = "91", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = PhysicianLicenseClassChangeSept2025, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
                 };
             }
         }
