@@ -14,8 +14,15 @@
 
     <p class="font-weight-bold mb-5">
       {{ certificate.gpid | uppercase }}
+      <button mat-icon-button
+              type="button"
+              aria-label="Copy your GPID to clipboard"
+              matTooltip="Copy your GPID to clipboard"
+              [cdkCopyToClipboard]="gpid"
+              (cdkCopyToClipboardCopied)="onCopy()">
+        <mat-icon>content_paste</mat-icon>
+      </button>
     </p>
-
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>User Information</ng-container>
     </app-page-subheader>
