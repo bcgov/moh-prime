@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
 
@@ -16,7 +17,8 @@ import { ProvisionerAccessComponent } from '@certificate/shared/components/provi
   imports: [
     ProvisionerAccessRoutingModule,
     SharedModule,
-    DashboardModule
+    DashboardModule,
+    ClipboardModule
   ]
 })
 export class ProvisionerAccessModule { }
