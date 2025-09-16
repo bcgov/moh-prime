@@ -1,4 +1,4 @@
-name: CodeClimate-Checks
+name: UnitTest-Checks
 on:
   pull_request:
     types: [opened, reopened, synchronize, closed]
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  collect-frontend-coverage:
+  test-frontend:
     defaults:
       run:
         working-directory: ./prime-angular-frontend
@@ -45,30 +45,12 @@ jobs:
       - name: install yarn
         run: npm install -g yarn
 
-      - uses: amancevice/setup-code-climate@v0
-        with:
-          cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
-          cc_test_reporter_version: latest  # optional
-
-      - run: cc-test-reporter before-build
-
       - name: yarn and yarn run test
         run: |
           yarn
           yarn run test
-      - name: Collect Frontend Report
-        run: |
-          cc-test-reporter format-coverage -t lcov -o coverage/frontend.json coverage/lcov.info
 
-      - name: Create frontend coverage file artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend
-          path: ./prime-angular-frontend/coverage/frontend.json
-          retention-days: 1
-
-
-  collect-backend-coverage:
+  test-backend:
     defaults:
       run:
         working-directory: ./prime-dotnet-webapi-tests
@@ -101,14 +83,6 @@ jobs:
         run: |
           cd ../
           dotnet tool install -g dotnet-reportgenerator-globaltool --version 5.3.6
-
-      - uses: amancevice/setup-code-climate@v0
-        with:
-          cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
-          cc_test_reporter_version: latest  # optional
-
-      - run: cc-test-reporter before-build
-
       - name: Generate coverage report
         env:
           EXCLUDE: "**/Migrations/**%2c**/Models/**%2c**/Views/**%2c**/ViewModels/**%2c**/Configuration/**%2c**/DTOs/**%2c**/Helpers/**%2c**/Resources/**%2c**/**Definitions.cs"
@@ -117,54 +91,4 @@ jobs:
       - name: Run report generator
         run: |
           reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:coverage" -reporttype:lcov "-filefilters:-ApiDbContextModelSnapshot.cs;" -verbosity:Error
-      - name: Collect Backend Report
-        run: |
-          cd ../prime-dotnet-webapi
-          cc-test-reporter format-coverage -t lcov -o ../prime-dotnet-webapi-tests/coverage/backend.json ../prime-dotnet-webapi-tests/coverage/lcov.info -p /home/runner/work/moh-prime/moh-prime/prime-dotnet-webapi
-      - name: Create backend coverage file artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend
-          path: ./prime-dotnet-webapi-tests/coverage/backend.json
-          retention-days: 1
 
-
-  codeclimate-sum-coverage:
-    needs: [ collect-frontend-coverage, collect-backend-coverage ]
-
-    if: github.ref != 'develop' || (github.ref == 'develop' && github.event.pull_request.merged == true)
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: set-date
-        run: |
-          echo "GIT_COMMITTED_AT=$(date +%s)" >> ${GITHUB_ENV}
-      - uses: amancevice/setup-code-climate@v0
-        with:
-          cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
-          cc_test_reporter_version: latest  # optional
-
-      - name: Download frontend artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend
-          # path: frontend/
-
-      - name: Download backend artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: backend
-          # path: backend/
-
-      - name: Sum files
-        run: |
-          cc-test-reporter sum-coverage -p 2 frontend.json backend.json
-          cc-test-reporter upload-coverage -i ./coverage/codeclimate.json
-
-      - name: Create summed report
-        uses: actions/upload-artifact@v4
-        with:
-          name: summed
-          path: ./coverage/codeclimate.json
-          retention-days: 1
