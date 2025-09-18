@@ -40,6 +40,7 @@ namespace Prime.Configuration.Database
                     new License { Code = 21, Weight = 26, Name = "Temporarily Inactive"                                },
                     new License { Code = 87, Weight = 27, Name = "Associate - Acute Care"                              },
                     new License { Code = 88, Weight = 28, Name = "Associate - Community Primary Care"                  },
+                    new License { Code = 180,Weight = 28, Name = "Associate"                                           },
                     new License { Code = 89, Weight = 29, Name = "USA Certified"                                       },
                     new License { Code = 92, Weight = 30, Name = "Certified Physician Assistant"                       },
                     new License { Code = 59, Weight = 31, Name = "Full - Podiatric Surgeon"                            },
