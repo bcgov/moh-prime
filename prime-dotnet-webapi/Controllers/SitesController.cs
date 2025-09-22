@@ -1503,5 +1503,58 @@ namespace Prime.Controllers
             var result = await _siteService.CanBeRestored(siteId);
             return Ok(result);
         }
+
+        // POST: api/Sites/5/link/6/add
+        /// <summary>
+        /// Add site link
+        /// </summary>
+        /// <param name="successorSiteId"></param>
+        /// <param name="predecessorSiteId"></param>
+        [HttpPost("{successorSiteId}/link/{predecessorSiteId}/add", Name = nameof(AddSiteLink))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> AddSiteLink(int predecessorSiteId, int successorSiteId)
+        {
+            await _siteService.SaveSiteLink(predecessorSiteId, successorSiteId);
+            return Ok();
+        }
+
+        // POST: api/Sites/5/link/6/remove
+        /// <summary>
+        /// Remove site link
+        /// </summary>
+        /// <param name="successorSiteId"></param>
+        /// <param name="predecessorSiteId"></param>
+        [HttpPost("{successorSiteId}/link/{predecessorSiteId}/remove", Name = nameof(RemoveSiteLink))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> RemoveSiteLink(int predecessorSiteId, int successorSiteId)
+        {
+            await _siteService.RemoveSiteLink(predecessorSiteId, successorSiteId);
+            return Ok();
+        }
+
+        // GET: api/Sites/5/predecessor
+        /// <summary>
+        /// Return site predecessor
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}/predecessor", Name = nameof(GetPredecessorSite))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetPredecessorSite(int siteId)
+        {
+            var viewModel = await _communitySiteService.GetPredecessorSite(siteId);
+            return Ok(viewModel);
+        }
     }
 }
