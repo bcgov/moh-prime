@@ -31,8 +31,6 @@ export class HealthAuthSiteRegLoginPageComponent implements OnInit {
     const redirectRoute = HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.COLLECTION_NOTICE);
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}?pc=${btoa(passcode)}`;
 
-    console.log(redirectUri);
-
     this.authService.login({
       idpHint: IdentityProviderEnum.BCSC_MOH,
       redirectUri

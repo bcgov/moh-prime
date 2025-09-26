@@ -28,8 +28,6 @@ export class CollectionNoticePageComponent implements OnInit {
     this.authService.hasJustLoggedIn = true;
     this.authService.passcode = this.route.snapshot.queryParams['pc'] ? atob(this.route.snapshot.queryParams['pc']) : null;
 
-    console.log(this.authService.passcode);
-
     this.nextRoute();
   }
 
