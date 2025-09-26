@@ -25,11 +25,13 @@ export class HealthAuthSiteRegLoginPageComponent implements OnInit {
     this.title = route.snapshot.data.title;
   }
 
-  public onLogin() {
+  public onLogin(passcode: string) {
 
     // Route to COLLECTION_NOTICE which determines the direction of routing
     const redirectRoute = HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.COLLECTION_NOTICE);
-    const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
+    const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}?pc=${btoa(passcode)}`;
+
+    console.log(redirectUri);
 
     this.authService.login({
       idpHint: IdentityProviderEnum.BCSC_MOH,
