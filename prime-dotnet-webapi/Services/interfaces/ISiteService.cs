@@ -55,5 +55,7 @@ namespace Prime.Services
         Task ArchiveSite(int siteId, string note);
         Task RestoreArchivedSite(int siteId, string note);
         Task<bool> CanBeRestored(int siteId);
+        Task SaveSiteLink(int predecessorSiteId, int successorSiteId);
+        Task RemoveSiteLink(int predecessorSiteId, int successorSiteId);
     }
 }

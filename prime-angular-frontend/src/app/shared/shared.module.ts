@@ -133,6 +133,7 @@ import { ChangeVendorNoteComponent } from './components/dialogs/content/change-v
 import { TransferHASiteComponent } from './components/dialogs/content/transfer-ha-site/transfer-ha-site.component';
 import { SiteArchiveRestoreComponent } from './components/dialogs/content/site-archive-restore/site-archive-restore.component';
 import { ChangeTermsOfAccessComponent } from './components/dialogs/content/terms-of-access/terms-of-access.component';
+import { LinkSiteComponent } from './components/dialogs/content/link-site/link-site.component';
 
 @NgModule({
   declarations: [
@@ -247,6 +248,7 @@ import { ChangeTermsOfAccessComponent } from './components/dialogs/content/terms
     TransferHASiteComponent,
     SiteArchiveRestoreComponent,
     ChangeTermsOfAccessComponent,
+    LinkSiteComponent,
   ],
   imports: [
     CommonModule,
