@@ -61,6 +61,9 @@ namespace Prime.Services
         {
             searchOptions ??= new OrganizationSearchOptions();
 
+            string[] textSearchArg = searchOptions.TextSearch != null ?
+                searchOptions.TextSearch.Split(',') : null;
+
             var query = _context.CommunitySites
                 .AsNoTracking()
                 .Where(s => s.DeletedDate == null && s.Organization.DeletedDate == null)
@@ -70,13 +73,11 @@ namespace Prime.Services
                     .Where(s => s.CareSettingCode == searchOptions.CareSettingCode)
                 )
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
-                    .Search(
-                        s => s.DoingBusinessAs,
-                        s => s.PEC,
-                        s => s.Organization.Name,
-                        s => s.Organization.DisplayId.ToString(),
-                        s => s.Organization.SigningAuthority.FirstName + " " + s.Organization.SigningAuthority.LastName)
-                    .Containing(searchOptions.TextSearch)
+                    .Where(s => textSearchArg.Any(t => s.DoingBusinessAs.Contains(t.Trim()) ||
+                    s.PEC.Contains(t.Trim()) ||
+                    s.Organization.Name.Contains(t.Trim()) ||
+                    s.Organization.DisplayId.ToString().Contains(t.Trim()) ||
+                    s.Organization.SigningAuthority.FirstName + " " + s.Organization.SigningAuthority.LastName == t.Trim()))
                 )
                 .If(searchOptions.Status.HasValue, q => q
                     .Where(s => (int)s.SiteStatuses.OrderByDescending(ss => ss.StatusDate)
@@ -93,7 +94,8 @@ namespace Prime.Services
                 //check for duplicate site id
                 site.DuplicatePecSiteCount = await GetDuplicatePecCount(site.CareSettingCode, site.PEC, site.Id);
                 // Related to another Site?
-                site.IsLinked = await IsLinkedSite(site.Id);
+                site.PredecessorSite = await GetPredecessorSite(site.Id);
+                site.SuccessorSite = await GetSuccessorSite(site.Id);
             }
 
             GroupSitesToOrgVisually(paginatedList);
@@ -134,15 +136,52 @@ namespace Prime.Services
                     .Where(s => s.PEC != null && s.PEC == pec && s.CareSettingCode == careSettingCode && originalSiteId != s.Id)
                     .CountAsync();
         }
-
-        private async Task<bool> IsLinkedSite(int siteId)
+        public async Task<CommunitySiteViewModel> GetPredecessorSite(int siteId)
         {
-            var intStream = _context.Database.SqlQueryRaw<int>(
-                "SELECT count(*) AS \"Value\" FROM \"PredecessorSiteToSuccessorSite\" pstss WHERE pstss.\"PredecessorSiteId\" = {0} OR pstss.\"SuccessorSiteId\" = {0}",
-                siteId);
-            // grab the first (and only) row
-            var count = await intStream.FirstAsync();
-            return count > 0;
+            var site = await _context.PredecessorSiteToSuccessorSites
+                .Where(ss => ss.SuccessorSiteId == siteId)
+                .Select(ss => ss.PredecessorSite)
+                .SingleOrDefaultAsync();
+
+            if (site != null)
+            {
+                var org = await _context.CommunitySites.Where(cs => cs.Id == site.Id)
+                    .Select(cs => cs.Organization)
+                    .SingleOrDefaultAsync();
+                return new CommunitySiteViewModel
+                {
+                    Site = site,
+                    Organization = org
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<CommunitySiteViewModel> GetSuccessorSite(int siteId)
+        {
+            var site = await _context.PredecessorSiteToSuccessorSites
+                .Where(ss => ss.PredecessorSiteId == siteId)
+                .Select(ss => ss.SuccessorSite)
+                .SingleOrDefaultAsync();
+
+            if (site != null)
+            {
+                var org = await _context.CommunitySites.Where(cs => cs.Id == site.Id)
+                    .Select(cs => cs.Organization)
+                    .SingleOrDefaultAsync();
+                return new CommunitySiteViewModel
+                {
+                    Site = site,
+                    Organization = org
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<CommunitySite> GetSiteAsync(int siteId)
