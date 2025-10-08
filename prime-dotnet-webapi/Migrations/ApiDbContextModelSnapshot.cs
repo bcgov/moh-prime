@@ -1510,19 +1510,19 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 1,
                             LicenseCode = 87,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 1,
                             LicenseCode = 88,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 1,
                             LicenseCode = 89,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -1540,6 +1540,12 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 1,
                             LicenseCode = 92,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 1,
+                            LicenseCode = 180,
                             Discontinued = false
                         },
                         new
@@ -6957,6 +6963,12 @@ namespace Prime.Migrations
                         {
                             Code = 88,
                             Name = "Associate - Community Primary Care",
+                            Weight = 28
+                        },
+                        new
+                        {
+                            Code = 180,
+                            Name = "Associate",
                             Weight = 28
                         },
                         new
@@ -13964,6 +13976,23 @@ namespace Prime.Migrations
                             Manual = true,
                             Multijurisdictional = false,
                             NamedInImReg = false,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 379,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2025, 9, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 180,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            Multijurisdictional = false,
+                            NamedInImReg = true,
                             Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),

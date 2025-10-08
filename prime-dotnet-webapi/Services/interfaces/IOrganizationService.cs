@@ -13,6 +13,7 @@ namespace Prime.Services
         Task<IEnumerable<OrganizationAdminListViewModel>> GetOrganizationAdminListViewAsync(string searchText);
         Task<OrganizationAdminListViewModel> GetOrganizationAdminListViewByIdAsync(int id);
         Task<Organization> GetOrganizationAsync(int organizationId);
+        Task<List<Organization>> GetOrganizationByNameAsync(string organizationName);
         Task<int> GetOrganizationSigningAuthorityIdAsync(int organizationId);
         Task<Organization> GetOrganizationByPecAsync(string pec);
         Task<int> CreateOrganizationAsync(int signingAuthorityId);

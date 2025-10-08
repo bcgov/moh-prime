@@ -60,6 +60,10 @@ export class CertificateComponent implements OnInit {
     return this.certificate.careSettings.some(cs => cs.code === CareSettingEnum.DEVICE_PROVIDER);
   }
 
+  public get gpid(): string {
+    return this.certificate.gpid;
+  }
+
   public ngOnInit() {
     this.busy = this.enrolmentCertificateResource
       .getCertificate(this.route.snapshot.params.tokenId)
@@ -74,5 +78,9 @@ export class CertificateComponent implements OnInit {
           this.logger.error('[ProvisionerAccess] CertificateComponent::getCertificate error has occurred: ', error);
         }
       );
+  }
+
+  public onCopy() {
+    this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
   }
 }

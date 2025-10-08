@@ -212,4 +212,36 @@
 
     </ng-template>
   </app-page-section>
+
+  <app-page-section *ngIf="showLinkSection"
+                    class="mb-5">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Predecessor Site</ng-container>
+    </app-page-subheader2>
+
+    <div class="mb-4"
+         *ngIf="!predecessorSite; else predecessorSitePanel">
+      No predecessor site
+    </div>
+
+    <ng-template #predecessorSitePanel>
+      <app-enrollee-property title="Organization">
+        {{ predecessorSite.organization.name }}
+      </app-enrollee-property>
+      <app-enrollee-property title="Site">
+        {{ predecessorSite.site.doingBusinessAs }} ({{ predecessorSite.site.pec}})
+      </app-enrollee-property>
+    </ng-template>
+
+    <button mat-flat-button
+            color="primary"
+            (click)="onOpenSiteLink()">{{ predecessorSite ? 'Edit' : 'Add' }}
+    </button>
+    <button mat-flat-button
+            color="warn"
+            class="ml-2"
+            *ngIf="predecessorSite"
+            (click)="onDeleteSiteLink()">Remove
+    </button>
+  </app-page-section>
 </ng-template>
