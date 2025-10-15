@@ -90,29 +90,24 @@ export class SiteOverviewComponent implements OnInit {
     }
   }
 
-  public saveVendor(): void {
-    const existingVendor = this.siteVendors.find((vendor: VendorConfig) => vendor.code === this.site.siteVendors[0].vendorCode).name;
-    const vendor = this.vendors.value;
+  public onEditVendor(): void {
+    const siteId = +this.route.snapshot.params.sid;
+    //const vendorChangeText = `from ${existingVendor} to ${vendor.name}`;
 
-    if (this.vendors.valid && existingVendor !== vendor.name) {
-      const siteId = +this.route.snapshot.params.sid;
-      const vendorChangeText = `from ${existingVendor} to ${vendor.name}`;
-
-      const data: DialogOptions = {
-        data: {
-          siteId,
-          vendorCode: vendor.code,
-          vendorChangeText
+    const data: DialogOptions = {
+      data: {
+        siteId,
+        vendorCode: this.site.siteVendors[0].vendorCode,
+        siteVendors: this.siteVendors,
+      }
+    };
+    this.dialog.open(ChangeVendorNoteComponent, { data }).afterClosed()
+      .subscribe((data) => {
+        if (data?.result) {
+          this.refresh.next(true);
+          this.site.siteVendors[0].vendorCode = data.vendorCode;
         }
-      };
-      this.dialog.open(ChangeVendorNoteComponent, { data }).afterClosed()
-        .subscribe((vendorChanged) => {
-          if (vendorChanged) {
-            this.refresh.next(true);
-            this.site.siteVendors[0].vendorCode = vendor.code;
-          }
-        });
-    }
+      });
   }
 
   public onApproveOrgClaim(): void {
