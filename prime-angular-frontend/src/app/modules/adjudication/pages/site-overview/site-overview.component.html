@@ -154,35 +154,22 @@
 
   <app-page-section class="mb-5">
     <app-page-subheader2>
-      <ng-container appPageSubheader2Title>Enter Vendor</ng-container>
+      <ng-container appPageSubheader2Title>Edit Vendor</ng-container>
     </app-page-subheader2>
 
-    <form (ngSubmit)="saveVendor()"
-          [formGroup]="form"
-          novalidate>
-
-      <div class="row">
-        <div class="col-sm-12 col-lg-9 col-xl-5 pb-2">
-
-          <mat-form-field class="w-100">
-            <mat-select placeholder="Vendor"
-                        formControlName="vendors">
-              <mat-option *ngFor="let vendor of siteVendors"
-                          [value]="vendor">{{ vendor.name }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-        </div>
-        <div class="col-sm-12">
-
-          <button mat-flat-button
-                  color="primary">Save Vendor
-          </button>
-
-        </div>
+    <div class="row">
+      <div class="col-sm-12 mb-4">
+        {{ site?.siteVendors[0]?.vendorCode | configCode: 'vendors' | default }}
       </div>
+      <div class="col-sm-12">
 
-    </form>
+        <button mat-flat-button
+                color="primary"
+                (click)="onEditVendor()">Edit
+        </button>
+      </div>
+    </div>
+
   </app-page-section>
 
   <app-page-section *ngIf="showSendNotification"
@@ -211,5 +198,37 @@
       </app-alert>
 
     </ng-template>
+  </app-page-section>
+
+  <app-page-section *ngIf="showLinkSection"
+                    class="mb-5">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Predecessor Site</ng-container>
+    </app-page-subheader2>
+
+    <div class="mb-4"
+         *ngIf="!predecessorSite; else predecessorSitePanel">
+      No predecessor site
+    </div>
+
+    <ng-template #predecessorSitePanel>
+      <app-enrollee-property title="Organization">
+        {{ predecessorSite.organization.name }}
+      </app-enrollee-property>
+      <app-enrollee-property title="Site">
+        {{ predecessorSite.site.doingBusinessAs }} ({{ predecessorSite.site.pec}})
+      </app-enrollee-property>
+    </ng-template>
+
+    <button mat-flat-button
+            color="primary"
+            (click)="onOpenSiteLink()">{{ predecessorSite ? 'Edit' : 'Add' }}
+    </button>
+    <button mat-flat-button
+            color="warn"
+            class="ml-2"
+            *ngIf="predecessorSite"
+            (click)="onDeleteSiteLink()">Remove
+    </button>
   </app-page-section>
 </ng-template>

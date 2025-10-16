@@ -31,7 +31,7 @@ export class PrimeEnrolmentAccessComponent implements OnInit, AfterViewInit {
   @ViewChild('siteTitleDiv') siteTitleDiv: ElementRef<HTMLDivElement>;
 
   @Input() public mode: 'enrolment' | 'community' | 'health-authority';
-  @Output() public login: EventEmitter<void>;
+  @Output() public login: EventEmitter<string>;
   public form: UntypedFormGroup;
   public locationCode: BannerLocationCode;
   public bcscMobileSetupUrl: string;
@@ -51,7 +51,7 @@ export class PrimeEnrolmentAccessComponent implements OnInit, AfterViewInit {
     private collectionNoticeService: CollectionNoticeService,
     private healthAuthorityResource: HealthAuthorityResource,
   ) {
-    this.login = new EventEmitter<void>();
+    this.login = new EventEmitter<string>();
     this.locationCode = BannerLocationCode.ENROLMENT_LANDING_PAGE;
     this.bcscMobileSetupUrl = config.bcscMobileSetupUrl;
     this.loginCancelled =
@@ -113,7 +113,7 @@ export class PrimeEnrolmentAccessComponent implements OnInit, AfterViewInit {
       this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .subscribe((isNext: boolean) => {
-          if (isNext) this.login.emit()
+          if (isNext) this.login.emit(this.passcode.value)
         });
     }
   }
