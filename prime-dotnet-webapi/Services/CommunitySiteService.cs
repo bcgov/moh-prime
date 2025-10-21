@@ -194,8 +194,7 @@ namespace Prime.Services
 
             if (site.CareSettingCode.HasValue &&
                 site.CareSettingCode.Value == (int)CareSettingType.CommunityPractice &&
-                site.Organization != null &&
-                site.Organization.RegistrationId != null)
+                site.Organization != null)
             {
                 var eras = await matchExceptionRemoteAccessSite(site.PEC, site.Organization.RegistrationId);
                 site.RemoteAccessTypeCode = eras != null ? eras.RemoteAccessTypeCode : (int)RemoteAccessTypeEnum.PrivateCommunityHealthPractice;

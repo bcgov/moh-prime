@@ -94,29 +94,24 @@ export class SiteOverviewPageComponent implements OnInit {
     }
   }
 
-  public saveVendor(): void {
-    const vendor = this.vendors.value;
-    const existingVendor = this.healthAuthorityVendors.find((vendor: VendorConfig) => vendor.code === this.site.healthAuthorityVendor.vendorCode).name;
+  public onEditVendor(): void {
+    const siteId = +this.route.snapshot.params.sid;
+    //const vendorChangeText = `from ${existingVendor} to ${vendor.name}`;
 
-    if (this.vendors.valid && vendor.name !== existingVendor) {
-      const siteId = +this.route.snapshot.params.sid;
-      const vendorChangeText = `from ${existingVendor} to ${vendor.name}`;
-
-      const data: DialogOptions = {
-        data: {
-          siteId,
-          vendorCode: vendor.code,
-          vendorChangeText
+    const data: DialogOptions = {
+      data: {
+        siteId,
+        vendorCode: this.site.healthAuthorityVendor.vendorCode,
+        siteVendors: this.healthAuthorityVendors,
+      }
+    };
+    this.dialog.open(ChangeVendorNoteComponent, { data }).afterClosed()
+      .subscribe((data) => {
+        if (data?.result) {
+          this.refresh.next(true);
+          this.site.healthAuthorityVendor.vendorCode = data.vendorCode;
         }
-      };
-      this.dialog.open(ChangeVendorNoteComponent, { data }).afterClosed()
-        .subscribe((vendorChanged: boolean) => {
-          if (vendorChanged) {
-            this.refresh.next(true);
-            this.site.healthAuthorityVendor.vendorCode = vendor.code;
-          }
-        });
-    }
+      });
   }
 
   public ngOnInit(): void {
