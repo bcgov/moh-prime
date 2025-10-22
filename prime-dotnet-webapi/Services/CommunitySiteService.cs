@@ -62,7 +62,7 @@ namespace Prime.Services
             searchOptions ??= new OrganizationSearchOptions();
 
             string[] textSearchArg = searchOptions.TextSearch != null ?
-                searchOptions.TextSearch.Split(',') : null;
+                searchOptions.TextSearch.ToUpper().Split(',') : null;
 
             var query = _context.CommunitySites
                 .AsNoTracking()
@@ -73,11 +73,11 @@ namespace Prime.Services
                     .Where(s => s.CareSettingCode == searchOptions.CareSettingCode)
                 )
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
-                    .Where(s => textSearchArg.Any(t => s.DoingBusinessAs.Contains(t.Trim()) ||
-                    s.PEC.Contains(t.Trim()) ||
-                    s.Organization.Name.Contains(t.Trim()) ||
+                    .Where(s => textSearchArg.Any(t => s.DoingBusinessAs.ToUpper().Contains(t.Trim()) ||
+                    s.PEC.ToUpper().Contains(t.Trim()) ||
+                    s.Organization.Name.ToUpper().Contains(t.Trim()) ||
                     s.Organization.DisplayId.ToString().Contains(t.Trim()) ||
-                    s.Organization.SigningAuthority.FirstName + " " + s.Organization.SigningAuthority.LastName == t.Trim()))
+                    (s.Organization.SigningAuthority.FirstName.ToUpper() + " " + s.Organization.SigningAuthority.LastName.ToUpper()).Contains(t.Trim())))
                 )
                 .If(searchOptions.Status.HasValue, q => q
                     .Where(s => (int)s.SiteStatuses.OrderByDescending(ss => ss.StatusDate)
