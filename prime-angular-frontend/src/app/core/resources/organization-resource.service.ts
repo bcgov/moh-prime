@@ -153,6 +153,19 @@ export class OrganizationResource {
       );
   }
 
+  public getOrganizationByName(organizationName: string): Observable<Organization[]> {
+    return this.apiResource.get<Organization[]>(`organizations/name/${organizationName}`)
+      .pipe(
+        map((response: ApiHttpResponse<Organization[]>) => response.result),
+        tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organizations could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getOrganizationByName error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getOrganizationClaim(queryParam: { pec?: string, username?: string }): Observable<boolean> {
     const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
     return this.apiResource.get<boolean>(`organizations/claims`, params)

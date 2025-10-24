@@ -6,7 +6,7 @@
                 class="alert-content">
     {{ this.collegeDiscontinued ?
     "The name of your college has changed. Please select the new name from the dropdown list for college name, " +
-    "then " : "Your previous licence class is no longer available, please " }}
+    "then " : "Your previous licence class is no longer available. Please " }}
     use the dropdown menu to select the licence you currently hold.
   </ng-container>
 </app-alert>
@@ -82,7 +82,7 @@
           </mat-form-field>
 
         </div>
-        <div *ngIf="!condensed && collegeCode.value !== CollegeLicenceClassEnum.CPSBC"
+        <div *ngIf="showRegistrationId()"
              class="col-sm-12 pl-5">
 
           <mat-form-field class="w-100">
@@ -162,7 +162,7 @@
           </div>
 
           <ng-container *ngIf="prescriberIdType === PrescriberIdTypeEnum.Mandatory || isPrescribing">
-
+            <br />
             <app-form-icon-group>
               <mat-form-field class="w-100">
                 <mat-label>{{ getPNetIdFieldLabel(collegeCode.value) }}</mat-label>

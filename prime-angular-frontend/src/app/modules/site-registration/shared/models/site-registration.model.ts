@@ -1,4 +1,4 @@
-import { SiteListViewModel } from '@registration/shared/models/site.model';
+import { CommunitySiteViewModel, SiteListViewModel } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 
 export interface SiteListViewModelPartial extends
@@ -29,4 +29,6 @@ export interface SiteRegistrationListViewModel extends OrganizationListViewModel
   signingAuthorityName: string;
   organizationName: string;
   duplicatePecSiteCount: number;
+  predecessorSite: CommunitySiteViewModel;
+  successorSite: CommunitySiteViewModel;
 }

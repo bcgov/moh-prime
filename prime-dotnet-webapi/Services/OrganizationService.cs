@@ -122,6 +122,13 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
+        public async Task<List<Organization>> GetOrganizationByNameAsync(string organizationName)
+        {
+            return await GetBaseOrganizationQuery()
+                .Where(o => o.Name.ToLower().Contains(organizationName.ToLower()))
+                .ToListAsync();
+        }
+
         public async Task<int> GetOrganizationSigningAuthorityIdAsync(int organizationId)
         {
             return await _context.Organizations

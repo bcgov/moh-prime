@@ -49,7 +49,7 @@ export class AuthenticationGuard extends BaseGuard {
         // once authenticated
         const redirectUri = `${this.config.loginRedirectUrl}${routePath}`;
         const idpHint = (adminRoutes.includes(targetModule))
-          ? IdentityProviderEnum.IDIR
+          ? IdentityProviderEnum.IDIR_AAD
           : (gisRoutes.includes(targetModule))
             ? IdentityProviderEnum.PHSA
             : IdentityProviderEnum.BCSC_MOH;

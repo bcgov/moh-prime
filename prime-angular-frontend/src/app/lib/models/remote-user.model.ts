@@ -7,4 +7,5 @@ export interface RemoteUser {
   email: string;
   remoteUserCertification: RemoteUserCertification;
   notified: boolean;
+  createdDate: string;
 }
