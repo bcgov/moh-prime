@@ -8,6 +8,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteListViewModel } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-link-site',
@@ -77,7 +78,6 @@ export class LinkSiteComponent implements OnInit {
           this.linkSite.emit(true);
         });
     }
-    //this.authorizedUser.markAsTouched();
   }
 
   public onRemove() {
@@ -149,7 +149,8 @@ export class LinkSiteComponent implements OnInit {
       if (orgId && orgId > 0) {
         this.siteResource.getSites(orgId)
           .subscribe(sites => {
-            this.sites = sites.filter(s => s.id !== this.siteId && s.completed);
+            this.sites = sites.filter(s => s.id !== this.siteId && s.completed &&
+              s.careSettingCode == CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
             this.showSiteList = true;
           });
       }
