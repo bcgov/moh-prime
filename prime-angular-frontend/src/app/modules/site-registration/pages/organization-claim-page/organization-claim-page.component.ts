@@ -8,7 +8,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 
-import { EMPTY, Observable, of } from 'rxjs';
+import { EMPTY } from 'rxjs';
 import { catchError, exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
