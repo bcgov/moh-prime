@@ -39,7 +39,7 @@ export class ElectronicOrganizationAgreementPageComponent implements OnInit {
   }
 
   public onBack(): void {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATIONS);
+    this.routeUtils.routeWithin(SiteRoutes.ORGANIZATIONS);
   }
 
   public onSubmit(): void {
