@@ -114,9 +114,16 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public changeOrganization(organizationId: number): void {
-    //this.organizationService.organization = this.organizationService.organizations.find((org) => org.id === organizationId);
-    //this.getOrganizations();
+    // Reset care setting codes pending transfer
+    this.careSettingCodesPendingTransfer = [];
     this.organization = this.organizations.find(org => org.id === organizationId);
+
+    if (this.organization.pendingTransfer) {
+      this.organizationResource.getCareSettingCodesForPendingTransfer(this.organization.id)
+        .subscribe((careSettingCodes: CareSettingEnum[]) => {
+          this.careSettingCodesPendingTransfer = careSettingCodes;
+        });
+    }
   }
 
   public getOrganizationProperties(organization: Organization): KeyValue<string, string>[] {
