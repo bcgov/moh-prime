@@ -24,7 +24,6 @@ namespace Prime.Configuration.Database
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.PrivateCommunityHealthPractice, LicenseCode = 9, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.PrivateCommunityHealthPractice, LicenseCode = 10, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.PrivateCommunityHealthPractice, LicenseCode = 12, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
-                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.PrivateCommunityHealthPractice, LicenseCode = 13, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.PrivateCommunityHealthPractice, LicenseCode = 14, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.PrivateCommunityHealthPractice, LicenseCode = 15, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.PrivateCommunityHealthPractice, LicenseCode = 17, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
@@ -47,7 +46,6 @@ namespace Prime.Configuration.Database
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 9, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 10, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 12, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
-                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 13, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 14, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 15, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 17, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
@@ -66,6 +64,38 @@ namespace Prime.Configuration.Database
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 176, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 39, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
                     new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA, LicenseCode = 45, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+
+                    // FNHA Clinic
+                    // Physicians
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 1, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 2, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 3, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 4, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 5, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 6, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 8, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 9, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 10, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 12, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 14, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 15, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 17, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 18, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 19, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 88, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 89, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    // RN
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 35, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 32, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 175, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 39, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    // RPN
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 41, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 45, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 176, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    // Pharmacist
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 25, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
+                    new RemoteAccessTypeLicense { RemoteAccessTypeCode = RemoteAccessTypeEnum.FNHA_Clinic, LicenseCode = 27, CreatedTimeStamp = InitialSeedingDate, UpdatedTimeStamp = InitialSeedingDate },
                 };
             }
         }

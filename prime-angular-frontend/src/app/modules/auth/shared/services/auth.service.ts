@@ -10,7 +10,6 @@ import { Address } from '@lib/models/address.model';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { Admin } from '@auth/shared/models/admin.model';
-import { BrokerProfile } from '@auth/shared/models/broker-profile.model';
 import { AccessTokenParsed } from '@auth/shared/models/access-token-parsed.model';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
@@ -34,6 +33,7 @@ export class AuthService implements IAuthService {
   // Login event state for performing operations
   // required immediately after authentication
   private hasJustLoggedInState: boolean;
+  private haPasscode: string;
 
   constructor(
     private accessTokenService: AccessTokenService,
@@ -46,6 +46,14 @@ export class AuthService implements IAuthService {
 
   public get hasJustLoggedIn(): boolean {
     return this.hasJustLoggedInState;
+  }
+
+  public set passcode(passcode: string) {
+    this.haPasscode = passcode;
+  }
+
+  public get passcode(): string {
+    return this.haPasscode;
   }
 
   public login(options?: any): Promise<void> {

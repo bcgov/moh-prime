@@ -64,7 +64,8 @@ export class MockCommunitySiteService {
             licenseCode: faker.random.number(),
             practitionerId: faker.random.words(5),
           },
-          notified: faker.random.boolean()
+          notified: faker.random.boolean(),
+          createdDate: faker.date.past(2).toDateString(),
         }
       ],
       administratorPharmaNetId: faker.random.number(),
@@ -90,6 +91,7 @@ export class MockCommunitySiteService {
       siteSubmissions: [],
       missingBusinessLicence: false,
       remoteAccessTypeCode: RemoteAccessTypeEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
+      predecessorSite: null
     });
   }
 

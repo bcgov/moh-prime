@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 import { exhaustMap } from 'rxjs/operators';
 import { EMPTY, Observable } from 'rxjs';
@@ -34,10 +34,10 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 })
 export class AccessAgreementComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public currentPage: number;
   public hasReadAgreement: boolean;
-  public agreed: FormControl;
+  public agreed: UntypedFormControl;
 
   public hasAcceptedAgreement: boolean;
   public hasDownloadedFile: boolean;
@@ -69,11 +69,11 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
     this.currentPage = 0;
     this.hasReadAgreement = false;
-    this.agreed = new FormControl(false);
+    this.agreed = new UntypedFormControl(false);
   }
 
-  public get accessAgreementGuid(): FormControl {
-    return this.form.get('accessAgreementGuid') as FormControl;
+  public get accessAgreementGuid(): UntypedFormControl {
+    return this.form.get('accessAgreementGuid') as UntypedFormControl;
   }
 
   public get isMobile(): boolean {

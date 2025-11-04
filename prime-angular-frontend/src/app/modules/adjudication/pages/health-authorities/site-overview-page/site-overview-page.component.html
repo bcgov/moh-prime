@@ -32,7 +32,7 @@
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>Enter Site ID</ng-container>
       <ng-container appPageSubheader2Summary>
-        The Site ID will be sent to the Signing Authority, Administrator of PharmaNet onboarding and the
+        The Site ID will be sent to the Signing Authority, PharmaNet Administrator and the
         vendor associated to this submission.
       </ng-container>
     </app-page-subheader2>
@@ -75,31 +75,18 @@
       <ng-container appPageSubheader2Title>Enter Vendor</ng-container>
     </app-page-subheader2>
 
-    <form (ngSubmit)="saveVendor()"
-          [formGroup]="form"
-          novalidate>
-
-      <div class="row">
-        <div class="col-sm-12 col-lg-9 col-xl-5 pb-2">
-
-          <mat-form-field class="w-100">
-            <mat-select placeholder="Vendor"
-                        formControlName="vendors">
-              <mat-option *ngFor="let vendor of healthAuthorityVendors"
-                          [value]="vendor">{{ vendor.name }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-        </div>
-        <div class="col-sm-12">
-
-          <button mat-flat-button
-                  color="primary">Save Vendor
-          </button>
-
-        </div>
+    <div class="row">
+      <div class="col-sm-12 mb-4">
+        {{ site?.healthAuthorityVendor.vendorCode | configCode: 'vendors' | default }}
       </div>
+      <div class="col-sm-12">
 
-    </form>
+        <button mat-flat-button
+                color="primary"
+                (click)="onEditVendor()">Edit
+        </button>
+      </div>
+    </div>
+
   </app-page-section>
 </ng-template>

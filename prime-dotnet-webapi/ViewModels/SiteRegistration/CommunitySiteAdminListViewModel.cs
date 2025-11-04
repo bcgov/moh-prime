@@ -24,5 +24,7 @@ namespace Prime.ViewModels
         public bool IsNew { get; set; }
         public int DuplicatePecSiteCount { get; set; }
         public bool HasClaim { get; set; }
+        public CommunitySiteViewModel PredecessorSite { get; set; }
+        public CommunitySiteViewModel SuccessorSite { get; set; }
     }
 }

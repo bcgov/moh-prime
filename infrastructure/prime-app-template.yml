@@ -160,13 +160,7 @@ objects:
               subPath: config-map.json
             - name: log-storage
               mountPath: /tmp/
-            resources:
-              limits:
-                cpu: 50m
-                memory: 50Mi
-              requests:
-                cpu: 15m
-                memory: 10Mi
+            resources: {}
             envFrom:
               - configMapRef:
                   name: keycloak
@@ -628,12 +622,9 @@ objects:
               - '-c'
               - dotnet ./prime.dll -v 2>&1> /dev/stdout
             resources:
-              limits:
-                cpu: 100m
-                memory: 1Gi
               requests:
-                cpu: 10m
-                memory: 500Mi
+                cpu: 100m
+                memory: 2Gi
             env:
               - name: DOCUMENT_MANAGER_CLIENT_ID
                 valueFrom:

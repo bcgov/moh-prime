@@ -14,6 +14,7 @@ using LinqKit;
 using System.Security.Claims;
 using Prime.HttpClients;
 using DelegateDecompiler.EntityFrameworkCore;
+using System.Runtime.Intrinsics.X86;
 
 namespace Prime.Services
 {
@@ -273,6 +274,7 @@ namespace Prime.Services
         {
             return await _context.RemoteUsers
                 .Where(user => user.SiteId == siteId)
+                .OrderByDescending(user => user.CreatedTimeStamp)
                 .ProjectTo<RemoteUserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
@@ -294,10 +296,11 @@ namespace Prime.Services
                     (ruc.PractitionerId == searchedCert.PractitionerId && searchedCert.CollegeCode == CollegeCode.BCCNM)));
             }
 
+            // Remote user needs to have been notified when site is approved, sit is not deleted or archived
             IEnumerable<RemoteAccessSearchDto> searchResults = await _context.RemoteUserCertifications
                 .AsNoTracking()
                 .AsExpandable()
-                .Where(ruc => ruc.RemoteUser.Site.ApprovedDate.HasValue &&
+                .Where(ruc => ruc.RemoteUser.Notified &&
                     ruc.RemoteUser.Site.DeletedDate == null && ruc.RemoteUser.Site.ArchivedDate == null)
                 .Where(matchesAnyCert)
                 .ProjectTo<RemoteAccessSearchDto>(_mapper.ConfigurationProvider)
@@ -584,6 +587,54 @@ namespace Prime.Services
         {
             return _context.Sites
                 .Where(s => s.DeletedDate == null);
+        }
+
+        public async Task SaveSiteLink(int predecessorSiteId, int successorSiteId)
+        {
+            var anyLinkExists = await _context.PredecessorSiteToSuccessorSites.Where(ss => ss.PredecessorSiteId == predecessorSiteId).AnyAsync();
+            // if the predecessor site is already linked, exit
+            if (anyLinkExists) return;
+
+            var existingLink = await GetSiteLink(predecessorSiteId, successorSiteId);
+            // if link already exists, exit
+            if (existingLink != null) return;
+
+            var existingSuccessorLink = await _context.PredecessorSiteToSuccessorSites.Where(ss => ss.SuccessorSiteId == successorSiteId).FirstOrDefaultAsync();
+            if (existingSuccessorLink != null)
+            {
+                // remove existing successor link
+                _context.Remove(existingSuccessorLink);
+            }
+
+            var link = new PredecessorSiteToSuccessorSite
+            {
+                PredecessorSiteId = predecessorSiteId,
+                SuccessorSiteId = successorSiteId
+            };
+
+            _context.PredecessorSiteToSuccessorSites.Add(link);
+
+            var predecessorSite = await _context.Sites.Where(s => s.Id == predecessorSiteId).FirstAsync();
+
+            await _businessEventService.CreateSiteEventAsync(successorSiteId, $"Predecessor Site - {predecessorSite.DoingBusinessAs} ({predecessorSite.PEC}) is added");
+        }
+
+        public async Task RemoveSiteLink(int predecessorSiteId, int successorSiteId)
+        {
+            var existingLink = await GetSiteLink(predecessorSiteId, successorSiteId);
+            if (existingLink == null) return;
+
+            _context.PredecessorSiteToSuccessorSites.Remove(existingLink);
+
+            var predecessorSite = await _context.Sites.Where(s => s.Id == predecessorSiteId).FirstAsync();
+
+            await _businessEventService.CreateSiteEventAsync(successorSiteId, $"Predecessor Site - {predecessorSite.DoingBusinessAs} ({predecessorSite.PEC}) is removed");
+        }
+
+        private async Task<PredecessorSiteToSuccessorSite> GetSiteLink(int predecessorSiteId, int successorSiteId)
+        {
+            return await _context.PredecessorSiteToSuccessorSites.Where(ss => ss.PredecessorSiteId == predecessorSiteId &&
+                ss.SuccessorSiteId == successorSiteId).SingleOrDefaultAsync();
         }
     }
 }

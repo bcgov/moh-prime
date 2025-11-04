@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  CanActivate, CanActivateChild, CanLoad, Route, UrlSegment, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router
-} from '@angular/router';
+import { Route, UrlSegment, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -17,7 +15,7 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 @Injectable({
   providedIn: 'root'
 })
-export class UnderagedGuard implements CanActivate, CanActivateChild, CanLoad {
+export class UnderagedGuard  {
   constructor(
     private router: Router,
     private authService: AuthService

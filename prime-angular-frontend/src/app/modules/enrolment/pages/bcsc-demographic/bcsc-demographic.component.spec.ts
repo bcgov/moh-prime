@@ -1,10 +1,10 @@
 import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { KeycloakService } from 'keycloak-angular';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
@@ -36,10 +36,11 @@ describe('BcscDemographicComponent', () => {
           HttpClientTestingModule,
           NgxBusyModule,
           NgxContextualHelpModule,
-          NgxMaskModule.forRoot(),
           NgxMaterialModule,
           ReactiveFormsModule,
-          RouterTestingModule
+          RouterTestingModule,
+          NgxMaskDirective,
+          NgxMaskPipe
         ],
         declarations: [BcscDemographicComponent, AddressFormComponent],
         providers: [
@@ -59,7 +60,8 @@ describe('BcscDemographicComponent', () => {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
           },
-          KeycloakService
+          KeycloakService,
+          provideNgxMask()
         ],
         schemas: [CUSTOM_ELEMENTS_SCHEMA]
       }
@@ -67,8 +69,8 @@ describe('BcscDemographicComponent', () => {
   }));
 
   beforeEach(inject(
-    [FormBuilder, FormUtilsService],
-    (fb: FormBuilder, formUtilsService: FormUtilsService) => {
+    [UntypedFormBuilder, FormUtilsService],
+    (fb: UntypedFormBuilder, formUtilsService: FormUtilsService) => {
       fixture = TestBed.createComponent(BcscDemographicComponent);
       component = fixture.componentInstance;
       const bcscDemographicFormState = new BcscDemographicFormState(fb, formUtilsService);

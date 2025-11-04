@@ -25,5 +25,7 @@ namespace Prime.Services
         Task<PermissionsRecord> GetPermissionsRecordAsync(int siteId);
         Task<IEnumerable<IndividualDeviceProviderViewModel>> GetIndividualDeviceProvidersAsync(int siteId);
         Task UpdateSigningAuthorityForOrganization(int organizationId, int partyId);
+        Task<CommunitySiteViewModel> GetPredecessorSite(int siteId);
+        Task<CommunitySiteViewModel> GetSuccessorSite(int siteId);
     }
 }

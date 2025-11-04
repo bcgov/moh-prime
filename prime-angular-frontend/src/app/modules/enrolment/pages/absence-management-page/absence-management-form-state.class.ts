@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -7,27 +7,27 @@ import { AbsenceManagementForm } from './absence-management-form.model';
 
 export class AbsenceManagementFormState extends AbstractFormState<AbsenceManagementForm> {
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get range(): FormGroup {
-    return this.form.get('range') as FormGroup;
+  public get range(): UntypedFormGroup {
+    return this.form.get('range') as UntypedFormGroup;
   }
 
-  public get start(): FormControl {
-    return this.range.get('start') as FormControl;
+  public get start(): UntypedFormControl {
+    return this.range.get('start') as UntypedFormControl;
   }
 
-  public get end(): FormControl {
-    return this.range.get('end') as FormControl;
+  public get end(): UntypedFormControl {
+    return this.range.get('end') as UntypedFormControl;
   }
 
-  public get email(): FormControl {
-    return this.form.get('email') as FormControl;
+  public get email(): UntypedFormControl {
+    return this.form.get('email') as UntypedFormControl;
   }
 
   public get json(): AbsenceManagementForm {

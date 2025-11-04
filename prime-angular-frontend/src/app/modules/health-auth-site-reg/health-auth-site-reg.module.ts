@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
 import { SharedModule } from '@shared/shared.module';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 import { HealthAuthSiteRegRoutingModule } from './health-auth-site-reg-routing.module';
 import { HealthAuthSiteRegDashboardComponent } from './shared/components/health-auth-site-reg-dashboard/health-auth-site-reg-dashboard.component';
@@ -40,7 +41,12 @@ import { OverviewPageComponent } from './pages/overview-page/overview-page.compo
   imports: [
     SharedModule,
     DashboardModule,
-    HealthAuthSiteRegRoutingModule
+    HealthAuthSiteRegRoutingModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
   ],
+  providers: [
+    provideNgxMask(),
+  ]
 })
 export class HealthAuthSiteRegModule { }

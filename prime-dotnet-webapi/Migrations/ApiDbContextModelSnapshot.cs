@@ -1407,6 +1407,12 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 1,
+                            LicenseCode = 179,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 1,
                             LicenseCode = 13,
                             Discontinued = false
                         },
@@ -1504,19 +1510,19 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 1,
                             LicenseCode = 87,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 1,
                             LicenseCode = 88,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 1,
                             LicenseCode = 89,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -1534,6 +1540,12 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 1,
                             LicenseCode = 92,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 1,
+                            LicenseCode = 180,
                             Discontinued = false
                         },
                         new
@@ -6862,6 +6874,12 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            Code = 179,
+                            Name = "Educational - Postgraduate Resident Clinical Associate",
+                            Weight = 15
+                        },
+                        new
+                        {
                             Code = 13,
                             Name = "Educational - Postgraduate Resident Elective",
                             Weight = 15
@@ -6942,6 +6960,12 @@ namespace Prime.Migrations
                         {
                             Code = 88,
                             Name = "Associate - Community Primary Care",
+                            Weight = 28
+                        },
+                        new
+                        {
+                            Code = 180,
+                            Name = "Associate",
                             Weight = 28
                         },
                         new
@@ -13902,6 +13926,74 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
+                        },
+                        new
+                        {
+                            Id = 376,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2025, 3, 12, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 179,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            Multijurisdictional = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 377,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2023, 8, 28, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 9,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 378,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2025, 7, 3, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 13,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = false,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 379,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2025, 9, 11, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 180,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            Multijurisdictional = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
                         });
                 });
 
@@ -16965,6 +17057,41 @@ namespace Prime.Migrations
                     b.ToTable("PreApprovedRegistration");
                 });
 
+            modelBuilder.Entity("Prime.Models.PredecessorSiteToSuccessorSite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("PredecessorSiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SuccessorSiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PredecessorSiteId");
+
+                    b.HasIndex("SuccessorSiteId");
+
+                    b.ToTable("PredecessorSiteToSuccessorSite");
+                });
+
             modelBuilder.Entity("Prime.Models.Privilege", b =>
                 {
                     b.Property<int>("Id")
@@ -17727,6 +17854,11 @@ namespace Prime.Migrations
                         {
                             Code = 2,
                             Name = "FNHA"
+                        },
+                        new
+                        {
+                            Code = 3,
+                            Name = "FNHA Clinic"
                         });
                 });
 
@@ -17845,15 +17977,6 @@ namespace Prime.Migrations
                         {
                             RemoteAccessTypeCode = 1,
                             LicenseCode = 12,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            RemoteAccessTypeCode = 1,
-                            LicenseCode = 13,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
@@ -18034,15 +18157,6 @@ namespace Prime.Migrations
                         {
                             RemoteAccessTypeCode = 2,
                             LicenseCode = 12,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            RemoteAccessTypeCode = 2,
-                            LicenseCode = 13,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
@@ -18196,6 +18310,240 @@ namespace Prime.Migrations
                         {
                             RemoteAccessTypeCode = 2,
                             LicenseCode = 45,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 1,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 2,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 3,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 4,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 5,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 6,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 8,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 9,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 10,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 12,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 14,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 15,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 17,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 18,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 19,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 88,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 89,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 35,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 32,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 175,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 39,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 41,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 45,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 176,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 25,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            RemoteAccessTypeCode = 3,
+                            LicenseCode = 27,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2025, 2, 19, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
@@ -20549,6 +20897,25 @@ namespace Prime.Migrations
                         .IsRequired();
 
                     b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Prime.Models.PredecessorSiteToSuccessorSite", b =>
+                {
+                    b.HasOne("Prime.Models.Site", "PredecessorSite")
+                        .WithMany()
+                        .HasForeignKey("PredecessorSiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Site", "SuccessorSite")
+                        .WithMany()
+                        .HasForeignKey("SuccessorSiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PredecessorSite");
+
+                    b.Navigation("SuccessorSite");
                 });
 
             modelBuilder.Entity("Prime.Models.Privilege", b =>

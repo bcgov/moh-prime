@@ -4,7 +4,7 @@
                                [inProgress]="!isCompleted"></app-site-progress-indicator>
 
   <app-expiry-alert [expiryDates]="siteExpiryDate"
-                    *ngIf="!isBusinessLicenceUpdated">
+                    *ngIf="this.overviewType !== 'organization' && !isBusinessLicenceUpdated && this.site.status === SiteStatusType.EDITABLE">
     <!-- Work around for ngProjectAs not passing class reference to alert when applied to ng-content -->
     <ng-container #alertTitle
                   class="alert-title">
@@ -15,6 +15,15 @@
       Review information and upload a valid business licence.
     </ng-container>
   </app-expiry-alert>
+
+  <app-alert *ngIf="this.overviewType !== 'organization' && isBusinessLicenceUpdated && this.site.status === SiteStatusType.EDITABLE"
+             type="warning"
+             icon="warning">
+    <ng-container #alertContent
+                  class="alert-content">
+      Submit the site registration to complete the update.
+    </ng-container>
+  </app-alert>
 
   <app-alert *ngIf="hasErrors()"
              type="danger"
@@ -52,7 +61,7 @@
       </mat-checkbox>
     </div>
     <div class="row justify-content-end">
-      <div class="col text-right">
+      <div class="col text-right mt-4">
         <button mat-flat-button
                 color="primary"
                 [disabled]="!accept.checked || hasErrors()"

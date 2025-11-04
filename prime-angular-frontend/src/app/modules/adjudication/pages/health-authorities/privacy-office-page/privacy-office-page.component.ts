@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -31,7 +31,7 @@ export class PrivacyOfficePageComponent extends AbstractEnrolmentPage implements
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private healthAuthResource: HealthAuthorityResource,
     private route: ActivatedRoute,
     router: Router

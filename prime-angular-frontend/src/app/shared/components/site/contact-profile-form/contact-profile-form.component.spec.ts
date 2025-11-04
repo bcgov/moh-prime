@@ -14,7 +14,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 describe('ContactProfileFormComponent', () => {
   let component: ContactProfileFormComponent;
@@ -31,7 +31,8 @@ describe('ContactProfileFormComponent', () => {
         RouterTestingModule,
         MatSnackBarModule,
         ReactiveFormsModule,
-        NgxMaskModule.forRoot()
+        NgxMaskDirective,
+        NgxMaskPipe
       ],
       providers: [
         {
@@ -46,7 +47,8 @@ describe('ContactProfileFormComponent', () => {
           provide: SiteService,
           useClass: MockCommunitySiteService
         },
-        SiteFormStateService
+        SiteFormStateService,
+        provideNgxMask()
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();

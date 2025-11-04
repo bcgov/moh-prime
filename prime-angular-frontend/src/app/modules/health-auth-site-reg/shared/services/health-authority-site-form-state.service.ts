@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -47,7 +47,7 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
     'status'>;
 
   constructor(
-    protected fb: FormBuilder,
+    protected fb: UntypedFormBuilder,
     protected routeStateService: RouteStateService,
     protected logger: ConsoleLoggerService,
     // Must apply HealthAuthorityResolver to routable views that
@@ -142,7 +142,7 @@ export class HealthAuthoritySiteFormStateService extends AbstractFormStateServic
   }
 
   public patchHoursOperationForm(healthAuthoritySite: HealthAuthoritySite) {
-    this.hoursOperationFormState.businessDays.controls.forEach((businessDay: FormGroup) => {
+    this.hoursOperationFormState.businessDays.controls.forEach((businessDay: UntypedFormGroup) => {
       businessDay.get('startTime').reset();
       businessDay.get('endTime').reset();
     });

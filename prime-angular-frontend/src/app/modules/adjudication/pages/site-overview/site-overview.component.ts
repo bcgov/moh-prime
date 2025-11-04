@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -11,7 +11,6 @@ import { Party } from '@lib/models/party.model';
 import { asyncValidator } from '@lib/validators/form-async.validators';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
-import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthoritySiteResource } from '@core/resources/health-authority-site-resource.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -22,10 +21,11 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { Organization } from '@registration/shared/models/organization.model';
-import { Site } from '@registration/shared/models/site.model';
+import { CommunitySiteViewModel, Site } from '@registration/shared/models/site.model';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
 import { ConfigService } from '@config/config.service';
 import { VendorConfig } from '@config/config.model';
+import { LinkSiteComponent } from '@shared/components/dialogs/content/link-site/link-site.component';
 
 @Component({
   selector: 'app-site-overview',
@@ -37,12 +37,14 @@ export class SiteOverviewComponent implements OnInit {
   public hasActions: boolean;
   public organization: Organization;
   public site: Site;
+  public predecessorSite: CommunitySiteViewModel;
   public siteVendors: VendorConfig[];
   public refresh: BehaviorSubject<boolean>;
   public orgClaim: OrganizationClaim;
   public newSigningAuthority: Party;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public showSendNotification: boolean;
+  public showLinkSection: boolean;
   public isNotificationSent: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
 
@@ -56,8 +58,7 @@ export class SiteOverviewComponent implements OnInit {
     protected adjudicationResource: AdjudicationResource,
     protected healthAuthSiteResource: HealthAuthoritySiteResource,
     private organizationResource: OrganizationResource,
-    private formUtilsService: FormUtilsService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private configService: ConfigService,
   ) {
     this.hasActions = true;
@@ -65,12 +66,12 @@ export class SiteOverviewComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
   }
 
-  public get pec(): FormControl {
-    return this.form.get('pec') as FormControl;
+  public get pec(): UntypedFormControl {
+    return this.form.get('pec') as UntypedFormControl;
   }
 
-  public get vendors(): FormControl {
-    return this.form.get('vendors') as FormControl;
+  public get vendors(): UntypedFormControl {
+    return this.form.get('vendors') as UntypedFormControl;
   }
 
   public onRoute(routePath: RoutePath): void {
@@ -89,29 +90,24 @@ export class SiteOverviewComponent implements OnInit {
     }
   }
 
-  public saveVendor(): void {
-    const existingVendor = this.siteVendors.find((vendor: VendorConfig) => vendor.code === this.site.siteVendors[0].vendorCode).name;
-    const vendor = this.vendors.value;
+  public onEditVendor(): void {
+    const siteId = +this.route.snapshot.params.sid;
+    //const vendorChangeText = `from ${existingVendor} to ${vendor.name}`;
 
-    if (this.vendors.valid && existingVendor !== vendor.name) {
-      const siteId = +this.route.snapshot.params.sid;
-      const vendorChangeText = `from ${existingVendor} to ${vendor.name}`;
-
-      const data: DialogOptions = {
-        data: {
-          siteId,
-          vendorCode: vendor.code,
-          vendorChangeText
+    const data: DialogOptions = {
+      data: {
+        siteId,
+        vendorCode: this.site.siteVendors[0].vendorCode,
+        siteVendors: this.siteVendors,
+      }
+    };
+    this.dialog.open(ChangeVendorNoteComponent, { data }).afterClosed()
+      .subscribe((data) => {
+        if (data?.result) {
+          this.refresh.next(true);
+          this.site.siteVendors[0].vendorCode = data.vendorCode;
         }
-      };
-      this.dialog.open(ChangeVendorNoteComponent, { data }).afterClosed()
-        .subscribe((vendorChanged) => {
-          if (vendorChanged) {
-            this.refresh.next(true);
-            this.site.siteVendors[0].vendorCode = vendor.code;
-          }
-        });
-    }
+      });
   }
 
   public onApproveOrgClaim(): void {
@@ -142,6 +138,45 @@ export class SiteOverviewComponent implements OnInit {
       .subscribe(() => this.isNotificationSent = true);
   }
 
+  public onOpenSiteLink(): void {
+    const data: DialogOptions = {
+      data: {
+        siteId: this.site.id,
+        organizationId: this.predecessorSite?.organization.id,
+        predecessorSiteId: this.predecessorSite?.site.id
+      },
+    };
+    this.busy = this.dialog.open(LinkSiteComponent, { data })
+      .afterClosed()
+      .subscribe((result: boolean) => {
+        if (result) {
+          this.siteResource.getSiteById(this.site.id).subscribe((site) => {
+            this.predecessorSite = site.predecessorSite;
+            this.site.predecessorSite = this.predecessorSite;
+          })
+        }
+      });
+  }
+
+  public onDeleteSiteLink(): void {
+    const data: DialogOptions = {
+      title: 'Remove Predecessor Site',
+      message: 'Are you sure to remove Predecessor Site?',
+      actionText: 'Remove'
+    };
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .subscribe((result: boolean) => {
+        if (result) {
+          this.siteResource.removeSiteLink(this.site.predecessorSite.site.id, this.site.id)
+            .subscribe(() => {
+              this.site.predecessorSite = null;
+              this.predecessorSite = null;
+            });
+        }
+      });
+  }
+
   public ngOnInit(): void {
     this.createFormInstance();
 
@@ -156,6 +191,7 @@ export class SiteOverviewComponent implements OnInit {
         // Full objects are needed to display overview components
         this.organization = org;
         this.site = site;
+        this.predecessorSite = site.predecessorSite;
         this.siteVendors = this.configService.vendors
           .filter((vendor: VendorConfig) => vendor.careSettingCode === site.careSettingCode)
         this.orgClaim = orgClaim;
@@ -163,6 +199,9 @@ export class SiteOverviewComponent implements OnInit {
         this.showSendNotification = [
           CareSettingEnum.COMMUNITY_PHARMACIST,
           CareSettingEnum.DEVICE_PROVIDER
+        ].includes(site.careSettingCode);
+        this.showLinkSection = [
+          CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
         ].includes(site.careSettingCode);
         return of(orgClaim?.newSigningAuthorityId);
       }),

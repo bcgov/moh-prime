@@ -39,6 +39,12 @@
           {{ remoteUser.remoteUserCertification.practitionerId | default }}
         </app-enrollee-property>
       </div>
+
+      <div class="mb-3">
+        <app-enrollee-property title="Created Date">
+          {{ remoteUser.createdDate | formatDate }}
+        </app-enrollee-property>
+      </div>
     </ng-container>
   </ng-container>
 

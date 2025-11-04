@@ -73,6 +73,10 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetOrganizationById(int organizationId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
+            if (organization == null)
+            {
+                return NotFound();
+            }
 
             if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
@@ -80,6 +84,23 @@ namespace Prime.Controllers
             }
 
             return Ok(organization);
+        }
+
+        // GET: api/Organizations/name/string
+        /// <summary>
+        /// Gets a specific Organization.
+        /// </summary>
+        /// <param name="organizationName"></param>
+        [HttpGet("name/{organizationName}", Name = nameof(GetOrganizationByName))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<List<Organization>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetOrganizationByName(string organizationName)
+        {
+            var organizations = await _organizationService.GetOrganizationByNameAsync(organizationName);
+
+            return Ok(organizations);
         }
 
         // POST: api/Organizations

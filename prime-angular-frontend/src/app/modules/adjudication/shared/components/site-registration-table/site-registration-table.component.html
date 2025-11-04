@@ -61,8 +61,16 @@
         scope="col"> Site Name (Doing Business As) </th>
     <td mat-cell
         *matCellDef="let row;">
-      <span *ngIf="row.isNew" class="red">NEW </span>
-      {{ row.doingBusinessAs | default }}
+      <div class="d-flex align-items-center">
+        <span *ngIf="row.isNew" class="red">NEW </span>
+        {{ row.doingBusinessAs | default }}
+        <mat-icon *ngIf="row?.predecessorSite || row?.successorSite"
+                  [matTooltip]="row?.predecessorSite ? getPredecessorSiteText(row) : getSuccessorSiteText(row)"
+                  (click)="onFilterByLink(row)"
+                  class="linked-site-alert"
+                  matTooltipPosition="after">info
+        </mat-icon>
+      </div>
     </td>
   </ng-container>
 

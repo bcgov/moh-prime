@@ -6,7 +6,7 @@
                 class="alert-content">
     {{ this.collegeDiscontinued ?
     "The name of your college has changed. Please select the new name from the dropdown list for college name, " +
-    "then " : "Your previous licence class is no longer available, please " }}
+    "then " : "Your previous licence class is no longer available. Please " }}
     use the dropdown menu to select the licence you currently hold.
   </ng-container>
 </app-alert>
@@ -82,15 +82,12 @@
           </mat-form-field>
 
         </div>
-        <div *ngIf="!condensed && collegeCode.value !== CollegeLicenceClassEnum.CPSBC"
+        <div *ngIf="showRegistrationId()"
              class="col-sm-12 pl-5">
 
           <mat-form-field class="w-100">
+            <mat-label>{{ getRegNumberFieldLabel(collegeCode.value) }}</mat-label>
             <input matInput
-                   [placeholder]="(collegeCode.value === CollegeLicenceClassEnum.CPBC
-                    || collegeCode.value === CollegeLicenceClassEnum.CDSBC
-                    || collegeCode.value === CollegeLicenceClassEnum.OptometryBC)
-                    ? 'Registration Number' : 'Registration ID'"
                    formControlName="licenseNumber">
             <mat-error *ngIf="licenseNumber.hasError('required')">Required</mat-error>
             <mat-error *ngIf="licenseNumber.hasError('alphanumeric')">
@@ -107,9 +104,10 @@
 
           <div class="col-sm-12 pl-5">
 
-            <mat-form-field class="w-100">
+            <mat-form-field class="w-100"
+                            subscriptSizing="dynamic">
+              <mat-label>Next Renewal Date</mat-label>
               <input matInput
-                     placeholder="Next Renewal Date"
                      [min]="minRenewalDate"
                      [matDatepicker]="picker"
                      formControlName="renewalDate"
@@ -130,6 +128,7 @@
 
         <div *ngIf="collegeCode.value === CollegeLicenceClassEnum.CPSBC"
              class="col-sm-12 pl-5">
+          <br />
           <app-page-subheader>
             <ng-container appPageSubheaderTitle>CPSID Number</ng-container>
             <ng-container appPageSubheaderSummary>
@@ -158,17 +157,16 @@
             <mat-slide-toggle class="mr-4"
                               [checked]="practitionerId.value"
                               (change)="onPrescribing($event)">
-              Do you have a {{(collegeCode.value === CollegeLicenceClassEnum.BCCNM) ?
-              "PharmaNet ID/Prescriber ID":"PharmaNet ID"}} issued by the College?
+              Do you have a {{ getPNetIdFieldLabel(collegeCode.value) }} issued by the College?
             </mat-slide-toggle>
           </div>
 
           <ng-container *ngIf="prescriberIdType === PrescriberIdTypeEnum.Mandatory || isPrescribing">
-
+            <br />
             <app-form-icon-group>
               <mat-form-field class="w-100">
+                <mat-label>{{ getPNetIdFieldLabel(collegeCode.value) }}</mat-label>
                 <input matInput
-                       [placeholder]="(collegeCode.value === CollegeLicenceClassEnum.BCCNM) ?  'PharmaNet ID/Prescriber ID' : 'PharmaNet ID'"
                        formControlName="practitionerId"
                        class="uppercase"
                        maxlength="5"

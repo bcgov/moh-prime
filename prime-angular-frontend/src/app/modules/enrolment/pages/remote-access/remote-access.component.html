@@ -34,7 +34,7 @@
         </app-page-subheader>
 
         <div formArrayName="sites"
-             class="mb-3"
+             class="mb-3 remote-site"
              *ngFor="let remoteAccessResult of remoteAccessSearch; let i = index">
           <mat-checkbox [formControlName]="i">
             <div class="pl-2">

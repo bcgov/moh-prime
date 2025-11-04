@@ -6,15 +6,20 @@
          [class.col-6]="mode === 'columns'">
 
       <mat-form-field class="w-100">
-        
+        <mat-label>{{ control.label }}</mat-label>
         <input matInput
-               [placeholder]="control.label"
                [formControlName]="control.name">
-        <mat-error *ngIf="control.name==='preferredFirstName' && form.get('preferredFirstName').hasError('required')">Required</mat-error>
-        <mat-error *ngIf="control.name==='preferredFirstName' && form.get('preferredFirstName').hasError('validName')">Please enter a valid name</mat-error>
-        <mat-error *ngIf="control.name==='preferredLastName' && form.get('preferredLastName').hasError('required')">Required</mat-error>
-        <mat-error *ngIf="control.name==='preferredLastName' && form.get('preferredLastName').hasError('validName')">Please enter a valid name</mat-error>
-        
+        <mat-error
+                   *ngIf="control.name==='preferredFirstName' && form.get('preferredFirstName').hasError('required')">Required</mat-error>
+        <mat-error
+                   *ngIf="control.name==='preferredFirstName' && form.get('preferredFirstName').hasError('validName')">Please
+          enter a valid name</mat-error>
+        <mat-error
+                   *ngIf="control.name==='preferredLastName' && form.get('preferredLastName').hasError('required')">Required</mat-error>
+        <mat-error
+                   *ngIf="control.name==='preferredLastName' && form.get('preferredLastName').hasError('validName')">Please
+          enter a valid name</mat-error>
+
 
       </mat-form-field>
 

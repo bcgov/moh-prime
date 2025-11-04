@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -7,7 +7,7 @@ import { Enrollee } from '@shared/models/enrollee.model';
 
 export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
   public constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private formUtilsService: FormUtilsService
   ) {
     super();
@@ -15,28 +15,28 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
     this.buildForm();
   }
 
-  public get preferredFirstName(): FormControl {
-    return this.formInstance.get('preferredFirstName') as FormControl;
+  public get preferredFirstName(): UntypedFormControl {
+    return this.formInstance.get('preferredFirstName') as UntypedFormControl;
   }
 
-  public get preferredMiddleName(): FormControl {
-    return this.formInstance.get('preferredMiddleName') as FormControl;
+  public get preferredMiddleName(): UntypedFormControl {
+    return this.formInstance.get('preferredMiddleName') as UntypedFormControl;
   }
 
-  public get preferredLastName(): FormControl {
-    return this.formInstance.get('preferredLastName') as FormControl;
+  public get preferredLastName(): UntypedFormControl {
+    return this.formInstance.get('preferredLastName') as UntypedFormControl;
   }
 
-  public get verifiedAddress(): FormGroup {
-    return this.formInstance.get('verifiedAddress') as FormGroup;
+  public get verifiedAddress(): UntypedFormGroup {
+    return this.formInstance.get('verifiedAddress') as UntypedFormGroup;
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.formInstance.get('physicalAddress') as FormGroup;
+  public get physicalAddress(): UntypedFormGroup {
+    return this.formInstance.get('physicalAddress') as UntypedFormGroup;
   }
 
-  public get mailingAddress(): FormGroup {
-    return this.formInstance.get('mailingAddress') as FormGroup;
+  public get mailingAddress(): UntypedFormGroup {
+    return this.formInstance.get('mailingAddress') as UntypedFormGroup;
   }
 
   public get json(): Enrollee {

@@ -47,12 +47,22 @@ namespace Prime.Services
                 query = query.Where(s => s.OrganizationId == organizationId && s.Organization.DeletedDate == null);
             }
 
-            return await query.ToListAsync();
+            IEnumerable<CommunitySite> sites = await query.ToListAsync();
+            // For SQL performance reasons, retrieve these 1-to-many related entities separately from base query
+            foreach (var site in sites)
+            {
+                site.RemoteUsers = GetRemoteUsersOfSite(site.Id);
+                site.SiteStatuses = GetStatusesOfSite(site.Id);
+            }
+            return sites;
         }
 
         public async Task<PaginatedList<CommunitySiteAdminListViewModel>> GetSitesAsync(OrganizationSearchOptions searchOptions)
         {
             searchOptions ??= new OrganizationSearchOptions();
+
+            string[] textSearchArg = searchOptions.TextSearch != null ?
+                searchOptions.TextSearch.ToUpper().Split(',') : null;
 
             var query = _context.CommunitySites
                 .AsNoTracking()
@@ -63,13 +73,11 @@ namespace Prime.Services
                     .Where(s => s.CareSettingCode == searchOptions.CareSettingCode)
                 )
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
-                    .Search(
-                        s => s.DoingBusinessAs,
-                        s => s.PEC,
-                        s => s.Organization.Name,
-                        s => s.Organization.DisplayId.ToString(),
-                        s => s.Organization.SigningAuthority.FirstName + " " + s.Organization.SigningAuthority.LastName)
-                    .Containing(searchOptions.TextSearch)
+                    .Where(s => textSearchArg.Any(t => s.DoingBusinessAs.ToUpper().Contains(t.Trim()) ||
+                    s.PEC.ToUpper().Contains(t.Trim()) ||
+                    s.Organization.Name.ToUpper().Contains(t.Trim()) ||
+                    s.Organization.DisplayId.ToString().Contains(t.Trim()) ||
+                    (s.Organization.SigningAuthority.FirstName.ToUpper() + " " + s.Organization.SigningAuthority.LastName.ToUpper()).Contains(t.Trim())))
                 )
                 .If(searchOptions.Status.HasValue, q => q
                     .Where(s => (int)s.SiteStatuses.OrderByDescending(ss => ss.StatusDate)
@@ -81,10 +89,13 @@ namespace Prime.Services
             var paginatedList = await PaginatedList<CommunitySiteAdminListViewModel>.CreateAsync(query, searchOptions.Page ?? 1);
 
 
-            //check for duplicate site id
             foreach (var site in paginatedList)
             {
+                //check for duplicate site id
                 site.DuplicatePecSiteCount = await GetDuplicatePecCount(site.CareSettingCode, site.PEC, site.Id);
+                // Related to another Site?
+                site.PredecessorSite = await GetPredecessorSite(site.Id);
+                site.SuccessorSite = await GetSuccessorSite(site.Id);
             }
 
             GroupSitesToOrgVisually(paginatedList);
@@ -122,19 +133,68 @@ namespace Prime.Services
         private async Task<int> GetDuplicatePecCount(int? careSettingCode, string pec, int originalSiteId)
         {
             return await _context.Sites
-                    .Where(s => s.PEC != null && s.PEC == pec && s.CareSettingCode == careSettingCode && originalSiteId != s.Id)
+                    .Where(s => s.PEC != null && s.PEC == pec && s.CareSettingCode == careSettingCode && originalSiteId != s.Id && s.DeletedDate == null)
                     .CountAsync();
+        }
+        public async Task<CommunitySiteViewModel> GetPredecessorSite(int siteId)
+        {
+            var site = await _context.PredecessorSiteToSuccessorSites
+                .Where(ss => ss.SuccessorSiteId == siteId)
+                .Select(ss => ss.PredecessorSite)
+                .SingleOrDefaultAsync();
+
+            if (site != null)
+            {
+                var org = await _context.CommunitySites.Where(cs => cs.Id == site.Id)
+                    .Select(cs => cs.Organization)
+                    .SingleOrDefaultAsync();
+                return new CommunitySiteViewModel
+                {
+                    Site = site,
+                    Organization = org
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<CommunitySiteViewModel> GetSuccessorSite(int siteId)
+        {
+            var site = await _context.PredecessorSiteToSuccessorSites
+                .Where(ss => ss.PredecessorSiteId == siteId)
+                .Select(ss => ss.SuccessorSite)
+                .SingleOrDefaultAsync();
+
+            if (site != null)
+            {
+                var org = await _context.CommunitySites.Where(cs => cs.Id == site.Id)
+                    .Select(cs => cs.Organization)
+                    .SingleOrDefaultAsync();
+                return new CommunitySiteViewModel
+                {
+                    Site = site,
+                    Organization = org
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<CommunitySite> GetSiteAsync(int siteId)
         {
             var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
+            // For SQL performance reasons, retrieve these 1-to-many related entities separately from base query
+            site.RemoteUsers = GetRemoteUsersOfSite(site.Id);
+            site.SiteStatuses = GetStatusesOfSite(site.Id);
 
             if (site.CareSettingCode.HasValue &&
                 site.CareSettingCode.Value == (int)CareSettingType.CommunityPractice &&
-                site.Organization != null &&
-                site.Organization.RegistrationId != null)
+                site.Organization != null)
             {
                 var eras = await matchExceptionRemoteAccessSite(site.PEC, site.Organization.RegistrationId);
                 site.RemoteAccessTypeCode = eras != null ? eras.RemoteAccessTypeCode : (int)RemoteAccessTypeEnum.PrivateCommunityHealthPractice;
@@ -440,12 +500,15 @@ namespace Prime.Services
             }
 
             var existingUsers = current.RemoteUsers.ToDictionary(x => x.Id, x => x);
+            var outputUsers = new List<SiteRemoteUserUpdateModel>();
 
             foreach (var updatedUser in updateRemoteUsers)
             {
                 if (existingUsers.TryGetValue(updatedUser.Id, out var existing))
                 {
                     existingUsers.Remove(updatedUser.Id);
+
+                    outputUsers.Add(updatedUser);
 
                     // Only considered an update if incoming and existing aren't equal
                     if (!updatedUser.Equals(existing))
@@ -463,12 +526,21 @@ namespace Prime.Services
                 }
                 else
                 {
-                    var newRemoteUser = _mapper.Map<RemoteUser>(updatedUser);
-                    newRemoteUser.Id = 0;
-                    newRemoteUser.SiteId = current.Id;
-                    _context.RemoteUsers.Add(newRemoteUser);
+                    if (!outputUsers.Where(u => updatedUser.Equals(_mapper.Map<RemoteUser>(u))).Any())
+                    {
+                        var newRemoteUser = _mapper.Map<RemoteUser>(updatedUser);
+                        newRemoteUser.Id = 0;
+                        newRemoteUser.SiteId = current.Id;
+                        _context.RemoteUsers.Add(newRemoteUser);
 
-                    result.Add($"Remote user '{updatedUser.FirstName} {updatedUser.LastName}' was added.");
+                        outputUsers.Add(updatedUser);
+
+                        result.Add($"Remote user '{updatedUser.FirstName} {updatedUser.LastName}' was added.");
+                    }
+                    else
+                    {
+                        result.Add($"Duplicate Remote user '{updatedUser.FirstName} {updatedUser.LastName}' was detected and skipped.");
+                    }
                 }
             }
 
@@ -722,14 +794,27 @@ namespace Prime.Services
                 .Include(s => s.TechnicalSupport)
                     .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.BusinessHours.OrderBy(bh => bh.Day))
-                .Include(s => s.RemoteUsers)
-                    .ThenInclude(r => r.RemoteUserCertification)
-                        .ThenInclude(c => c.College)
                 .Include(s => s.BusinessLicences)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Include(s => s.Adjudicator)
-                .Include(s => s.SiteStatuses)
                 .Include(s => s.SiteSubmissions);
+        }
+
+        private ICollection<RemoteUser> GetRemoteUsersOfSite(int siteId)
+        {
+            return _context.RemoteUsers
+                .Where(ru => ru.SiteId == siteId)
+                .OrderByDescending(ru => ru.CreatedTimeStamp)
+                .Include(r => r.RemoteUserCertification)
+                    .ThenInclude(c => c.College)
+                .ToList();
+        }
+
+        private ICollection<SiteStatus> GetStatusesOfSite(int siteId)
+        {
+            return _context.SiteStatuses
+                .Where(ss => ss.SiteId == siteId)
+                .ToList();
         }
 
         private async Task<ExceptionRemoteAccessSite> matchExceptionRemoteAccessSite(string siteId, string registrationId)

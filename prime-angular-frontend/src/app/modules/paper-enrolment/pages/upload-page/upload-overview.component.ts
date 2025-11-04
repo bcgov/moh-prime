@@ -37,7 +37,7 @@ import { UploadForm } from './upload-form.model';
     </app-page-section>
   `,
   styles: [
-    '.mat-icon { font-size: 1.2em; }',
+    '.mat-icon { font-size: 1em; }',
     '.button > .mat-icon { font-size: 1.35rem; }'
   ],
   changeDetection: ChangeDetectionStrategy.OnPush

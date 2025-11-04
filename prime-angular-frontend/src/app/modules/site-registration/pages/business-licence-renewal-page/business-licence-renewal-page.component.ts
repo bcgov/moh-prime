@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 
 import { noop, Observable, of } from 'rxjs';
 
@@ -46,7 +46,7 @@ export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRe
     protected siteService: SiteService,
     protected siteFormStateService: SiteFormStateService,
     protected siteResource: SiteResource,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private utilsService: UtilsService,
     private route: ActivatedRoute,
     router: Router

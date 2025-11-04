@@ -30,6 +30,10 @@ namespace Prime.Configuration.Database
         public static readonly DateTime AddTemporaryLimitedPharmacistLicenceClasses = new(2024, 10, 22, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime UpdatePharmacyTechnician = new(2024, 11, 12, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime AddMultijurisdictionalFlag = new(2024, 11, 12, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime AddPostgraduateResidentClinicalAssociate = new(2025, 03, 12, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime FNHAClinicUpdate = new(2025, 07, 01, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime LicenseClassChangeJuly2025 = new(2025, 7, 3, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime PhysicianLicenseClassChangeSept2025 = new(2025, 9, 11, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
         {
@@ -472,6 +476,17 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id = 374, LicenseCode = 177, Prefix = "L9", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, EffectiveDate = AddMultijurisdictionalFlag, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE, Multijurisdictional = true},
                     new LicenseDetail { Id = 375, LicenseCode = 89, Prefix = "91", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = AddMultijurisdictionalFlag, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE, Multijurisdictional = true },
 
+                    //new licence class - Educational – Postgraduate Resident Clinical Associate
+                    new LicenseDetail { Id = 376, LicenseCode = 179, Prefix = "91", Manual = false, Validate = true,  LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true,  EffectiveDate = AddPostgraduateResidentClinicalAssociate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+
+                    //change CPSBC Conditional - Practice Setting to manual review
+                    new LicenseDetail { Id = 377, LicenseCode = 9, Prefix = "91", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = AdjustmentsToCPSBCAug28th2023, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    //change CPSBC Educational - Postgraduate Resident Elective to manual review
+                    new LicenseDetail { Id = 378, LicenseCode = 13, Prefix = "91", Manual = true, Validate = true,  LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = false,  EffectiveDate = LicenseClassChangeJuly2025, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+
+                    //change CPSBC Educational - Postgraduate Resident Elective to manual review
+                    new LicenseDetail { Id = 379, LicenseCode = 180, Prefix = "91", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = PhysicianLicenseClassChangeSept2025, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
                 };
             }
         }

@@ -38,3 +38,15 @@
 .mat-drawer-container {
   color: $body-color;
 }
+
+.mat-mdc-slide-toggle .mdc-label {
+  height: 15px;
+}
+
+mat-radio-button .mdc-form-field .mdc-label {
+  height: 15px;
+}
+
+div.mdc-checkbox+label.mdc-label {
+  height: 15px;
+}

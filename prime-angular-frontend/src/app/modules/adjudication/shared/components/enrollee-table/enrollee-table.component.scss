@@ -32,3 +32,17 @@ mat-date-range-input {
     color: theme-palette(yellow);
   }
 }
+
+.mat-mdc-header-cell {
+  font-size: 12px;
+  padding: 0 5px 0 0;
+  vertical-align: text-bottom;
+}
+
+.mat-mdc-cell {
+  padding: 0 10px 0 0;
+}
+
+.mat-mdc-row {
+  font-family: 'BC Sans';
+}
