@@ -22,6 +22,10 @@ import { SiteRegistrationNote } from '@shared/models/site-registration-note.mode
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '../services/adjudication-resource.service';
 import { SiteActionEnum, SiteArchiveRestoreComponent } from '@shared/components/dialogs/content/site-archive-restore/site-archive-restore.component';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { request } from 'http';
+import { Organization } from '@registration/shared/models/organization.model';
+import { SiteListViewModel } from '@registration/shared/models/site.model';
 
 export abstract class AbstractSiteAdminPage {
   public abstract busy: Subscription;
@@ -35,6 +39,7 @@ export abstract class AbstractSiteAdminPage {
     protected siteResource: SiteResource,
     protected adjudicationResource: AdjudicationResource,
     protected healthAuthSiteResource: HealthAuthoritySiteResource,
+    protected organizationResource: OrganizationResource
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
   }
@@ -282,6 +287,45 @@ export abstract class AbstractSiteAdminPage {
   public onUnreject(siteId: number): void {
     this.busy = this.siteResource.unrejectSite(siteId)
       .subscribe(() => this.onRefresh());
+  }
+
+  public onEnableOrgEditing(organizationId: number): void {
+    const request$ = this.siteResource.getSites(organizationId);
+    request$
+      .pipe(
+        map((sites: SiteListViewModel[]) => {
+          return {
+            title: "Set Organization Editable",
+            boldMessage: `*Note: ${sites.length} site submission will be reversed and all organization agreement will be deleted.`,
+            message: "Are you sure you want to set this organization to be editable?",
+            actionText: "Set Organization Editable"
+          }
+        }),
+        exhaustMap((data: DialogOptions) =>
+          this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+        )
+      ).subscribe((result: boolean) => {
+        if (result) {
+          return this.organizationResource.enableOrganizationEditable(organizationId)
+            .subscribe(() => this.onRefresh());
+        }
+        return EMPTY;
+      });
+    /*
+        const data: DialogOptions = {
+          title: "Set Organization Editable",
+          message: "Are you sure you want to set this organization to be editable?",
+          actionText: "Set Organization Editable"
+        }
+        this.dialog.open(ConfirmDialogComponent, { data })
+          .afterClosed()
+          .subscribe((result: boolean) => {
+            if (result) {
+              this.organizationResource.enableOrganizationEditable(organizationId)
+                .subscribe(() => this.onRefresh());
+            }
+          });
+          */
   }
 
   /**

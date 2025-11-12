@@ -15,7 +15,8 @@
                           [hideOverviewButton]="hideOverviewButton"
                           (route)="onRoute($event)"
                           (redirectSiteRegistration)="onRedirectToSiteRegistration($event)"
-                          (delete)="onDelete($event)">
+                          (delete)="onDelete($event)"
+                          (enableOrgEditing)="onEnableOrgEditing($event)">
   </app-organization-table>
 
   <ng-container *ngIf="content">

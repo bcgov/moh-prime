@@ -20,6 +20,7 @@ import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 @Component({
   selector: 'app-health-authority-site-container',
@@ -43,10 +44,11 @@ export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage
     protected siteResource: SiteResource,
     protected adjudicationResource: AdjudicationResource,
     protected healthAuthSiteResource: HealthAuthoritySiteResource,
+    protected organizationResource: OrganizationResource,
     @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
     private permissionService: PermissionService
   ) {
-    super(route, router, dialog, siteResource, adjudicationResource, healthAuthSiteResource);
+    super(route, router, dialog, siteResource, adjudicationResource, healthAuthSiteResource, organizationResource);
 
     this.hasActions = false;
   }
