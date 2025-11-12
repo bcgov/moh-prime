@@ -23,8 +23,6 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '../services/adjudication-resource.service';
 import { SiteActionEnum, SiteArchiveRestoreComponent } from '@shared/components/dialogs/content/site-archive-restore/site-archive-restore.component';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { request } from 'http';
-import { Organization } from '@registration/shared/models/organization.model';
 import { SiteListViewModel } from '@registration/shared/models/site.model';
 
 export abstract class AbstractSiteAdminPage {
@@ -311,21 +309,6 @@ export abstract class AbstractSiteAdminPage {
         }
         return EMPTY;
       });
-    /*
-        const data: DialogOptions = {
-          title: "Set Organization Editable",
-          message: "Are you sure you want to set this organization to be editable?",
-          actionText: "Set Organization Editable"
-        }
-        this.dialog.open(ConfirmDialogComponent, { data })
-          .afterClosed()
-          .subscribe((result: boolean) => {
-            if (result) {
-              this.organizationResource.enableOrganizationEditable(organizationId)
-                .subscribe(() => this.onRefresh());
-            }
-          });
-          */
   }
 
   /**
