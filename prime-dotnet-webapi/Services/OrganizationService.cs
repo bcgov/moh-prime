@@ -189,9 +189,12 @@ namespace Prime.Services
             var deletedDate = DateTime.UtcNow;
             organization.DeletedDate = deletedDate;
 
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, null, "Delete Organization.");
+
             foreach (var site in organization.Sites)
             {
                 site.DeletedDate = deletedDate;
+                await _businessEventService.CreateSiteEventAsync(site.Id, "Delete site as part of organization deletion");
             }
 
             _context.Update(organization);

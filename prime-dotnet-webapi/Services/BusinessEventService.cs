@@ -232,7 +232,7 @@ namespace Prime.Services
             return await CreateSiteEventAsync(siteId, partyId, description);
         }
 
-        public async Task<BusinessEvent> CreateOrganizationEventAsync(int organizationId, int partyId, string description)
+        public async Task<BusinessEvent> CreateOrganizationEventAsync(int organizationId, int? partyId, string description)
         {
             var username = _httpContext.HttpContext.User.GetPrimeUsername();
             Admin admin = await _adminService.GetAdminAsync(username);
