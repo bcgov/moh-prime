@@ -5,6 +5,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
     <UserSecretsId>2144bc8e-373b-4888-a0ca-b0ff7798bd81</UserSecretsId>
+    <Features>$(Features);experimental-data-section-string-literals=0</Features>
   </PropertyGroup>
   <ItemGroup>
     <!-- Addressing vulnerabilities ⬇️ by specifying version explicitly -->
