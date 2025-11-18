@@ -232,7 +232,7 @@ namespace Prime.Services
             return await CreateSiteEventAsync(siteId, partyId, description);
         }
 
-        public async Task<BusinessEvent> CreateOrganizationEventAsync(int organizationId, int partyId, string description)
+        public async Task<BusinessEvent> CreateOrganizationEventAsync(int organizationId, int? partyId, string description)
         {
             return await CreateOrganizationBusinessEvent(organizationId, partyId, description);
         }
