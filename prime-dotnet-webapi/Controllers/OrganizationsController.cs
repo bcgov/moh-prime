@@ -605,5 +605,32 @@ namespace Prime.Controllers
 
             return Ok(organization);
         }
+
+
+
+        // POST: api/Organizations/1/editable
+        /// <summary>
+        /// Sets the Organization details to editable.
+        /// </summary>
+        /// <param name="id"></param>
+        [HttpPost("{id}/editable", Name = nameof(SetOrganizationDetailEditable))]
+        [Authorize(Roles = Roles.PrimeAdministrant)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> SetOrganizationDetailEditable(int id)
+        {
+
+            var organization = await _organizationService.GetOrganizationAsync(id);
+            if (organization == null)
+            {
+                return NotFound($"Organization not found with id {id}");
+            }
+
+            await _organizationService.SetOrganizationDetailEditable(id);
+
+            return NoContent();
+        }
     }
 }

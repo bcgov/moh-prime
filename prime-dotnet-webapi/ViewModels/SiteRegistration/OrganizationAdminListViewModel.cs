@@ -17,5 +17,6 @@ namespace Prime.ViewModels
         //First Site ID with PEC
         public int? SiteId { get; set; }
         public bool HasClaim { get; set; }
+        public bool HasSubmittedSite { get; set; }
     }
 }

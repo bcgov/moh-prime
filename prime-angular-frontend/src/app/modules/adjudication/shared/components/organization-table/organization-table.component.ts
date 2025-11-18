@@ -20,6 +20,7 @@ export class OrganizationTableComponent implements OnInit, OnChanges {
   @Output() public refresh: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
   @Output() public delete: EventEmitter<{ [key: string]: number }>;
+  @Output() public enableOrgEditing: EventEmitter<number>;
   @Output() public redirectSiteRegistration: EventEmitter<string | (string | number)[]>;
 
   public busy: Subscription;
@@ -37,6 +38,7 @@ export class OrganizationTableComponent implements OnInit, OnChanges {
     this.refresh = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.delete = new EventEmitter<{ [key: string]: number }>();
+    this.enableOrgEditing = new EventEmitter<number>();
     this.redirectSiteRegistration = new EventEmitter<string | (string | number)[]>();
 
     this.columns = [
@@ -47,6 +49,7 @@ export class OrganizationTableComponent implements OnInit, OnChanges {
       'signingAuthority',
       'createdDate',
       'validSite',
+      'editable',
       'actions'
     ];
     this.dataSource = new MatTableDataSource<OrganizationAdminView>([]);
@@ -75,5 +78,9 @@ export class OrganizationTableComponent implements OnInit, OnChanges {
 
   public onDelete(record: { [key: string]: number }) {
     this.delete.emit(record);
+  }
+
+  public onEnableOrgEditing(organizationId: number): void {
+    this.enableOrgEditing.emit(organizationId);
   }
 }
