@@ -111,7 +111,7 @@
 
     <ng-container *ngIf="isCommunitySite">
       <button mat-menu-item
-              [disabled]="!(Role.SUPER_ADMIN | inRole)"
+              [disabled]="!(Role.SUPER_ADMIN | inRole) || !orgHasSubmittedSite()"
               (click)="onEnableOrgEditable()">
         <mat-icon>edit</mat-icon>
         <span>Set Organization Editable</span>
