@@ -193,6 +193,7 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
         doingBusinessAs,
         hasClaim,
         pendingTransfer,
+        hasSubmittedSite,
       } = organization;
 
       return [{
@@ -208,6 +209,7 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
         name,
         organizationDoingBusinessAs: doingBusinessAs,
         hasClaim,
+        hasSubmittedSite,
         ...this.toSiteViewModelPartial(site)
       }];
     };
