@@ -64,6 +64,10 @@ export class SiteRegistrationActionsComponent implements OnInit {
     return !((this.siteRegistration as SiteRegistrationListViewModel).organizationId)
   }
 
+  public orgHasSubmittedSite(): boolean {
+    return !!((this.siteRegistration as SiteRegistrationListViewModel).hasSubmittedSite)
+  }
+
   public onApprove(): void {
     if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
       this.approve.emit(this.siteRegistration.id);
