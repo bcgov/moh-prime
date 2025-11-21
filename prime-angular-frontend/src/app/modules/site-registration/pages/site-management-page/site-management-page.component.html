@@ -13,7 +13,7 @@
 
   <app-page-header>Site Management</app-page-header>
 
-  <ng-container *ngFor="let code of careSettingCodesPendingTransfer">
+  <ng-container *ngIf="careSettingCodesPendingTransfer && careSettingCodesPendingTransfer.length > 0">
     <app-alert type="danger"
                icon="warning">
       <ng-container #alertTitle
@@ -22,11 +22,21 @@
       </ng-container>
       <ng-container #alertContent
                     class="alert-content">
-        You are required to sign the <strong>{{ CareSettingEnum[code] | replace: '_':' ' | capitalize: true }} Organization
-          Agreement</strong>. Please follow the link below to read and sign the agreement before being granted
-        permission to edit and view this organization.
-        <br/>
-        <a class="org_agreement_link" [routerLink]="" (click)="routeToOrgAgreementByCareSettingCode(code)">Go to Organization Agreement</a>
+        <p>
+          Claiming a PharmaNet site for a new organization requires an authorized person accept the PRIME Organization
+          Agreement for the new organization before you will be able to access the site details. If you are authorized
+          to
+          do so, you can accept the agreement in PRIME. If you are not authorized to accept the agreement, you will be
+          able to download a copy, have it signed offline, and upload it to the organization information section of
+          PRIME. Use the link below to view and either accept or download the agreement.
+        </p>
+
+        <ng-container *ngFor="let code of careSettingCodesPendingTransfer">
+          <p>
+            <a class="org_agreement_link" [routerLink]="" (click)="routeToOrgAgreementByCareSettingCode(code)">Go to {{ CareSettingEnum[code] | replace: '_':' ' | capitalize: true }} Organization Agreement</a>
+          </p>
+        </ng-container>
+
       </ng-container>
     </app-alert>
   </ng-container>

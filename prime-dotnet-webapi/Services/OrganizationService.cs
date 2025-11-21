@@ -287,7 +287,7 @@ namespace Prime.Services
             // Get a list of the care settings used on sites that exist for an organization
             var oganizationCareSettings = await _context.CommunitySites
                 .AsNoTracking()
-                .Where(s => s.OrganizationId == organizationId)
+                .Where(s => s.OrganizationId == organizationId && s.DeletedDate == null)
                 .Select(s => s.CareSettingCode)
                 .ToListAsync();
 

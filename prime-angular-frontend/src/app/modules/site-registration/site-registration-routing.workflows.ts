@@ -25,7 +25,6 @@ import { AdministratorPageComponent } from '@registration/pages/administrator-pa
 import { PrivacyOfficerPageComponent } from '@registration/pages/privacy-officer-page/privacy-officer-page.component';
 import { TechnicalSupportPageComponent } from '@registration/pages/technical-support-page/technical-support-page.component';
 import { OrganizationAgreementPageComponent } from '@registration/pages/organization-agreement-page/organization-agreement-page.component';
-import { ElectronicOrganizationAgreementPageComponent } from '@registration/pages/electronic-organization-agreement-page/electronic-organization-agreement-page.component';
 import { OverviewPageComponent } from '@registration/pages/overview-page/overview-page.component';
 import { NextStepsPageComponent } from '@registration/pages/next-steps-page/next-steps-page.component';
 import { Routes } from "@angular/router";
@@ -100,7 +99,7 @@ export const defaultCommunitySiteWorkflow: Routes = [
           },
           {
             path: `${SiteRoutes.CARE_SETTINGS}/:csid/${SiteRoutes.ORGANIZATION_AGREEMENT}`,
-            component: ElectronicOrganizationAgreementPageComponent,
+            component: OrganizationAgreementPageComponent,
             canActivate: [ElectronicAgreementGuard],
             data: { title: 'Organization Agreement' }
           },
