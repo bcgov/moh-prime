@@ -60,7 +60,7 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
     protected organizationResource: OrganizationResource,
     private permissionService: PermissionService
   ) {
-    super(route, router, dialog, siteResource, adjudicationResource, healthAuthSiteResource);
+    super(route, router, dialog, siteResource, adjudicationResource, healthAuthSiteResource, organizationResource);
 
     this.hasActions = false;
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
@@ -192,7 +192,8 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
         name,
         doingBusinessAs,
         hasClaim,
-        pendingTransfer
+        pendingTransfer,
+        hasSubmittedSite,
       } = organization;
 
       return [{
@@ -208,6 +209,7 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
         name,
         organizationDoingBusinessAs: doingBusinessAs,
         hasClaim,
+        hasSubmittedSite,
         ...this.toSiteViewModelPartial(site)
       }];
     };

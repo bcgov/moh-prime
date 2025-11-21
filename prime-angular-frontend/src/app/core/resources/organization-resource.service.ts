@@ -415,4 +415,17 @@ export class OrganizationResource {
         })
       );
   }
+
+  public enableOrganizationEditable(organizationId: number): NoContent {
+    return this.apiResource.post<NoContent>(`organizations/${organizationId}/editable`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Organization set to editable')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization could not be set to editable');
+          this.logger.error('[Core] OrganizationResource::enableOrganizationEditable error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }

@@ -26,6 +26,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
   @Output() public restore: EventEmitter<number>;
   @Output() public delete: EventEmitter<{ [key: string]: number }>;
   @Output() public enableEditing: EventEmitter<number>;
+  @Output() public enableOrgEditing: EventEmitter<number>;
   @Output() public flag: EventEmitter<{ siteId: number, flagged: boolean }>;
   @Output() public isNew: EventEmitter<{ siteId: number, isNew: boolean }>;
 
@@ -46,6 +47,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
     this.archive = new EventEmitter<number>();
     this.restore = new EventEmitter<number>();
     this.enableEditing = new EventEmitter<number>();
+    this.enableOrgEditing = new EventEmitter<number>();
     this.flag = new EventEmitter<{ siteId: number, flagged: boolean }>();
     this.isNew = new EventEmitter<{ siteId: number, isNew: boolean }>();
   }
@@ -60,6 +62,10 @@ export class SiteRegistrationActionsComponent implements OnInit {
 
   public isHealthAuthoritySite(): boolean {
     return !((this.siteRegistration as SiteRegistrationListViewModel).organizationId)
+  }
+
+  public orgHasSubmittedSite(): boolean {
+    return !!((this.siteRegistration as SiteRegistrationListViewModel).hasSubmittedSite)
   }
 
   public onApprove(): void {
@@ -157,6 +163,10 @@ export class SiteRegistrationActionsComponent implements OnInit {
 
   public onDelete(record: { [key: string]: number }) {
     this.delete.emit(record);
+  }
+
+  public onEnableOrgEditable() {
+    this.enableOrgEditing.emit(this.getSiteOrganizationId());
   }
 
   public onRequestChanges(): void {

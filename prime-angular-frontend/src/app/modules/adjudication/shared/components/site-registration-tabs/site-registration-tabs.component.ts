@@ -23,6 +23,7 @@ import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { SearchHAFormComponent } from '../search-ha-form/search-ha-form.component';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 @Component({
   selector: 'app-site-registration-tabs',
@@ -59,9 +60,10 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     protected adjudicationResource: AdjudicationResource,
     protected healthAuthResource: HealthAuthorityResource,
     protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
+    protected organizationResource: OrganizationResource,
     private authService: AuthService,
   ) {
-    super(route, router, dialog, siteResource, adjudicationResource, healthAuthoritySiteResource);
+    super(route, router, dialog, siteResource, adjudicationResource, healthAuthoritySiteResource, organizationResource);
 
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
 
