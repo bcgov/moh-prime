@@ -133,7 +133,7 @@ namespace Prime.Services
         private async Task<int> GetDuplicatePecCount(int? careSettingCode, string pec, int originalSiteId)
         {
             return await _context.Sites
-                    .Where(s => s.PEC != null && s.PEC == pec && s.CareSettingCode == careSettingCode && originalSiteId != s.Id)
+                    .Where(s => s.PEC != null && s.PEC == pec && s.CareSettingCode == careSettingCode && originalSiteId != s.Id && s.DeletedDate == null)
                     .CountAsync();
         }
         public async Task<CommunitySiteViewModel> GetPredecessorSite(int siteId)

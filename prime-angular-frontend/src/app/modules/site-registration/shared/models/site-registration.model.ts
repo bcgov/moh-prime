@@ -8,7 +8,7 @@ export interface SiteListViewModelPartial extends
 }
 
 export interface OrganizationListViewModelPartial extends
-  Omit<Organization, 'id' | 'sites' | 'completed' | 'doingBusinessAs' | 'hasSubmittedSite' | 'hasAcceptedAgreement' | 'registrationId' | 'pendingTransfer'> {
+  Omit<Organization, 'id' | 'sites' | 'completed' | 'doingBusinessAs' | 'hasAcceptedAgreement' | 'registrationId' | 'pendingTransfer'> {
   organizationId: number;
   organizationDoingBusinessAs: string;
 }
