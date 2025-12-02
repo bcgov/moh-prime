@@ -75,7 +75,7 @@ export class OrganizationContainerComponent implements OnInit {
   public onRestore(organizationId: number) {
     this.organizationResource.restoreOrganization(organizationId)
       .subscribe(() => {
-        var org = this.organizations.find((o) => o.id === organizationId);
+        let org = this.organizations.find((o) => o.id === organizationId);
         org.isArchived = false;
       });
   }
@@ -192,7 +192,7 @@ export class OrganizationContainerComponent implements OnInit {
           ),
           exhaustMap(() => this.organizationResource.archiveOrganization(organizationId)),
           exhaustMap(() => {
-            var org = this.organizations.find((o) => o.id === organizationId);
+            let org = this.organizations.find((o) => o.id === organizationId);
             org.isArchived = true;
             this.routeUtils.routeTo([AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.ORGANIZATIONS]);
             return EMPTY;

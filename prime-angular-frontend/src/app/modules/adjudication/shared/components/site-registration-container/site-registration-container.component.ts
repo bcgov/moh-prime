@@ -100,7 +100,7 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
           ),
           exhaustMap(() => this.organizationResource.archiveOrganization(organizationId)),
           exhaustMap(() => {
-            var org = this.dataSource.data.find((o) => o.organizationId === organizationId);
+            let org = this.dataSource.data.find((o) => o.organizationId === organizationId);
             org.isOrganizationArchived = true;
             return EMPTY;
           })
@@ -111,7 +111,7 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
   public onRestoreOrganization(organizationId: number) {
     this.organizationResource.restoreOrganization(organizationId)
       .subscribe(() => {
-        var org = this.dataSource.data.find((o) => o.organizationId === organizationId)
+        let org = this.dataSource.data.find((o) => o.organizationId === organizationId)
         org.isOrganizationArchived = false;
       });
   }
