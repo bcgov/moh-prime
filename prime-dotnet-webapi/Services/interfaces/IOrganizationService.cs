@@ -21,6 +21,8 @@ namespace Prime.Services
         Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization);
         Task<int> UpdateCompletedAsync(int organizationId);
         Task DeleteOrganizationAsync(int organizationId);
+        Task ArchiveOrganizationAsync(int organizationId);
+        Task RestoreArchivedOrganizationAsync(int organizationId);
         Task<Organization> GetOrganizationNoTrackingAsync(int organizationId);
         Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int careSettingCode, int signingAuthorityId);
         Task AcceptOrgAgreementAsync(int organizationId, int agreementId);

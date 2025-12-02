@@ -73,9 +73,11 @@
   <ng-container matColumnDef="editable">
     <th mat-header-cell
         *matHeaderCellDef
-        scope="col"> Editable </th>
+        scope="col"> State </th>
     <td mat-cell
-        *matCellDef="let row;"> {{ row.hasSubmittedSite ? "No" : "Yes" }} </td>
+        *matCellDef="let row;"
+        [ngClass]="statusColour(row)"> {{ row.isArchived ? "Archived" :
+      row.hasSubmittedSite ? "Submitted" : "Editable" }} </td>
   </ng-container>
 
   <ng-container matColumnDef="actions">
@@ -120,13 +122,27 @@
       <span>Overview</span>
     </button>
     <button mat-menu-item
+            *ngIf="!row.isArchived"
+            [disabled]="!(Role.SUPER_ADMIN | inRole)"
+            (click)="onArchive(row.id)">
+      <mat-icon>archive</mat-icon>
+      <span>Archive Organization</span>
+    </button>
+    <button mat-menu-item
+            *ngIf="row.isArchived"
+            [disabled]="!(Role.SUPER_ADMIN | inRole)"
+            (click)="onRestore(row.id)">
+      <mat-icon>unarchive</mat-icon>
+      <span>Restore Organization</span>
+    </button>
+    <button mat-menu-item
             [disabled]="!(Role.SUPER_ADMIN | inRole)"
             (click)="onDelete(row.id)">
       <mat-icon>delete</mat-icon>
       <span>Delete Organization</span>
     </button>
     <button mat-menu-item
-            [disabled]="!(Role.SUPER_ADMIN | inRole) || !row.hasSubmittedSite"
+            [disabled]="!(Role.SUPER_ADMIN | inRole) || !row.hasSubmittedSite || row.isArchived"
             (click)="onEnableOrgEditing(row.id)">
       <mat-icon>edit</mat-icon>
       <span>Set Organization Editable</span>

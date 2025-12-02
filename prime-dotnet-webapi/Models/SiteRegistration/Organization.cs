@@ -41,6 +41,8 @@ namespace Prime.Models
 
         public DateTimeOffset? DeletedDate { get; set; }
 
+        public DateTimeOffset? ArchivedDate { get; set; }
+
         //   [JsonIgnore]
         public ICollection<CommunitySite> Sites { get; set; }
 
@@ -76,6 +78,13 @@ namespace Prime.Models
         public bool HasClaim
         {
             get => Claims.Any();
+        }
+
+        [NotMapped]
+        [Computed]
+        public bool IsArchived
+        {
+            get => ArchivedDate.HasValue;
         }
     }
 }

@@ -59,7 +59,7 @@ namespace Prime.Services
                     .ThenInclude(sa => sa.Addresses)
                         .ThenInclude(pa => pa.Address)
                 .Include(o => o.Sites.Where(s => s.DeletedDate == null))
-                .Where(o => o.SigningAuthorityId == partyId && o.DeletedDate == null)
+                .Where(o => o.SigningAuthorityId == partyId && o.DeletedDate == null && o.ArchivedDate == null)
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .ToListAsync();
@@ -235,6 +235,53 @@ namespace Prime.Services
                 site.DeletedDate = deletedDate;
                 await _businessEventService.CreateSiteEventAsync(site.Id, "Delete site as part of organization deletion");
             }
+
+            _context.Update(organization);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ArchiveOrganizationAsync(int organizationId)
+        {
+            var organization = await GetBaseOrganizationQuery()
+                .SingleOrDefaultAsync(o => o.Id == organizationId);
+
+            if (organization == null)
+            {
+                return;
+            }
+
+            var archivedDate = DateTime.UtcNow;
+            organization.ArchivedDate = archivedDate;
+
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, null, "Archive Organization.");
+
+            foreach (var site in organization.Sites)
+            {
+                site.ArchivedDate = archivedDate;
+                site.AddStatus(SiteStatusType.Archived);
+
+                await _businessEventService.CreateSiteEventAsync(site.Id, "Archive site as part of organization archiving");
+            }
+
+            _context.Update(organization);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RestoreArchivedOrganizationAsync(int organizationId)
+        {
+            var organization = await GetBaseOrganizationQuery()
+                .SingleOrDefaultAsync(o => o.Id == organizationId);
+
+            if (organization == null)
+            {
+                return;
+            }
+
+            organization.ArchivedDate = null;
+
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, null, "Restore Archived Organization.");
 
             _context.Update(organization);
 
@@ -500,7 +547,7 @@ namespace Prime.Services
             {
                 //undone site submission for all sites
                 var sites = await _context.CommunitySites
-                    .Where(cs => cs.OrganizationId == organizationId && cs.DeletedDate == null).ToListAsync();
+                    .Where(cs => cs.OrganizationId == organizationId && cs.DeletedDate == null && cs.ArchivedDate == null).ToListAsync();
 
                 foreach (var site in sites)
                 {

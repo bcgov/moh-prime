@@ -275,6 +275,32 @@ export class OrganizationResource {
       );
   }
 
+  public archiveOrganization(organizationId: number): NoContent {
+    return this.apiResource.put<NoContent>(`organizations/${organizationId}/archive`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Organization has been archived')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization could not be archived');
+          this.logger.error('[Core] OrganizationResource::archiveOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public restoreOrganization(organizationId: number): NoContent {
+    return this.apiResource.put<NoContent>(`organizations/${organizationId}/restore`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Organization has been restored')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization could not be restored');
+          this.logger.error('[Core] OrganizationResource::restoreOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   /**
    * @description
    * Check whether an organization agreement is needed, and create
