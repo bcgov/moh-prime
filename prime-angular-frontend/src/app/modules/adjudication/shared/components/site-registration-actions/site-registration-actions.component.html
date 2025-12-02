@@ -82,7 +82,8 @@
     </button>
 
     <button mat-menu-item
-            [disabled]="!(Role.SUPER_ADMIN | inRole)"
+            [disabled]="!(Role.SUPER_ADMIN | inRole) || isOrganizationArchived()"
+            [matTooltip]="isOrganizationArchived() ? 'Organization is Archived. Site can\'t be restored.' : ''"
             *ngIf="isActionAllowed(SiteAdjudicationAction.RESTORE)"
             (click)="onRestore()">
       <mat-icon>unarchive</mat-icon>
@@ -111,10 +112,30 @@
 
     <ng-container *ngIf="isCommunitySite">
       <button mat-menu-item
-              [disabled]="!(Role.SUPER_ADMIN | inRole) || !orgHasSubmittedSite()"
+              [disabled]="!(Role.SUPER_ADMIN | inRole) || !orgHasSubmittedSite() || isOrganizationArchived()"
               (click)="onEnableOrgEditable()">
         <mat-icon>edit</mat-icon>
         <span>Set Organization Editable</span>
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="isCommunitySite">
+      <button mat-menu-item
+              [disabled]="!(Role.SUPER_ADMIN | inRole) "
+              *ngIf="!isOrganizationArchived()"
+              (click)="onArchiveOrganization()">
+        <mat-icon>archive</mat-icon>
+        <span>Archive Organization</span>
+      </button>
+    </ng-container>
+
+    <ng-container *ngIf="isCommunitySite">
+      <button mat-menu-item
+              [disabled]="!(Role.SUPER_ADMIN | inRole) "
+              *ngIf="isOrganizationArchived()"
+              (click)="onRestoreOrganization()">
+        <mat-icon>unarchive</mat-icon>
+        <span>Restore Organization</span>
       </button>
     </ng-container>
   </mat-menu>

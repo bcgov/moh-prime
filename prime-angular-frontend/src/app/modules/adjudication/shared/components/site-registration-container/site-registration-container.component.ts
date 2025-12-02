@@ -80,6 +80,42 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
       : this.deleteSite(record.siteId);
   }
 
+  public onArchiveOrganization(organizationId: number) {
+    if (organizationId && this.permissionService.hasRoles(Role.SUPER_ADMIN)) {
+
+      const data = {
+        title: 'Archive Organization',
+        message: 'Are you sure you want to archive this organization?Archiving an organization also archives all the organization\'s sites',
+        actionType: 'warn',
+        actionText: 'Archive Organization'
+      };
+
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? of(noop)
+              : EMPTY
+          ),
+          exhaustMap(() => this.organizationResource.archiveOrganization(organizationId)),
+          exhaustMap(() => {
+            let org = this.dataSource.data.find((o) => o.organizationId === organizationId);
+            org.isOrganizationArchived = true;
+            return EMPTY;
+          })
+        ).subscribe();
+    }
+  }
+
+  public onRestoreOrganization(organizationId: number) {
+    this.organizationResource.restoreOrganization(organizationId)
+      .subscribe(() => {
+        let org = this.dataSource.data.find((o) => o.organizationId === organizationId)
+        org.isOrganizationArchived = false;
+      });
+  }
+
   public ngOnInit(): void {
     // Use existing query params for initial search, and
     // update results on query param change
@@ -194,6 +230,7 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
         hasClaim,
         pendingTransfer,
         hasSubmittedSite,
+        isArchived
       } = organization;
 
       return [{
@@ -210,6 +247,7 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
         organizationDoingBusinessAs: doingBusinessAs,
         hasClaim,
         hasSubmittedSite,
+        isOrganizationArchived: isArchived,
         ...this.toSiteViewModelPartial(site)
       }];
     };
