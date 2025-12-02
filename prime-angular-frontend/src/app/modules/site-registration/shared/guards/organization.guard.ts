@@ -54,7 +54,7 @@ export class OrganizationGuard extends AbstractRoutingWorkflowGuard {
 
     // When a claim exists for a signing authority access to the organization
     // is not allowed, and they are redirected to the claim organization workflow
-    if (hasClaim) {
+    if (hasClaim && (!organizations || organizations.length === 0)) {
       this.router.navigate([
         SiteRoutes.MODULE_PATH,
         ...this.getExistingClaimRouteRedirect()

@@ -1,6 +1,7 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [inProgress]="!isSubmitted"></app-site-progress-indicator>
+  <app-site-progress-indicator *ngIf="!isOrganizationPendingTransfer"
+                               [inProgress]="!isSubmitted"></app-site-progress-indicator>
 
   <section class="mb-3">
     <app-page-subheader2>
