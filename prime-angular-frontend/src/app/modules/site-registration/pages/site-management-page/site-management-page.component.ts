@@ -118,6 +118,13 @@ export class SiteManagementPageComponent implements OnInit {
     this.careSettingCodesPendingTransfer = [];
     this.organization = this.organizations.find(org => org.id === organizationId);
 
+    this.organizationSitesExpiryDates = this.organization.sites
+      .reduce((expiryDates: string[], site: Site) => {
+        return (site.status === SiteStatusType.EDITABLE && !!site.approvedDate)
+          ? [...expiryDates, Site.getExpiryDate(site)]
+          : expiryDates;
+      }, []);
+
     if (this.organization.pendingTransfer) {
       this.organizationResource.getCareSettingCodesForPendingTransfer(this.organization.id)
         .subscribe((careSettingCodes: CareSettingEnum[]) => {
