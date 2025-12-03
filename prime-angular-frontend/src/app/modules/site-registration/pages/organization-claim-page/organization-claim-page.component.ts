@@ -8,7 +8,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 
-import { EMPTY, of } from 'rxjs';
+import { EMPTY } from 'rxjs';
 import { catchError, exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -20,6 +20,7 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationClaimPageFormState } from './organization-claim-page-form-state.class';
+import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
   selector: 'app-organization-claim-page',
@@ -31,8 +32,8 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
-  public isClaimExistingOrg: boolean;
   public hasOrgClaimError: boolean;
+  public hasOrganization: boolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -50,56 +51,56 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
   }
 
   public onClaimOrgChange(event: MatSlideToggleChange): void {
-    this.isClaimExistingOrg = event.checked;
-    this.toggleClaimFormValidators(event.checked);
   }
 
   public onBack(): void {
-    this.routeUtils.routeRelativeTo([SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]);
+    if (this.hasOrganization) {
+      this.routeUtils.routeRelativeTo(['../']);
+    } else {
+      this.routeUtils.routeRelativeTo([SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]);
+    }
   }
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.isClaimExistingOrg = !!this.formState.json.pec && !!this.formState.json.claimDetail;
-    this.toggleClaimFormValidators(this.isClaimExistingOrg);
+    this.authService.getUser$()
+      .subscribe((bcscUser: BcscUser) => {
+        this.organizationResource.getSigningAuthorityOrganizationByUsername(bcscUser.username)
+          .subscribe((orgs: Organization[]) => this.hasOrganization = orgs ? orgs.length > 0 : false);
+      });
   }
 
   protected createFormInstance(): void {
     this.formState = this.organizationFormStateService.organizationClaimPageFormState;
+    this.formUtilsService.setValidators(this.formState.pec, [Validators.required]);
+    this.formUtilsService.setValidators(this.formState.claimDetail, [Validators.required]);
   }
 
   protected patchForm(): void { }
 
   protected performSubmission(): NoContent {
-    return (this.isClaimExistingOrg)
-      ? this.authService.getUser$()
-        .pipe(
-          exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityByUsername(bcscUser.username)),
-          exhaustMap((party: Party) =>
-            this.organizationResource.claimOrganization(party.id, this.formState.json)
-              .pipe(
-                catchError(_ => {
-                  this.hasOrgClaimError = true;
-                  return EMPTY;
-                })
-              )),
-          NoContentResponse
-        )
-      : of(NoContentResponse);
+    return this.authService.getUser$()
+      .pipe(
+        exhaustMap((bcscUser: BcscUser) => {
+          this.organizationResource.getSigningAuthorityOrganizationByUsername(bcscUser.username)
+            .subscribe((orgs: Organization[]) => this.hasOrganization = orgs ? orgs.length > 0 : false);
+          return this.organizationResource.getSigningAuthorityByUsername(bcscUser.username);
+        }
+        ),
+        exhaustMap((party: Party) =>
+          this.organizationResource.claimOrganization(party.id, this.formState.json)
+            .pipe(
+              catchError(_ => {
+                this.hasOrgClaimError = true;
+                return EMPTY;
+              })
+            )),
+        NoContentResponse
+      );
   }
 
   protected afterSubmitIsSuccessful(): void {
     this.routeUtils.routeRelativeTo([SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION]);
   }
 
-  private toggleClaimFormValidators(isOrgClaim: boolean): void {
-    if (isOrgClaim) {
-      this.formUtilsService.setValidators(this.formState.pec, [Validators.required]);
-      this.formUtilsService.setValidators(this.formState.claimDetail, [Validators.required]);
-    }
-    else {
-      this.formUtilsService.resetAndClearValidators(this.formState.pec);
-      this.formUtilsService.resetAndClearValidators(this.formState.claimDetail);
-    }
-  }
 }

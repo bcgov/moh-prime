@@ -115,6 +115,7 @@ export class SiteOverviewComponent implements OnInit {
       .approveOrganizationClaim(this.orgClaim.organizationId, this.orgClaim.id)
       .subscribe(() => {
         this.refresh.next(true);
+        this.organization.hasClaim = false;
       });
   }
 
