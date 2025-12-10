@@ -28,6 +28,7 @@ import {
   SiteRegistrationListViewModel,
   SiteListViewModelPartial
 } from '@registration/shared/models/site-registration.model';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -100,8 +101,10 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
           ),
           exhaustMap(() => this.organizationResource.archiveOrganization(organizationId)),
           exhaustMap(() => {
-            let org = this.dataSource.data.find((o) => o.organizationId === organizationId);
-            org.isOrganizationArchived = true;
+            let site = this.dataSource.data.find((o) => o.organizationId === organizationId);
+            site.isOrganizationArchived = true;
+            site.status = SiteStatusType.ARCHIVED;
+
             return EMPTY;
           })
         ).subscribe();
