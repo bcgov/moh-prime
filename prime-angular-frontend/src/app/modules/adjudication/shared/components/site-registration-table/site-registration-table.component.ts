@@ -110,7 +110,7 @@ export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
   }
 
   public displayMissingBusinessLicence(row: SiteRegistrationListViewModel): string {
-    if (row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+    if (row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY) {
       if (row.missingBusinessLicence === undefined) {
         row.missingBusinessLicence = row.businessLicence === null ||
           row.businessLicence.businessLicenceDocument === null

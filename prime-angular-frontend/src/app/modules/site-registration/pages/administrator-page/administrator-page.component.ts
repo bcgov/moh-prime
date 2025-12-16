@@ -50,7 +50,7 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
   }
 
   public isCommunityPharmacy(): boolean {
-    return this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+    return this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY;
   }
 
   public onSelect(contact: Contact) {
@@ -67,7 +67,7 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
       nextRoute = SiteRoutes.SITE_REVIEW;
     } else {
       switch (this.siteService.site.careSettingCode) {
-        case CareSettingEnum.COMMUNITY_PHARMACIST:
+        case CareSettingEnum.COMMUNITY_PHARMACY:
         case CareSettingEnum.DEVICE_PROVIDER:
           nextRoute = SiteRoutes.HOURS_OPERATION;
           break;
