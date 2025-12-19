@@ -29,7 +29,6 @@ import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.
 import { OrganizationClaimConfirmationPageComponent } from './pages/organization-claim-confirmation-page/organization-claim-confirmation-page.component';
 import { BusinessLicenceRenewalPageComponent } from './pages/business-licence-renewal-page/business-licence-renewal-page.component';
 import { BusinessLicenceExpiryComponent } from './shared/components/business-licence-expiry/business-licence-expiry.component';
-import { ElectronicOrganizationAgreementPageComponent } from './pages/electronic-organization-agreement-page/electronic-organization-agreement-page.component';
 import { DeviceProviderPageComponent } from './pages/device-provider-page/device-provider-page.component';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
@@ -56,7 +55,6 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
     OrganizationClaimConfirmationPageComponent,
     BusinessLicenceRenewalPageComponent,
     BusinessLicenceExpiryComponent,
-    ElectronicOrganizationAgreementPageComponent,
     DeviceProviderPageComponent,
     OrganizationClaimedPageComponent
   ],

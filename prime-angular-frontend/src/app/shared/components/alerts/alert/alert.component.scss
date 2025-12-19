@@ -13,6 +13,7 @@ h2 {
 .large {
   // Page refreshes cause mat-icon to take precendence
   font-size: 3rem !important;
+  min-width: 60px;
 }
 
 .mat-icon {

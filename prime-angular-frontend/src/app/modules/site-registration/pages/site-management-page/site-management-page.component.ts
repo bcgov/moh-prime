@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValue } from '@angular/common';
 
-import { of, Subscription } from 'rxjs';
+import { forkJoin, of, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
@@ -42,6 +42,7 @@ export class SiteManagementPageComponent implements OnInit {
   public organizationAgreements: OrganizationAgreementViewModel[];
   public routeUtils: RouteUtils;
   public careSettingCodesPendingTransfer: CareSettingEnum[];
+  public userId: string;
 
   public AgreementType = AgreementType;
   public CareSettingEnum = CareSettingEnum;
@@ -108,9 +109,28 @@ export class SiteManagementPageComponent implements OnInit {
     this.routeUtils.routeRelativeTo([0, SiteRoutes.ORGANIZATION_NAME]);
   }
 
+  public claimOrganization(): void {
+    this.routeUtils.routeRelativeTo([0, SiteRoutes.ORGANIZATION_CLAIM]);
+  }
+
   public changeOrganization(organizationId: number): void {
-    this.organizationService.organization = this.organizationService.organizations.find((org) => org.id === organizationId);
-    this.getOrganizations();
+    // Reset care setting codes pending transfer
+    this.careSettingCodesPendingTransfer = [];
+    this.organization = this.organizations.find(org => org.id === organizationId);
+
+    this.organizationSitesExpiryDates = this.organization.sites
+      .reduce((expiryDates: string[], site: Site) => {
+        return (site.status === SiteStatusType.EDITABLE && !!site.approvedDate)
+          ? [...expiryDates, Site.getExpiryDate(site)]
+          : expiryDates;
+      }, []);
+
+    if (this.organization.pendingTransfer) {
+      this.organizationResource.getCareSettingCodesForPendingTransfer(this.organization.id)
+        .subscribe((careSettingCodes: CareSettingEnum[]) => {
+          this.careSettingCodesPendingTransfer = careSettingCodes;
+        });
+    }
   }
 
   public getOrganizationProperties(organization: Organization): KeyValue<string, string>[] {
@@ -173,6 +193,14 @@ export class SiteManagementPageComponent implements OnInit {
     };
   }
 
+  public canAddOrClaimOrganization(): boolean {
+    return this.organizations.some(org => org.completed && !org.hasClaim && !org.pendingTransfer);
+  }
+
+  public orgHasPendingTransferOrClaim(): boolean {
+    return this.organization?.pendingTransfer || this.organization?.hasClaim;
+  }
+
   public isPendingTransfer(): boolean {
     return this.organization?.pendingTransfer;
   }
@@ -222,9 +250,16 @@ export class SiteManagementPageComponent implements OnInit {
     this.busy = this.authService.getUser$()
       .pipe(
         exhaustMap((user: BcscUser) =>
-          this.organizationResource.getSigningAuthorityOrganizationByUsername(user.username)
+          forkJoin([
+            this.organizationResource.getSigningAuthorityOrganizationByUsername(user.username),
+            this.organizationResource.getSigningAuthorityOrganizationClaimByUsername(user.username),
+            of(user)
+          ])
         ),
-        map((organizations: Organization[]) => {
+        map(([organizations, organizationClaims, user]: [Organization[], Organization[], BcscUser]) => {
+          if (organizationClaims) {
+            organizations = organizations.concat(organizationClaims);
+          }
           const organization = this.organizationService.organization ?
             organizations.find((org) => org.id === this.organizationService.organization.id)
             : organizations[0];
@@ -236,6 +271,8 @@ export class SiteManagementPageComponent implements OnInit {
                 : expiryDates;
             }, []);
           this.organizations = organizations;
+          this.userId = user.userId;
+
           return this.organization = organization;
         }),
         exhaustMap((organization: Organization) =>

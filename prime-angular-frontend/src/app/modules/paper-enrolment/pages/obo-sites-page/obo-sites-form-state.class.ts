@@ -79,7 +79,7 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
           site.patchValue(value);
           return this.addNonHealthAuthorityOboSite(site, this.communityHealthSites);
         }
-        case CareSettingEnum.COMMUNITY_PHARMACIST: {
+        case CareSettingEnum.COMMUNITY_PHARMACY: {
           const oboSite = oboSites.find(os => os.careSettingCode === csc);
           const site = this.buildOboSiteForm();
           const value = (oboSite) ? oboSite : { careSettingCode: csc };
@@ -126,7 +126,7 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
         return this.addNonHealthAuthorityOboSite(site, this.communityHealthSites);
       }
-      case CareSettingEnum.COMMUNITY_PHARMACIST: {
+      case CareSettingEnum.COMMUNITY_PHARMACY: {
         return this.addNonHealthAuthorityOboSite(site, this.communityPharmacySites);
       }
       case CareSettingEnum.DEVICE_PROVIDER: {
@@ -143,7 +143,7 @@ export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
         return this.communityHealthSites.removeAt(index);
       }
-      case CareSettingEnum.COMMUNITY_PHARMACIST: {
+      case CareSettingEnum.COMMUNITY_PHARMACY: {
         return this.communityPharmacySites.removeAt(index);
       }
       case CareSettingEnum.DEVICE_PROVIDER: {

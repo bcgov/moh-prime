@@ -12,6 +12,7 @@ using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
 using Prime.ViewModels;
+using Microsoft.CodeAnalysis.CSharp;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Prime.Services
@@ -58,10 +59,34 @@ namespace Prime.Services
                     .ThenInclude(sa => sa.Addresses)
                         .ThenInclude(pa => pa.Address)
                 .Include(o => o.Sites.Where(s => s.DeletedDate == null))
-                .Where(o => o.SigningAuthorityId == partyId && o.DeletedDate == null)
+                .Where(o => o.SigningAuthorityId == partyId && o.DeletedDate == null && o.ArchivedDate == null)
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationClaimsByPartyIdAsync(int partyId)
+        {
+            var claimedOrgIds = await _context.OrganizationClaims
+                .Where(c => c.NewSigningAuthorityId == partyId)
+                .Select(c => c.OrganizationId)
+                .ToListAsync();
+
+            var orgs = await _context.Organizations
+                .Include(o => o.SigningAuthority)
+                    .ThenInclude(sa => sa.Addresses)
+                        .ThenInclude(pa => pa.Address)
+                .Where(o => claimedOrgIds.Contains(o.Id))
+                .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
+                .ToListAsync();
+
+            foreach (var org in orgs)
+            {
+                org.HasClaim = true;
+            }
+
+            return orgs;
         }
 
         public async Task<IEnumerable<OrganizationAdminListViewModel>> GetOrganizationAdminListViewAsync(string searchText)
@@ -216,6 +241,53 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task ArchiveOrganizationAsync(int organizationId)
+        {
+            var organization = await GetBaseOrganizationQuery()
+                .SingleOrDefaultAsync(o => o.Id == organizationId);
+
+            if (organization == null)
+            {
+                return;
+            }
+
+            var archivedDate = DateTime.UtcNow;
+            organization.ArchivedDate = archivedDate;
+
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, null, "Archive Organization.");
+
+            foreach (var site in organization.Sites)
+            {
+                site.ArchivedDate = archivedDate;
+                site.AddStatus(SiteStatusType.Archived);
+
+                await _businessEventService.CreateSiteEventAsync(site.Id, "Archive site as part of organization archiving");
+            }
+
+            _context.Update(organization);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RestoreArchivedOrganizationAsync(int organizationId)
+        {
+            var organization = await GetBaseOrganizationQuery()
+                .SingleOrDefaultAsync(o => o.Id == organizationId);
+
+            if (organization == null)
+            {
+                return;
+            }
+
+            organization.ArchivedDate = null;
+
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, null, "Restore Archived Organization.");
+
+            _context.Update(organization);
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<Organization> GetOrganizationNoTrackingAsync(int organizationId)
         {
             return await GetBaseOrganizationQuery()
@@ -279,7 +351,7 @@ namespace Prime.Services
             // Get a list of the care settings used on sites that exist for an organization
             var oganizationCareSettings = await _context.CommunitySites
                 .AsNoTracking()
-                .Where(s => s.OrganizationId == organizationId)
+                .Where(s => s.OrganizationId == organizationId && s.DeletedDate == null)
                 .Select(s => s.CareSettingCode)
                 .ToListAsync();
 
@@ -475,7 +547,7 @@ namespace Prime.Services
             {
                 //undone site submission for all sites
                 var sites = await _context.CommunitySites
-                    .Where(cs => cs.OrganizationId == organizationId && cs.DeletedDate == null).ToListAsync();
+                    .Where(cs => cs.OrganizationId == organizationId && cs.DeletedDate == null && cs.ArchivedDate == null).ToListAsync();
 
                 foreach (var site in sites)
                 {
