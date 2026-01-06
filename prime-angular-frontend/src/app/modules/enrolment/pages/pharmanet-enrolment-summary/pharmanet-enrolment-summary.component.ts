@@ -23,6 +23,8 @@ import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { ImageComponent } from '@shared/components/dialogs/content/image/image.component';
 import { Role } from '@auth/shared/enum/role.enum';
 import { ConfigService } from '@config/config.service';
+import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
+import { Site } from '@registration/shared/models/site.model';
 
 /**
  * TODO: https://bcgovmoh.atlassian.net/browse/PRIME-2325 (Refactor common code in both PharmanetEnrolmentSummaryComponent and NextStepsComponent)
@@ -52,6 +54,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public isEnrolmentComplete: boolean;
   public complete: boolean;
   public healthAuthorities: Config<number>[];
+  public remoteAccessSites: RemoteAccessSite[] = [];
 
   public careSettingConfigs: {
     setting: string,
@@ -215,7 +218,13 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             if (result) {
               let emailPairs = this.careSettingConfigs.map((config) => {
                 return {
-                  emails: config.formArray.value.map(email => email.email).filter(e => e),
+                  emails: config.formArray.value.map(email => {
+                    return {
+                      email: email.email,
+                      remoteAccessSiteIds: email.sitesIds.map((selected: boolean, index: string | number) =>
+                        selected ? this.remoteAccessSites[index].site.id : null).filter(id => id)
+                    };
+                  }),
                   careSettingCode: config.settingCode,
                   healthAuthorityCode: config.healthAuthorityCode,
                 }
@@ -343,7 +352,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
   public addEmptyEmailInput(settingCode: number, healthAuthorityCode: number) {
     let emailsArray = this.getEmailsGroup(settingCode, healthAuthorityCode);
-    this.addEmail(emailsArray);
+    this.addEmail(emailsArray, null, settingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
   }
 
   public removeEmail(settingCode: number, healthAuthorityCode: number, index: number): void {
@@ -353,6 +362,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
   public ngOnInit(): void {
     this.enrolment = this.enrolmentService.enrolment;
+    this.remoteAccessSites = this.enrolment.remoteAccessSites ?? [];
     this.createFormInstance();
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
     this.initialEnrolment = this.route.snapshot.queryParams?.initialEnrolment === 'true';
@@ -438,11 +448,24 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return "";
   }
 
-  protected addEmail(emailsArray: UntypedFormArray, email?: string): void {
+  protected getRemoteAccessSiteControls(index: number): UntypedFormArray {
+    const remoteAccessSiteGroup = this.communityHealthEmails.at(index) as UntypedFormGroup;
+    return remoteAccessSiteGroup.get('sitesIds') as UntypedFormArray;
+  }
 
-    const emailForm = this.fb.group({
+  protected getRemoteAccessSite(index: number): Site {
+    return this.remoteAccessSites[index].site;
+  }
+
+  protected addEmail(emailsArray: UntypedFormArray, email?: string, withSiteIds?: boolean): void {
+
+    const emailForm = withSiteIds ? this.fb.group({
+      email: ['', []],
+      sitesIds: this.fb.array(this.remoteAccessSites.map(() => this.fb.control(false)), [])
+    }) : this.fb.group({
       email: ['', []]
     });
+
     emailForm.patchValue({ email });
     emailsArray.push(emailForm);
 
@@ -455,7 +478,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
   protected initForm() {
     if (!this.communityHealthEmails.length) {
-      this.addEmail(this.communityHealthEmails);
+      this.addEmail(this.communityHealthEmails, null, true);
       this.addEmail(this.pharmacistEmails);
       this.addEmail(this.healthAuthorityFraserEmails);
       this.addEmail(this.healthAuthorityInteriorEmails);
