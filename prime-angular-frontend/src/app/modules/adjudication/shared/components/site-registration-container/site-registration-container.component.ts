@@ -28,6 +28,7 @@ import {
   SiteRegistrationListViewModel,
   SiteListViewModelPartial
 } from '@registration/shared/models/site-registration.model';
+import { SiteStatusType } from '@lib/enums/site-status.enum';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -60,7 +61,7 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
     protected organizationResource: OrganizationResource,
     private permissionService: PermissionService
   ) {
-    super(route, router, dialog, siteResource, adjudicationResource, healthAuthSiteResource);
+    super(route, router, dialog, siteResource, adjudicationResource, healthAuthSiteResource, organizationResource);
 
     this.hasActions = false;
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
@@ -78,6 +79,44 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
     (record.organizationId)
       ? this.deleteOrganization(record.organizationId)
       : this.deleteSite(record.siteId);
+  }
+
+  public onArchiveOrganization(organizationId: number) {
+    if (organizationId && this.permissionService.hasRoles(Role.SUPER_ADMIN)) {
+
+      const data = {
+        title: 'Archive Organization',
+        message: 'Are you sure you want to archive this organization?Archiving an organization also archives all the organization\'s sites',
+        actionType: 'warn',
+        actionText: 'Archive Organization'
+      };
+
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? of(noop)
+              : EMPTY
+          ),
+          exhaustMap(() => this.organizationResource.archiveOrganization(organizationId)),
+          exhaustMap(() => {
+            let site = this.dataSource.data.find((o) => o.organizationId === organizationId);
+            site.isOrganizationArchived = true;
+            site.status = SiteStatusType.ARCHIVED;
+
+            return EMPTY;
+          })
+        ).subscribe();
+    }
+  }
+
+  public onRestoreOrganization(organizationId: number) {
+    this.organizationResource.restoreOrganization(organizationId)
+      .subscribe(() => {
+        let org = this.dataSource.data.find((o) => o.organizationId === organizationId)
+        org.isOrganizationArchived = false;
+      });
   }
 
   public ngOnInit(): void {
@@ -192,7 +231,9 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
         name,
         doingBusinessAs,
         hasClaim,
-        pendingTransfer
+        pendingTransfer,
+        hasSubmittedSite,
+        isArchived
       } = organization;
 
       return [{
@@ -208,6 +249,8 @@ export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage im
         name,
         organizationDoingBusinessAs: doingBusinessAs,
         hasClaim,
+        hasSubmittedSite,
+        isOrganizationArchived: isArchived,
         ...this.toSiteViewModelPartial(site)
       }];
     };

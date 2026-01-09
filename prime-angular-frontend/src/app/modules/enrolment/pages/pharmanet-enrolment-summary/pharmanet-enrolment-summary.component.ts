@@ -156,7 +156,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
         this.showCommunityHealth = show;
         break;
       }
-      case this.CareSettingEnum.COMMUNITY_PHARMACIST: {
+      case this.CareSettingEnum.COMMUNITY_PHARMACY: {
         this.showPharmacist = show;
         break;
       }
@@ -300,7 +300,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
         formArray = this.communityHealthEmails;
         break;
       }
-      case this.CareSettingEnum.COMMUNITY_PHARMACIST: {
+      case this.CareSettingEnum.COMMUNITY_PHARMACY: {
         formArray = this.pharmacistEmails;
         break;
       }
@@ -378,7 +378,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             });
         }
           break;
-        case CareSettingEnum.COMMUNITY_PHARMACIST: {
+        case CareSettingEnum.COMMUNITY_PHARMACY: {
           this.careSettingConfigs.push({
             setting: 'Community Pharmacy',
             settingPlural: 'Community Pharmacies',

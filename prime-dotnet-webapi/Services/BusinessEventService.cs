@@ -232,31 +232,14 @@ namespace Prime.Services
             return await CreateSiteEventAsync(siteId, partyId, description);
         }
 
-        public async Task<BusinessEvent> CreateOrganizationEventAsync(int organizationId, int partyId, string description)
+        public async Task<BusinessEvent> CreateOrganizationEventAsync(int organizationId, int? partyId, string description)
         {
-            var username = _httpContext.HttpContext.User.GetPrimeUsername();
-            Admin admin = await _adminService.GetAdminAsync(username);
-            int? adminId = admin?.Id;
+            return await CreateOrganizationBusinessEvent(organizationId, partyId, description);
+        }
 
-            var businessEvent = new BusinessEvent
-            {
-                PartyId = partyId,
-                OrganizationId = organizationId,
-                AdminId = adminId,
-                BusinessEventTypeCode = BusinessEventType.Organization,
-                Description = description,
-                EventDate = DateTimeOffset.Now
-            };
-
-            _context.BusinessEvents.Add(businessEvent);
-            var created = await _context.SaveChangesAsync();
-
-            if (created < 1)
-            {
-                throw new InvalidOperationException("Could not create organization business event.");
-            }
-
-            return businessEvent;
+        public async Task<BusinessEvent> CreateOrganizationEventAsync(int organizationId, string description)
+        {
+            return await CreateOrganizationBusinessEvent(organizationId, null, description);
         }
 
         public async Task<BusinessEvent> CreatePharmanetApiCallEventAsync(int enrolleeId, string licencePrefix, string licenceNumber, string description, bool overrideWithDesc)
@@ -348,6 +331,33 @@ namespace Prime.Services
                 Description = description,
                 EventDate = DateTimeOffset.Now
             };
+
+            return businessEvent;
+        }
+
+        private async Task<BusinessEvent> CreateOrganizationBusinessEvent(int organizationId, int? partyId, string description)
+        {
+            var username = _httpContext.HttpContext.User.GetPrimeUsername();
+            Admin admin = await _adminService.GetAdminAsync(username);
+            int? adminId = admin?.Id;
+
+            var businessEvent = new BusinessEvent
+            {
+                OrganizationId = organizationId,
+                AdminId = adminId,
+                PartyId = partyId,
+                BusinessEventTypeCode = BusinessEventType.Organization,
+                Description = description,
+                EventDate = DateTimeOffset.Now
+            };
+
+            _context.BusinessEvents.Add(businessEvent);
+            var created = await _context.SaveChangesAsync();
+
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create organization business event.");
+            }
 
             return businessEvent;
         }

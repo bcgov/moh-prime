@@ -115,6 +115,7 @@ export class SiteOverviewComponent implements OnInit {
       .approveOrganizationClaim(this.orgClaim.organizationId, this.orgClaim.id)
       .subscribe(() => {
         this.refresh.next(true);
+        this.organization.hasClaim = false;
       });
   }
 
@@ -197,7 +198,7 @@ export class SiteOverviewComponent implements OnInit {
         this.orgClaim = orgClaim;
         this.initForm(site, this.siteVendors.find((vendor: VendorConfig) => vendor.code === this.site.siteVendors[0].vendorCode));
         this.showSendNotification = [
-          CareSettingEnum.COMMUNITY_PHARMACIST,
+          CareSettingEnum.COMMUNITY_PHARMACY,
           CareSettingEnum.DEVICE_PROVIDER
         ].includes(site.careSettingCode);
         this.showLinkSection = [
