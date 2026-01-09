@@ -148,7 +148,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
         this.enrolmentFormStateService.addNonHealthAuthorityOboSite(site, this.communityHealthSites);
         break;
       }
-      case CareSettingEnum.COMMUNITY_PHARMACIST: {
+      case CareSettingEnum.COMMUNITY_PHARMACY: {
         this.enrolmentFormStateService.addNonHealthAuthorityOboSite(site, this.communityPharmacySites);
         break;
       }
@@ -169,7 +169,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
         this.communityHealthSites.removeAt(index);
         break;
       }
-      case CareSettingEnum.COMMUNITY_PHARMACIST: {
+      case CareSettingEnum.COMMUNITY_PHARMACY: {
         this.communityPharmacySites.removeAt(index);
         break;
       }
@@ -260,7 +260,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
           }
           break;
         }
-        case CareSettingEnum.COMMUNITY_PHARMACIST: {
+        case CareSettingEnum.COMMUNITY_PHARMACY: {
           this.communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
           if (!this.communityPharmacySites.length) {
             this.addOboSite(careSettingCode);

@@ -23,6 +23,7 @@ import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { SearchHAFormComponent } from '../search-ha-form/search-ha-form.component';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 @Component({
   selector: 'app-site-registration-tabs',
@@ -59,9 +60,10 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     protected adjudicationResource: AdjudicationResource,
     protected healthAuthResource: HealthAuthorityResource,
     protected healthAuthoritySiteResource: HealthAuthoritySiteResource,
+    protected organizationResource: OrganizationResource,
     private authService: AuthService,
   ) {
-    super(route, router, dialog, siteResource, adjudicationResource, healthAuthoritySiteResource);
+    super(route, router, dialog, siteResource, adjudicationResource, healthAuthoritySiteResource, organizationResource);
 
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
 
@@ -89,13 +91,13 @@ export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage impleme
     ];
     this.tabIndexToCareSettingMap = {
       0: null, // map to null to remove queryString
-      1: CareSettingEnum.COMMUNITY_PHARMACIST,
+      1: CareSettingEnum.COMMUNITY_PHARMACY,
       2: CareSettingEnum.DEVICE_PROVIDER,
       3: CareSettingEnum.HEALTH_AUTHORITY
     };
     this.careSettingToTabIndexMap = {
       [CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE]: 0,
-      [CareSettingEnum.COMMUNITY_PHARMACIST]: 1,
+      [CareSettingEnum.COMMUNITY_PHARMACY]: 1,
       [CareSettingEnum.DEVICE_PROVIDER]: 2,
       [CareSettingEnum.HEALTH_AUTHORITY]: 3
     };

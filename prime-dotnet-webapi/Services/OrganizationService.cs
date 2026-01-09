@@ -12,6 +12,8 @@ using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
 using Prime.ViewModels;
+using Microsoft.CodeAnalysis.CSharp;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Prime.Services
 {
@@ -57,10 +59,34 @@ namespace Prime.Services
                     .ThenInclude(sa => sa.Addresses)
                         .ThenInclude(pa => pa.Address)
                 .Include(o => o.Sites.Where(s => s.DeletedDate == null))
-                .Where(o => o.SigningAuthorityId == partyId && o.DeletedDate == null)
+                .Where(o => o.SigningAuthorityId == partyId && o.DeletedDate == null && o.ArchivedDate == null)
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationClaimsByPartyIdAsync(int partyId)
+        {
+            var claimedOrgIds = await _context.OrganizationClaims
+                .Where(c => c.NewSigningAuthorityId == partyId)
+                .Select(c => c.OrganizationId)
+                .ToListAsync();
+
+            var orgs = await _context.Organizations
+                .Include(o => o.SigningAuthority)
+                    .ThenInclude(sa => sa.Addresses)
+                        .ThenInclude(pa => pa.Address)
+                .Where(o => claimedOrgIds.Contains(o.Id))
+                .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
+                .ToListAsync();
+
+            foreach (var org in orgs)
+            {
+                org.HasClaim = true;
+            }
+
+            return orgs;
         }
 
         public async Task<IEnumerable<OrganizationAdminListViewModel>> GetOrganizationAdminListViewAsync(string searchText)
@@ -145,6 +171,8 @@ namespace Prime.Services
         public async Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization)
         {
             var currentOrganization = await GetOrganizationAsync(organizationId);
+            await CheckOrganizationNameChange(currentOrganization, updatedOrganization);
+
             _context.Entry(currentOrganization).CurrentValues.SetValues(updatedOrganization);
 
             await _businessEventService.CreateOrganizationEventAsync(currentOrganization.Id, currentOrganization.SigningAuthorityId, "Organization Updated");
@@ -156,6 +184,17 @@ namespace Prime.Services
             catch (DbUpdateConcurrencyException)
             {
                 return 0;
+            }
+        }
+
+        private async Task CheckOrganizationNameChange(Organization organization, OrganizationUpdateModel updatedOrganization)
+        {
+            //if organization is changed with signed organization agreement, remove the organization agreement.
+            if ((organization.Name != updatedOrganization.Name ||
+                organization.RegistrationId != updatedOrganization.RegistrationId) &&
+                organization.Agreements.Count > 0)
+            {
+                _context.Agreements.RemoveRange(organization.Agreements);
             }
         }
 
@@ -196,6 +235,53 @@ namespace Prime.Services
                 site.DeletedDate = deletedDate;
                 await _businessEventService.CreateSiteEventAsync(site.Id, "Delete site as part of organization deletion");
             }
+
+            _context.Update(organization);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ArchiveOrganizationAsync(int organizationId)
+        {
+            var organization = await GetBaseOrganizationQuery()
+                .SingleOrDefaultAsync(o => o.Id == organizationId);
+
+            if (organization == null)
+            {
+                return;
+            }
+
+            var archivedDate = DateTime.UtcNow;
+            organization.ArchivedDate = archivedDate;
+
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, null, "Archive Organization.");
+
+            foreach (var site in organization.Sites)
+            {
+                site.ArchivedDate = archivedDate;
+                site.AddStatus(SiteStatusType.Archived);
+
+                await _businessEventService.CreateSiteEventAsync(site.Id, "Archive site as part of organization archiving");
+            }
+
+            _context.Update(organization);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RestoreArchivedOrganizationAsync(int organizationId)
+        {
+            var organization = await GetBaseOrganizationQuery()
+                .SingleOrDefaultAsync(o => o.Id == organizationId);
+
+            if (organization == null)
+            {
+                return;
+            }
+
+            organization.ArchivedDate = null;
+
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, null, "Restore Archived Organization.");
 
             _context.Update(organization);
 
@@ -265,7 +351,7 @@ namespace Prime.Services
             // Get a list of the care settings used on sites that exist for an organization
             var oganizationCareSettings = await _context.CommunitySites
                 .AsNoTracking()
-                .Where(s => s.OrganizationId == organizationId)
+                .Where(s => s.OrganizationId == organizationId && s.DeletedDate == null)
                 .Select(s => s.CareSettingCode)
                 .ToListAsync();
 
@@ -450,6 +536,68 @@ namespace Prime.Services
             }
 
             return numUpdated;
+        }
+
+        public async Task SetOrganizationDetailEditable(int organizationId)
+        {
+            var organization = await GetOrganizationOnlyAsync(organizationId);
+            var siteIds = new List<int>();
+
+            if (organization != null)
+            {
+                //undone site submission for all sites
+                var sites = await _context.CommunitySites
+                    .Where(cs => cs.OrganizationId == organizationId && cs.DeletedDate == null && cs.ArchivedDate == null).ToListAsync();
+
+                foreach (var site in sites)
+                {
+                    site.Completed = false;
+
+                    if (site.SubmittedDate != null)
+                    {
+                        siteIds.Add(site.Id);
+
+                        // reset submitted date
+                        site.SubmittedDate = null;
+                        site.ApprovedDate = null;
+
+                        // if site is in in-review status, change to editable
+                        if (site.Status == SiteStatusType.InReview)
+                        {
+                            var siteEditableStatus = new SiteStatus
+                            {
+                                SiteId = site.Id,
+                                StatusType = SiteStatusType.Editable,
+                                StatusDate = DateTimeOffset.Now
+                            };
+                            _context.SiteStatuses.Add(siteEditableStatus);
+                        }
+                    }
+                }
+
+                // then remove all organization agreement
+                var agreements = await _context.Agreements
+                    .Where(a => a.OrganizationId == organizationId).ToListAsync();
+                var agreementDeleted = false;
+
+                if (agreements.Count > 0)
+                {
+                    _context.Agreements.RemoveRange(agreements);
+                    agreementDeleted = true;
+                }
+
+                await _context.SaveChangesAsync();
+
+                //insert log
+                foreach (var siteId in siteIds)
+                {
+                    await _businessEventService.CreateSiteEventAsync(siteId, "Site submission has been reversed in order to set the organization detail editable.");
+                }
+                if (agreementDeleted)
+                {
+                    await _businessEventService.CreateOrganizationEventAsync(organizationId, "Organization Agreement(s) is removed and Organization detail is editable.");
+                }
+            }
         }
 
         private async Task<Organization> GetOrganizationOnlyAsync(int organizationId)

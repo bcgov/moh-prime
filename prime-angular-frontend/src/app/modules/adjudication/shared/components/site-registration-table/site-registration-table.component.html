@@ -44,7 +44,10 @@
         *matHeaderCellDef
         scope="col"> Organization Name </th>
     <td mat-cell
-        *matCellDef="let row;"> {{ row.organizationName | default: '' }} </td>
+        *matCellDef="let row;">
+      <span [matTooltip]="row.isOrganizationArchived ? 'Archived' : ''"
+            [ngClass]="{'archived': row.isOrganizationArchived}">{{ row.organizationName | default: '' }}</span>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="signingAuthority">

@@ -12,8 +12,10 @@ import { OrganizationAdminView } from '@registration/shared/models/organization.
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
-import { EMPTY, exhaustMap, noop, of, Subscription } from 'rxjs';
+import { EMPTY, exhaustMap, map, noop, of, Subscription } from 'rxjs';
 import { SearchFormStatusType } from '@adjudication/shared/enums/search-form-status-type.enum';
+import { SiteListViewModel } from '@registration/shared/models/site.model';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 
 @Component({
   selector: 'app-organization-container',
@@ -64,6 +66,42 @@ export class OrganizationContainerComponent implements OnInit {
 
   public onDelete(organizationId: number) {
     this.deleteOrganization(organizationId);
+  }
+
+  public onArchive(organizationId: number) {
+    this.archiveOrganization(organizationId);
+  }
+
+  public onRestore(organizationId: number) {
+    this.organizationResource.restoreOrganization(organizationId)
+      .subscribe(() => {
+        let org = this.organizations.find((o) => o.id === organizationId);
+        org.isArchived = false;
+      });
+  }
+
+  public onEnableOrgEditing(organizationId: number) {
+    const request$ = this.siteResource.getSites(organizationId);
+    request$
+      .pipe(
+        map((sites: SiteListViewModel[]) => {
+          return {
+            title: "Set Organization Editable",
+            boldMessage: `*Note: ${sites.length} site submission will be reversed and all organization agreement will be deleted.`,
+            message: "Are you sure you want to set this organization to be editable?",
+            actionText: "Set Organization Editable"
+          }
+        }),
+        exhaustMap((data: DialogOptions) =>
+          this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+        )
+      ).subscribe((result: boolean) => {
+        if (result) {
+          return this.organizationResource.enableOrganizationEditable(organizationId)
+            .subscribe(() => this.onRefresh());
+        }
+        return EMPTY;
+      });
   }
 
   public ngOnInit(): void {
@@ -127,6 +165,35 @@ export class OrganizationContainerComponent implements OnInit {
           exhaustMap(() => this.organizationResource.deleteOrganization(organizationId)),
           exhaustMap(() => {
             this.organizations = this.organizations.filter((o) => o.id !== organizationId);
+            this.routeUtils.routeTo([AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.ORGANIZATIONS]);
+            return EMPTY;
+          })
+        ).subscribe();
+    }
+  }
+
+  private archiveOrganization(organizationId: number) {
+    if (organizationId && this.permissionService.hasRoles(Role.SUPER_ADMIN)) {
+
+      const data = {
+        title: 'Archive Organization',
+        message: 'Are you sure you want to archive this organization?Archiving an organization also archives all the organization\'s sites',
+        actionType: 'warn',
+        actionText: 'Archive Organization'
+      };
+
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? of(noop)
+              : EMPTY
+          ),
+          exhaustMap(() => this.organizationResource.archiveOrganization(organizationId)),
+          exhaustMap(() => {
+            let org = this.organizations.find((o) => o.id === organizationId);
+            org.isArchived = true;
             this.routeUtils.routeTo([AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.ORGANIZATIONS]);
             return EMPTY;
           })
