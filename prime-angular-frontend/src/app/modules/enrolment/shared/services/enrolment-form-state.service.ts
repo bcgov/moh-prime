@@ -389,7 +389,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
             this.addNonHealthAuthorityOboSite(site, communityHealthSites);
             break;
           }
-          case CareSettingEnum.COMMUNITY_PHARMACIST: {
+          case CareSettingEnum.COMMUNITY_PHARMACY: {
             this.addNonHealthAuthorityOboSite(site, communityPharmacySites);
             break;
           }

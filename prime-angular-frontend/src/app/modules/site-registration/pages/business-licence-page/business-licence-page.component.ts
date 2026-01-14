@@ -83,14 +83,14 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
 
   public canDefer(): boolean {
     return [
-      CareSettingEnum.COMMUNITY_PHARMACIST,
+      CareSettingEnum.COMMUNITY_PHARMACY,
       CareSettingEnum.DEVICE_PROVIDER,
       CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
     ].includes(this.siteService.site.careSettingCode);
   }
 
   public isCommunityPharmacy(): boolean {
-    return this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+    return this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY;
   }
 
   public isDeviceProvider(): boolean {
@@ -154,7 +154,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   protected initForm(): void {
     this.site = this.siteService.site;
     this.getBusinessLicence(this.site.id);
-    if (this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+    if (this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY) {
       if (this.site.activeBeforeRegistration) {
         this.formUtilsService.setValidators(this.formState.pec, [Validators.required, FormControlValidators.communityPharmacySiteId])
       } else {
@@ -197,7 +197,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
       this.siteResource.updateSite(this.siteFormStateService.json)
     );
 
-    if (this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST || this.siteFormStateService.businessLicenceFormState.pec.value) {
+    if (this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY || this.siteFormStateService.businessLicenceFormState.pec.value) {
       return request$;
     }
 

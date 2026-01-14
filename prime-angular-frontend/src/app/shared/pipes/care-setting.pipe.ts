@@ -23,7 +23,7 @@ export class CareSettingPipe implements PipeTransform {
 
   private getCareSettingAbbreviation(careSetting: CareSettingEnum): string {
     switch (careSetting) {
-      case CareSettingEnum.COMMUNITY_PHARMACIST:
+      case CareSettingEnum.COMMUNITY_PHARMACY:
         return 'CP';
       case CareSettingEnum.DEVICE_PROVIDER:
         return 'DP';
@@ -39,7 +39,7 @@ export class CareSettingPipe implements PipeTransform {
 
   private getCareSettingName(careSetting: CareSettingEnum): string {
     switch (careSetting) {
-      case CareSettingEnum.COMMUNITY_PHARMACIST:
+      case CareSettingEnum.COMMUNITY_PHARMACY:
         return 'Community Pharmacist';
       case CareSettingEnum.DEVICE_PROVIDER:
         return 'Device Provider';
