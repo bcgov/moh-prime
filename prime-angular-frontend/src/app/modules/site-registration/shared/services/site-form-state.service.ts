@@ -152,7 +152,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    * will allow submission for an unapproved site that does not have a PEC.
    */
   public get isValidSubmission(): boolean {
-    const isCPorPCHP = this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST ||
+    const isCPorPCHP = this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY ||
       this.site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
 
     const pecControl = this.businessLicenceFormState.pec;

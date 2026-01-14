@@ -8,14 +8,14 @@ describe('CareSettingPipe', () => {
   it('create an instance', () => expect(pipe).toBeTruthy());
 
   it('should provide a care setting name for each care setting', () => {
-    const value = CareSettingEnum.COMMUNITY_PHARMACIST;
+    const value = CareSettingEnum.COMMUNITY_PHARMACY;
     const result = pipe.transform(value, 'name');
     expect(result).toBe('Community Pharmacist');
   });
 
   it('should provide care setting names for each care setting', () => {
     const value = [
-      CareSettingEnum.COMMUNITY_PHARMACIST,
+      CareSettingEnum.COMMUNITY_PHARMACY,
       CareSettingEnum.DEVICE_PROVIDER,
       CareSettingEnum.HEALTH_AUTHORITY,
       CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
@@ -31,14 +31,14 @@ describe('CareSettingPipe', () => {
   });
 
   it('should provide a care setting abbreviation for a care setting', () => {
-    const value = CareSettingEnum.COMMUNITY_PHARMACIST;
+    const value = CareSettingEnum.COMMUNITY_PHARMACY;
     const result = pipe.transform(value, 'abbr');
     expect(result).toBe('CP');
   });
 
   it('should provide care setting abbreviations for every care setting', () => {
     const value = [
-      CareSettingEnum.COMMUNITY_PHARMACIST,
+      CareSettingEnum.COMMUNITY_PHARMACY,
       CareSettingEnum.DEVICE_PROVIDER,
       CareSettingEnum.HEALTH_AUTHORITY,
       CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
