@@ -175,6 +175,21 @@
                [formArrayName]="formArrayName">
             <ng-container *ngFor="let email of formArray.controls; let i = index;"
                           [formGroupName]="i">
+              <div class="mb-2"
+                   formArrayName="sitesIds"
+                   *ngIf="settingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE && remoteAccessSites?.length > 0">
+                *Include details of clinic where approved for remote access in approval email
+                <ng-container class="col col-sm-12"
+                              *ngFor="let siteControl of remoteAccessSites; let j = index">
+                  <mat-checkbox [formControlName]="j">
+                    {{getRemoteAccessSite(j).doingBusinessAs | default}} -
+                    {{getRemoteAccessSite(j).physicalAddress?.street | default}}
+                    {{getRemoteAccessSite(j).physicalAddress?.city | default}}
+                    {{getRemoteAccessSite(j).physicalAddress?.provinceCode | default}}
+                    {{getRemoteAccessSite(j).physicalAddress?.postal | default}}
+                  </mat-checkbox>
+                </ng-container>
+              </div>
               <app-email-form [form]="email"
                               [index]="i"
                               [validateFormat]="true"

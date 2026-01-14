@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 using Flurl;
+using System.Collections.Generic;
 
 namespace Prime.Models
 {
@@ -30,6 +31,8 @@ namespace Prime.Models
         public int? CareSettingCode { get; set; }
 
         public int? HealthAuthorityCode { get; set; }
+
+        public ICollection<AccessTokenRemoteAccessSite> RemoteAccessSites { get; set; }
 
         [NotMapped]
         public string FrontendUrl
