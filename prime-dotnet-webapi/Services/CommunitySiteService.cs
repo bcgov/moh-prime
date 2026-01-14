@@ -402,6 +402,7 @@ namespace Prime.Services
                 {nameof(currentContact.JobRoleTitle), "Job Title"},
                 {nameof(currentContact.Email), "Email"},
                 {nameof(currentContact.Phone), "Phone"},
+                {nameof(currentContact.PhoneExtension), "Phone Extension"},
                 {nameof(currentContact.Fax), "Fax"},
                 {nameof(currentContact.SMSPhone), "SMS Phone"},
             };
