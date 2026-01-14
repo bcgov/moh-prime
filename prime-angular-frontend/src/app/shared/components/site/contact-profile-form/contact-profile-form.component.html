@@ -81,6 +81,18 @@
         </mat-form-field>
 
       </div>
+      <div class="col-12">
+
+        <mat-form-field class="w-100">
+          <mat-label>Optional Extension Number</mat-label>
+          <input matInput
+                 formControlName="phoneExtension"
+                 maxlength="10">
+          <mat-error *ngIf="phoneExtension.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="phoneExtension.hasError('numeric')">Must contain only numbers</mat-error>
+        </mat-form-field>
+
+      </div>
       <ng-container *ngIf="!excludeList.includes('fax')">
         <div class="col-12">
 

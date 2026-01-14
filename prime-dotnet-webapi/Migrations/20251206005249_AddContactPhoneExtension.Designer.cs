@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -11,9 +12,11 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251206005249_AddContactPhoneExtension")]
+    partial class AddContactPhoneExtension
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,41 +66,6 @@ namespace Prime.Migrations
                         .IsUnique();
 
                     b.ToTable("AccessAgreementNote");
-                });
-
-            modelBuilder.Entity("Prime.Models.AccessTokenRemoteAccessSite", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("EnrolmentCertificateAccessTokenId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("SiteId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolmentCertificateAccessTokenId");
-
-                    b.HasIndex("SiteId");
-
-                    b.ToTable("AccessTokenRemoteAccessSite");
                 });
 
             modelBuilder.Entity("Prime.Models.Address", b =>
@@ -20110,23 +20078,6 @@ namespace Prime.Migrations
                     b.Navigation("Enrollee");
                 });
 
-            modelBuilder.Entity("Prime.Models.AccessTokenRemoteAccessSite", b =>
-                {
-                    b.HasOne("Prime.Models.EnrolmentCertificateAccessToken", null)
-                        .WithMany("RemoteAccessSites")
-                        .HasForeignKey("EnrolmentCertificateAccessTokenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.Site", "RemoteAccessSite")
-                        .WithMany()
-                        .HasForeignKey("SiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RemoteAccessSite");
-                });
-
             modelBuilder.Entity("Prime.Models.Address", b =>
                 {
                     b.HasOne("Prime.Models.Country", "Country")
@@ -21559,11 +21510,6 @@ namespace Prime.Migrations
                     b.Navigation("EnrolleeNotification");
 
                     b.Navigation("EnrolmentStatusReference");
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolmentCertificateAccessToken", b =>
-                {
-                    b.Navigation("RemoteAccessSites");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolmentStatus", b =>
