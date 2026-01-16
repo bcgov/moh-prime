@@ -17,6 +17,7 @@ using Prime.Engines;
 using System;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
+using Microsoft.AspNetCore.JsonPatch.Internal;
 
 namespace Prime.Services
 {
@@ -190,9 +191,11 @@ namespace Prime.Services
 
         public async Task UpdatePrivacyOfficeAsync(int healthAuthorityId, PrivacyOfficeViewModel privacyOffice)
         {
-            var existing = await _context.PrivacyOffices
-                .Include(po => po.PhysicalAddress)
-                .SingleOrDefaultAsync(po => po.HealthAuthorityOrganizationId == healthAuthorityId);
+            var existing = await _context.HealthAuthorities
+            .Include(ha => ha.PrivacyOffice)
+                .ThenInclude(po => po.PhysicalAddress)
+            .Include(ha => ha.PrivacyOfficers)
+            .SingleOrDefaultAsync(ha => ha.Id == healthAuthorityId);
 
             if (existing == null)
             {
@@ -202,7 +205,8 @@ namespace Prime.Services
             }
             else
             {
-                _mapper.Map(privacyOffice, existing);
+                _mapper.Map(privacyOffice, existing.PrivacyOffice);
+                privacyOffice.PrivacyOfficer.Id = existing.PrivacyOfficers.OrderBy(po => po.Id).Select(po => po.Id).FirstOrDefault();
             }
 
             // Implicit call to _context.SaveChanges()
