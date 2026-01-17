@@ -8,6 +8,7 @@ namespace Prime.ViewModels
         public string JobRoleTitle { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
+        public string PhoneExtension { get; set; }
         public string SMSPhone { get; set; }
         public string Fax { get; set; }
         public AddressViewModel PhysicalAddress { get; set; }
