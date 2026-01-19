@@ -1,0 +1,20 @@
+appName: cm-prime
+licensePlate: 9c33a9
+environment: dev
+imageTag: dev
+servletContextPath: /actuator/prometheus
+urlStub: .pharmanetenrolment.gov.bc.ca
+
+frontend:
+  cpuLimit: 50m
+  memoryLimit: 50Mi
+  cpuRequests: 15m
+  memoryRequests: 10Mi
+  replicaCount: 1
+
+backend:
+  cpuLimit: 50m
+  memoryLimit: 50Mi
+  cpuRequests: 15m
+  memoryRequests: 10Mi
+  replicaCount: 1

@@ -1,0 +1,243 @@
+###########################################
+###           Backend Web API           ###
+###########################################
+#   Backend Web API Deployment Config
+kind: Deployment
+apiVersion: apps.openshift.io/v1
+metadata:
+  name: {{ .Values.appName }}-webapi
+  namespace: {{ .Values.licensePlate }}-dev
+  labels:
+    app.kubernetes.io/part-of: {{ .Values.appName }}
+    app.openshift.io/runtime: dotnet
+  annotations:
+    image.openshift.io/triggers: |-
+      [
+          {
+          "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "{{ .Values.licensePlate }}-tools",
+              "name": "{{ .Values.appName }}:{{ .Values.imageTag }}"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image"
+          }
+      ]
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: {{ .Values.appName }}-webapi
+      app: {{ .Values.appName }}
+
+        # Need to find a way to run this - possibly as a separate job prior to deployment?
+        # command:
+        #     - /bin/bash
+        #     - -c
+        #     - >
+        #     createdb -O $(APPUSER) prime-${SVC_NAME} 2> /dev/null || echo "database already exists"
+        # env:
+        #     - name: PGHOST
+        #     valueFrom:
+        #         configMapKeyRef:
+        #         name: database-cm
+        #         key: database-host
+        #     - name: PGDATABASE
+        #     value: postgres
+        #     - name: APPUSER
+        #     valueFrom:
+        #         secretKeyRef:
+        #         name: dev-patroni-secret
+        #         key: app-db-username
+        #     - name: PGUSER
+        #     valueFrom:
+        #         secretKeyRef:
+        #         name: dev-patroni-secret
+        #         key: superuser-username
+        #     - name: PGPASSWORD
+        #     valueFrom:
+        #         secretKeyRef:
+        #         name: dev-patroni-secret
+        #         key: superuser-password
+
+template:
+  metadata:
+  labels:
+    dev-app: {{ .Values.appName }}
+    name: {{ .Values.appName }}-webapi
+  spec:
+    initContainers:
+      - name: run-migrations
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/{{ .Values.licensePlate }}-tools/prime-webapi-backend:{{ .Values.imageTag }}
+          env:
+          - name: PGHOST
+          valueFrom:
+                  configMapKeyRef:
+                  name: database-cm
+                  key: database-host
+          - name: PGUSER
+          valueFrom:
+              secretKeyRef:
+              name: dev-patroni-secret
+              key: app-db-username
+          - name: PGPASSWORD
+          valueFrom:
+              secretKeyRef:
+              name: dev-patroni-secret
+              key: app-db-password
+          - name: PGDATABASE
+          value: prime-{{ .Values.appName }}
+          command: ['psql', '-a', '-f', './databaseMigrations.sql']
+    containers:
+        - name: ${SVC_NAME}-webapi
+        image: >-
+            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-webapi-backend:{{ .Values.imageTag }}
+        command:
+            - bash
+            - '-c'
+            - dotnet ./prime.dll -v 2>&1> /dev/stdout
+        env:
+            - name: DOCUMENT_MANAGER_CLIENT_ID
+            valueFrom:
+                configMapKeyRef:
+                name: document-manager
+                key: DOCUMENT_MANAGER_CLIENT_ID
+            - name: DOCUMENT_MANAGER_URL
+            value: http://{{ .Values.appName }}-document-manager:6001
+            - name: OC_APP
+            value: {{ .Values.appName }}
+            - name: PHARMANET_SSL_CERT_FILENAME
+            value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
+            - name: DB_HOST
+            valueFrom:
+                configMapKeyRef:
+                name: database-cm
+                key: database-host
+            - name: BACKEND_URL
+            value: https://{{ .Values.appName }}{{ .Values.urlStub }}/api/v1/
+            - name: FRONTEND_URL
+            value: https://{{ .Values.appName }}{{ .Values.urlStub }}
+            - name: POSTGRESQL_USER
+            valueFrom:
+                secretKeyRef:
+                name: dev-patroni-secret
+                key: app-db-username
+            - name: POSTGRESQL_PASSWORD
+            valueFrom:
+                secretKeyRef:
+                name: dev-patroni-secret
+                key: app-db-password
+            - name: POSTGRESQL_DATABASE
+            value: prime-{{ .Values.appName }}
+            - name: DB_CONNECTION_STRING
+            value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
+        ports:
+            - containerPort: 1025
+            protocol: TCP
+            - containerPort: 5001
+            protocol: TCP
+            - containerPort: 8080
+            protocol: TCP
+
+        resources:
+          limits:
+            cpu: {{ .Values.cpuLimit }}
+            memory: {{ .Values.memoryLimit }}
+          requests:
+            cpu: {{ .Values.cpuRequests }}
+            memory: {{ .Values.memoryRequests }}
+
+
+
+        resources:
+            limits:
+            cpu: 50m
+            memory: 1Gi
+            requests:
+            cpu: 15m
+            memory: 500Mi
+
+            
+        startupProbe:
+            httpGet:
+            path: /api/healthcheck/startup
+            port: 8080
+            timeoutSeconds: 60
+            failureThreshold: 120
+            periodSeconds: 35
+        readinessProbe:
+            httpGet:
+            path: /api/healthcheck/readiness
+            port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+        livenessProbe:
+            httpGet:
+            path: /api/healthcheck/liveness
+            port: 8080
+            failureThreshold: 3
+            periodSeconds: 5
+        imagePullPolicy: IfNotPresent
+        terminationMessagePolicy: File
+        envFrom:
+            - configMapRef:
+                name: canada-post-addresscomplete
+            - configMapRef:
+                name: ches
+            - configMapRef:
+                name: dotnet-webapi-backend
+            - configMapRef:
+                name: keycloak
+            - configMapRef:
+                name: ldap
+            - configMapRef:
+                name: mail-settings
+            - configMapRef:
+                name: metabase-embedded
+            - configMapRef:
+                name: pharmanet-api
+            - configMapRef:
+                name: verifiable-credential
+            - configMapRef:
+                name: provider-enrolment-team
+            - secretRef:
+                name: canada-post-addresscomplete-secrets
+            - secretRef:
+                name: ches-secrets
+            - secretRef:
+                name: document-manager-secrets
+            - secretRef:
+                name: keycloak-secrets
+            - secretRef:
+                name: metabase-embedded-secrets
+            - secretRef:
+                name: pharmanet-api-secrets
+            - secretRef:
+                name: verifiable-credential-secrets
+            - secretRef:
+                name: plr-integration-thumbprint
+        volumeMounts:
+            - name: cert-volume
+            mountPath: /opt/app-root/etc/certs
+            readOnly: true
+    volumes:
+        - name: cert-volume
+        secret:
+            secretName: pharmanet-api-ssl-certs
+
+#   Backend Web API Service
+kind: Service
+apiVersion: v1
+  metadata:
+    name: {{ .Values.appName }}-webapi
+    namespace: {{ .Values.licensePlate }}-{{ .Values.environment }}
+    labels:
+      app.kubernetes.io/part-of: {{ .Values.appName }}
+  spec:
+    ports:
+      - name: "http"
+        port: 8080
+        targetPort: 8080
+    selector:
+      name: {{ .Values.appName }}-webapi
