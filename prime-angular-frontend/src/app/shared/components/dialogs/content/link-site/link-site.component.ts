@@ -9,7 +9,6 @@ import { OrganizationResource } from '@core/resources/organization-resource.serv
 import { SiteListViewModel } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { OrganizationsComponent } from '@adjudication/pages/organizations/organizations.component';
 
 @Component({
   selector: 'app-link-site',

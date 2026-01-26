@@ -118,14 +118,9 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetOrganizationSiteBySiteID(string siteId)
         {
             var organizations = await _organizationService.GetOrganizationSiteBySiteIdAsync(siteId);
-            if (organizations == null || organizations.Length == 0)
-            {
-                return NotFound($"Organization Site not found with site id: {siteId}");
-            }
-            else
-            {
-                return Ok(organizations);
-            }
+            return organizations == null || organizations.Length == 0
+                ? NotFound($"Organization Site not found with site id: {siteId}")
+                : Ok(organizations);
         }
 
         // GET: api/organization/sites/sitename/sitename
@@ -142,14 +137,9 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetOrganizationSiteBySiteName(string sitename)
         {
             var organizations = await _organizationService.GetOrganizationSiteBySiteNameAsync(sitename);
-            if (organizations == null || organizations.Length == 0)
-            {
-                return NotFound($"Organization Site not found with site name: {sitename}");
-            }
-            else
-            {
-                return Ok(organizations);
-            }
+            return (organizations == null || organizations.Length == 0)
+                ? NotFound($"Organization Site not found with site name: {sitename}")
+                : Ok(organizations);
         }
 
         // POST: api/Organizations
