@@ -103,6 +103,55 @@ namespace Prime.Controllers
             return Ok(organizations);
         }
 
+
+        // GET: api/organization/sites/siteid/abc
+        /// <summary>
+        /// Return site predecessor
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpGet("sites/siteid/{siteId}", Name = nameof(GetOrganizationSiteBySiteID))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetOrganizationSiteBySiteID(string siteId)
+        {
+            var organizations = await _organizationService.GetOrganizationSiteBySiteIdAsync(siteId);
+            if (organizations == null || organizations.Length == 0)
+            {
+                return NotFound($"Organization Site not found with site id: {siteId}");
+            }
+            else
+            {
+                return Ok(organizations);
+            }
+        }
+
+        // GET: api/organization/sites/sitename/sitename
+        /// <summary>
+        /// Return site predecessor
+        /// </summary>
+        /// <param name="sitename"></param>
+        [HttpGet("sites/sitename/{sitename}", Name = nameof(GetOrganizationSiteBySiteName))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetOrganizationSiteBySiteName(string sitename)
+        {
+            var organizations = await _organizationService.GetOrganizationSiteBySiteNameAsync(sitename);
+            if (organizations == null || organizations.Length == 0)
+            {
+                return NotFound($"Organization Site not found with site name: {sitename}");
+            }
+            else
+            {
+                return Ok(organizations);
+            }
+        }
+
         // POST: api/Organizations
         /// <summary>
         /// Creates a new Organization.
