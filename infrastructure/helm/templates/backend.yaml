@@ -5,8 +5,8 @@
 kind: Deployment
 apiVersion: apps.openshift.io/v1
 metadata:
-  name: {{ .Values.appName }}-webapi
-  namespace: {{ .Values.licensePlate }}-dev
+  name: {{ .Values.environment }}-webapi
+  namespace: {{ .Values.licensePlate }}-{{ .Values.environment }}
   labels:
     app.kubernetes.io/part-of: {{ .Values.appName }}
     app.openshift.io/runtime: dotnet
@@ -17,7 +17,7 @@ metadata:
           "from": {
               "kind": "ImageStreamTag",
               "namespace": "{{ .Values.licensePlate }}-tools",
-              "name": "{{ .Values.appName }}:{{ .Values.imageTag }}"
+              "name": "{{ .Values.appName }}-webapi-backend:{{ .Values.imageTag }}"
           },
           "fieldPath": "spec.template.spec.containers[0].image"
           }
@@ -27,138 +27,97 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      name: {{ .Values.appName }}-webapi
+      name: {{ .Values.environment }}-webapi
       app: {{ .Values.appName }}
-
-        # Need to find a way to run this - possibly as a separate job prior to deployment?
-        # command:
-        #     - /bin/bash
-        #     - -c
-        #     - >
-        #     createdb -O $(APPUSER) prime-${SVC_NAME} 2> /dev/null || echo "database already exists"
-        # env:
-        #     - name: PGHOST
-        #     valueFrom:
-        #         configMapKeyRef:
-        #         name: database-cm
-        #         key: database-host
-        #     - name: PGDATABASE
-        #     value: postgres
-        #     - name: APPUSER
-        #     valueFrom:
-        #         secretKeyRef:
-        #         name: dev-patroni-secret
-        #         key: app-db-username
-        #     - name: PGUSER
-        #     valueFrom:
-        #         secretKeyRef:
-        #         name: dev-patroni-secret
-        #         key: superuser-username
-        #     - name: PGPASSWORD
-        #     valueFrom:
-        #         secretKeyRef:
-        #         name: dev-patroni-secret
-        #         key: superuser-password
 
 template:
   metadata:
   labels:
     dev-app: {{ .Values.appName }}
-    name: {{ .Values.appName }}-webapi
+    name: {{ .Values.environment }}-webapi
   spec:
     initContainers:
-      - name: run-migrations
+        - name: run-migrations
           image: >-
             image-registry.openshift-image-registry.svc:5000/{{ .Values.licensePlate }}-tools/prime-webapi-backend:{{ .Values.imageTag }}
           env:
-          - name: PGHOST
-          valueFrom:
-                  configMapKeyRef:
+            - name: PGHOST
+              valueFrom:
+                configMapKeyRef:
                   name: database-cm
                   key: database-host
-          - name: PGUSER
-          valueFrom:
-              secretKeyRef:
-              name: dev-patroni-secret
-              key: app-db-username
-          - name: PGPASSWORD
-          valueFrom:
-              secretKeyRef:
-              name: dev-patroni-secret
-              key: app-db-password
-          - name: PGDATABASE
-          value: prime-{{ .Values.appName }}
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: ${SVC_NAME}-patroni-secret
+                  key: app-db-username
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${SVC_NAME}-patroni-secret
+                  key: app-db-password
+            - name: PGDATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: ${SVC_NAME}-patroni-secret
+                  key: app-db-name
           command: ['psql', '-a', '-f', './databaseMigrations.sql']
     containers:
-        - name: ${SVC_NAME}-webapi
+      - name: {{ .Values.environment }}-webapi
         image: >-
-            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-webapi-backend:{{ .Values.imageTag }}
+          image-registry.openshift-image-registry.svc:5000/{{ .Values.licensePlate }}-tools/prime-webapi-backend:{{ .Values.imageTag }}
         command:
             - bash
             - '-c'
             - dotnet ./prime.dll -v 2>&1> /dev/stdout
         env:
-            - name: DOCUMENT_MANAGER_CLIENT_ID
+          - name: DOCUMENT_MANAGER_CLIENT_ID
             valueFrom:
-                configMapKeyRef:
-                name: document-manager
-                key: DOCUMENT_MANAGER_CLIENT_ID
-            - name: DOCUMENT_MANAGER_URL
+              configMapKeyRef:
+                    name: document-manager
+                    key: DOCUMENT_MANAGER_CLIENT_ID
+          - name: DOCUMENT_MANAGER_URL
             value: http://{{ .Values.appName }}-document-manager:6001
-            - name: OC_APP
+          - name: OC_APP
             value: {{ .Values.appName }}
-            - name: PHARMANET_SSL_CERT_FILENAME
+          - name: PHARMANET_SSL_CERT_FILENAME
             value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
-            - name: DB_HOST
+          - name: DB_HOST
             valueFrom:
-                configMapKeyRef:
-                name: database-cm
-                key: database-host
-            - name: BACKEND_URL
+              configMapKeyRef:
+                    name: database-cm
+                    key: database-host
+          - name: BACKEND_URL
             value: https://{{ .Values.appName }}{{ .Values.urlStub }}/api/v1/
-            - name: FRONTEND_URL
+          - name: FRONTEND_URL
             value: https://{{ .Values.appName }}{{ .Values.urlStub }}
-            - name: POSTGRESQL_USER
+          - name: POSTGRESQL_USER
             valueFrom:
-                secretKeyRef:
-                name: dev-patroni-secret
-                key: app-db-username
-            - name: POSTGRESQL_PASSWORD
+              secretKeyRef:
+                    name: dev-patroni-secret
+                    key: app-db-username
+          - name: POSTGRESQL_PASSWORD
             valueFrom:
-                secretKeyRef:
+              secretKeyRef:
                 name: dev-patroni-secret
                 key: app-db-password
-            - name: POSTGRESQL_DATABASE
+          - name: POSTGRESQL_DATABASE
             value: prime-{{ .Values.appName }}
-            - name: DB_CONNECTION_STRING
+          - name: DB_CONNECTION_STRING
             value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
         ports:
-            - containerPort: 1025
+          - containerPort: 1025
             protocol: TCP
-            - containerPort: 5001
+          - containerPort: 5001
             protocol: TCP
-            - containerPort: 8080
+          - containerPort: 8080
             protocol: TCP
 
         resources:
-          limits:
-            cpu: {{ .Values.cpuLimit }}
-            memory: {{ .Values.memoryLimit }}
-          requests:
-            cpu: {{ .Values.cpuRequests }}
-            memory: {{ .Values.memoryRequests }}
-
-
-
-        resources:
-            limits:
-            cpu: 50m
-            memory: 1Gi
             requests:
-            cpu: 15m
-            memory: 500Mi
-
-            
+                cpu: {{ .Values.webapi.cpuRequests }}
+                memory: {{ .Values.webapi.memoryRequests }}
+           
         startupProbe:
             httpGet:
             path: /api/healthcheck/startup
@@ -219,25 +178,83 @@ template:
                 name: plr-integration-thumbprint
         volumeMounts:
             - name: cert-volume
-            mountPath: /opt/app-root/etc/certs
-            readOnly: true
+              mountPath: /opt/app-root/etc/certs
+              readOnly: true
     volumes:
         - name: cert-volume
-        secret:
+          secret:
             secretName: pharmanet-api-ssl-certs
 
 #   Backend Web API Service
 kind: Service
 apiVersion: v1
-  metadata:
-    name: {{ .Values.appName }}-webapi
+metadata:
+    name: {{ .Values.environment }}-webapi
     namespace: {{ .Values.licensePlate }}-{{ .Values.environment }}
     labels:
-      app.kubernetes.io/part-of: {{ .Values.appName }}
-  spec:
+      app.kubernetes.io/part-of: {{ .Values.environment }}
+spec:
     ports:
       - name: "http"
         port: 8080
         targetPort: 8080
     selector:
-      name: {{ .Values.appName }}-webapi
+      name: {{ .Values.environment }}-webapi
+
+
+#   Backend Web API Job running prior to deployment
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.environment }}-createdb
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: hook-succeeded
+  labels:
+    {{- include "pidp.labels" . | nindent 4 }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: createdb
+        image: {{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: Always
+        command:
+          - /bin/bash
+          - -c
+          - >
+            createdb -O $(APPUSER) prime-{{ .Values.environment }} 2> /dev/null || echo "database already exists"
+        env:
+          - name: PGHOST
+            valueFrom:
+              configMapKeyRef:
+                name: database-cm
+                key: database-host
+          - name: PGUSER
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.environment }}-patroni-secret
+                key: superuser-username
+          - name: APPUSER
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.environment }}-patroni-secret
+                key: app-db-username
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.environment }}-patroni-secret
+                key: superuser-password
+          - name: PGDATABASE
+            {{- if $isPR }}
+            value: "pidp_{{ $drn }}"
+            {{ else }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.environment }}-patroni-secret
+                key: app-db-name
+            {{- end }}
+      restartPolicy: Never
+  backoffLimit: 3
+{{- end }}

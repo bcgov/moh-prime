@@ -1,3 +1,4 @@
+{{ $isProd := contains "prod" $ocEnv }}
 ###########################################
 ###               Frontend              ###
 ###########################################
@@ -5,10 +6,10 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: {{ .Values.appName }}-frontend
+  name: {{ .Values.environment }}-frontend
   namespace: {{ .Values.licensePlate }}-{{ .Values.environment }}
   labels:
-    app.kubernetes.io/part-of: {{ .Values.appName }}
+    app.kubernetes.io/part-of: {{ .Values.environment }}
     app.openshift.io/runtime: nginx
   annotations:
     image.openshift.io/triggers: |-
@@ -17,21 +18,21 @@ metadata:
           "from": {
             "kind": "ImageStreamTag",
             "namespace": "{{ .Values.licensePlate }}-tools",
-            "name": "{{ .Values.appName }}:{{ .Values.imageTag }}"
+            "name": "{{ .Values.appName }}-frontend:{{ .Values.imageTag }}"
           },
           "fieldPath": "spec.template.spec.containers[0].image"
         }
       ]
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.frontend.replicaCount }}
   selector:
     matchLabels:
-      name: {{ .Values.appName }}-frontend
+      name: {{ .Values.environment }}-frontend
       app: {{ .Values.appName }}
   template:
     metadata:
       labels:
-        name: {{ .Values.appName }}-frontend
+        name: {{ .Values.environment }}-frontend
         app: {{ .Values.appName }}
       annotations:
         rollme: {{ randAlphaNum 5 | quote }}
@@ -40,7 +41,7 @@ spec:
         prometheus.io/path: {{ .Values.servletContextPath }}
     spec:
       containers:
-        - name: {{ .Values.appName }}-frontend
+        - name: {{ .Values.environment }}-frontend
           image: >-
             image-registry.openshift-image-registry.svc:5000/{{ .Values.licensePlate }}-tools/prime-frontend:{{ .Values.imageTag }}
           ports:
@@ -59,7 +60,7 @@ spec:
                 name: keycloak
           env:
             - name: DOCUMENT_MANAGER_URL
-              value: https://{{ .Values.appName }}{{ .Values.urlStub }}/api/docman
+              value: https://{{ .Values.environment }}.{{ .Values.urlStub }}/api/docman
           resources:
             limits:
               cpu: {{ .Values.cpuLimit }}
@@ -102,7 +103,7 @@ spec:
           defaultMode: 420
       - name: nginx-config
         configMap:
-          name: {{ .Values.appName }}-nginx-config
+          name: {{ .Values.environment }}-nginx-config
           defaultMode: 420
       - name: plr-integration-volume
         secret:
@@ -110,7 +111,7 @@ spec:
           defaultMode: 420
       - name: env-config
         configMap:
-          name: {{ .Values.appName }}-env-config
+          name: {{ .Values.environment }}-env-config
           defaultMode: 420
   revisionHistoryLimit: 3
 ---
@@ -118,22 +119,22 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.appName }}-env-config
+  name: {{ .Values.environment }}-env-config
   namespace: {{ .Values.licensePlate }}-{{ .Values.environment }}
   labels:
-    app.kubernetes.io/part-of: {{ .Values.appName }}
+    app.kubernetes.io/part-of: {{ .Values.environment }}
 data:
   config-map.json: |-
     {
       "environmentName": "{{ .Values.environment }}",
-      "apiEndpoint": "https://{{ .Values.appName }}.pharmanetenrolment.gov.bc.ca/api/v1",
-      "loginRedirectUrl": "https://{{ .Values.appName }}.pharmanetenrolment.gov.bc.ca",
-      "documentManagerUrl": "https://{{ .Values.appName }}.pharmanetenrolment.gov.bc.ca/api/docman",
+      "apiEndpoint": "https://{{ if $isProd }}{{ else }}{{ $release }}.{{ end }}{{ .Values.urlStub }}/api/v1",
+      "loginRedirectUrl": "https://{{ if $isProd }}{{ else }}{{ $release }}.{{ end }}{{ .Values.urlStub }}",
+      "documentManagerUrl": "https://{{ if $isProd }}{{ else }}{{ $release }}.{{ end }}{{ .Values.urlStub }}/api/docman",
       "keycloakConfig": {
         "config": {
-          "url": "https://common-logon-test.hlth.gov.bc.ca/auth",
-          "realm": "moh_applications",
-          "clientId": "PRIME-APPLICATION-LOCAL"
+          "url": "{{ .Values.settings.keycloak.url }}",
+          "realm": "{{ .Values.settings.keycloak.realm }}",
+          "clientId": "{{ .Values.settings.keycloak.clientId }}"
         }
       },
       "mohKeycloakConfig": {
@@ -149,10 +150,10 @@ data:
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: {{ .Values.appName }}-nginx-config
+  name: {{ .Values.environment }}-nginx-config
   namespace: {{ .Values.licensePlate }}-{{ .Values.environment }}
   labels:
-    app.kubernetes.io/part-of: {{ .Values.appName }}
+    app.kubernetes.io/part-of: {{ .Values.environment }}
 data:
   nginx.conf: |-
     # Based on https://www.nginx.com/resources/wiki/start/topics/examples/full/#nginx-conf
@@ -365,10 +366,10 @@ data:
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ .Values.appName }}-frontend
+  name: {{ .Values.environment }}-frontend
   namespace: {{ .Values.licensePlate }}-{{ .Values.environment }}
   labels:
-    app.kubernetes.io/part-of: {{ .Values.appName }}
+    app.kubernetes.io/part-of: {{ .Values.environment }}
 spec:
   ports:
     - name: "http"
@@ -384,16 +385,16 @@ spec:
       port: 8890
       targetPort: 8890
   selector:
-    name: {{ .Values.appName }}-frontend
+    name: {{ .Values.environment }}-frontend
 ---
 #   Ingress
 kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: {{ .Values.appName }}
+  name: {{ .Values.environment }}
   namespace: {{ .Values.licensePlate }}-{{ .Values.environment }}
   labels:
-    app.kubernetes.io/part-of: {{ .Values.appName }}
+    app.kubernetes.io/part-of: {{ .Values.environment }}
 spec:
   tls:
     - hosts:
@@ -408,7 +409,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.appName }}-frontend
+                name: {{ .Values.environment }}-frontend
                 port:
                   number: 8080
     - host: '{{ .Values.appName }}-hpr.pharmanetenrolment.gov.bc.ca'
@@ -418,22 +419,22 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ .Values.appName }}-frontend
+                name: {{ .Values.environment }}-frontend
                 port:
                   number: 8888
 ---
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: {{ .Values.appName }}-mutualauth
+  name: {{ .Values.environment }}-frontend-mutualauth
   namespace: {{ .Values.licensePlate }}-{{ .Values.environment }}
   labels:
-    app.kubernetes.io/part-of: {{ .Values.appName }}
+    app.kubernetes.io/part-of: {{ .Values.environment }}
 spec:
-  host: {{ .Values.appName }}-mutualauth{{ .Values.urlStub }}
+  host: {{ .Values.environment }}-mauth-{{ .Values.licensePlate }}-{{ .Values.environment }}.apps.silver.devops.gov.bc.ca
   to:
     kind: Service
-    name: {{ .Values.appName }}-frontend
+    name: {{ .Values.environment }}-frontend
     weight: 100
   port:
     targetPort: 8890

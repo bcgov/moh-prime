@@ -1,20 +1,23 @@
-appName: cm-prime
+appName: prime
 licensePlate: 9c33a9
 environment: dev
 imageTag: dev
 servletContextPath: /actuator/prometheus
-urlStub: .pharmanetenrolment.gov.bc.ca
+urlStub: pharmanetenrolment.gov.bc.ca
 
 frontend:
-  cpuLimit: 50m
-  memoryLimit: 50Mi
-  cpuRequests: 15m
-  memoryRequests: 10Mi
+  cpuRequests: 50m
+  memoryRequests: 50Mi
   replicaCount: 1
 
 backend:
-  cpuLimit: 50m
-  memoryLimit: 50Mi
-  cpuRequests: 15m
-  memoryRequests: 10Mi
+  cpuRequests: 50m
+  memoryRequests: 50Mi
   replicaCount: 1
+
+settings:
+  environmentName: dev
+  keycloak:
+    url: https://common-logon-dev.hlth.gov.bc.ca/auth
+    realm: "moh_applications"
+    clientId: "PRIME-APPLICATION-LOCAL"
