@@ -219,17 +219,18 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
               let emailPairs = this.careSettingConfigs.map((config) => {
                 return {
                   emails: config.formArray.value.map(email => {
-                    return {
-                      email: email.email,
-                      remoteAccessSiteIds: email.sitesIds.map((selected: boolean, index: string | number) =>
-                        selected ? this.remoteAccessSites[index].site.id : null).filter(id => id)
-                    };
+                    return config.settingCode === this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
+                      ? {
+                        email: email.email,
+                        remoteAccessSiteIds: email.sitesIds.map((selected: boolean, index: string | number) =>
+                          selected ? this.remoteAccessSites[index].site.id : null).filter(id => id)
+                      } : { email: email.email, remoteAccessSiteIds: [] };
                   }),
                   careSettingCode: config.settingCode,
                   healthAuthorityCode: config.healthAuthorityCode,
                 }
               });
-              return this.enrolmentResource.sendProvisionerAccessLink(emailPairs.filter((ep) => ep.emails && ep.emails[0]), this.enrolment.id);
+              return this.enrolmentResource.sendProvisionerAccessLink(emailPairs.filter((ep) => ep.emails && ep.emails[0].email !== undefined), this.enrolment.id);
             } else {
               return EMPTY;
             }
