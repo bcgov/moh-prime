@@ -9,7 +9,7 @@ postgres_namespace: openshift
 database_host: metabase-database
 database_port: 5432
 database_username: metabase-user
-database_password: roh3Mosai7Shei7O
+database_password: ""
 database_name: metabase
 postgresql_version: 10-el8
 metabase_database_memory_limit: 521Mi
