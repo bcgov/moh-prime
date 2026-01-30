@@ -101,30 +101,23 @@
       <div imageName="notification"
            class="col-12">
         <ng-container appInfographicDescription>
-          When PRIME approved you to access PharmaNet, you were assigned a global PharmaNet ID (GPID).
-          <br><br>
-          Examples of when you would need to share your provisioner information include:
-          <ul>
-            <li>If I change work sites</li>
-            <li>If I change jobs</li>
-            <li>If my worksite has new PharmaNet software</li>
-          </ul>
+          <p>
+            Before you will be able to access PharmaNet, you must share your PRIME approval and provisioning details
+            with
+            the PharmaNet administrator for the site(s) where you wish to use PharmaNet. A PharmaNet administrator is
+            the
+            person in your workplace who sets up PharmaNet access, or requests your PharmaNet vendor to do so.
+          </p>
+          <p>
+            If you need to complete a paper or electronic request form to request access to PharmaNet for your sites,
+            please send the approval and provisioning details to yourself. You will need them to complete the form.
+          </p>
         </ng-container>
         <ng-container appInfographicContent
                       *ngIf="enrolment.currentStatus.statusCode === EnrolmentStatus.EDITABLE">
-
           <p>
-            To share your provisioner information, enter the email address of your PharmaNet administrator(s) below. A
-            PharmaNet administrator is the person in your workplace who sets up PharmaNet access.
-          </p>
-
-          <p>
-            PRIME will send your enrolment information to your PharmaNet administrator(s) so they can set up your
-            access.
-          </p>
-
-          <p class="mb-4 font-italic">
-            Note: You cannot access PharmaNet without completing this step.
+            To send the approval and provisioning details, enter the email address of your PharmaNet
+            administrator(s)/yourself below.
           </p>
         </ng-container>
 
@@ -175,10 +168,27 @@
                [formArrayName]="formArrayName">
             <ng-container *ngFor="let email of formArray.controls; let i = index;"
                           [formGroupName]="i">
-              <div class="mb-2"
+
+              <app-email-form [form]="email"
+                              [index]="i"
+                              [validateFormat]="true"
+                              [showRemoveButton]="i>0"
+                              (remove)="removeEmail(settingCode, healthAuthorityCode, $event)">
+              </app-email-form>
+
+              <div class="mb-2 remote_access_section"
                    formArrayName="sitesIds"
                    *ngIf="settingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE && remoteAccessSites?.length > 0">
-                *Include details of clinic where approved for remote access in approval email
+                <div class="title">Note: Remote Access to PharmaNet </div>
+                <p>
+                  If your clinic has registered you for remote access to PharmaNet, you must include the clinic
+                  information in your provisioning details before remote access your PharmaNet administrator is
+                  authorized
+                  to set up remote access.
+                </p>
+                <p>
+                  Tick the box beside the details you wish to send to the email address you have entered above.
+                </p>
                 <ng-container class="col col-sm-12"
                               *ngFor="let siteControl of remoteAccessSites; let j = index">
                   <mat-checkbox [formControlName]="j">
@@ -189,13 +199,8 @@
                     {{getRemoteAccessSite(j).physicalAddress?.postal | default}}
                   </mat-checkbox>
                 </ng-container>
+                <br/><br/>
               </div>
-              <app-email-form [form]="email"
-                              [index]="i"
-                              [validateFormat]="true"
-                              [showRemoveButton]="i>0"
-                              (remove)="removeEmail(settingCode, healthAuthorityCode, $event)">
-              </app-email-form>
             </ng-container>
           </div>
 

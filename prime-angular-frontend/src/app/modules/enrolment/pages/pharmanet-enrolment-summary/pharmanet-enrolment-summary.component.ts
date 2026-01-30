@@ -284,7 +284,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       return 'Next Steps to Get PharmaNet';
     } else {
       if (!this.initialEnrolment) {
-        return 'Share my Global PharmaNet ID (GPID)';
+        return 'Share my PRIME approval and provisioning details';
       } else {
         return 'PRIME Enrolment Complete';
       }
@@ -385,7 +385,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
               healthAuthorityCode: null,
               formArray: this.communityHealthEmails,
               formArrayName: 'communityHealthEmails',
-              subheaderContent: `Send your approval to your private community health practice's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
+              subheaderContent: `Enter the email address of your clinic’s PharmaNet administrator below. If you work in more than one private community health practice, you will need to send the email separately to each PharmaNet administrator on a separate line. Your PharmaNet administrator(s), or your PharmaNet software vendor, will contact you once your PharmaNet access has been set up.`
             });
         }
           break;
