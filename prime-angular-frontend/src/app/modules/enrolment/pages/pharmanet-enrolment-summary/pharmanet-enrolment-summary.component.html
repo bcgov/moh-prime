@@ -164,11 +164,10 @@
 
       <form [formGroup]="emailForm">
         <div class="row">
-          <div class="col col-sm-8"
+          <div class="col col-12"
                [formArrayName]="formArrayName">
             <ng-container *ngFor="let email of formArray.controls; let i = index;"
                           [formGroupName]="i">
-
               <app-email-form [form]="email"
                               [index]="i"
                               [validateFormat]="true"
@@ -189,17 +188,18 @@
                 <p>
                   Tick the box beside the details you wish to send to the email address you have entered above.
                 </p>
-                <ng-container class="col col-sm-12"
-                              *ngFor="let siteControl of remoteAccessSites; let j = index">
-                  <mat-checkbox [formControlName]="j">
-                    {{getRemoteAccessSite(j).doingBusinessAs | default}} -
-                    {{getRemoteAccessSite(j).physicalAddress?.street | default}}
-                    {{getRemoteAccessSite(j).physicalAddress?.city | default}}
-                    {{getRemoteAccessSite(j).physicalAddress?.provinceCode | default}}
-                    {{getRemoteAccessSite(j).physicalAddress?.postal | default}}
-                  </mat-checkbox>
+                <ng-container *ngFor="let siteControl of remoteAccessSites; let j = index">
+                  <div class="col col-12">
+                    <mat-checkbox [formControlName]="j">
+                      {{getRemoteAccessSite(j).doingBusinessAs | default}} -
+                      {{getRemoteAccessSite(j).physicalAddress?.street | default}}
+                      {{getRemoteAccessSite(j).physicalAddress?.city | default}}
+                      {{getRemoteAccessSite(j).physicalAddress?.provinceCode | default}}
+                      {{getRemoteAccessSite(j).physicalAddress?.postal | default}}
+                    </mat-checkbox>
+                  </div>
                 </ng-container>
-                <br/><br/>
+                <br/>
               </div>
             </ng-container>
           </div>
