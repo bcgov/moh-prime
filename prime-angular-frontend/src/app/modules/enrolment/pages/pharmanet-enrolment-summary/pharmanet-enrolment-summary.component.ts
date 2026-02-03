@@ -520,4 +520,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
     return emailFilled;
   }
+
+  public getEmailLabel(emailIndex: number): string {
+    return emailIndex === 0 ? 'Email' : `Email #${emailIndex + 1}`;
+  }
 }
