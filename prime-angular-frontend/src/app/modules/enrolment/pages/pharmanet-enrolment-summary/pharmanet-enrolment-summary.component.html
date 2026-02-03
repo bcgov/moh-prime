@@ -172,6 +172,7 @@
                               [index]="i"
                               [validateFormat]="true"
                               [showRemoveButton]="i>0"
+                              [label]="getEmailLabel(i)"
                               (remove)="removeEmail(settingCode, healthAuthorityCode, $event)">
               </app-email-form>
 
@@ -210,7 +211,7 @@
                     color="primary"
                     (click)="addEmptyEmailInput(settingCode, healthAuthorityCode)">
               <mat-icon>add</mat-icon>
-              Add email of PharmaNet administrator
+              Add email of other PharmaNet administrator
             </button>
           </div>
         </div>
