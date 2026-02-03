@@ -18,6 +18,7 @@ export class EmailFormComponent implements OnInit {
   @Input() public index: number;
   @Input() public validateFormat: boolean = false;
   @Input() public required: boolean = false;
+  @Input() public label: string = 'Email';
   @Output() public remove: EventEmitter<number>;
 
   constructor(
