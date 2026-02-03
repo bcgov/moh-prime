@@ -230,7 +230,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
                   healthAuthorityCode: config.healthAuthorityCode,
                 }
               });
-              return this.enrolmentResource.sendProvisionerAccessLink(emailPairs.filter((ep) => ep.emails && ep.emails[0].email !== undefined), this.enrolment.id);
+              return this.enrolmentResource.sendProvisionerAccessLink(emailPairs.filter((ep) => ep.emails && ep.emails[0].email !== undefined && ep.emails[0].email !== null), this.enrolment.id);
             } else {
               return EMPTY;
             }
