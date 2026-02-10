@@ -385,7 +385,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
               healthAuthorityCode: null,
               formArray: this.communityHealthEmails,
               formArrayName: 'communityHealthEmails',
-              subheaderContent: `Enter the email address of your clinic’s PharmaNet administrator below. If you work in more than one private community health practice, you will need to send the email separately to each PharmaNet administrator on a separate line. Your PharmaNet administrator(s), or your PharmaNet software vendor, will contact you once your PharmaNet access has been set up.`
+              subheaderContent: `Enter the email address of your clinic’s PharmaNet administrator below. If you work in more than one private community health practice, you will need to send the email separately to each PharmaNet administrator on a separate line. Either your PharmaNet administrator(s), or your PharmaNet software vendor, will contact you once your PharmaNet access has been set up.`
             });
         }
           break;
