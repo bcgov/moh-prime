@@ -19,7 +19,7 @@ export BACKUP_CONF=${BACKUP_CONF:-backup.conf}
 
 # Used to prune the total number of backup when using the daily backup strategy.
 # Default provides for one full month of backups
-export NUM_BACKUPS=${NUM_BACKUPS:-31}
+export NUM_BACKUPS=${NUM_BACKUPS:-8}
 
 # Used to prune the total number of backup when using the rolling backup strategy.
 # Defaults provide for:
@@ -27,7 +27,7 @@ export NUM_BACKUPS=${NUM_BACKUPS:-31}
 # - A month's worth of weekly backups
 # - The previous month's backup
 export DAILY_BACKUPS=${DAILY_BACKUPS:-6}
-export WEEKLY_BACKUPS=${WEEKLY_BACKUPS:-4}
+export WEEKLY_BACKUPS=${WEEKLY_BACKUPS:-1}
 export MONTHLY_BACKUPS=${MONTHLY_BACKUPS:-1}
 
 # Modes:
