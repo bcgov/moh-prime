@@ -166,26 +166,17 @@
                [formArrayName]="formArrayName">
             <ng-container *ngFor="let email of formArray.controls; let i = index;"
                           [formGroupName]="i">
-              <app-email-form [form]="email"
-                              [index]="i"
-                              [validateFormat]="true"
-                              [showRemoveButton]="i>0"
-                              [label]="getEmailLabel(i)"
-                              (remove)="removeEmail(settingCode, healthAuthorityCode, $event)">
-              </app-email-form>
-
               <div class="mb-2 remote_access_section"
                    formArrayName="sitesIds"
                    *ngIf="settingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE && remoteAccessSites?.length > 0">
-                <div class="title">Note: Remote Access to PharmaNet </div>
-                <p>
+                <div class="remote_access_title">Note: Remote Access to PharmaNet </div>
+                <p class="remote_access_text">
                   If your clinic has registered you for remote access to PharmaNet, you must include the clinic
-                  information in your provisioning details before remote access your PharmaNet administrator is
-                  authorized
+                  information in your provisioning details before your PharmaNet administrator is authorized
                   to set up remote access.
                 </p>
                 <p>
-                  Tick the box beside the details you wish to send to the email address you have entered above.
+                  Tick the box beside the details you wish to send to the email address.
                 </p>
                 <ng-container *ngFor="let siteControl of remoteAccessSites; let j = index">
                   <div class="col col-12">
@@ -200,6 +191,14 @@
                 </ng-container>
                 <br/>
               </div>
+
+              <app-email-form [form]="email"
+                              [index]="i"
+                              [validateFormat]="true"
+                              [showRemoveButton]="i>0"
+                              [label]="getEmailLabel(i)"
+                              (remove)="removeEmail(settingCode, healthAuthorityCode, $event)">
+              </app-email-form>
             </ng-container>
           </div>
 
@@ -209,7 +208,7 @@
                     color="primary"
                     (click)="addEmptyEmailInput(settingCode, healthAuthorityCode)">
               <mat-icon>add</mat-icon>
-              Add email of other PharmaNet administrator
+              Add email of another PharmaNet administrator
             </button>
           </div>
         </div>
