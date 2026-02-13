@@ -230,7 +230,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
                   healthAuthorityCode: config.healthAuthorityCode,
                 }
               });
-              return this.enrolmentResource.sendProvisionerAccessLink(emailPairs.filter((ep) => ep.emails && ep.emails[0].email !== undefined), this.enrolment.id);
+              return this.enrolmentResource.sendProvisionerAccessLink(emailPairs.filter((ep) => ep.emails && ep.emails[0].email !== undefined && ep.emails[0].email !== null), this.enrolment.id);
             } else {
               return EMPTY;
             }
@@ -385,7 +385,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
               healthAuthorityCode: null,
               formArray: this.communityHealthEmails,
               formArrayName: 'communityHealthEmails',
-              subheaderContent: `Enter the email address of your clinic’s PharmaNet administrator below. If you work in more than one private community health practice, you will need to send the email separately to each PharmaNet administrator on a separate line. Your PharmaNet administrator(s), or your PharmaNet software vendor, will contact you once your PharmaNet access has been set up.`
+              subheaderContent: `Enter the email address of your clinic’s PharmaNet administrator below. If you work in more than one private community health practice, you will need to send the email separately to each PharmaNet administrator on a separate line. Either your PharmaNet administrator(s), or your PharmaNet software vendor, will contact you once your PharmaNet access has been set up.`
             });
         }
           break;
@@ -519,5 +519,9 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     });
 
     return emailFilled;
+  }
+
+  public getEmailLabel(emailIndex: number): string {
+    return emailIndex === 0 ? 'Email' : `Email #${emailIndex + 1}`;
   }
 }
