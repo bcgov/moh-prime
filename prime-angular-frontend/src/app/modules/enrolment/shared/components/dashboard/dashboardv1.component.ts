@@ -194,7 +194,7 @@ export class DashboardV1Component implements OnInit {
             ].includes(currentRoute)
           },
           {
-            name: 'Share GPID/Approval',
+            name: 'Share Provisioner Info',
             icon: statusIcons.certificate,
             route: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
             showItem: true,
