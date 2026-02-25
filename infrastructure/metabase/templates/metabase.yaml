@@ -1,0 +1,292 @@
+#   Metabase-database Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    template.alpha.openshift.io/wait-for-ready: "true"
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "namespace": "openshift",
+            "name": "postgresql:{{ .Values.postgresql_version }}"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image"
+        }
+      ]
+  name: {{ .Values.service_name}}-database
+  labels:
+    app.kubernetes.io/part-of: {{ .Values.app_name}}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      name: {{ .Values.service_name}}-database
+  strategy:
+    type: Recreate
+    recreateParams:
+      timeoutSeconds: 600
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.service_name}}-database
+    spec:
+      volumes:
+        - name: {{ .Values.service_name}}-database-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.service_name}}-data
+      containers:
+        - name: postgresql
+          env:
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  key: database-user
+                  name: {{ .Values.service_name}}-database
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: database-password
+                  name: {{ .Values.service_name}}-database
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: database-name
+                  name: {{ .Values.service_name}}-database
+          image: 'image-registry.openshift-image-registry.svc:5000/openshift/postgresql:{{ .Values.postgresql_version }}'
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - /usr/libexec/check-container
+              - --live
+            initialDelaySeconds: 120
+            timeoutSeconds: 10       
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - /usr/libexec/check-container
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: {{ .Values.metabase_database_memory_limit }}
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+            - mountPath: /var/lib/pgsql/data
+              name: {{ .Values.service_name}}-database-data
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+---
+#   Metabase-data PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "{{ .Values.service_name}}-data"
+  labels:
+    app.kubernetes.io/part-of: {{ .Values.app_name}}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: "{{ .Values.pvc_capacity }}"
+---
+#   Metabase-database Service
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
+  name: {{ .Values.service_name}}-database
+  labels:
+    app.kubernetes.io/part-of: {{ .Values.app_name}}
+spec:
+  ports:
+    - name: postgresql
+      nodePort: 0
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    name: {{ .Values.service_name}}-database
+  sessionAffinity: None
+  type: ClusterIP
+---
+#   Metabase Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  annotations:
+    template.openshift.io/expose-database_name: '{.data[''database-name'']}'
+    template.openshift.io/expose-password: '{.data[''database-password'']}'
+    template.openshift.io/expose-username: '{.data[''database-user'']}'
+    template.openshift.io/expose-databae-host: '{.data[''database-host'']}'
+  name: {{ .Values.service_name}}-database
+  labels:
+    app.kubernetes.io/part-of: {{ .Values.app_name}}
+stringData:
+  database-host: {{ .Values.database_host }}
+  database-name: {{ .Values.database_name }}
+  database-password: {{ .Values.database_password }}
+  database-user: {{ .Values.database_username }}
+---
+#   Metabase Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    app.openshift.io/connects-to: >-
+      [{"apiVersion":"apps.openshift.io/v1","kind":"Deployment","name":"{{ .Values.service_name}}-database"}]  
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "namespace": "{{ .Values.namespace }}",
+            "name": "metabase:{{ .Values.image_tag }}"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image",
+          "paused": false
+        }
+      ]
+  name: {{ .Values.service_name}}
+  labels:
+    app.kubernetes.io/part-of: {{ .Values.app_name}}
+    app: {{ .Values.app_name}}
+    service: {{ .Values.service_name}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.app_name}}
+      deployment: {{ .Values.service_name}}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app_name}}
+        service: {{ .Values.service_name}}
+        deployment: {{ .Values.service_name}}
+        template: metabase
+    spec:
+      containers:
+      - name: {{ .Values.service_name}}
+        image: 'image-registry.openshift-image-registry.svc:5000/{{ .Values.namespace }}/metabase:{{ .Values.image_tag }}'
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: MB_DB_TYPE
+          value: postgres
+        - name: MB_DB_PORT
+          value: '{{ .Values.database_port }}'
+        - name: MB_DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.service_name}}-database
+              key: database-host
+        - name: MB_DB_DBNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.service_name}}-database
+              key: database-name
+        - name: MB_DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.service_name}}-database
+              key: database-user
+        - name: MB_DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.service_name}}-database
+              key: database-password
+        command:
+            - java
+        args:
+          - '-Xmx300m'
+          - '-Xss512k'
+          - '-Dfile.encoding=UTF-8'
+          - '-Dlogfile.path=target/log'
+          - '-XX:+CMSClassUnloadingEnabled'
+          - '-XX:+UseConcMarkSweepGC'
+          - '-server'
+          - '-jar'
+          - '/app/metabase.jar'
+        ports:
+        - containerPort: 3000
+          name: {{ .Values.service_name}}
+          protocol: TCP
+        terminationMessagePath: /dev/termination-log
+        resources:
+          requests:
+            cpu: {{ .Values.metabase_cpu_request }}
+            memory: {{ .Values.metabase_memory_request }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 240
+          timeoutSeconds: 3
+          failureThreshold: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 3
+          timeoutSeconds: 3
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+#   Metabase Service
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    template.openshift.io/expose-uri: http://{.spec.clusterIP}:{.spec.ports[?(.name=="{{ .Values.service_name}}")].port}
+  name: {{ .Values.service_name}}
+  labels:
+    app.kubernetes.io/part-of: {{ .Values.app_name}}
+    app: {{ .Values.app_name}}
+    service: {{ .Values.service_name}}
+spec:
+  ports:
+  - name: {{ .Values.service_name}}
+    port: 3000
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: {{ .Values.app_name}}
+    deployment: {{ .Values.service_name}}
+  sessionAffinity: None
+  type: ClusterIP
+---
+#   Metabase Route
+apiVersion: v1
+kind: Route
+metadata:
+  name: {{ .Values.service_name}}
+  labels:
+    app: {{ .Values.app_name}}
+    service: {{ .Values.service_name}}
+    app.kubernetes.io/part-of: {{ .Values.app_name}}
+spec:
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: {{ .Values.service_name}}
+  port:
+    targetPort: {{ .Values.service_name}}

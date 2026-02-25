@@ -1,0 +1,7 @@
+apiVersion: v2
+name: prime
+description: Prime Helm Chart
+icon: https://www2.gov.bc.ca/StaticWebResources/static/gov3/images/gov_bc_logo.svg
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
