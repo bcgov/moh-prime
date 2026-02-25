@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -11,13 +12,15 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250725171538_NewStatusReasonDuplicateEnrollee")]
+    partial class NewStatusReasonDuplicateEnrollee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.19")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -63,41 +66,6 @@ namespace Prime.Migrations
                         .IsUnique();
 
                     b.ToTable("AccessAgreementNote");
-                });
-
-            modelBuilder.Entity("Prime.Models.AccessTokenRemoteAccessSite", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("EnrolmentCertificateAccessTokenId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("SiteId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolmentCertificateAccessTokenId");
-
-                    b.HasIndex("SiteId");
-
-                    b.ToTable("AccessTokenRemoteAccessSite");
                 });
 
             modelBuilder.Entity("Prime.Models.Address", b =>
@@ -1545,19 +1513,19 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 1,
                             LicenseCode = 87,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
                             LicenseCode = 88,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
                             LicenseCode = 89,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -1575,12 +1543,6 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 1,
                             LicenseCode = 92,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 1,
-                            LicenseCode = 180,
                             Discontinued = false
                         },
                         new
@@ -2823,9 +2785,6 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneExtension")
                         .HasColumnType("text");
 
                     b.Property<int?>("PhysicalAddressId")
@@ -6178,7 +6137,7 @@ namespace Prime.Migrations
 
                     b.ToTable("HealthAuthorityContact");
 
-                    b.HasDiscriminator().HasValue("HealthAuthorityContact");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("HealthAuthorityContact");
 
                     b.UseTphMappingStrategy();
                 });
@@ -6998,12 +6957,6 @@ namespace Prime.Migrations
                         {
                             Code = 88,
                             Name = "Associate - Community Primary Care",
-                            Weight = 28
-                        },
-                        new
-                        {
-                            Code = 180,
-                            Name = "Associate",
                             Weight = 28
                         },
                         new
@@ -14015,23 +13968,6 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
-                        },
-                        new
-                        {
-                            Id = 379,
-                            AllowRequestRemoteAccess = true,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2025, 9, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 180,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            Multijurisdictional = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
                         });
                 });
 
@@ -14189,9 +14125,6 @@ namespace Prime.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset?>("ArchivedDate")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("Completed")
                         .HasColumnType("boolean");
@@ -20115,23 +20048,6 @@ namespace Prime.Migrations
                     b.Navigation("Enrollee");
                 });
 
-            modelBuilder.Entity("Prime.Models.AccessTokenRemoteAccessSite", b =>
-                {
-                    b.HasOne("Prime.Models.EnrolmentCertificateAccessToken", null)
-                        .WithMany("RemoteAccessSites")
-                        .HasForeignKey("EnrolmentCertificateAccessTokenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.Site", "RemoteAccessSite")
-                        .WithMany()
-                        .HasForeignKey("SiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RemoteAccessSite");
-                });
-
             modelBuilder.Entity("Prime.Models.Address", b =>
                 {
                     b.HasOne("Prime.Models.Country", "Country")
@@ -21564,11 +21480,6 @@ namespace Prime.Migrations
                     b.Navigation("EnrolleeNotification");
 
                     b.Navigation("EnrolmentStatusReference");
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolmentCertificateAccessToken", b =>
-                {
-                    b.Navigation("RemoteAccessSites");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolmentStatus", b =>
