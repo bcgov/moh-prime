@@ -67,7 +67,7 @@ namespace Prime.Services
             {
                 careType.Vendors = await _context.HealthAuthorityCareTypeToVendors
                     .AsNoTracking()
-                    .Where(ct2v => ct2v.HealthAuthorityCareTypeId == careType.Id)
+                    .Where(ct2v => ct2v.HealthAuthorityCareTypeId == careType.Id && ct2v.DeletedDateTime == null)
                     .Select(ct2v => ct2v.HealthAuthorityVendor)
                     .ProjectTo<HealthAuthorityVendorViewModel>(_mapper.ConfigurationProvider)
                     .ToListAsync();
@@ -245,6 +245,45 @@ namespace Prime.Services
 
             return true;
         }
+        public async Task<bool> UpdateCareTypeVendorsAsync(int healthAuthorityId, IEnumerable<HealthAuthorityCareTypeVendorModel> careTypeVendors)
+        {
+            var existingCareTypeVendors = await _context.HealthAuthorityCareTypeToVendors
+                .Where(ctv => ctv.HealthAuthorityCareType.HealthAuthorityOrganizationId == healthAuthorityId)
+                .Include(ctv => ctv.HealthAuthorityCareType)
+                .Include(ctv => ctv.HealthAuthorityVendor)
+                .ToListAsync();
+
+            var haCareTypes = await _context.HealthAuthorityCareTypes.Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId).ToListAsync();
+            var haVendors = await _context.HealthAuthorityVendors.Where(v => v.HealthAuthorityOrganizationId == healthAuthorityId).ToListAsync();
+
+            // add new vendors
+            foreach (var ctv in careTypeVendors.OrderBy(ctv => ctv.CareType))
+            {
+                if (!existingCareTypeVendors.Any(ectv => ectv.HealthAuthorityCareType.CareType == ctv.CareType &&
+                    ectv.HealthAuthorityVendor.VendorCode == ctv.VendorCode))
+                {
+                    _context.HealthAuthorityCareTypeToVendors.Add(new HealthAuthorityCareTypeToVendor
+                    {
+                        HealthAuthorityCareTypeId = haCareTypes.First(ct => ct.CareType == ctv.CareType).Id,
+                        HealthAuthorityVendorId = haVendors.First(v => v.VendorCode == ctv.VendorCode).Id,
+                    });
+                }
+            }
+
+            // mark removed ones as deleted
+            foreach (var ectv in existingCareTypeVendors)
+            {
+                if (!careTypeVendors.Any(ctv => ectv.HealthAuthorityCareType.CareType == ctv.CareType &&
+                    ectv.HealthAuthorityVendor.VendorCode == ctv.VendorCode))
+                {
+                    ectv.DeletedDateTime = DateTime.Now;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
 
         public async Task<bool> ValidateSiteSelectionsAsync(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel)
         {
