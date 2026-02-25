@@ -221,18 +221,20 @@
   </app-page-subheader>
 
   <app-enrollee-property title="User Role"
+                         [hasError]="enrolmentErrors?.deviceProvider"
+                         errorMessage="Must have device provider information"
                          [makeBold]="true">
-    {{ enrolleeDeviceProvider.deviceProviderRoleCode | configCode: 'deviceProviderRoles'| default }}
+    {{ enrolleeDeviceProvider?.deviceProviderRoleCode | configCode: 'deviceProviderRoles'| default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Device Provider ID"
                          [makeBold]="true">
-    {{ enrolleeDeviceProvider.deviceProviderId | default }}
+    {{ enrolleeDeviceProvider?.deviceProviderId | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Certificate Number"
                          [makeBold]="true">
-    {{ enrolleeDeviceProvider.certificationNumber | default }}
+    {{ enrolleeDeviceProvider?.certificationNumber | default }}
   </app-enrollee-property>
 
   <button *ngIf="showEditRedirect"

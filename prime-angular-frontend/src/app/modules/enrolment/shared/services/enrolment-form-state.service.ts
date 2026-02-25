@@ -604,8 +604,10 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         const selfDeclarationDetails = selfDeclarations
           .find(esd => esd.selfDeclarationTypeCode === type)
           ?.selfDeclarationDetails;
+        const selfDeclaration = selfDeclarations
+          .find(esd => esd.selfDeclarationTypeCode === type);
         const adapted = {
-          [sd]: (selfDeclarationDetails) ? true : defaultValue,
+          [sd]: selfDeclaration ? (selfDeclarationDetails) ? true : defaultValue : null,
           [`${sd}Details`]: (selfDeclarationDetails) ? selfDeclarationDetails : null
         };
         return { ...sds, ...adapted };

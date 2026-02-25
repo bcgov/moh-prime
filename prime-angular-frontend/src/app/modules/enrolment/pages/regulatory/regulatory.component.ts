@@ -122,10 +122,16 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   public ngOnInit() {
-    this.isDeviceProvider = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
-      careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
-    this.hasOtherCareSetting = this.enrolmentService.enrolment.careSettings.some((careSetting) =>
-      careSetting.careSettingCode !== CareSettingEnum.DEVICE_PROVIDER);
+    this.isDeviceProvider = this.enrolmentService.isInitialEnrolment ?
+      this.enrolmentService.enrolment.careSettings.some((careSetting) =>
+        careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER) :
+      this.enrolmentFormStateService.json.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
+
+    this.hasOtherCareSetting = this.enrolmentService.isInitialEnrolment ?
+      this.enrolmentService.enrolment.careSettings.some((careSetting) =>
+        careSetting.careSettingCode !== CareSettingEnum.DEVICE_PROVIDER) :
+      this.enrolmentFormStateService.json.careSettings.some(cs => cs.careSettingCode !== CareSettingEnum.DEVICE_PROVIDER);
+
     this.createFormInstance();
     this.patchForm().subscribe(() => {
       this.initForm();

@@ -5,6 +5,7 @@ import { AbstractOverview } from '@lib/classes/abstract-overview.class';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { RegulatoryForm } from './regulatory-form.model';
+import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
 
 @Component({
   selector: 'app-regulatory-overview',
@@ -23,17 +24,17 @@ import { RegulatoryForm } from './regulatory-form.model';
 
       <app-enrollee-property title="User Role"
                             [makeBold]="true">
-        {{ regulatory?.enrolleeDeviceProviders[0].deviceProviderRoleCode | configCode: 'deviecProviderRoles' | default }}
+        {{ deviceProviderUseRoleCode | configCode: 'deviecProviderRoles' | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="Device Provider ID"
                             [makeBold]="true">
-        {{ regulatory?.enrolleeDeviceProviders[0].deviceProviderId | default }}
+        {{ deviceProviderId | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="Certificate Number"
                             [makeBold]="true">
-        {{ regulatory?.enrolleeDeviceProviders[0].certificationNumber | default }}
+        {{ certificationNumber | default }}
       </app-enrollee-property>
       <button mat-flat-button
           color="primary"
@@ -148,6 +149,21 @@ import { RegulatoryForm } from './regulatory-form.model';
 export class RegulatoryOverviewComponent extends AbstractOverview {
   @Input() public regulatory: RegulatoryForm;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
+
+  public get deviceProviderUseRoleCode(): string {
+    return this.regulatory?.enrolleeDeviceProviders ?
+      this.regulatory?.enrolleeDeviceProviders[0].deviceProviderRoleCode : "";
+  }
+
+  public get deviceProviderId(): string {
+    return this.regulatory?.enrolleeDeviceProviders ?
+      this.regulatory?.enrolleeDeviceProviders[0].deviceProviderId : "";
+  }
+
+  public get certificationNumber(): string {
+    return this.regulatory?.enrolleeDeviceProviders ?
+      this.regulatory?.enrolleeDeviceProviders[0].certificationNumber : "";
+  }
 
   constructor(
     route: ActivatedRoute,

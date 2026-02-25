@@ -18,6 +18,7 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Models.VerifiableCredentials;
 using Prime.ViewModels;
+using System.Security.Cryptography;
 
 namespace Prime.Services
 {
@@ -798,6 +799,9 @@ namespace Prime.Services
         /// <param name="enrolleeId"></param>
         public async Task<IEnumerable<SelfDeclarationViewModel>> GetSelfDeclarationsAsync(int enrolleeId)
         {
+            var enrolleeCareSetting = await GetCareSettingsAsync(enrolleeId);
+            var isDeviceProvider = enrolleeCareSetting.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.DeviceProvider);
+
             var answered = await _context.Set<SelfDeclaration>()
                 .Where(sd => sd.EnrolleeId == enrolleeId)
                 .ProjectTo<SelfDeclarationViewModel>(_mapper.ConfigurationProvider)
@@ -805,7 +809,7 @@ namespace Prime.Services
 
             var answeredCodes = answered.Select(a => a.SelfDeclarationTypeCode);
             var unAnswered = await _context.Set<SelfDeclarationType>()
-                .Where(t => !answeredCodes.Contains(t.Code))
+                .Where(t => !answeredCodes.Contains(t.Code) && (isDeviceProvider || t.Code != (int)SelfDeclarationTypeCode.RegistrationSuspended_DeviceProvider))
                 .Select(t => new SelfDeclarationViewModel
                 {
                     EnrolleeId = enrolleeId,
