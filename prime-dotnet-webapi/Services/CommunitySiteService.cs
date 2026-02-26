@@ -746,6 +746,13 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
+        public async Task<BusinessLicence> GetBusinessLicenceAsync(int siteId, int businessLicenceId)
+        {
+            return await _context.BusinessLicences
+                .Where(bl => bl.SiteId == siteId && bl.Id == businessLicenceId)
+                .SingleOrDefaultAsync();
+        }
+
         public async Task<bool> SiteExistsAsync(int siteId)
         {
             return await _context.CommunitySites
