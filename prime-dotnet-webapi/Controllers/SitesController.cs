@@ -849,7 +849,7 @@ namespace Prime.Controllers
                 return NotFound($"No business licence document found for site with id {siteId}");
             }
 
-            var token = await _documentService.GetDownloadTokenForBusinessLicenceDocument(siteId);
+            var token = await _documentService.GetDownloadTokenForBusinessLicenceDocument(siteId, businessLicenceId);
 
             return Ok(token);
         }
