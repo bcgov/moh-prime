@@ -101,6 +101,16 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     this.formState.businessLicenceGuid.patchValue(document.documentGuid);
     this.uploadedFile = true;
     this.hasNoBusinessLicenceError = false;
+
+    // Flag business licence as updated if a different document is uploaded
+    if (this.site.businessLicence?.businessLicenceDocument &&
+      document.documentGuid != this.site.businessLicence?.businessLicenceDocument?.documentGuid) {
+
+      const { filename } = this.siteFormStateService.businessLicenceFormState;
+      filename.patchValue(document.filename);
+
+      this.formState.flagBusinessLicenceUpdated(true);
+    }
   }
 
   public onRemoveDocument(_: string): void {
