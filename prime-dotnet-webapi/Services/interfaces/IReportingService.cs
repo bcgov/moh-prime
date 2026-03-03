@@ -22,5 +22,20 @@ namespace Prime.Services
         /// </summary>
         /// <returns></returns>
         Task<int> PopulateTransactionLogTempAsync(int numberInDays);
+        /// <summary>
+        /// Archive number of days old records from PharmanetTransactionLog table to PharmanetTransactionLogArchive
+        /// </summary>
+        /// <returns></returns>
+        Task<int> ArchiveTransactionLogAsync(int numberOfDays);
+        /// <summary>
+        /// Return a string showing the date range of the transaction log in the archive table, return null if there is no record
+        /// </summary>
+        /// <returns></returns>
+        Task<string> GetArchiveTransactionLogStringAsync();
+        /// <summary>
+        /// Clear the log record in PharmanetTransactionLogArchive table and it will be ready for next archive process
+        /// </summary>
+        /// <returns></returns>
+        Task<int> ClearTransactionLogArchiveAsync();
     }
 }

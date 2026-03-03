@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Prime.Models;
 using Prime.HttpClients;
 using System.Text;
+using FluentValidation.Validators;
 
 namespace Prime.Services
 {
@@ -158,6 +159,75 @@ namespace Prime.Services
 
             _context.Database.SetCommandTimeout(300);
             int result = await _context.Database.ExecuteSqlRawAsync(copySql.ToString());
+
+            return result;
+        }
+
+        public async Task<int> ArchiveTransactionLogAsync(int numberOfDays)
+        {
+            // if there is already record in archive table, do not execute the archive process as the archive log needs to be pushed to S3 storage
+            // before the new process can be executed.
+            if (await _context.PharmanetTransactionLogArchives.AnyAsync())
+            {
+                return 0;
+            }
+
+            StringBuilder archiveSql = new StringBuilder();
+            archiveSql.Append("insert into \"PharmanetTransactionLogArchive\"");
+            archiveSql.Append("(\"Id\", \"CreatedTimeStamp\", \"TransactionId\", \"TxDateTime\", \"UserId\", \"PharmacyId\", \"TransactionType\", ");
+            archiveSql.Append("\"TransactionSubType\", \"PractitionerId\", \"CollegePrefix\", \"TransactionOutcome\", \"ProviderSoftwareId\", ");
+            archiveSql.Append("\"ProviderSoftwareVersion\", \"LocationIpAddress\", \"SourceIpAddress\")");
+            archiveSql.Append("SELECT \"Id\", \"CreatedTimeStamp\", \"TransactionId\", \"TxDateTime\", \"UserId\", \"PharmacyId\", \"TransactionType\", ");
+            archiveSql.Append("\"TransactionSubType\", \"PractitionerId\", \"CollegePrefix\", \"TransactionOutcome\", \"ProviderSoftwareId\", ");
+            archiveSql.Append("\"ProviderSoftwareVersion\", \"LocationIpAddress\", \"SourceIpAddress\"");
+            archiveSql.Append("from \"PharmanetTransactionLog\" ptl ");
+            archiveSql.Append($"where \"TxDateTime\" < (select min(\"TxDateTime\") + interval '{numberOfDays} day' from \"PharmanetTransactionLog\" )");
+
+            _context.Database.SetCommandTimeout(300);
+            int result = await _context.Database.ExecuteSqlRawAsync(archiveSql.ToString());
+
+            // delete the archived records from main log table
+            StringBuilder deleteSql = new StringBuilder();
+            deleteSql.Append("delete from \"PharmanetTransactionLog\" ptl ");
+            deleteSql.Append($"where ptl.\"Id\" in (select \"Id\" from \"PharmanetTransactionLogArchive\")");
+
+            await _context.Database.ExecuteSqlRawAsync(deleteSql.ToString());
+
+            return result;
+        }
+
+        public async Task<string> GetArchiveTransactionLogStringAsync()
+        {
+            _context.Database.SetCommandTimeout(300);
+            var log = await _context.PharmanetTransactionLogArchives
+                .Select(l => l.TxDateTime)
+                .GroupBy(l => 1)
+                .Select(ll => new
+                {
+                    MaxDate = ll.Max(),
+                    MinDate = ll.Min(),
+                }).FirstOrDefaultAsync();
+
+            if (log == null)
+            {
+                return null;
+            }
+            else
+            {
+                if (log.MaxDate == log.MinDate)
+                {
+                    return $"{log.MaxDate:dd MMM yyyy}";
+                }
+                else
+                {
+                    return $"{log.MinDate:dd-MMM-yyyy}_{log.MaxDate:dd-MMM-yyyy}";
+                }
+            }
+        }
+
+        public async Task<int> ClearTransactionLogArchiveAsync()
+        {
+            int result = await _context.PharmanetTransactionLogArchives.ExecuteDeleteAsync();
 
             return result;
         }
