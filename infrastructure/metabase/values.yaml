@@ -1,0 +1,15 @@
+app_name: utilities
+service_name: metabase
+namespace: 9c33a9-tools
+image_tag: latest
+pvc_capacity: 1Gi
+metabase_cpu_request: 200m
+metabase_memory_request: 1536Mi
+postgres_namespace: openshift
+database_host: metabase-database
+database_port: 5432
+database_username: metabase-user
+database_password: ""
+database_name: metabase
+postgresql_version: 10-el8
+metabase_database_memory_limit: 521Mi
