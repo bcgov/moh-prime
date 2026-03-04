@@ -208,16 +208,11 @@ namespace Prime.Services
                     MinDate = ll.Min(),
                 }).FirstOrDefaultAsync();
 
-            if (log == null)
-            {
-                return null;
-            }
-            else
-            {
-                return log.MaxDate == log.MinDate
+            return log == null
+                ? null
+                : log.MaxDate == log.MinDate
                     ? $"{log.MaxDate:dd MMM yyyy}"
                     : $"{log.MinDate:dd-MMM-yyyy}_{log.MaxDate:dd-MMM-yyyy}";
-            }
         }
 
         public async Task<int> ClearTransactionLogArchiveAsync()
