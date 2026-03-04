@@ -214,14 +214,9 @@ namespace Prime.Services
             }
             else
             {
-                if (log.MaxDate == log.MinDate)
-                {
-                    return $"{log.MaxDate:dd MMM yyyy}";
-                }
-                else
-                {
-                    return $"{log.MinDate:dd-MMM-yyyy}_{log.MaxDate:dd-MMM-yyyy}";
-                }
+                return log.MaxDate == log.MinDate
+                    ? $"{log.MaxDate:dd MMM yyyy}"
+                    : $"{log.MinDate:dd-MMM-yyyy}_{log.MaxDate:dd-MMM-yyyy}";
             }
         }
 
