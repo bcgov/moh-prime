@@ -107,14 +107,14 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> ArchiveTransactionLog(int numberOfDays = 1)
+        public async Task<ActionResult> ArchiveTransactionLog(int numberOfDays = 1, bool forceArchive = false)
         {
             if (numberOfDays <= 0)
             {
                 return BadRequest();
             }
 
-            var result = await _reportingService.ArchiveTransactionLogAsync(numberOfDays);
+            var result = await _reportingService.ArchiveTransactionLogAsync(numberOfDays, forceArchive);
             return Ok(result);
         }
 

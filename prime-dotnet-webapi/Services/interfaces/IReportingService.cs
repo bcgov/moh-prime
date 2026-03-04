@@ -26,7 +26,7 @@ namespace Prime.Services
         /// Archive number of days old records from PharmanetTransactionLog table to PharmanetTransactionLogArchive
         /// </summary>
         /// <returns></returns>
-        Task<int> ArchiveTransactionLogAsync(int numberOfDays);
+        Task<int> ArchiveTransactionLogAsync(int numberOfDays, bool forceArchive = false);
         /// <summary>
         /// Return a string showing the date range of the transaction log in the archive table, return null if there is no record
         /// </summary>

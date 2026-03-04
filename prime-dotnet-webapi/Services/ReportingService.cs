@@ -163,11 +163,11 @@ namespace Prime.Services
             return result;
         }
 
-        public async Task<int> ArchiveTransactionLogAsync(int numberOfDays)
+        public async Task<int> ArchiveTransactionLogAsync(int numberOfDays, bool forceArchive = false)
         {
             // if there is already record in archive table, do not execute the archive process as the archive log needs to be pushed to S3 storage
             // before the new process can be executed.
-            if (await _context.PharmanetTransactionLogArchives.AnyAsync())
+            if (await _context.PharmanetTransactionLogArchives.AnyAsync() && !forceArchive)
             {
                 return 0;
             }
@@ -181,7 +181,7 @@ namespace Prime.Services
             archiveSql.Append("\"TransactionSubType\", \"PractitionerId\", \"CollegePrefix\", \"TransactionOutcome\", \"ProviderSoftwareId\", ");
             archiveSql.Append("\"ProviderSoftwareVersion\", \"LocationIpAddress\", \"SourceIpAddress\"");
             archiveSql.Append("from \"PharmanetTransactionLog\" ptl ");
-            archiveSql.Append($"where \"TxDateTime\" < (select min(\"TxDateTime\") + interval '{numberOfDays} day' from \"PharmanetTransactionLog\" )");
+            archiveSql.Append($"where \"TxDateTime\" < (select cast(min(\"TxDateTime\") as date) + interval '{numberOfDays} day' from \"PharmanetTransactionLog\" )");
 
             _context.Database.SetCommandTimeout(300);
             int result = await _context.Database.ExecuteSqlRawAsync(archiveSql.ToString());
@@ -210,8 +210,8 @@ namespace Prime.Services
 
             return log == null
                 ? null
-                : log.MaxDate == log.MinDate
-                    ? $"{log.MaxDate:dd MMM yyyy}"
+                : log.MaxDate.Date.Equals(log.MinDate.Date)
+                    ? $"{log.MaxDate:dd-MMM-yyyy}"
                     : $"{log.MinDate:dd-MMM-yyyy}_{log.MaxDate:dd-MMM-yyyy}";
         }
 
