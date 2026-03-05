@@ -274,6 +274,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       requiresLicenceUpdate: enrolment.certifications.some((cert: CollegeCertification) =>
         this.configService.licenses.some(l => l.code === cert.licenseCode && l.collegeLicenses.some(cl => cl.collegeCode === cert.collegeCode && cl.discontinued))),
       requireRedoSelfDeclaration: enrolment.requireRedoSelfDeclaration,
+      requireUpdateSelfDeclaration: this.enrolmentFormStateService.json.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
+        && this.enrolmentService.enrolment.selfDeclarations.length == 4 && this.enrolmentService.enrolment.selfDeclarationCompletedDate == enrolment.selfDeclarationCompletedDate,
     };
   }
 
