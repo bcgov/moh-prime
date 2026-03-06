@@ -143,6 +143,7 @@ namespace Prime
         public DbSet<PlrProvider> PlrProviders { get; set; }
         public DbSet<PharmanetTransactionLog> PharmanetTransactionLogs { get; set; }
         public DbSet<PharmanetTransactionLogTemp> PharmanetTransactionLogTemps { get; set; }
+        public DbSet<PharmanetTransactionLogArchive> PharmanetTransactionLogArchives { get; set; }
         public DbSet<CollegeForPlrRoleType> CollegeForPlrRoleTypes { get; set; }
         public DbSet<Practitioner> Practitioner { get; set; }
 
