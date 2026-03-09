@@ -246,6 +246,28 @@ objects:
                   value: ${ENVIRONMENT_FRIENDLY_NAME}
                 - name: ENVIRONMENT_NAME
                   value: ${ENVIRONMENT_NAME}
+                - name: PRIME_WEB_API_URL
+                  value: 'http://prod-webapi:8080'
+                - name: KEYCLOAK_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: prime-service-account
+                      key: prime_service_account_client_secret
+                - name: KEYCLOAK_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: prime-service-account
+                      key: prime_service_account_client_id
+                - name: KEYCLOAK_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: keycloak
+                      key: KEYCLOAK_URL
+                - name: KEYCLOAK_REALM
+                  valueFrom:
+                    secretKeyRef:
+                      name: keycloak
+                      key: KEYCLOAK_REALM
               resources:
                 requests:
                   cpu: ${CPU_REQUEST}
