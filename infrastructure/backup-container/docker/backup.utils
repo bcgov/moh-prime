@@ -19,6 +19,7 @@ function backupDatabase(){
 
     if (( ${_rtnCd} != 0 )); then
       rm -rfvd ${_backupFile}
+      rm -rfvd ${_logBackupFile}
     fi
 
     return ${_rtnCd}
@@ -115,12 +116,12 @@ function runBackups(){
 
           s3Backup "${backupPath}"
   
-          if[[ ! -z "${logBackupFilename}" ]]; then
+          if [[ ! -z "${logBackupFilename}" ]]; then
             logBackupPath=$(finalizeBackup "${logBackupFilename}")
             logBackupSize=$(getFileSize "${logBackupPath}")
             logInfo "Successfully backed up transaction log archive table for ${database}.\nBackup Size: ${logBackupSize}\nBackup written to ${logBackupPath}."
 
-            if[[ logBackupSize -gt 0 ]]; then
+            if [[ logBackupSize -gt 0 ]]; then
               s3Backup "${logBackupPath}"
               # clear_archive_table
             else
