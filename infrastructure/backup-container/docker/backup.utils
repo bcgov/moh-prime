@@ -123,7 +123,7 @@ function runBackups(){
 
             if [[ logBackupSize -gt 0 ]]; then
               s3Backup "${logBackupPath}"
-              # clear_archive_table
+              clear_archive_table
             else
               echoYellow "The transaction log archive table backup for ${database} is empty.  Skipping upload to S3."
             fi

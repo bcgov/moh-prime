@@ -4,7 +4,7 @@
 # -----------------------------------------------------------------------------------------------------------------
 
 # Function to get the keycloak token
-function get_key_token() {
+function get_keycloak_token() {
     (
         local TOKEN_RESPONSE=$(curl -X POST "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/token" \
             -H "Content-Type: application/x-www-form-urlencoded" \
@@ -34,7 +34,7 @@ function get_archive_date_range(){
     (
         echo "run get_archive_date_range"
 
-        local API_TOKEN=$(get_api_token)
+        local API_TOKEN=$(get_keycloak_token)
         # Use the token in the Authorization header (assuming Bearer token)
         local RESPONSE=$(curl -s -X GET "${PRIME_WEB_API_URL}/api/jobs/archive/transaction-log" \
             -H "Authorization: Bearer $API_TOKEN" \
@@ -63,7 +63,7 @@ function clear_archive_table(){
     (
         echo "run clear_archive_table"
 
-        local API_TOKEN=$(get_api_token)
+        local API_TOKEN=$(get_keycloak_token)
         # Use the token in the Authorization header (assuming Bearer token)
         local RESPONSE=$(curl -s -X DELETE "${PRIME_WEB_API_URL}/api/jobs/archive/transaction-log" \
             -H "Authorization: Bearer $API_TOKEN" \
