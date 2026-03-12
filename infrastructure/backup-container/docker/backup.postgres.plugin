@@ -36,7 +36,10 @@ function onBackupDatabase(){
     rm "${BACKUP_DIR}roles.sql" && rm "${BACKUP_DIR}backup.sql"
     
     # If a log backup file was specified, backup the transaction log archive table.
+
     if [[ ! -z "${_logBackupFile}" ]]; then
+     logInfo "Try to create log backup file\n"
+     
      pg_dump --data-only -t '"PharmanetTransactionLogArchive"' -U "${_username}" "${_database}" > "${BACKUP_DIR}log_backup.sql"
      tar -C ${BACKUP_DIR} -cvzf ${_logBackupFile} log_backup.sql
      rm "${BACKUP_DIR}log_backup.sql"

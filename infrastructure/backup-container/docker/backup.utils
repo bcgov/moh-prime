@@ -101,6 +101,8 @@ function runBackups(){
         filename=$(generateFilename "${backupDir}" "${database}")
         logBackupFilename=$(generateBackupLogFilename "${backupDir}" "${database}")
 
+        logInfo "logBackupFilename: ${logBackupFilename}\n"
+
         backupDatabase "${database}" "${filename}" "${logBackupFilename}"
 
         rtnCd=${?}

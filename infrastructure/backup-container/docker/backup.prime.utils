@@ -32,7 +32,7 @@ function get_keycloak_token() {
 # Function to get date range as string from prime-webapi
 function get_archive_date_range(){
     (
-        echo "run get_archive_date_range"
+        # echo "run get_archive_date_range"
 
         local API_TOKEN=$(get_keycloak_token)
         # Use the token in the Authorization header (assuming Bearer token)
@@ -61,7 +61,7 @@ function get_archive_date_range(){
 # Function to clear the transaction log archive table
 function clear_archive_table(){
     (
-        echo "run clear_archive_table"
+        # echo "run clear_archive_table"
 
         local API_TOKEN=$(get_keycloak_token)
         # Use the token in the Authorization header (assuming Bearer token)
