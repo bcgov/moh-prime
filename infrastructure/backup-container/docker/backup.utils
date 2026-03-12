@@ -6,15 +6,11 @@ function backupDatabase(){
   (
     _databaseSpec=${1}
     _fileName=${2}
-    _logBackupFileName=${3}
 
     _backupFile="${_fileName}${IN_PROGRESS_BACKUP_FILE_EXTENSION}"
-    _logBackupFile="${_logBackupFileName}${IN_PROGRESS_BACKUP_FILE_EXTENSION}"
 
     touchBackupFile "${_backupFile}"
-    touchBackupFile "${_logBackupFile}"
-
-    onBackupDatabase "${_databaseSpec}" "${_backupFile}" "${_logBackupFile}"
+    onBackupDatabase "${_databaseSpec}" "${_backupFile}"
     _rtnCd=${?}
 
     if (( ${_rtnCd} != 0 )); then
@@ -98,36 +94,18 @@ function runBackups(){
       if isForContainerType ${database}; then
         local startTime=$(date +%s%N)
         filename=$(generateFilename "${backupDir}" "${database}")
-        logBackupFilename=$(generateBackupLogFilename "${backupDir}" "${database}")
-
-        backupDatabase "${database}" "${filename}" "${logBackupFilename}"
-
+        backupDatabase "${database}" "${filename}"
         rtnCd=${?}
         local endTime=$(date +%s%N)
         local elapsedTime="\n\nElapsed time: $(getElapsedTime ${startTime} ${endTime}) - Status Code: ${rtnCd}"
 
         if (( ${rtnCd} == 0 )); then
           backupPath=$(finalizeBackup "${filename}")
-
           dbSize=$(getDbSize "${database}")
           backupSize=$(getFileSize "${backupPath}")
           logInfo "Successfully backed up ${database}.\nBackup written to ${backupPath}.\nDatabase Size: ${dbSize}\nBackup Size: ${backupSize}${elapsedTime}"
 
           s3Backup "${backupPath}"
-  
-          if[[ ! -z "${logBackupFilename}" ]]; then
-            logBackupPath=$(finalizeBackup "${logBackupFilename}")
-            logBackupSize=$(getFileSize "${logBackupPath}")
-            logInfo "Successfully backed up transaction log archive table for ${database}.\nBackup Size: ${logBackupSize}\nBackup written to ${logBackupPath}."
-
-            if[[ logBackupSize -gt 0 ]]; then
-              s3Backup "${logBackupPath}"
-              # clear_archive_table
-            else
-              echoYellow "The transaction log archive table backup for ${database} is empty.  Skipping upload to S3."
-            fi
-          fi
-  
           ftpBackup "${filename}"
           pruneBackups "${backupDir}" "${database}"
         else
