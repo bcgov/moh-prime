@@ -18,7 +18,6 @@ function onBackupDatabase(){
 
     _databaseSpec=${1}
     _backupFile=${2}
-    _logBackupFile=${3}
 
     _hostname=$(getHostname ${_databaseSpec})
     _database=$(getDatabaseName ${_databaseSpec})
@@ -29,21 +28,10 @@ function onBackupDatabase(){
     echoGreen "Backing up '${_hostname}${_port:+:${_port}}${_database:+/${_database}}' to '${_backupFile}' ..."
 
     export PGPASSWORD=${_password}
-    # Create a backup of the database, excluding the transaction log tables, and a backup of the roles.  
     pg_dump -Fp -T '"PharmanetTransactionLog"' -T 'pharmanettransactionlog*' -h "${_hostname}" ${_portArg} -U "${_username}" "${_database}" > "${BACKUP_DIR}backup.sql"
     pg_dumpall -h "${_hostname}" ${_portArg} -U "${_username}"  --roles-only --no-role-passwords > "${BACKUP_DIR}roles.sql"
     tar -C ${BACKUP_DIR} -cvzf ${_backupFile} backup.sql roles.sql
     rm "${BACKUP_DIR}roles.sql" && rm "${BACKUP_DIR}backup.sql"
-    
-    # If a log backup file was specified, backup the transaction log archive table.
-    if [[ ! -z "${_logBackupFile}" ]]; then
-     pg_dump --data-only -t '"PharmanetTransactionLogArchive"' -U "${_username}" "${_database}" > "${BACKUP_DIR}log_backup.sql"
-     tar -C ${BACKUP_DIR} -cvzf ${_logBackupFile} log_backup.sql
-     rm "${BACKUP_DIR}log_backup.sql"
-    else
-      echoYellow "No log backup file specified.  Skipping backup of the transaction log archive table."
-    fi
-
     return ${PIPESTATUS[0]}
   )
 }
