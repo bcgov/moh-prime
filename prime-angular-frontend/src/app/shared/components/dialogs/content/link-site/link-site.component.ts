@@ -63,6 +63,10 @@ export class LinkSiteComponent implements OnInit {
     return this.form.get('organizationIdOrName') as UntypedFormControl;
   }
 
+  public get siteIdOrName(): UntypedFormControl {
+    return this.form.get('siteIdOrName') as UntypedFormControl;
+  }
+
   public onCancel() {
     this.dialogRef.close();
     this.linkSite.emit(false);
@@ -96,27 +100,64 @@ export class LinkSiteComponent implements OnInit {
     this.refreshSiteList(this.organizationId.value - 1000);
   }
 
-  public searchOrganization() {
+  public searchOrganizationSite() {
+    this.organizationId.reset();
+    this.predecessorSiteId.reset();
+
     this.organizationSearchClicked = true;
     this.showSiteList = false;
     this.showSaveButton = false;
     this.organizations = [];
     this.sites = [];
 
-    var value = this.organizationIdOrName.value;
 
-    if (!isNaN(Number(value))) {
-      this.organizationResource.getOrganizationById(Number(value) - 1000)
-        .subscribe({
-          next: (organization) => {
-            this.organizations = [organization];
-          }
-        });
-    } else if (value !== '') {
-      this.organizationResource.getOrganizationByName(this.organizationIdOrName.value.trim())
-        .subscribe(organizations => {
-          this.organizations = organizations;
-        });
+    var orgSearchValue = this.organizationIdOrName.value?.trim();
+    var siteSearchValue = this.siteIdOrName.value?.trim();
+
+    const siteIdRegExp = /^[a-zA-Z0-9]{3}$|^B0000[a-zA-Z0-9]{3}$/;
+
+    if (siteSearchValue !== '' && siteSearchValue !== undefined) {
+      if (siteIdRegExp.test(siteSearchValue)) {
+        this.organizationResource.getOrganizationSiteBySiteID(siteSearchValue.toUpperCase())
+          .subscribe(organizations => {
+            this.organizations = organizations;
+            if (organizations.length == 1) {
+              //set the organization
+              this.organizationId.setValue(organizations[0].id);
+              //set the site
+              const site = organizations[0].sites?.find(s => s.pec.toUpperCase() == siteSearchValue.toUpperCase());
+              this.predecessorSiteId.setValue(site?.id);
+            }
+          });
+      } else {
+        this.organizationResource.getOrganizationSiteBySiteName(siteSearchValue.toUpperCase())
+          .subscribe(organizations => {
+            this.organizations = organizations;
+            if (organizations.length == 1) {
+              //set the organization
+              this.organizationId.setValue(organizations[0].id);
+              //set the site
+              const site = organizations[0].sites?.find(s => s.doingBusinessAs.toUpperCase() == siteSearchValue.toUpperCase());
+              this.predecessorSiteId.setValue(site?.id);
+            }
+          });
+      }
+    } else if (orgSearchValue !== '' && orgSearchValue !== undefined) {
+      if (!isNaN(Number(orgSearchValue))) {
+        this.organizationResource.getOrganizationById(Number(orgSearchValue) - 1000)
+          .subscribe({
+            next: (organization) => {
+              this.organizations = [organization];
+              //set the organization
+              this.organizationId.setValue(organization.id);
+            }
+          });
+      } else {
+        this.organizationResource.getOrganizationByName(orgSearchValue)
+          .subscribe(organizations => {
+            this.organizations = organizations;
+          });
+      }
     }
     this.showOrganization = true;
   }
@@ -169,6 +210,7 @@ export class LinkSiteComponent implements OnInit {
   protected createFormInstance() {
     this.form = this.fb.group({
       organizationIdOrName: [null,],
+      siteIdOrName: [null,],
       organizationId: [null,],
       predecessorSiteId: [null, [Validators.required]],
     });
