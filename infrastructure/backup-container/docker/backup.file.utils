@@ -229,7 +229,7 @@ function generateBackupLogFilename(){
         echo ""
       else
         _coreFilename=$(generateCoreFilename ${_databaseSpec})
-        _filename="${_backupDir}${_coreFilename}_Transactionlog_${_dateRangeString}"
+        _filename="${_backupDir}${_coreFilename}_transaction_log_${_dateRangeString}"
         echo ${_filename}
       fi
     else

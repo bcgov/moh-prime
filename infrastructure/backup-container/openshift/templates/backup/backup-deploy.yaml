@@ -241,7 +241,10 @@ objects:
                 - name: ENVIRONMENT_NAME
                   value: ${ENVIRONMENT_NAME}
                 - name: PRIME_WEB_API_URL
-                  value: 'http://test-webapi:8080'
+                  valueFrom:
+                    secretKeyRef:
+                      name: backup-container
+                      key: prime-api-host
                 - name: KEYCLOAK_CLIENT_SECRET
                   valueFrom:
                     secretKeyRef:

@@ -129,6 +129,8 @@ function runBackups(){
             else
               echoYellow "The transaction log archive table backup for ${database} is empty.  Skipping upload to S3."
             fi
+
+            rm -fv "${logBackupPath}"
           fi
   
           ftpBackup "${filename}"
