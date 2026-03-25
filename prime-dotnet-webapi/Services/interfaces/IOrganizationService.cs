@@ -37,5 +37,7 @@ namespace Prime.Services
         Task FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(int organizationId);
         Task<int> UpdateMissingRegistrationIds();
         Task SetOrganizationDetailEditable(int organizationId);
+        Task<Organization[]> GetOrganizationSiteBySiteIdAsync(string pec);
+        Task<Organization[]> GetOrganizationSiteBySiteNameAsync(string siteName);
     }
 }
