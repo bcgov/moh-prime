@@ -214,6 +214,32 @@ function generateFilename(){
   )
 }
 
+function generateBackupLogFilename(){
+  (
+    _backupDir=${1}
+    _databaseSpec=${2}
+    _database=$(getDatabaseName ${_databaseSpec})
+
+    # Only generate backup log filename for prime databases since the backup log is only applicable to prime databases.
+    if [[ ${_database} == "prime-prod" || ${_database} == "prime-test" || ${_database} == "prime-dev" ]]; then
+
+      _dateRangeString=$(get_archive_date_range)
+      if [[ -z "${_dateRangeString}" ]]; then
+        logError "Failed to get date range string for backup log filename."
+        echo ""
+      else
+        _coreFilename=$(generateCoreFilename ${_databaseSpec})
+        _filename="${_backupDir}${_coreFilename}_transaction_log_${_dateRangeString}"
+        echo ${_filename}
+      fi
+    else
+      logError "Database ${_database} is not a prime database. do not generate backup log filename."
+      echo ""
+    fi  
+
+  )
+}
+
 function generateCoreFilename(){
   (
     _databaseSpec=${1}
