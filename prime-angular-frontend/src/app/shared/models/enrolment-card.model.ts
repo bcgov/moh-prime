@@ -3,4 +3,5 @@ export interface EnrolmentCard {
   agreementAcceptedDate: string;
   requestedRemoteAccess: boolean;
   submissionCreatedDate: string;
+  isCurrent: boolean;
 }
