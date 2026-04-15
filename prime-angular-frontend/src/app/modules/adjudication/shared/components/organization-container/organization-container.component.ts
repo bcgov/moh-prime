@@ -68,6 +68,18 @@ export class OrganizationContainerComponent implements OnInit {
     this.deleteOrganization(organizationId);
   }
 
+  public onArchive(organizationId: number) {
+    this.archiveOrganization(organizationId);
+  }
+
+  public onRestore(organizationId: number) {
+    this.organizationResource.restoreOrganization(organizationId)
+      .subscribe(() => {
+        let org = this.organizations.find((o) => o.id === organizationId);
+        org.isArchived = false;
+      });
+  }
+
   public onEnableOrgEditing(organizationId: number) {
     const request$ = this.siteResource.getSites(organizationId);
     request$
@@ -153,6 +165,35 @@ export class OrganizationContainerComponent implements OnInit {
           exhaustMap(() => this.organizationResource.deleteOrganization(organizationId)),
           exhaustMap(() => {
             this.organizations = this.organizations.filter((o) => o.id !== organizationId);
+            this.routeUtils.routeTo([AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.ORGANIZATIONS]);
+            return EMPTY;
+          })
+        ).subscribe();
+    }
+  }
+
+  private archiveOrganization(organizationId: number) {
+    if (organizationId && this.permissionService.hasRoles(Role.SUPER_ADMIN)) {
+
+      const data = {
+        title: 'Archive Organization',
+        message: 'Are you sure you want to archive this organization?Archiving an organization also archives all the organization\'s sites',
+        actionType: 'warn',
+        actionText: 'Archive Organization'
+      };
+
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? of(noop)
+              : EMPTY
+          ),
+          exhaustMap(() => this.organizationResource.archiveOrganization(organizationId)),
+          exhaustMap(() => {
+            let org = this.organizations.find((o) => o.id === organizationId);
+            org.isArchived = true;
             this.routeUtils.routeTo([AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.ORGANIZATIONS]);
             return EMPTY;
           })

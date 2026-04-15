@@ -63,7 +63,7 @@ export class OrganizationSitesComponent implements OnInit {
     ]).subscribe(([organization, sites]: [OrganizationAdminView, PaginatedList<SiteRegistrationListViewModel>]) => {
       this.organization = organization;
 
-      this.communityPharmacies.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST);
+      this.communityPharmacies.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY);
       this.privateCommunityHealthPractices.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
       this.deviceProviders.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
 

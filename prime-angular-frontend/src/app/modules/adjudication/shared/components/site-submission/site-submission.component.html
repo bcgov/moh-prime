@@ -240,6 +240,11 @@
     {{ contact?.phone | default }}
   </app-enrollee-property>
 
+  <app-enrollee-property *ngIf="contact?.phoneExtension"
+                         title="Phone Extension">
+    {{ contact?.phoneExtension | default }}
+  </app-enrollee-property>
+
   <app-enrollee-property *ngIf="contact?.fax"
                          title="Fax">
     {{ contact?.fax | default }}

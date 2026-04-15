@@ -106,7 +106,7 @@ describe('CareSettingComponent', () => {
       it('should return a list shorter than the list of all care setting types', () => {
         const mockCareTypeFormGroup = (component as any).enrolmentFormStateService.buildCareSettingForm() as UntypedFormGroup;
         component.addCareSetting();
-        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACIST });
+        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACY });
 
         expect(component.filterCareSettingTypes(mockCareTypeFormGroup).length).toBeLessThan(component.careSettingTypes.length);
       });
@@ -115,9 +115,9 @@ describe('CareSettingComponent', () => {
     describe('with adding one care setting and making one selection', () => {
       it('should return a list shorter than the list of all care setting types', () => {
         const mockCareTypeFormGroup = (component as any).enrolmentFormStateService.buildCareSettingForm() as UntypedFormGroup;
-        mockCareTypeFormGroup.setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACIST });
+        mockCareTypeFormGroup.setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACY });
         component.addCareSetting();
-        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACIST });
+        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACY });
 
         expect(component.filterCareSettingTypes(mockCareTypeFormGroup).length).toEqual(component.careSettingTypes.length);
       });
@@ -137,7 +137,7 @@ describe('CareSettingComponent', () => {
     describe('with care setting other than Health Authority selected', () => {
       it('hasSelectedHACareSetting should return false', () => {
         component.addCareSetting();
-        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACIST });
+        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACY });
 
         expect(component.hasSelectedHACareSetting()).toBeFalse();
       });

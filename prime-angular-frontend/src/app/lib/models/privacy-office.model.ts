@@ -5,10 +5,12 @@ export interface PrivacyOffice {
   phone: string;
   physicalAddress: Address;
   privacyOfficer: {
+    id: number;
     firstName: string;
     lastName: string;
     email: string;
     phone: string;
+    phoneExtension?: string;
     smsPhone?: string;
   };
 }

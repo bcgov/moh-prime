@@ -75,13 +75,6 @@
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
 
-    <button *ngIf="showUpdateBusinessLicence()"
-            mat-flat-button
-            color="primary"
-            class="mb-4"
-            (click)="onRouteRelative(['./', SiteRoutes.BUSINESS_LICENCE_RENEWAL])">
-      Update Business Licence
-    </button>
 
     <app-enrollee-property title="Doing Business As">
       {{ site?.doingBusinessAs | default }}
@@ -99,12 +92,12 @@
     <ng-container *ngIf="!admin; else businessLicenceListView">
       <ng-container
                     *ngIf="(site.businessLicence?.businessLicenceDocument || businessLicenceUpdated); else deferredLicence">
-        <app-enrollee-property title="Expiry"
+        <app-enrollee-property title="Business Licence Expiry Date"
                                [errorMessage]="'Please update business licence'">
           {{ site.businessLicence?.expiryDate | formatDate | default }}
         </app-enrollee-property>
 
-        <app-enrollee-property title="Filename"
+        <app-enrollee-property title="Business Licence Filename"
                                [hasError]="!site.businessLicence?.expiryDate && withinRenewalPeriod && !businessLicenceUpdated"
                                [errorMessage]="'Please update business licence'">
           <ng-container *ngIf="!businessLicenceUpdated; else businessLicenceUpdatedMessage">
@@ -140,6 +133,14 @@
         </ng-template>
       </ng-template>
     </ng-container>
+
+    <button *ngIf="showUpdateBusinessLicence()"
+            mat-flat-button
+            color="primary"
+            class="mb-4 mt-4"
+            (click)="onRouteRelative(['./', SiteRoutes.BUSINESS_LICENCE_RENEWAL])">
+      Update Business Licence
+    </button>
 
     <ng-template #businessLicenceListView>
       <ng-container *ngFor="let businessLicence of site.businessLicences">
