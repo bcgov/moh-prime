@@ -48,7 +48,7 @@ export class EnrolmentRoutes {
   public static STEP_COLLEGE = 'College /<br/>Professional /<br/>Job Info';
   public static STEP_SELF_DECLARATION = 'Self-Declaration';
   public static STEP_REVIEW = 'Review';
-  public static STEP_TOA = 'Terms of Access';
+  public static STEP_TOA = 'Terms of <br/>Access ';
   public static STEP_ADMIN_EMAIL = 'Administrator Email';
   public static STEP_COMPLETE = 'Completed';
 
@@ -103,7 +103,6 @@ export class EnrolmentRoutes {
   public static enrolmentEditableRoutes(): string[] {
     return [
       EnrolmentRoutes.CURRENT_ACCESS_TERM,
-      EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
       EnrolmentRoutes.PHARMANET_TRANSACTIONS,
       EnrolmentRoutes.ACCESS_TERMS
     ];

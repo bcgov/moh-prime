@@ -14,6 +14,10 @@
   color: orangered;
 }
 
+.archived {
+  color: #dc3545;
+}
+
 .pec-alert {
   color: theme-palette(yellow);
   font-size: large;
@@ -38,4 +42,8 @@
 
 .mat-mdc-cell {
   padding: 0 10px 0 0;
+}
+
+.mat-mdc-row {
+  font-family: 'BC Sans';
 }

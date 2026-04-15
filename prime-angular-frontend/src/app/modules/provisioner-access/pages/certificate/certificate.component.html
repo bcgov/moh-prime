@@ -14,8 +14,15 @@
 
     <p class="font-weight-bold mb-5">
       {{ certificate.gpid | uppercase }}
+      <button mat-icon-button
+              type="button"
+              aria-label="Copy your GPID to clipboard"
+              matTooltip="Copy your GPID to clipboard"
+              [cdkCopyToClipboard]="gpid"
+              (cdkCopyToClipboardCopied)="onCopy()">
+        <mat-icon>content_paste</mat-icon>
+      </button>
     </p>
-
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>User Information</ng-container>
     </app-page-subheader>
@@ -77,6 +84,21 @@
                            [makeBold]="true">
       None
     </app-enrollee-property>
+
+    <ng-container *ngFor="let remoteSite of certificate.remoteAccessSite">
+      <app-enrollee-property title="Site Approved for Remote Access"
+                             [makeBold]="true">
+        <ng-container>
+          {{ remoteSite.doingBusinessAs | default }}
+        </ng-container>
+        <address>
+          {{ remoteSite.physicalAddress?.street | default }},
+          {{ remoteSite.physicalAddress?.city | default }}
+          {{ remoteSite.physicalAddress?.provinceCode | default }}
+          {{ remoteSite.physicalAddress?.postal | default }}
+        </address>
+      </app-enrollee-property>
+    </ng-container>
 
   </ng-container>
 

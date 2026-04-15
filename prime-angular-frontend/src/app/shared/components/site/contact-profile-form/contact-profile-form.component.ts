@@ -93,6 +93,10 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
     return this.form.get('phone') as UntypedFormControl;
   }
 
+  public get phoneExtension(): UntypedFormControl {
+    return this.form.get('phoneExtension') as UntypedFormControl;
+  }
+
   public get fax(): UntypedFormControl {
     return this.form.get('fax') as UntypedFormControl;
   }

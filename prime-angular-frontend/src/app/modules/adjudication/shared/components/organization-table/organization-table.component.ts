@@ -19,7 +19,10 @@ export class OrganizationTableComponent implements OnInit, OnChanges {
 
   @Output() public refresh: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
-  @Output() public delete: EventEmitter<{ [key: string]: number }>;
+  @Output() public delete: EventEmitter<number>;
+  @Output() public archive: EventEmitter<number>;
+  @Output() public restore: EventEmitter<number>;
+  @Output() public enableOrgEditing: EventEmitter<number>;
   @Output() public redirectSiteRegistration: EventEmitter<string | (string | number)[]>;
 
   public busy: Subscription;
@@ -36,7 +39,10 @@ export class OrganizationTableComponent implements OnInit, OnChanges {
   ) {
     this.refresh = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
-    this.delete = new EventEmitter<{ [key: string]: number }>();
+    this.delete = new EventEmitter<number>();
+    this.archive = new EventEmitter<number>();
+    this.restore = new EventEmitter<number>();
+    this.enableOrgEditing = new EventEmitter<number>();
     this.redirectSiteRegistration = new EventEmitter<string | (string | number)[]>();
 
     this.columns = [
@@ -47,6 +53,7 @@ export class OrganizationTableComponent implements OnInit, OnChanges {
       'signingAuthority',
       'createdDate',
       'validSite',
+      'editable',
       'actions'
     ];
     this.dataSource = new MatTableDataSource<OrganizationAdminView>([]);
@@ -73,7 +80,29 @@ export class OrganizationTableComponent implements OnInit, OnChanges {
     this.dataSource.data = this.organizations;
   }
 
-  public onDelete(record: { [key: string]: number }) {
-    this.delete.emit(record);
+  public onDelete(organizationId: number) {
+    this.delete.emit(organizationId);
+  }
+
+  public onArchive(organizationId: number): void {
+    this.archive.emit(organizationId);
+  }
+
+  public onRestore(organizationId: number): void {
+    this.restore.emit(organizationId);
+  }
+
+  public onEnableOrgEditing(organizationId: number): void {
+    this.enableOrgEditing.emit(organizationId);
+  }
+
+  public statusColour(organization: OrganizationAdminView): string {
+    if (organization.isArchived) {
+      return 'archived';
+    } else if (!organization.hasSubmittedSite) {
+      return 'editable';
+    } else {
+      return 'submitted';
+    }
   }
 }

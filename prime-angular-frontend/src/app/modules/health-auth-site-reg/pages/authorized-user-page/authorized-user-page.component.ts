@@ -21,6 +21,7 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { AuthorizedUserFormState } from './authorized-user-form-state.class';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-authorized-user-page',
@@ -58,7 +59,11 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
-    this.healthAuthorities = configService.healthAuthorities;
+    if (this.authService.passcode !== undefined) {
+      this.healthAuthorities = configService.healthAuthorities.filter(ha => ha.passcode === this.authService.passcode);
+    } else {
+      this.healthAuthorities = configService.healthAuthorities;
+    }
   }
 
   public onPreferredNameChange({ checked }: ToggleContentChange): void {
@@ -101,6 +106,10 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
         })
       )
       .subscribe(() => this.initForm());
+
+    if (this.healthAuthorities.length === 1) {
+      this.formState.healthAuthorityCode.setValue(this.healthAuthorities[0].code);
+    }
   }
 
   protected createFormInstance(): void {

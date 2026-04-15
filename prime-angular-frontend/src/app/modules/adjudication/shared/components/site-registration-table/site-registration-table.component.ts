@@ -110,7 +110,7 @@ export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
   }
 
   public displayMissingBusinessLicence(row: SiteRegistrationListViewModel): string {
-    if (row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+    if (row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY) {
       if (row.missingBusinessLicence === undefined) {
         row.missingBusinessLicence = row.businessLicence === null ||
           row.businessLicence.businessLicenceDocument === null
@@ -180,6 +180,20 @@ export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
 
   public onPecFilter(pec: string) {
     this.pecFilter.emit(pec);
+  }
+
+  public onFilterByLink(row: SiteRegistrationListViewModel) {
+    var site = row.predecessorSite ?
+      row.predecessorSite.site :
+      row.successorSite.site;
+    this.pecFilter.emit(`${site.pec}, ${row.pec}`);
+  }
+
+  public getPredecessorSiteText(row: SiteRegistrationListViewModel) {
+    return `Predecessor Site: ${row.predecessorSite.site.doingBusinessAs} (${row.predecessorSite.site.pec})`
+  }
+  public getSuccessorSiteText(row: SiteRegistrationListViewModel) {
+    return `Successor Site: ${row.successorSite.site.doingBusinessAs} (${row.successorSite.site.pec})`
   }
 }
 

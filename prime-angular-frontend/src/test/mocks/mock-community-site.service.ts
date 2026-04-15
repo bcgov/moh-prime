@@ -91,6 +91,7 @@ export class MockCommunitySiteService {
       siteSubmissions: [],
       missingBusinessLicence: false,
       remoteAccessTypeCode: RemoteAccessTypeEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
+      predecessorSite: null
     });
   }
 

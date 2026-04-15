@@ -1,4 +1,4 @@
-import { SiteListViewModel } from '@registration/shared/models/site.model';
+import { CommunitySiteViewModel, SiteListViewModel } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 
 export interface SiteListViewModelPartial extends
@@ -8,7 +8,7 @@ export interface SiteListViewModelPartial extends
 }
 
 export interface OrganizationListViewModelPartial extends
-  Omit<Organization, 'id' | 'sites' | 'completed' | 'doingBusinessAs' | 'hasSubmittedSite' | 'hasAcceptedAgreement' | 'registrationId' | 'pendingTransfer'> {
+  Omit<Organization, 'id' | 'sites' | 'completed' | 'doingBusinessAs' | 'hasAcceptedAgreement' | 'registrationId' | 'pendingTransfer' | 'isArchived'> {
   organizationId: number;
   organizationDoingBusinessAs: string;
 }
@@ -29,5 +29,7 @@ export interface SiteRegistrationListViewModel extends OrganizationListViewModel
   signingAuthorityName: string;
   organizationName: string;
   duplicatePecSiteCount: number;
-  isLinked: boolean;
+  predecessorSite: CommunitySiteViewModel;
+  successorSite: CommunitySiteViewModel;
+  isOrganizationArchived: boolean;
 }

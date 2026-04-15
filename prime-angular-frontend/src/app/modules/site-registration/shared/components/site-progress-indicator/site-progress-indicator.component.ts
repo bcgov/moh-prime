@@ -50,7 +50,7 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
           case CareSettingEnum.DEVICE_PROVIDER:
             this.steps = SiteRoutes.deviceProviderSiteSteps();
             break;
-          case CareSettingEnum.COMMUNITY_PHARMACIST:
+          case CareSettingEnum.COMMUNITY_PHARMACY:
             this.steps = SiteRoutes.pharmacySiteSteps();
             break;
         }

@@ -2836,27 +2836,33 @@ export class MockConfig {
       'healthAuthorities': [
         {
           'code': 6,
-          'name': 'Provincial Health Services Authority'
+          'name': 'Provincial Health Services Authority',
+          'passcode': 'PHSA'
         },
         {
           'code': 4,
-          'name': 'Island Health'
+          'name': 'Island Health',
+          'passcode': 'ISH'
         },
         {
           'code': 5,
-          'name': 'Fraser Health'
+          'name': 'Fraser Health',
+          'passcode': 'FH'
         },
         {
           'code': 2,
-          'name': 'Interior Health'
+          'name': 'Interior Health',
+          'passcode': 'IH'
         },
         {
           'code': 1,
-          'name': 'Northern Health'
+          'name': 'Northern Health',
+          'passcode': 'NH'
         },
         {
           'code': 3,
-          'name': 'Vancouver Coastal Health'
+          'name': 'Vancouver Coastal Health',
+          'passcode': 'VCH'
         }
       ],
       'deviceProviderRoles': [

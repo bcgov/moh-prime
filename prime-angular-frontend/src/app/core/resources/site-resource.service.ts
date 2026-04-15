@@ -21,7 +21,7 @@ import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-searc
 import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 
-import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
+import { CommunitySiteViewModel, Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
@@ -77,9 +77,10 @@ export class SiteResource {
     return forkJoin({
       site: this.apiResource.get<Site>(`sites/${siteId}`, params, null, true),
       individualDeviceProviders: this.apiResource.get<IndividualDeviceProvider[]>(`sites/${siteId}/individual-device-providers`, null, null, true),
+      predecessorSite: this.apiResource.get<CommunitySiteViewModel>(`sites/${siteId}/predecessor`, null, null, true)
     })
       .pipe(
-        map(({ site, individualDeviceProviders }) => ({ ...site, individualDeviceProviders })),
+        map(({ site, individualDeviceProviders, predecessorSite }) => ({ ...site, individualDeviceProviders, predecessorSite })),
         map((site: Site) => {
           site.businessHours = site.businessHours
             .map((businessDay: BusinessDay) => {
@@ -657,6 +658,39 @@ export class SiteResource {
         map((response: ApiHttpResponse<boolean>) => response.result),
         catchError((error: any) => {
           this.logger.error('[SiteRegistration] SiteResource::canRestoreSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public saveSiteLink(predecessorSiteId: number, successorSiteId: number): NoContent {
+    return this.apiResource.post<boolean>(`sites/${successorSiteId}/link/${predecessorSiteId}/add`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::saveSiteLink error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public removeSiteLink(predecessorSiteId: number, successorSiteId: number): NoContent {
+    return this.apiResource.post<boolean>(`sites/${successorSiteId}/link/${predecessorSiteId}/remove`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::removeSiteLink error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getPredecessorSite(siteId: number): Observable<Site> {
+    return this.apiResource.get<Site>(`sites/${siteId}/predecessor`)
+      .pipe(
+        map((response: ApiHttpResponse<Site>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::getPredecessorSite error has occurred: ', error);
           throw error;
         })
       );

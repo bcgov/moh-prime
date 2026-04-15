@@ -44,7 +44,10 @@
         *matHeaderCellDef
         scope="col"> Organization Name </th>
     <td mat-cell
-        *matCellDef="let row;"> {{ row.organizationName | default: '' }} </td>
+        *matCellDef="let row;">
+      <span [matTooltip]="row.isOrganizationArchived ? 'Archived' : ''"
+            [ngClass]="{'archived': row.isOrganizationArchived}">{{ row.organizationName | default: '' }}</span>
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="signingAuthority">
@@ -64,8 +67,9 @@
       <div class="d-flex align-items-center">
         <span *ngIf="row.isNew" class="red">NEW </span>
         {{ row.doingBusinessAs | default }}
-        <mat-icon *ngIf="row?.isLinked"
-                  [matTooltip]="'Refer to Metabase Linked Sites Report'"
+        <mat-icon *ngIf="row?.predecessorSite || row?.successorSite"
+                  [matTooltip]="row?.predecessorSite ? getPredecessorSiteText(row) : getSuccessorSiteText(row)"
+                  (click)="onFilterByLink(row)"
                   class="linked-site-alert"
                   matTooltipPosition="after">info
         </mat-icon>

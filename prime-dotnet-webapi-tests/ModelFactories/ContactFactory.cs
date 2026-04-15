@@ -23,6 +23,8 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.Fax, f => f.Phone.PhoneNumber().OrNull(f, 0.70f));
             RuleFor(x => x.SMSPhone, f => f.Phone.PhoneNumber().OrNull(f));
             RuleFor(x => x.PhysicalAddress, f => new PhysicalAddressFactory().Generate());
+
+            Ignore(x => x.PhoneExtension);
         }
     }
 }

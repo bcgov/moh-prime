@@ -17,8 +17,10 @@ namespace Prime.ViewModels.Profiles
                 .ForMember(dest => dest.SigningAuthorityName, opt => opt.MapFrom(src => $"{src.SigningAuthority.FirstName} {src.SigningAuthority.LastName}"))
                 .ForMember(dest => dest.SiteId, opt => opt.MapFrom(src => src.Sites.FirstOrDefault(s => s.PEC != null).Id))
                 .ForMember(dest => dest.HasClaim, opt => opt.MapFrom(src => src.Claims.Any()))
+                .ForMember(dest => dest.HasSubmittedSite, opt => opt.MapFrom(src => src.HasSubmittedSite))
                 .ForMember(dest => dest.ValidSiteCount, opt => opt.MapFrom(src => src.Sites.Count(s => s.CareSettingCode != null && s.DeletedDate == null)))
-                .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.CreatedTimeStamp.DateTime));
+                .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.CreatedTimeStamp.DateTime))
+                .ForMember(dest => dest.IsArchived, opt => opt.MapFrom(src => src.ArchivedDate.HasValue));
             CreateMap<CommunitySite, CommunitySiteListViewModel>()
                 .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
                 .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count));
@@ -28,6 +30,7 @@ namespace Prime.ViewModels.Profiles
                 .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count))
                 .ForMember(dest => dest.DisplayId, opt => opt.MapFrom(src => src.Organization.DisplayId))
                 .ForMember(dest => dest.OrganizationId, opt => opt.MapFrom(src => src.Organization.Id))
+                .ForMember(dest => dest.IsOrganizationArchived, opt => opt.MapFrom(src => src.Organization.IsArchived))
                 .ForMember(dest => dest.SigningAuthorityName, opt => opt.MapFrom(src => $"{src.Organization.SigningAuthority.FirstName} {src.Organization.SigningAuthority.LastName}"))
                 .ForMember(dest => dest.MissingBusinessLicence, opt => opt.MapFrom(src => src.BusinessLicence == null || src.BusinessLicence.BusinessLicenceDocument == null));
 

@@ -61,6 +61,9 @@ namespace Prime.Services
         {
             searchOptions ??= new OrganizationSearchOptions();
 
+            string[] textSearchArg = searchOptions.TextSearch != null ?
+                searchOptions.TextSearch.ToUpper().Split(',') : null;
+
             var query = _context.CommunitySites
                 .AsNoTracking()
                 .Where(s => s.DeletedDate == null && s.Organization.DeletedDate == null)
@@ -70,13 +73,11 @@ namespace Prime.Services
                     .Where(s => s.CareSettingCode == searchOptions.CareSettingCode)
                 )
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
-                    .Search(
-                        s => s.DoingBusinessAs,
-                        s => s.PEC,
-                        s => s.Organization.Name,
-                        s => s.Organization.DisplayId.ToString(),
-                        s => s.Organization.SigningAuthority.FirstName + " " + s.Organization.SigningAuthority.LastName)
-                    .Containing(searchOptions.TextSearch)
+                    .Where(s => textSearchArg.Any(t => s.DoingBusinessAs.ToUpper().Contains(t.Trim()) ||
+                    s.PEC.ToUpper().Contains(t.Trim()) ||
+                    s.Organization.Name.ToUpper().Contains(t.Trim()) ||
+                    s.Organization.DisplayId.ToString().Contains(t.Trim()) ||
+                    (s.Organization.SigningAuthority.FirstName.ToUpper() + " " + s.Organization.SigningAuthority.LastName.ToUpper()).Contains(t.Trim())))
                 )
                 .If(searchOptions.Status.HasValue, q => q
                     .Where(s => (int)s.SiteStatuses.OrderByDescending(ss => ss.StatusDate)
@@ -93,7 +94,8 @@ namespace Prime.Services
                 //check for duplicate site id
                 site.DuplicatePecSiteCount = await GetDuplicatePecCount(site.CareSettingCode, site.PEC, site.Id);
                 // Related to another Site?
-                site.IsLinked = await IsLinkedSite(site.Id);
+                site.PredecessorSite = await GetPredecessorSite(site.Id);
+                site.SuccessorSite = await GetSuccessorSite(site.Id);
             }
 
             GroupSitesToOrgVisually(paginatedList);
@@ -131,18 +133,55 @@ namespace Prime.Services
         private async Task<int> GetDuplicatePecCount(int? careSettingCode, string pec, int originalSiteId)
         {
             return await _context.Sites
-                    .Where(s => s.PEC != null && s.PEC == pec && s.CareSettingCode == careSettingCode && originalSiteId != s.Id)
+                    .Where(s => s.PEC != null && s.PEC == pec && s.CareSettingCode == careSettingCode && originalSiteId != s.Id && s.DeletedDate == null)
                     .CountAsync();
         }
-
-        private async Task<bool> IsLinkedSite(int siteId)
+        public async Task<CommunitySiteViewModel> GetPredecessorSite(int siteId)
         {
-            var intStream = _context.Database.SqlQueryRaw<int>(
-                "SELECT count(*) AS \"Value\" FROM \"PredecessorSiteToSuccessorSite\" pstss WHERE pstss.\"PredecessorSiteId\" = {0} OR pstss.\"SuccessorSiteId\" = {0}",
-                siteId);
-            // grab the first (and only) row
-            var count = await intStream.FirstAsync();
-            return count > 0;
+            var site = await _context.PredecessorSiteToSuccessorSites
+                .Where(ss => ss.SuccessorSiteId == siteId)
+                .Select(ss => ss.PredecessorSite)
+                .SingleOrDefaultAsync();
+
+            if (site != null)
+            {
+                var org = await _context.CommunitySites.Where(cs => cs.Id == site.Id)
+                    .Select(cs => cs.Organization)
+                    .SingleOrDefaultAsync();
+                return new CommunitySiteViewModel
+                {
+                    Site = site,
+                    Organization = org
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<CommunitySiteViewModel> GetSuccessorSite(int siteId)
+        {
+            var site = await _context.PredecessorSiteToSuccessorSites
+                .Where(ss => ss.PredecessorSiteId == siteId)
+                .Select(ss => ss.SuccessorSite)
+                .SingleOrDefaultAsync();
+
+            if (site != null)
+            {
+                var org = await _context.CommunitySites.Where(cs => cs.Id == site.Id)
+                    .Select(cs => cs.Organization)
+                    .SingleOrDefaultAsync();
+                return new CommunitySiteViewModel
+                {
+                    Site = site,
+                    Organization = org
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<CommunitySite> GetSiteAsync(int siteId)
@@ -155,8 +194,7 @@ namespace Prime.Services
 
             if (site.CareSettingCode.HasValue &&
                 site.CareSettingCode.Value == (int)CareSettingType.CommunityPractice &&
-                site.Organization != null &&
-                site.Organization.RegistrationId != null)
+                site.Organization != null)
             {
                 var eras = await matchExceptionRemoteAccessSite(site.PEC, site.Organization.RegistrationId);
                 site.RemoteAccessTypeCode = eras != null ? eras.RemoteAccessTypeCode : (int)RemoteAccessTypeEnum.PrivateCommunityHealthPractice;
@@ -364,6 +402,7 @@ namespace Prime.Services
                 {nameof(currentContact.JobRoleTitle), "Job Title"},
                 {nameof(currentContact.Email), "Email"},
                 {nameof(currentContact.Phone), "Phone"},
+                {nameof(currentContact.PhoneExtension), "Phone Extension"},
                 {nameof(currentContact.Fax), "Fax"},
                 {nameof(currentContact.SMSPhone), "SMS Phone"},
             };
@@ -704,6 +743,13 @@ namespace Prime.Services
                 .Where(s => s.Id == siteId && s.DeletedDate == null)
                 .Select(s => s.BusinessLicence)
                 .DecompileAsync()
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task<BusinessLicence> GetBusinessLicenceAsync(int siteId, int businessLicenceId)
+        {
+            return await _context.BusinessLicences
+                .Where(bl => bl.SiteId == siteId && bl.Id == businessLicenceId)
                 .SingleOrDefaultAsync();
         }
 

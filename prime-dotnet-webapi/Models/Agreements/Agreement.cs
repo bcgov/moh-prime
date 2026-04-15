@@ -59,6 +59,9 @@ namespace Prime.Models
         [NotMapped]
         public string AgreementContent { get; set; }
 
+        [NotMapped]
+        public bool IsCurrent { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             // Validate that no more than one Foreign key / Navigation property have been set. Zero could be fine, since it is valid to specify only the keys or only the navigation properties when creating an Agreement.

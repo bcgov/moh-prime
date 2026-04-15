@@ -1,0 +1,75 @@
+<h2 mat-dialog-title
+    class="d-flex align-items-stretch">
+  <span class="flex-grow-1">
+    Predecessor Site
+  </span>
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <div class="row">
+      <mat-form-field class="col-10">
+        <mat-label>Organization Reference ID or Organization Name</mat-label>
+        <input matInput
+               formControlName="organizationIdOrName">
+      </mat-form-field>
+      <button mat-flat-button
+              class="col-2"
+              color="primary"
+              (click)="searchOrganization()">
+        Search
+      </button>
+    </div>
+    <div *ngIf="showOrganization"
+         class="row">
+      <ng-container *ngIf="!organizations || organizations.length === 0; else organizationsList">
+        <div class="col-12">
+          No organization found.
+        </div>
+      </ng-container>
+    </div>
+
+    <ng-template #organizationsList>
+      <mat-form-field class="col-12">
+        <mat-label>Organization</mat-label>
+        <mat-select formControlName="organizationId">
+          <mat-option *ngFor="let organization of organizations"
+                      [value]="organization.id">
+            {{ organization.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="false">Required</mat-error>
+      </mat-form-field>
+    </ng-template>
+
+    <div *ngIf="showSiteList">
+      <mat-form-field class="w-100">
+        <mat-label>Site</mat-label>
+        <mat-select formControlName="predecessorSiteId">
+          <mat-option *ngFor="let site of sites"
+                      [value]="site.id">
+            {{ site.doingBusinessAs }} ({{ site.pec }})
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="false">Required</mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+
+  <div class="mt-4">
+    <div class="row">
+      <div class="col-6">
+        <button mat-stroked-button
+                (click)="onCancel()"
+                class="my-2 mr-2">Cancel</button>
+      </div>
+      <div class="col-6 text-right"
+           *ngIf="showSaveButton">
+        <button mat-flat-button
+                (click)="onSave()"
+                [disabled]="saveClick"
+                color="primary"
+                class="my-2 mr-1">Save</button>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

@@ -5,7 +5,8 @@ import { catchError, map } from 'rxjs/operators';
 
 import {
   Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig,
-  LicenseConfig, VendorConfig, CollegeLicenseGroupingConfig, DeviceProviderRoleConfig
+  LicenseConfig, VendorConfig, CollegeLicenseGroupingConfig, DeviceProviderRoleConfig,
+  HAConfig
 } from '@config/config.model';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
@@ -89,9 +90,9 @@ export class ConfigService implements IConfigService {
       .sort(this.utilsService.sortByKey<VendorConfig>('name'));
   }
 
-  public get healthAuthorities(): Config<number>[] {
+  public get healthAuthorities(): HAConfig[] {
     return [...this.configuration.healthAuthorities]
-      .sort(this.utilsService.sortByKey<Config<number>>('name'));
+      .sort(this.utilsService.sortByKey<HAConfig>('name'));
   }
 
   public get facilities(): Config<number>[] {

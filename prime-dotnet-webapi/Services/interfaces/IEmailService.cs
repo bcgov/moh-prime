@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Prime.Models;
 using Prime.ViewModels;
+using Prime.Models.Api;
 
 namespace Prime.Services
 {

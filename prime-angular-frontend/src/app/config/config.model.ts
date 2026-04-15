@@ -11,7 +11,7 @@ export interface Configuration {
   statuses: Config<number>[];
   statusReasons: Config<number>[];
   vendors: VendorConfig[];
-  healthAuthorities: Config<number>[];
+  healthAuthorities: HAConfig[];
   facilities: Config<number>[];
   careTypes: Config<number>[];
   securityGroups: Config<number>[];
@@ -76,6 +76,10 @@ export interface CollegePracticeConfig {
 
 export interface VendorConfig extends Config<number> {
   careSettingCode: number;
+}
+
+export interface HAConfig extends Config<number> {
+  passcode: string;
 }
 
 export interface ProvinceConfig extends Config<string> {

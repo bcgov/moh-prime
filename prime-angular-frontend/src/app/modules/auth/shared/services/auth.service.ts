@@ -33,6 +33,7 @@ export class AuthService implements IAuthService {
   // Login event state for performing operations
   // required immediately after authentication
   private hasJustLoggedInState: boolean;
+  private haPasscode: string;
 
   constructor(
     private accessTokenService: AccessTokenService,
@@ -45,6 +46,14 @@ export class AuthService implements IAuthService {
 
   public get hasJustLoggedIn(): boolean {
     return this.hasJustLoggedInState;
+  }
+
+  public set passcode(passcode: string) {
+    this.haPasscode = passcode;
+  }
+
+  public get passcode(): string {
+    return this.haPasscode;
   }
 
   public login(options?: any): Promise<void> {

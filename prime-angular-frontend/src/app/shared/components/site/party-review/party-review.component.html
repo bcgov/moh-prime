@@ -11,6 +11,11 @@
   {{ party?.phone | phone | default }}
 </app-enrollee-property>
 
+<app-enrollee-property *ngIf="party?.phoneExtension"
+                       title="Phone Extension">
+  {{ party?.phoneExtension | default }}
+</app-enrollee-property>
+
 <app-enrollee-property *ngIf="!excludeList.includes('fax')"
                        title="Fax">
   {{ party?.fax | phone | default }}

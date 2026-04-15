@@ -190,7 +190,7 @@ namespace Prime.Services.Rules
 
                 if (!record.MatchesEnrolleeByName(enrollee))
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NameDiscrepancy, $"{cert} returned \"{record.FirstName} {record.LastName}\".");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NameDiscrepancy, $"{cert} returned First Name \"{record.FirstName}\" and Last Name \"{record.LastName}\".");
                     passed = false;
                 }
                 if (!_ignoreDOBDiscrepancy && record.DateofBirth.Date != enrollee.DateOfBirth.Date)

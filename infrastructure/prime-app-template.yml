@@ -160,13 +160,7 @@ objects:
               subPath: config-map.json
             - name: log-storage
               mountPath: /tmp/
-            resources:
-              limits:
-                cpu: 50m
-                memory: 50Mi
-              requests:
-                cpu: 15m
-                memory: 10Mi
+            resources: {}
             envFrom:
               - configMapRef:
                   name: keycloak

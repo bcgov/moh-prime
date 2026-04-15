@@ -134,6 +134,7 @@ namespace Prime.Services.EmailInternal
                         JobTitle = s.Provisioner.JobRoleTitle,
                         FullName = $"{s.Provisioner.FirstName} {s.Provisioner.LastName}",
                         Phone = s.Provisioner.Phone,
+                        PhoneExtension = s.Provisioner.PhoneExtension,
                         Fax = s.Provisioner.Fax,
                         SmsPhone = s.Provisioner.SMSPhone,
                         Email = s.Provisioner.Email
@@ -143,6 +144,7 @@ namespace Prime.Services.EmailInternal
                         JobTitle = s.AdministratorPharmaNet.JobRoleTitle,
                         FullName = $"{s.AdministratorPharmaNet.FirstName} {s.AdministratorPharmaNet.LastName}",
                         Phone = s.AdministratorPharmaNet.Phone,
+                        PhoneExtension = s.AdministratorPharmaNet.PhoneExtension,
                         Fax = s.AdministratorPharmaNet.Fax,
                         SmsPhone = s.AdministratorPharmaNet.SMSPhone,
                         Email = s.AdministratorPharmaNet.Email
@@ -152,6 +154,7 @@ namespace Prime.Services.EmailInternal
                         JobTitle = s.PrivacyOfficer.JobRoleTitle,
                         FullName = $"{s.PrivacyOfficer.FirstName} {s.PrivacyOfficer.LastName}",
                         Phone = s.PrivacyOfficer.Phone,
+                        PhoneExtension = s.PrivacyOfficer.PhoneExtension,
                         Fax = s.PrivacyOfficer.Fax,
                         SmsPhone = s.PrivacyOfficer.SMSPhone,
                         Email = s.PrivacyOfficer.Email
@@ -161,6 +164,7 @@ namespace Prime.Services.EmailInternal
                         JobTitle = s.TechnicalSupport.JobRoleTitle,
                         FullName = $"{s.TechnicalSupport.FirstName} {s.TechnicalSupport.LastName}",
                         Phone = s.TechnicalSupport.Phone,
+                        PhoneExtension = s.TechnicalSupport.PhoneExtension,
                         Fax = s.TechnicalSupport.Fax,
                         SmsPhone = s.TechnicalSupport.SMSPhone,
                         Email = s.TechnicalSupport.Email
