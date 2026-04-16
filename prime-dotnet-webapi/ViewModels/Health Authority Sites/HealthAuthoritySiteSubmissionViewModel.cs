@@ -22,5 +22,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
         }
         public string VendorName { get; set; }
         public ContactViewModel PharmaNetAdministrator { get; set; }
+        public ContactViewModel PrivacyOfficer { get; set; }
+        public ContactViewModel TechnicalSupport { get; set; }
     }
 }

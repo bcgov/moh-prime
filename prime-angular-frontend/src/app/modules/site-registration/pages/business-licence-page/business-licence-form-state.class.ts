@@ -202,7 +202,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       const activeBeforeRegistration = form.get("activeBeforeRegistration");
       const careSettingCode = form.get("careSettingCode");
 
-      if ((careSettingCode.value === CareSettingEnum.COMMUNITY_PHARMACIST || careSettingCode.value === CareSettingEnum.DEVICE_PROVIDER) &&
+      if ((careSettingCode.value === CareSettingEnum.COMMUNITY_PHARMACY || careSettingCode.value === CareSettingEnum.DEVICE_PROVIDER) &&
         !(isNewWOSiteId.value || isNewWSiteId.value || activeBeforeRegistration.value) && this.siteService.site?.approvedDate === null) {
         return { 'checkboxRequired': true };
       }

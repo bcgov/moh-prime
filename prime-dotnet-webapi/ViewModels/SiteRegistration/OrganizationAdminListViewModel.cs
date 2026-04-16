@@ -10,6 +10,7 @@ namespace Prime.ViewModels
         public string DoingBusinessAs { get; set; }
         public string SigningAuthorityName { get; set; }
         public DateTime CreatedDate { get; set; }
+        public bool IsArchived { get; set; }
 
         //Number of site with care setting set
         public int ValidSiteCount { get; set; }

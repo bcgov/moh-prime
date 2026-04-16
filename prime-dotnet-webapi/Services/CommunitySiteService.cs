@@ -402,6 +402,7 @@ namespace Prime.Services
                 {nameof(currentContact.JobRoleTitle), "Job Title"},
                 {nameof(currentContact.Email), "Email"},
                 {nameof(currentContact.Phone), "Phone"},
+                {nameof(currentContact.PhoneExtension), "Phone Extension"},
                 {nameof(currentContact.Fax), "Fax"},
                 {nameof(currentContact.SMSPhone), "SMS Phone"},
             };
@@ -742,6 +743,13 @@ namespace Prime.Services
                 .Where(s => s.Id == siteId && s.DeletedDate == null)
                 .Select(s => s.BusinessLicence)
                 .DecompileAsync()
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task<BusinessLicence> GetBusinessLicenceAsync(int siteId, int businessLicenceId)
+        {
+            return await _context.BusinessLicences
+                .Where(bl => bl.SiteId == siteId && bl.Id == businessLicenceId)
                 .SingleOrDefaultAsync();
         }
 

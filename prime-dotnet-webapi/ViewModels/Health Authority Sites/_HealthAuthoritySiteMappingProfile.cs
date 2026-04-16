@@ -39,6 +39,8 @@ namespace Prime.ViewModels.HealthAuthoritySites
                 .ForMember(dest => dest.AuthorizedUserFullName, opt => opt.MapFrom(src =>
                     $"{src.AuthorizedUser.Party.FirstName} {src.AuthorizedUser.Party.LastName}"))
                 .ForMember(dest => dest.SiteAddress, opt => opt.MapFrom(src => src.PhysicalAddress))
+                .ForMember(dest => dest.TechnicalSupport, opt => opt.MapFrom(src => src.HealthAuthorityTechnicalSupport.Contact))
+                .ForMember(dest => dest.PrivacyOfficer, opt => opt.MapFrom(src => src.HealthAuthorityOrganization.PrivacyOfficers.FirstOrDefault().Contact))
                 .ForMember(dest => dest.PharmaNetAdministrator, opt => opt.MapFrom(src => src.HealthAuthorityPharmanetAdministrator.Contact)); ;
         }
     }

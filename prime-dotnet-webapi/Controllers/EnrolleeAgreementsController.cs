@@ -148,7 +148,8 @@ namespace Prime.Controllers
                 {
                     AgreementId = agreement.Id,
                     AgreementAcceptedDate = agreement.AcceptedDate,
-                    Submission = submission
+                    Submission = submission,
+                    IsCurrent = agreement.IsCurrent
                 };
 
                 enrolmentCards.Add(card);

@@ -1,12 +1,13 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [inProgress]="!isSubmitted"></app-site-progress-indicator>
+  <app-site-progress-indicator *ngIf="!isOrganizationPendingTransfer"
+                               [inProgress]="!isSubmitted"></app-site-progress-indicator>
 
   <section class="mb-3">
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>Organization Agreement</ng-container>
       <ng-container appPageSubheader2Summary>
-        Does your organization have signing requirements that prevent you from signing an online agreement?
+        Does your organization have signing requirements that prevent you from accepting an online agreement?
       </ng-container>
     </app-page-subheader2>
 
@@ -14,15 +15,15 @@
                       color="primary"
                       class="mt-3 mb-3"
                       [checked]="true">
-      I can sign online agreements
+      I can accept online agreements
     </mat-slide-toggle>
   </section>
 
   <ng-container *ngIf="!canSignOnline.checked; else electronic">
     <section class="mb-5">
       <p class="mb-4">
-        Download and print off the Organization Agreement for PharmaNet Use. Sign, and upload. You cannot make
-        changes to the agreement.
+        If you cannot accept online agreements, download and print off the Organization Agreement for PharmaNet Use.
+        Sign, and upload. You cannot make changes to the agreement.
       </p>
 
       <button mat-flat-button

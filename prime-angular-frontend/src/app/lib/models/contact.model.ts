@@ -13,6 +13,7 @@ export class Contact implements Person {
   public physicalAddressId?: number;
   public physicalAddress: Address;
   public phone: string;
+  public phoneExtension?: string;
   public smsPhone?: string;
 
   public fax?: string;

@@ -13,6 +13,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime InitialEffectiveDate = new(2020, 2, 1, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime Dec2022EffectiveDate = new(2022, 12, 17, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime August10th2023EffectiveDate = new(2023, 8, 10, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime April9th2026EffectiveDate = new(2026, 4, 9, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<SelfDeclarationVersion> SeedData
         {
@@ -32,6 +33,9 @@ namespace Prime.Configuration.Database
 
                     // additional self declaration for device provider
                     new SelfDeclarationVersion { Id = 9,  SelfDeclarationTypeCode = (int)SelfDeclarationTypeCode.RegistrationSuspended_DeviceProvider, Text = "Are you, or have you ever been, <u>disciplined, suspended, or expelled</u>, whether by order or with consent, by Orthotics Prosthetics Canada or a similar organization in another jurisdiction <u>for a matter involving an “unlawful or improper action”</u>?", EffectiveDate = August10th2023EffectiveDate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE, CareSettingCodeStr = "4" },
+
+                    // self declaration question update
+                    new SelfDeclarationVersion { Id = 10,  SelfDeclarationTypeCode = (int)SelfDeclarationTypeCode.RegistrationSuspended, Text = "Are you, or have you ever been, subject to the imposition, whether by order or with consent, of <u>prohibitions, limits or conditions on your practice of a health profession:</u> <ol style='list-style-type: lower-alpha;' class='mb-0'><li>in British Columbia, under the Health Professions and Occupations Act, the Health Professions Act or the Pharmacy Operations and Drug Scheduling Act, or</li><li>in any other jurisdiction, by a body that regulates a health profession in that jurisdiction</li></ol><u>for a matter involving an “unlawful or improper action”</u>?", EffectiveDate = April9th2026EffectiveDate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE, CareSettingCodeStr = "1,2,3,4" },
                 };
             }
         }

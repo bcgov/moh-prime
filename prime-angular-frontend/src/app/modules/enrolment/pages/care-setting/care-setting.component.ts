@@ -267,7 +267,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
         return clear(form.get('communityHealthSites') as UntypedFormArray);
       }
-      case CareSettingEnum.COMMUNITY_PHARMACIST: {
+      case CareSettingEnum.COMMUNITY_PHARMACY: {
         return clear(form.get('communityPharmacySites') as UntypedFormArray);
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {

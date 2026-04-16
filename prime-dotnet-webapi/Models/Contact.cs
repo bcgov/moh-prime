@@ -21,6 +21,8 @@ namespace Prime.Models
 
         public string Phone { get; set; }
 
+        public string PhoneExtension { get; set; }
+
         public string Fax { get; set; }
 
         public string SMSPhone { get; set; }
