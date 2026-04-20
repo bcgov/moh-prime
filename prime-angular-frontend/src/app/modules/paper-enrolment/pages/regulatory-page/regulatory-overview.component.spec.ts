@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { RegulatoryOverviewComponent } from './regulatory-overview.component';
 
@@ -9,6 +9,7 @@ import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('RegulatoryOverviewComponent', () => {
   let component: RegulatoryOverviewComponent;
@@ -16,24 +17,23 @@ describe('RegulatoryOverviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        MatSnackBarModule
-      ],
-      declarations: [
+    declarations: [
         RegulatoryOverviewComponent,
         DefaultPipe,
         ConfigCodePipe,
-      ],
-      providers: [
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
+        MatSnackBarModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

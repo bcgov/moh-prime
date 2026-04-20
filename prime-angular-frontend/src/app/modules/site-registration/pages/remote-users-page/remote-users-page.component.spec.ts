@@ -1,7 +1,7 @@
 import { inject, ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -21,6 +21,7 @@ import { CollegeNamePipe } from '@shared/pipes/college-name.pipe';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { ConfigCodePipe } from '@config/config-code.pipe';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('RemoteUsersPageComponent', () => {
   let component: RemoteUsersPageComponent;
@@ -28,40 +29,39 @@ describe('RemoteUsersPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        ReactiveFormsModule,
-        NgxMaterialModule,
-        BrowserAnimationsModule,
-        MatTooltipModule
-      ],
-      declarations: [
+    declarations: [
         RemoteUsersPageComponent,
         AddressPipe,
         FullnamePipe,
-      ],
-      providers: [
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
+        ReactiveFormsModule,
+        NgxMaterialModule,
+        BrowserAnimationsModule,
+        MatTooltipModule],
+    providers: [
         LicenseNumberLabelPipe,
         CollegeNamePipe,
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: SiteService,
-          useClass: MockCommunitySiteService
+            provide: SiteService,
+            useClass: MockCommunitySiteService
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
         AddressPipe,
         ConfigCodePipe,
-        KeycloakService
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

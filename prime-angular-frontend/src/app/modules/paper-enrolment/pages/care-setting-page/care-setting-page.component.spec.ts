@@ -1,6 +1,6 @@
 import { KeycloakService } from 'keycloak-angular';
 
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,6 +14,7 @@ import { MockPermissionService } from 'test/mocks/mock-permission.service';
 
 import { CareSettingPageComponent } from './care-setting-page.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('CareSettingPageComponent', () => {
   let component: CareSettingPageComponent;
@@ -21,31 +22,30 @@ describe('CareSettingPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [CareSettingPageComponent],
-      imports: [
-        NgxMaterialModule,
+    declarations: [CareSettingPageComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [NgxMaterialModule,
         ReactiveFormsModule,
-        HttpClientTestingModule,
         RouterTestingModule,
-        BrowserAnimationsModule
-      ],
-      providers: [
+        BrowserAnimationsModule],
+    providers: [
         KeycloakService,
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
         {
-          provide: PermissionService,
-          useClass: MockPermissionService
+            provide: PermissionService,
+            useClass: MockPermissionService
         },
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
       .compileComponents();
   }));
 

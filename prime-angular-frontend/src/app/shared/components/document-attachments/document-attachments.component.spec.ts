@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { DocumentAttachmentsComponent } from './document-attachments.component';
@@ -8,6 +8,7 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('DocumentAttachmentsComponent', () => {
   let component: DocumentAttachmentsComponent;
@@ -35,23 +36,22 @@ describe('DocumentAttachmentsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
-        MatSnackBarModule
-      ],
-      declarations: [
+    declarations: [
         DocumentAttachmentsComponent,
         DefaultPipe
-      ],
-      providers: [
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
+        MatSnackBarModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: AppConfig
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+            provide: APP_CONFIG,
+            useValue: AppConfig
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

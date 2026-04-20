@@ -9,11 +9,12 @@ import { ContactInformationFormComponent } from './contact-information-form.comp
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ContactInformationComponent', () => {
   let component: ContactInformationFormComponent;
@@ -21,33 +22,32 @@ describe('ContactInformationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [
+        ContactInformationFormComponent
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
         EnrolmentModule,
         NgxMaskDirective,
-        NgxMaskPipe
-      ],
-      declarations: [
-        ContactInformationFormComponent
-      ],
-      providers: [
+        NgxMaskPipe],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
         EnrolmentFormStateService,
         KeycloakService,
-        provideNgxMask()
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+        provideNgxMask(),
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 
