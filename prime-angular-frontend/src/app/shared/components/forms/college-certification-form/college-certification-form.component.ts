@@ -237,7 +237,7 @@ export class CollegeCertificationFormComponent implements OnInit {
       });
 
     if (!this.condensed) {
-      const initialLicenceCode = +this.licenseCode?.value ?? null;
+      const initialLicenceCode = this.licenseCode?.value ? +this.licenseCode.value : null;
       this.licenseCode.valueChanges
         // Allow for initialization of the licence code when
         // the code already exists
@@ -248,7 +248,7 @@ export class CollegeCertificationFormComponent implements OnInit {
             this.licenceCodeSelected.emit(licenseCode);
           }
         });
-      const initialNursingCategory = +this.category.value ?? null;
+      const initialNursingCategory = this.category.value ? +this.category.value : null;
       this.category.valueChanges
         .pipe(
           startWith(initialNursingCategory),
@@ -272,7 +272,7 @@ export class CollegeCertificationFormComponent implements OnInit {
       const isPrescribing = prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
       this.setPractitionerIdStateAndValidators(prescriberIdType, isPrescribing);
 
-      const initialLicenceCode = +this.licenseCode?.value ?? null;
+      const initialLicenceCode = this.licenseCode?.value ? +this.licenseCode.value : null;
       this.licenseCode.valueChanges
         // Allow for initialization of the licence code when
         // the code already exists
