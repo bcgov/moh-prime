@@ -19,9 +19,10 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 
 @Component({
-  selector: 'app-next-steps',
-  templateUrl: './next-steps-page.component.html',
-  styleUrls: ['./next-steps-page.component.scss']
+    selector: 'app-next-steps',
+    templateUrl: './next-steps-page.component.html',
+    styleUrls: ['./next-steps-page.component.scss'],
+    standalone: false
 })
 export class NextStepsPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: NextStepsFormState;

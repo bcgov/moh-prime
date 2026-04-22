@@ -9,9 +9,10 @@ import { UtilsService } from '@core/services/utils.service';
 import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
 @Component({
-  selector: 'app-site-adjudicator-documents',
-  templateUrl: './site-adjudicator-documents.component.html',
-  styleUrls: ['./site-adjudicator-documents.component.scss']
+    selector: 'app-site-adjudicator-documents',
+    templateUrl: './site-adjudicator-documents.component.html',
+    styleUrls: ['./site-adjudicator-documents.component.scss'],
+    standalone: false
 })
 export class SiteAdjudicatorDocumentsComponent implements OnInit {
   public documents$: Observable<SiteAdjudicationDocument[]>;

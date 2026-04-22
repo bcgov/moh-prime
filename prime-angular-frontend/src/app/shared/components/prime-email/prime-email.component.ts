@@ -2,9 +2,10 @@ import { Component, Inject } from '@angular/core';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 @Component({
-  selector: 'app-prime-email',
-  templateUrl: './prime-email.component.html',
-  styleUrls: ['./prime-email.component.scss']
+    selector: 'app-prime-email',
+    templateUrl: './prime-email.component.html',
+    styleUrls: ['./prime-email.component.scss'],
+    standalone: false
 })
 export class PrimeEmailComponent {
   constructor(

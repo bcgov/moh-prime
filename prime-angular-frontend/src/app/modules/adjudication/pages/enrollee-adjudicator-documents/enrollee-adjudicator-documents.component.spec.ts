@@ -32,11 +32,13 @@ describe('EnrolleeAdjudicatorDocumentsComponent', () => {
     selector: 'app-adjudicator-document',
     template: '',
     providers: [
-      {
-        provide: AdjudicatorDocumentsComponent,
-        useClass: AdjudicatorDocumentsStubComponent
-      }]
-  })
+        {
+            provide: AdjudicatorDocumentsComponent,
+            useClass: AdjudicatorDocumentsStubComponent
+        }
+    ],
+    standalone: false
+})
   class AdjudicatorDocumentsStubComponent {
     @Input() public documents$: Observable<AdjudicationDocument[]>;
     @Output() public saveDocuments: EventEmitter<string[]>;

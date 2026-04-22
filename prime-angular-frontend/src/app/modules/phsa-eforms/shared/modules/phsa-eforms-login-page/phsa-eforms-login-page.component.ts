@@ -8,9 +8,10 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 
 @Component({
-  selector: 'app-phsa-eforms-login-page',
-  templateUrl: './phsa-eforms-login-page.component.html',
-  styleUrls: ['./phsa-eforms-login-page.component.scss']
+    selector: 'app-phsa-eforms-login-page',
+    templateUrl: './phsa-eforms-login-page.component.html',
+    styleUrls: ['./phsa-eforms-login-page.component.scss'],
+    standalone: false
 })
 export class PhsaEformsLoginPageComponent implements OnInit {
   public title: string;

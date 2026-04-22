@@ -19,12 +19,13 @@ import { filter } from 'rxjs';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-prime-enrolment-access',
-  templateUrl: './prime-enrolment-access.component.html',
-  styleUrls: [
-    './prime-enrolment-access.component.scss',
-    '../access.component.scss'
-  ],
+    selector: 'app-prime-enrolment-access',
+    templateUrl: './prime-enrolment-access.component.html',
+    styleUrls: [
+        './prime-enrolment-access.component.scss',
+        '../access.component.scss'
+    ],
+    standalone: false
 })
 export class PrimeEnrolmentAccessComponent implements OnInit, AfterViewInit {
   @ViewChild('passcodeInput') passcodeInput: ElementRef<HTMLInputElement>;

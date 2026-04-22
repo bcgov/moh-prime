@@ -5,9 +5,10 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-enrollee-maintenance-page',
-  templateUrl: './enrollee-maintenance-page.component.html',
-  styleUrls: ['./enrollee-maintenance-page.component.scss']
+    selector: 'app-enrollee-maintenance-page',
+    templateUrl: './enrollee-maintenance-page.component.html',
+    styleUrls: ['./enrollee-maintenance-page.component.scss'],
+    standalone: false
 })
 export class EnrolleeMaintenancePageComponent implements OnInit {
   private routeUtils: RouteUtils;

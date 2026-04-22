@@ -7,9 +7,10 @@ import { DocumentUploadComponent } from '@shared/components/document-upload/docu
 import { AdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
 @Component({
-  selector: 'app-adjudicator-documents',
-  templateUrl: './adjudicator-documents.component.html',
-  styleUrls: ['./adjudicator-documents.component.scss']
+    selector: 'app-adjudicator-documents',
+    templateUrl: './adjudicator-documents.component.html',
+    styleUrls: ['./adjudicator-documents.component.scss'],
+    standalone: false
 })
 export class AdjudicatorDocumentsComponent implements OnInit {
   @Input() public documents$: Observable<AdjudicationDocument[]>;

@@ -26,9 +26,10 @@ import { SearchHAFormComponent } from '../search-ha-form/search-ha-form.componen
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 @Component({
-  selector: 'app-site-registration-tabs',
-  templateUrl: './site-registration-tabs.component.html',
-  styleUrls: ['./site-registration-tabs.component.scss']
+    selector: 'app-site-registration-tabs',
+    templateUrl: './site-registration-tabs.component.html',
+    styleUrls: ['./site-registration-tabs.component.scss'],
+    standalone: false
 })
 export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage implements OnInit {
   public busy: Subscription;

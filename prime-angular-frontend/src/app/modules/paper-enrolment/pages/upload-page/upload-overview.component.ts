@@ -9,8 +9,8 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { UploadForm } from './upload-form.model';
 
 @Component({
-  selector: 'app-upload-overview',
-  template: `
+    selector: 'app-upload-overview',
+    template: `
     <app-page-section>
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Job Site Information</ng-container>
@@ -36,11 +36,12 @@ import { UploadForm } from './upload-form.model';
       </button>
     </app-page-section>
   `,
-  styles: [
-    '.mat-icon { font-size: 1em; }',
-    '.button > .mat-icon { font-size: 1.35rem; }'
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    styles: [
+        '.mat-icon { font-size: 1em; }',
+        '.button > .mat-icon { font-size: 1.35rem; }'
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class UploadOverviewComponent extends AbstractOverview {
   @Input() public upload: UploadForm;

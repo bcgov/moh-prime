@@ -7,9 +7,10 @@ import { IProgressIndicator } from '@shared/components/progress-indicator/progre
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 
 @Component({
-  selector: 'app-phsa-eforms-progress-indicator',
-  templateUrl: './phsa-eforms-progress-indicator.component.html',
-  styleUrls: ['./phsa-eforms-progress-indicator.component.scss']
+    selector: 'app-phsa-eforms-progress-indicator',
+    templateUrl: './phsa-eforms-progress-indicator.component.html',
+    styleUrls: ['./phsa-eforms-progress-indicator.component.scss'],
+    standalone: false
 })
 export class PhsaEformsProgressIndicatorComponent implements OnInit, IProgressIndicator {
   @Input() public inProgress: boolean;

@@ -9,9 +9,10 @@ import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
-  selector: 'app-enrollee-access-term',
-  templateUrl: './enrollee-access-term.component.html',
-  styleUrls: ['./enrollee-access-term.component.scss']
+    selector: 'app-enrollee-access-term',
+    templateUrl: './enrollee-access-term.component.html',
+    styleUrls: ['./enrollee-access-term.component.scss'],
+    standalone: false
 })
 export class EnrolleeAccessTermComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;

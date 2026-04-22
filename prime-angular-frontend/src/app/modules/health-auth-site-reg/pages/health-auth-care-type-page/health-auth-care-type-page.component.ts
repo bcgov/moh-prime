@@ -23,9 +23,10 @@ import { HealthAuthCareTypeFormState } from './health-auth-care-type-form-state.
 import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
 
 @Component({
-  selector: 'app-health-auth-care-type-page',
-  templateUrl: './health-auth-care-type-page.component.html',
-  styleUrls: ['./health-auth-care-type-page.component.scss']
+    selector: 'app-health-auth-care-type-page',
+    templateUrl: './health-auth-care-type-page.component.html',
+    styleUrls: ['./health-auth-care-type-page.component.scss'],
+    standalone: false
 })
 export class HealthAuthCareTypePageComponent extends AbstractHealthAuthoritySiteRegistrationPage implements OnInit {
   public formState: HealthAuthCareTypeFormState;

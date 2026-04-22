@@ -43,9 +43,10 @@ import { DateOfBirthComponent } from '@shared/components/dialogs/content/date-of
 import { ChangeTermsOfAccessComponent } from '@shared/components/dialogs/content/terms-of-access/terms-of-access.component';
 
 @Component({
-  selector: 'app-adjudication-container',
-  templateUrl: './adjudication-container.component.html',
-  styleUrls: ['./adjudication-container.component.scss']
+    selector: 'app-adjudication-container',
+    templateUrl: './adjudication-container.component.html',
+    styleUrls: ['./adjudication-container.component.scss'],
+    standalone: false
 })
 export class AdjudicationContainerComponent implements OnInit {
   @Input() public hasActions: boolean;

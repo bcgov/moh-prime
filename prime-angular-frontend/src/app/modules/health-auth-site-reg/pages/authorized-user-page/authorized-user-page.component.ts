@@ -24,9 +24,10 @@ import { AuthorizedUserFormState } from './authorized-user-form-state.class';
 import { isNullOrUndefined } from 'util';
 
 @Component({
-  selector: 'app-authorized-user-page',
-  templateUrl: './authorized-user-page.component.html',
-  styleUrls: ['./authorized-user-page.component.scss']
+    selector: 'app-authorized-user-page',
+    templateUrl: './authorized-user-page.component.html',
+    styleUrls: ['./authorized-user-page.component.scss'],
+    standalone: false
 })
 export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: AuthorizedUserFormState;

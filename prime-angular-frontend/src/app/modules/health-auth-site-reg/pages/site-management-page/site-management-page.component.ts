@@ -22,10 +22,11 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-site-management-page',
-  templateUrl: './site-management-page.component.html',
-  styleUrls: ['./site-management-page.component.scss'],
-  providers: [FormatDatePipe]
+    selector: 'app-site-management-page',
+    templateUrl: './site-management-page.component.html',
+    styleUrls: ['./site-management-page.component.scss'],
+    providers: [FormatDatePipe],
+    standalone: false
 })
 export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;

@@ -10,9 +10,10 @@ import { BusinessEvent } from '@adjudication/shared/models/business-event.model'
 import { DateContent } from '@adjudication/shared/components/dated-content-table/dated-content-table.component';
 
 @Component({
-  selector: 'app-site-events-page',
-  templateUrl: './site-events-page.component.html',
-  styleUrls: ['./site-events-page.component.scss']
+    selector: 'app-site-events-page',
+    templateUrl: './site-events-page.component.html',
+    styleUrls: ['./site-events-page.component.scss'],
+    standalone: false
 })
 export class SiteEventsPageComponent implements OnInit {
   public businessEvents$: Observable<DateContent[]>;

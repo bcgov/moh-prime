@@ -25,9 +25,10 @@ import { CertSearch } from '@enrolment/shared/models/cert-search.model';
 import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-search.model';
 
 @Component({
-  selector: 'app-self-declaration',
-  templateUrl: './self-declaration.component.html',
-  styleUrls: ['./self-declaration.component.scss']
+    selector: 'app-self-declaration',
+    templateUrl: './self-declaration.component.html',
+    styleUrls: ['./self-declaration.component.scss'],
+    standalone: false
 })
 export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implements OnInit {
   public decisions: { code: boolean, name: string }[];

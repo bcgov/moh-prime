@@ -25,9 +25,10 @@ import { OrganizationService } from '@registration/shared/services/organization.
 import { OrganizationSigningAuthorityPageFormState } from './organization-signing-authority-page-form-state.class';
 
 @Component({
-  selector: 'app-organization-signing-authority-page',
-  templateUrl: './organization-signing-authority-page.component.html',
-  styleUrls: ['./organization-signing-authority-page.component.scss']
+    selector: 'app-organization-signing-authority-page',
+    templateUrl: './organization-signing-authority-page.component.html',
+    styleUrls: ['./organization-signing-authority-page.component.scss'],
+    standalone: false
 })
 export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: OrganizationSigningAuthorityPageFormState;

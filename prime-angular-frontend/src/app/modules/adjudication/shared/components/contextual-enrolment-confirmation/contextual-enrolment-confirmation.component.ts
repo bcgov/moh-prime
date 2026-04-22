@@ -15,9 +15,10 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 
 @Component({
-  selector: 'app-contextual-enrolment-confirmation',
-  templateUrl: './contextual-enrolment-confirmation.component.html',
-  styleUrls: ['./contextual-enrolment-confirmation.component.scss']
+    selector: 'app-contextual-enrolment-confirmation',
+    templateUrl: './contextual-enrolment-confirmation.component.html',
+    styleUrls: ['./contextual-enrolment-confirmation.component.scss'],
+    standalone: false
 })
 export class ContextualEnrolmentConfirmationComponent {
 

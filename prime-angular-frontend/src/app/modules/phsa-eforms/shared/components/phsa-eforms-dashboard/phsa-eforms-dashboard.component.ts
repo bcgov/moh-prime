@@ -9,9 +9,10 @@ import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 
 @Component({
-  selector: 'app-phsa-eforms-dashboard',
-  templateUrl: './phsa-eforms-dashboard.component.html',
-  styleUrls: ['./phsa-eforms-dashboard.component.scss']
+    selector: 'app-phsa-eforms-dashboard',
+    templateUrl: './phsa-eforms-dashboard.component.html',
+    styleUrls: ['./phsa-eforms-dashboard.component.scss'],
+    standalone: false
 })
 export class PhsaEformsDashboardComponent implements OnInit, IDashboard {
   public dashboardMenuItems: Observable<DashboardMenuItem[]>;

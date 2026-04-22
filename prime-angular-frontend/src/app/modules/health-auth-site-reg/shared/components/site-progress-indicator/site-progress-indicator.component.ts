@@ -7,9 +7,10 @@ import { IProgressIndicator, IStep } from '@shared/components/progress-indicator
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 
 @Component({
-  selector: 'app-site-progress-indicator',
-  templateUrl: './site-progress-indicator.component.html',
-  styleUrls: ['./site-progress-indicator.component.scss']
+    selector: 'app-site-progress-indicator',
+    templateUrl: './site-progress-indicator.component.html',
+    styleUrls: ['./site-progress-indicator.component.scss'],
+    standalone: false
 })
 export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicator {
   @Input() public inProgress: boolean;

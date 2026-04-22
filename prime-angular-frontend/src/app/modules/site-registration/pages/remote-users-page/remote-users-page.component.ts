@@ -26,9 +26,10 @@ import { ConfigCodePipe } from '@config/config-code.pipe';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-remote-users-page',
-  templateUrl: './remote-users-page.component.html',
-  styleUrls: ['./remote-users-page.component.scss']
+    selector: 'app-remote-users-page',
+    templateUrl: './remote-users-page.component.html',
+    styleUrls: ['./remote-users-page.component.scss'],
+    standalone: false
 })
 export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: RemoteUsersPageFormState;

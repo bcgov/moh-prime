@@ -6,9 +6,10 @@ import {ConfirmDialogComponent} from '@shared/components/dialogs/confirm-dialog/
 import {BulkEmailType} from '@shared/enums/bulk-email-type';
 
 @Component({
-  selector: 'app-send-bulk-email',
-  templateUrl: './send-bulk-email.component.html',
-  styleUrls: ['./send-bulk-email.component.scss']
+    selector: 'app-send-bulk-email',
+    templateUrl: './send-bulk-email.component.html',
+    styleUrls: ['./send-bulk-email.component.scss'],
+    standalone: false
 })
 export class SendBulkEmailComponent implements OnInit {
   public title: string;

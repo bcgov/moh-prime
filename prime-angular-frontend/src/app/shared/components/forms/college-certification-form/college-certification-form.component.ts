@@ -18,9 +18,10 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { NonNursingLicenseGrouping, NursingLicenseGrouping } from '@shared/enums/college-licence-grouping.enum';
 
 @Component({
-  selector: 'app-college-certification-form',
-  templateUrl: './college-certification-form.component.html',
-  styleUrls: ['./college-certification-form.component.scss']
+    selector: 'app-college-certification-form',
+    templateUrl: './college-certification-form.component.html',
+    styleUrls: ['./college-certification-form.component.scss'],
+    standalone: false
 })
 export class CollegeCertificationFormComponent implements OnInit {
   @Input() public form: UntypedFormGroup;

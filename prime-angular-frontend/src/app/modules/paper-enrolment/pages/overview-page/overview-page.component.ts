@@ -18,9 +18,10 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 
 @Component({
-  selector: 'app-overview-page',
-  templateUrl: './overview-page.component.html',
-  styleUrls: ['./overview-page.component.scss']
+    selector: 'app-overview-page',
+    templateUrl: './overview-page.component.html',
+    styleUrls: ['./overview-page.component.scss'],
+    standalone: false
 })
 export class OverviewPageComponent implements OnInit {
   public busy: Subscription;

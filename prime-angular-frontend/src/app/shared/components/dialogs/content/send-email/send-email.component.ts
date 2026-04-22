@@ -6,9 +6,10 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
-  selector: 'app-send-email',
-  templateUrl: './send-email.component.html',
-  styleUrls: ['./send-email.component.scss']
+    selector: 'app-send-email',
+    templateUrl: './send-email.component.html',
+    styleUrls: ['./send-email.component.scss'],
+    standalone: false
 })
 export class SendEmailComponent implements OnInit {
   public title: string;

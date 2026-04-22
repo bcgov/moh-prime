@@ -17,17 +17,17 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^18.2.14",
+    "@angular/animations": "^19.2.21",
     "@angular/cdk": "^18.2.14",
-    "@angular/common": "^18.2.14",
-    "@angular/compiler": "^18.2.14",
-    "@angular/core": "^18.2.14",
-    "@angular/forms": "^18.2.14",
+    "@angular/common": "^19.2.21",
+    "@angular/compiler": "^19.2.21",
+    "@angular/core": "^19.2.21",
+    "@angular/forms": "^19.2.21",
     "@angular/material": "^18.2.14",
     "@angular/material-moment-adapter": "^18.2.14",
-    "@angular/platform-browser": "^18.2.14",
-    "@angular/platform-browser-dynamic": "^18.2.14",
-    "@angular/router": "^18.2.14",
+    "@angular/platform-browser": "^19.2.21",
+    "@angular/platform-browser-dynamic": "^19.2.21",
+    "@angular/router": "^19.2.21",
     "@auth0/angular-jwt": "^5.0.2",
     "@ngneat/until-destroy": "^8.1.4",
     "@tinymce/tinymce-angular": "^7.0.0",
@@ -36,7 +36,7 @@
     "filepond": "^4.22.1",
     "filepond-plugin-file-validate-size": "^2.2.1",
     "filepond-plugin-file-validate-type": "^1.2.5",
-    "keycloak-angular": "^15.0.0",
+    "keycloak-angular": "^19.0.2",
     "keycloak-js": "^25.0.0",
     "moment": "^2.29.3",
     "ng-busy": "^18.0.0",
@@ -50,7 +50,7 @@
     "tslib": "^2.3.0",
     "tus-js-client": "^1.8.0",
     "web-animations-js": "^2.3.2",
-    "zone.js": "~0.14.10"
+    "zone.js": "~0.15.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.2.21",
@@ -60,8 +60,8 @@
     "@angular-eslint/schematics": "^18.4.3",
     "@angular-eslint/template-parser": "^18.4.3",
     "@angular/cli": "^18.2.21",
-    "@angular/compiler-cli": "^18.2.14",
-    "@angular/language-service": "^18.2.14",
+    "@angular/compiler-cli": "^19.2.21",
+    "@angular/language-service": "^19.2.21",
     "@types/faker": "^4.1.12",
     "@types/jasmine": "~3.10.3",
     "@types/jasminewd2": "^2.0.8",
@@ -83,7 +83,7 @@
     "protractor": "~7.0.0",
     "source-map-explorer": "^2.4.1",
     "ts-node": "~7.0.0",
-    "typescript": "~5.4.5",
+    "typescript": "~5.8.3",
     "webpack-bundle-analyzer": "^3.6.1"
   }
 }
