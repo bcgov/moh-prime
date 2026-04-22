@@ -21,13 +21,12 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { AuthorizedUserFormState } from './authorized-user-form-state.class';
-import { isNullOrUndefined } from 'util';
 
 @Component({
-    selector: 'app-authorized-user-page',
-    templateUrl: './authorized-user-page.component.html',
-    styleUrls: ['./authorized-user-page.component.scss'],
-    standalone: false
+  selector: 'app-authorized-user-page',
+  templateUrl: './authorized-user-page.component.html',
+  styleUrls: ['./authorized-user-page.component.scss'],
+  standalone: false
 })
 export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: AuthorizedUserFormState;

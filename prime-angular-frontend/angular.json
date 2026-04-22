@@ -62,7 +62,12 @@
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src/scss"
-              ]
+              ],
+              "sass": {
+                "silenceDeprecations": [
+                  "import"
+                ]
+              }
             },
             "scripts": [
               "node_modules/tinymce/tinymce.min.js"
