@@ -15,12 +15,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
-            "outputPath": {
-              "base": "dist/angular-frontend"
-            },
+            "outputPath": "dist/angular-frontend",
             "index": "src/index.html",
+            "main": "src/main.ts",
             "polyfills": [
               "src/polyfills.ts"
             ],
@@ -62,12 +61,7 @@
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src/scss"
-              ],
-              "sass": {
-                "silenceDeprecations": [
-                  "import"
-                ]
-              }
+              ]
             },
             "scripts": [
               "node_modules/tinymce/tinymce.min.js"
@@ -79,8 +73,7 @@
             "extractLicenses": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true,
-            "browser": "src/main.ts"
+            "namedChunks": true
           },
           "configurations": {
             "es5": {
