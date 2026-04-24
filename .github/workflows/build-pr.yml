@@ -199,7 +199,7 @@ jobs:
     - name: Install OC
       uses: redhat-actions/openshift-tools-installer@v1
       with:
-        oc: "4.6"
+        oc: "4.12"
 
     - name: Authenticate and set context
       uses: redhat-actions/oc-login@v1.1
