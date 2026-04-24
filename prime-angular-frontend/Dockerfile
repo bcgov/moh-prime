@@ -21,8 +21,7 @@ RUN apt-get update && \
     touch /etc/nginx/conf.d/default.conf && \
     chmod -R 777 /etc/nginx && \
     chmod -R 777 /var/cache/nginx && \
-    chmod -R 777 /var/run && \
-    chmod -R 777 /opt/app-root/src
+    chmod -R 777 /var/run
 COPY nginx.conf /etc/nginx/
 COPY nginxdev.conf /etc/nginx/nginx.template.conf
 COPY entrypoint.sh /
