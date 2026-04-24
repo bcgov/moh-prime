@@ -58,6 +58,10 @@ export class ContactFormState extends AbstractFormState<Contact> {
         null,
         [Validators.required, FormControlValidators.phone]
       ],
+      phoneExtension: [
+        null,
+        []
+      ],
       fax: [
         null,
         [FormControlValidators.phone]

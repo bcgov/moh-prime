@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -11,9 +12,11 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251206005249_AddContactPhoneExtension")]
+    partial class AddContactPhoneExtension
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,41 +66,6 @@ namespace Prime.Migrations
                         .IsUnique();
 
                     b.ToTable("AccessAgreementNote");
-                });
-
-            modelBuilder.Entity("Prime.Models.AccessTokenRemoteAccessSite", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("EnrolmentCertificateAccessTokenId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("SiteId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolmentCertificateAccessTokenId");
-
-                    b.HasIndex("SiteId");
-
-                    b.ToTable("AccessTokenRemoteAccessSite");
                 });
 
             modelBuilder.Entity("Prime.Models.Address", b =>
@@ -14587,61 +14555,6 @@ namespace Prime.Migrations
                     b.ToTable("PharmanetTransactionLog");
                 });
 
-            modelBuilder.Entity("Prime.Models.PharmanetTransactionLogArchive", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("CollegePrefix")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LocationIpAddress")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PharmacyId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PractitionerId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ProviderSoftwareId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ProviderSoftwareVersion")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SourceIpAddress")
-                        .HasColumnType("text");
-
-                    b.Property<long>("TransactionId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("TransactionOutcome")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TransactionSubType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TransactionType")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("TxDateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PharmanetTransactionLogArchive");
-                });
-
             modelBuilder.Entity("Prime.Models.PharmanetTransactionLogTemp", b =>
                 {
                     b.Property<long>("Id")
@@ -19027,18 +18940,6 @@ namespace Prime.Migrations
                             Text = "Are you, or have you ever been, <u>disciplined, suspended, or expelled</u>, whether by order or with consent, by Orthotics Prosthetics Canada or a similar organization in another jurisdiction <u>for a matter involving an “unlawful or improper action”</u>?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CareSettingCodeStr = "1,2,3,4",
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTimeOffset(new DateTime(2026, 4, 9, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SelfDeclarationTypeCode = 2,
-                            Text = "Are you, or have you ever been, subject to the imposition, whether by order or with consent, of <u>prohibitions, limits or conditions on your practice of a health profession:</u> <ol style='list-style-type: lower-alpha;' class='mb-0'><li>in British Columbia, under the Health Professions and Occupations Act, the Health Professions Act or the Pharmacy Operations and Drug Scheduling Act, or</li><li>in any other jurisdiction, by a body that regulates a health profession in that jurisdiction</li></ol><u>for a matter involving an “unlawful or improper action”</u>?",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -20175,23 +20076,6 @@ namespace Prime.Migrations
                     b.Navigation("Adjudicator");
 
                     b.Navigation("Enrollee");
-                });
-
-            modelBuilder.Entity("Prime.Models.AccessTokenRemoteAccessSite", b =>
-                {
-                    b.HasOne("Prime.Models.EnrolmentCertificateAccessToken", null)
-                        .WithMany("RemoteAccessSites")
-                        .HasForeignKey("EnrolmentCertificateAccessTokenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.Site", "RemoteAccessSite")
-                        .WithMany()
-                        .HasForeignKey("SiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RemoteAccessSite");
                 });
 
             modelBuilder.Entity("Prime.Models.Address", b =>
@@ -21626,11 +21510,6 @@ namespace Prime.Migrations
                     b.Navigation("EnrolleeNotification");
 
                     b.Navigation("EnrolmentStatusReference");
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolmentCertificateAccessToken", b =>
-                {
-                    b.Navigation("RemoteAccessSites");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolmentStatus", b =>

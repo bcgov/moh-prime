@@ -1,5 +1,10 @@
 export interface EmailsForCareSetting {
-  emails: string[];
+  emails: ProvisionerEmail[];
   careSettingCode: number;
   healthAuthorityCode?: number;
+}
+
+export interface ProvisionerEmail {
+  email: string;
+  remoteAccessSiteIds: number[];
 }
