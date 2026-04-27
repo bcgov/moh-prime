@@ -10,9 +10,10 @@ import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-even
 import { SiteResource } from '@core/resources/site-resource.service';
 
 @Component({
-  selector: 'app-site-events',
-  templateUrl: './site-events.component.html',
-  styleUrls: ['./site-events.component.scss']
+    selector: 'app-site-events',
+    templateUrl: './site-events.component.html',
+    styleUrls: ['./site-events.component.scss'],
+    standalone: false
 })
 export class SiteEventsComponent implements OnInit {
   public businessEvents$: Observable<DateContent[]>;

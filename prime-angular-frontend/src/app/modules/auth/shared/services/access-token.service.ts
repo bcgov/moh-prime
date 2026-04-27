@@ -54,7 +54,7 @@ export class AccessTokenService implements IAccessTokenService {
   }
 
   public isLoggedIn(): Promise<boolean> {
-    return this.keycloakService.isLoggedIn();
+    return Promise.resolve(this.keycloakService.isLoggedIn());
   }
 
   public loadBrokerProfile(forceReload?: boolean): Promise<BrokerProfile> {

@@ -7,9 +7,10 @@ import { Address, AddressType } from '@lib/models/address.model';
 import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
-  selector: 'app-same-as',
-  templateUrl: './same-as.component.html',
-  styleUrls: ['./same-as.component.scss']
+    selector: 'app-same-as',
+    templateUrl: './same-as.component.html',
+    styleUrls: ['./same-as.component.scss'],
+    standalone: false
 })
 export class SameAsComponent implements OnInit {
   // When not provided selections are not displayed

@@ -18,9 +18,10 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { NonNursingLicenseGrouping, NursingLicenseGrouping } from '@shared/enums/college-licence-grouping.enum';
 
 @Component({
-  selector: 'app-college-certification-form',
-  templateUrl: './college-certification-form.component.html',
-  styleUrls: ['./college-certification-form.component.scss']
+    selector: 'app-college-certification-form',
+    templateUrl: './college-certification-form.component.html',
+    styleUrls: ['./college-certification-form.component.scss'],
+    standalone: false
 })
 export class CollegeCertificationFormComponent implements OnInit {
   @Input() public form: UntypedFormGroup;
@@ -237,7 +238,7 @@ export class CollegeCertificationFormComponent implements OnInit {
       });
 
     if (!this.condensed) {
-      const initialLicenceCode = +this.licenseCode?.value ?? null;
+      const initialLicenceCode = this.licenseCode?.value ? +this.licenseCode.value : null;
       this.licenseCode.valueChanges
         // Allow for initialization of the licence code when
         // the code already exists
@@ -248,7 +249,7 @@ export class CollegeCertificationFormComponent implements OnInit {
             this.licenceCodeSelected.emit(licenseCode);
           }
         });
-      const initialNursingCategory = +this.category.value ?? null;
+      const initialNursingCategory = this.category.value ? +this.category.value : null;
       this.category.valueChanges
         .pipe(
           startWith(initialNursingCategory),
@@ -272,7 +273,7 @@ export class CollegeCertificationFormComponent implements OnInit {
       const isPrescribing = prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
       this.setPractitionerIdStateAndValidators(prescriberIdType, isPrescribing);
 
-      const initialLicenceCode = +this.licenseCode?.value ?? null;
+      const initialLicenceCode = this.licenseCode?.value ? +this.licenseCode.value : null;
       this.licenseCode.valueChanges
         // Allow for initialization of the licence code when
         // the code already exists

@@ -1,5 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -19,6 +19,7 @@ import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SelfDeclarationComponent', () => {
   let component: SelfDeclarationComponent;
@@ -27,36 +28,35 @@ describe('SelfDeclarationComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
-        imports: [
-          HttpClientTestingModule,
-          NgxBusyModule,
-          NgxContextualHelpModule,
-          NgxMaterialModule,
-          ReactiveFormsModule,
-          RouterTestingModule,
-          EnrolmentModule
-        ],
-        providers: [
-          {
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [NgxBusyModule,
+        NgxContextualHelpModule,
+        NgxMaterialModule,
+        ReactiveFormsModule,
+        RouterTestingModule,
+        EnrolmentModule],
+    providers: [
+        {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
-          },
-          {
+        },
+        {
             provide: AuthService,
             useClass: MockAuthService
-          },
-          {
+        },
+        {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
-          },
-          {
+        },
+        {
             provide: ConfigService,
             useClass: MockConfigService
-          },
-          KeycloakService
-        ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA]
-      }
+        },
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}
     ).compileComponents();
   }));
 

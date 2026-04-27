@@ -5,9 +5,10 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 @Component({
-  selector: 'app-access-denied',
-  templateUrl: './access-denied.component.html',
-  styleUrls: ['./access-denied.component.scss']
+    selector: 'app-access-denied',
+    templateUrl: './access-denied.component.html',
+    styleUrls: ['./access-denied.component.scss'],
+    standalone: false
 })
 export class AccessDeniedComponent implements OnInit {
   constructor(

@@ -13,9 +13,10 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-enrollee-access-term-enrolment',
-  templateUrl: './enrollee-access-term-enrolment.component.html',
-  styleUrls: ['./enrollee-access-term-enrolment.component.scss']
+    selector: 'app-enrollee-access-term-enrolment',
+    templateUrl: './enrollee-access-term-enrolment.component.html',
+    styleUrls: ['./enrollee-access-term-enrolment.component.scss'],
+    standalone: false
 })
 export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;

@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-enrollee-property',
-  templateUrl: './enrollee-property.component.html',
-  styleUrls: ['./enrollee-property.component.scss']
+    selector: 'app-enrollee-property',
+    templateUrl: './enrollee-property.component.html',
+    styleUrls: ['./enrollee-property.component.scss'],
+    standalone: false
 })
 export class EnrolleePropertyComponent implements OnInit {
   @Input() public title: string;

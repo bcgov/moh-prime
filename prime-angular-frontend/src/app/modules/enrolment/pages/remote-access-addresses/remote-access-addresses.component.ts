@@ -16,9 +16,10 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
-  selector: 'app-remote-access-addresses',
-  templateUrl: './remote-access-addresses.component.html',
-  styleUrls: ['./remote-access-addresses.component.scss']
+    selector: 'app-remote-access-addresses',
+    templateUrl: './remote-access-addresses.component.html',
+    styleUrls: ['./remote-access-addresses.component.scss'],
+    standalone: false
 })
 export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage implements OnInit {
   public formControlNames: string[];

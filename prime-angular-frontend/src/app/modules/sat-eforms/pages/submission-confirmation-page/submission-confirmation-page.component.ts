@@ -7,9 +7,10 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SatEformsRoutes } from '@sat/sat-eforms.routes';
 
 @Component({
-  selector: 'app-submission-confirmation-page',
-  templateUrl: './submission-confirmation-page.component.html',
-  styleUrls: ['./submission-confirmation-page.component.scss']
+    selector: 'app-submission-confirmation-page',
+    templateUrl: './submission-confirmation-page.component.html',
+    styleUrls: ['./submission-confirmation-page.component.scss'],
+    standalone: false
 })
 export class SubmissionConfirmationPageComponent implements OnInit {
   public title: string;

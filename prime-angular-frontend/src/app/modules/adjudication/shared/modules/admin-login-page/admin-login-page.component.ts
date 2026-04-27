@@ -5,9 +5,10 @@ import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
-  selector: 'app-admin-login-page',
-  templateUrl: './admin-login-page.component.html',
-  styleUrls: ['./admin-login-page.component.scss']
+    selector: 'app-admin-login-page',
+    templateUrl: './admin-login-page.component.html',
+    styleUrls: ['./admin-login-page.component.scss'],
+    standalone: false
 })
 export class AdminLoginPageComponent implements OnInit {
   constructor(

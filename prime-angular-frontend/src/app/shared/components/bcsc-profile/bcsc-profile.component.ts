@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 @Component({
-  selector: 'app-bcsc-profile',
-  templateUrl: './bcsc-profile.component.html',
-  styleUrls: ['./bcsc-profile.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-bcsc-profile',
+    templateUrl: './bcsc-profile.component.html',
+    styleUrls: ['./bcsc-profile.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class BcscProfileComponent {
   @Input() public user: BcscUser;

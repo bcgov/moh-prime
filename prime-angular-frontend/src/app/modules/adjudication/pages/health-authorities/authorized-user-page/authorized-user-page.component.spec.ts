@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
@@ -16,6 +16,7 @@ import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { AuthorizedUserPageComponent } from './authorized-user-page.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AuthorizedUserPageComponent', () => {
   let component: AuthorizedUserPageComponent;
@@ -23,36 +24,35 @@ describe('AuthorizedUserPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        MatSnackBarModule
-      ],
-      declarations: [
+    declarations: [
         AuthorizedUserPageComponent
-      ],
-      providers: [
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
+        MatSnackBarModule],
+    providers: [
         KeycloakService,
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
         {
-          provide: AuthService,
-          useClass: MockAuthService
+            provide: AuthService,
+            useClass: MockAuthService
         },
         {
-          provide: PermissionService,
-          useClass: MockPermissionService
+            provide: PermissionService,
+            useClass: MockPermissionService
         },
-        CapitalizePipe
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+        CapitalizePipe,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

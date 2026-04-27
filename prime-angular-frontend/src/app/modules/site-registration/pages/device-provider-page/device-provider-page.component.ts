@@ -23,10 +23,11 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { DeviceProviderPageFormState } from './device-provider-page-form-state.class';
 
 @Component({
-  selector: 'app-device-provider-page',
-  templateUrl: './device-provider-page.component.html',
-  styleUrls: ['./device-provider-page.component.scss'],
-  providers: [FormatDatePipe]
+    selector: 'app-device-provider-page',
+    templateUrl: './device-provider-page.component.html',
+    styleUrls: ['./device-provider-page.component.scss'],
+    providers: [FormatDatePipe],
+    standalone: false
 })
 export class DeviceProviderPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: DeviceProviderPageFormState;

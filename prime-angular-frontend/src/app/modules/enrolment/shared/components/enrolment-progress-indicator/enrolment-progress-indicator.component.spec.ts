@@ -1,11 +1,12 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SharedModule } from '@shared/shared.module';
 import { EnrolmentProgressIndicatorComponent } from './enrolment-progress-indicator.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('EnrolmentProgressIndicatorComponent', () => {
   let component: EnrolmentProgressIndicatorComponent;
@@ -13,22 +14,21 @@ describe('EnrolmentProgressIndicatorComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        SharedModule,
-        HttpClientTestingModule,
-        RouterTestingModule
-      ],
-      declarations: [
+    declarations: [
         EnrolmentProgressIndicatorComponent
-      ],
-      providers: [
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [SharedModule,
+        RouterTestingModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

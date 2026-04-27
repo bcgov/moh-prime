@@ -30,9 +30,10 @@ import { Site } from '@registration/shared/models/site.model';
  * TODO: https://bcgovmoh.atlassian.net/browse/PRIME-2325 (Refactor common code in both PharmanetEnrolmentSummaryComponent and NextStepsComponent)
  */
 @Component({
-  selector: 'app-pharmanet-enrolment-summary',
-  templateUrl: './pharmanet-enrolment-summary.component.html',
-  styleUrls: ['./pharmanet-enrolment-summary.component.scss']
+    selector: 'app-pharmanet-enrolment-summary',
+    templateUrl: './pharmanet-enrolment-summary.component.html',
+    styleUrls: ['./pharmanet-enrolment-summary.component.scss'],
+    standalone: false
 })
 export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;

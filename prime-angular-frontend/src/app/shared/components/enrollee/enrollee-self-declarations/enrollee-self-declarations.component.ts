@@ -22,9 +22,10 @@ interface SelfDeclarationComposite {
 }
 
 @Component({
-  selector: 'app-enrollee-self-declarations',
-  templateUrl: './enrollee-self-declarations.component.html',
-  styleUrls: ['./enrollee-self-declarations.component.scss']
+    selector: 'app-enrollee-self-declarations',
+    templateUrl: './enrollee-self-declarations.component.html',
+    styleUrls: ['./enrollee-self-declarations.component.scss'],
+    standalone: false
 })
 export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
   @Input() public enrolment: Enrolment;

@@ -1,6 +1,6 @@
 import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -23,6 +23,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { BcscDemographicFormState } from './bcsc-demographic-form-state.class';
 import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('BcscDemographicComponent', () => {
   let component: BcscDemographicComponent;
@@ -31,40 +32,39 @@ describe('BcscDemographicComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
-        imports: [
-          BrowserAnimationsModule,
-          HttpClientTestingModule,
-          NgxBusyModule,
-          NgxContextualHelpModule,
-          NgxMaterialModule,
-          ReactiveFormsModule,
-          RouterTestingModule,
-          NgxMaskDirective,
-          NgxMaskPipe
-        ],
-        declarations: [BcscDemographicComponent, AddressFormComponent],
-        providers: [
-          {
+    declarations: [BcscDemographicComponent, AddressFormComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [BrowserAnimationsModule,
+        NgxBusyModule,
+        NgxContextualHelpModule,
+        NgxMaterialModule,
+        ReactiveFormsModule,
+        RouterTestingModule,
+        NgxMaskDirective,
+        NgxMaskPipe],
+    providers: [
+        {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
-          },
-          {
+        },
+        {
             provide: ConfigService,
             useClass: MockConfigService
-          },
-          {
+        },
+        {
             provide: AuthService,
             useClass: MockAuthService
-          },
-          {
+        },
+        {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
-          },
-          KeycloakService,
-          provideNgxMask()
-        ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA]
-      }
+        },
+        KeycloakService,
+        provideNgxMask(),
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}
     ).compileComponents();
   }));
 

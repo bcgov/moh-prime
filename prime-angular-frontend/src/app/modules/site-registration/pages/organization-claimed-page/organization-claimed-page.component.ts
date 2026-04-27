@@ -5,9 +5,10 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
-  selector: 'app-organization-claimed-page',
-  templateUrl: './organization-claimed-page.component.html',
-  styleUrls: ['./organization-claimed-page.component.scss']
+    selector: 'app-organization-claimed-page',
+    templateUrl: './organization-claimed-page.component.html',
+    styleUrls: ['./organization-claimed-page.component.scss'],
+    standalone: false
 })
 export class OrganizationClaimedPageComponent implements OnInit {
   public title: string;

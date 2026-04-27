@@ -1,7 +1,7 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -19,6 +19,7 @@ import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { SiteManagementPageComponent } from './site-management-page.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SiteManagementPageComponent', () => {
   let component: SiteManagementPageComponent;
@@ -26,41 +27,40 @@ describe('SiteManagementPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        ReactiveFormsModule,
-        NgxMaterialModule,
-        BrowserAnimationsModule
-      ],
-      declarations: [
+    declarations: [
         SiteManagementPageComponent,
         FullnamePipe,
         AddressPipe,
         ConfigCodePipe,
         CapitalizePipe
-      ],
-      providers: [
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
+        ReactiveFormsModule,
+        NgxMaterialModule,
+        BrowserAnimationsModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: AuthService,
-          useClass: MockAuthService
+            provide: AuthService,
+            useClass: MockAuthService
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
         KeycloakService,
         FullnamePipe,
         AddressPipe,
         ConfigCodePipe,
-        CapitalizePipe
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+        CapitalizePipe,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

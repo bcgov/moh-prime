@@ -3,9 +3,10 @@ import { Component, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-busy-loading',
-  templateUrl: './busy-loading.component.html',
-  styleUrls: ['./busy-loading.component.scss']
+    selector: 'app-busy-loading',
+    templateUrl: './busy-loading.component.html',
+    styleUrls: ['./busy-loading.component.scss'],
+    standalone: false
 })
 export class BusyLoadingComponent {
   @Input() busy: Subscription;
