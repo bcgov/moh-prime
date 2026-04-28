@@ -9,9 +9,10 @@ import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-paper-enrolment-dashboard',
-  templateUrl: './paper-enrolment-dashboard.component.html',
-  styleUrls: ['./paper-enrolment-dashboard.component.scss']
+    selector: 'app-paper-enrolment-dashboard',
+    templateUrl: './paper-enrolment-dashboard.component.html',
+    styleUrls: ['./paper-enrolment-dashboard.component.scss'],
+    standalone: false
 })
 export class PaperEnrolmentDashboardComponent implements OnInit, IDashboard {
   public dashboardMenuItems: Observable<DashboardMenuItem[]>;

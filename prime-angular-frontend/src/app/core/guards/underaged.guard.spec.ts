@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -9,6 +9,7 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 
 import { UnderagedGuard } from './underaged.guard';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 
 describe('UnderagedGuard', () => {
@@ -16,23 +17,22 @@ describe('UnderagedGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule.withRoutes([
-          {
-            path: AppRoutes.UNDERAGED,
-            component: UnderagedComponent
-          }
-        ])
-      ],
-      providers: [
+    imports: [RouterTestingModule.withRoutes([
+            {
+                path: AppRoutes.UNDERAGED,
+                component: UnderagedComponent
+            }
+        ])],
+    providers: [
         {
-          provide: AuthService,
-          useClass: MockAuthService
+            provide: AuthService,
+            useClass: MockAuthService
         },
-        KeycloakService
-      ]
-    });
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+});
     guard = TestBed.inject(UnderagedGuard);
   });
 

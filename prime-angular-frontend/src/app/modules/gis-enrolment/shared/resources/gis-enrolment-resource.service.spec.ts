@@ -1,27 +1,27 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { GisEnrolmentResource } from './gis-enrolment-resource.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('GisEnrolmentResource', () => {
   let service: GisEnrolmentResource;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        NgxMaterialModule
-      ],
-      providers: [
+    imports: [NgxMaterialModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
-        }
-      ]
-    });
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+});
     service = TestBed.inject(GisEnrolmentResource);
   });
 

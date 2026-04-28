@@ -4,9 +4,10 @@ import { UntypedFormGroup, UntypedFormControl, UntypedFormBuilder } from '@angul
 import { debounceTime } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-note',
-  templateUrl: './note.component.html',
-  styleUrls: ['./note.component.scss']
+    selector: 'app-note',
+    templateUrl: './note.component.html',
+    styleUrls: ['./note.component.scss'],
+    standalone: false
 })
 export class NoteComponent implements OnInit {
   public form: UntypedFormGroup;

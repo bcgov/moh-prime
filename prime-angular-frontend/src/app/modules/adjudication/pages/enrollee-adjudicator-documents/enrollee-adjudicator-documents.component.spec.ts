@@ -5,7 +5,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
@@ -13,6 +13,7 @@ import { EnrolleeAdjudicatorDocumentsComponent } from './enrollee-adjudicator-do
 import { AdjudicatorDocumentsComponent } from '@adjudication/shared/components/adjudicator-documents/adjudicator-documents.component';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, Output } from '@angular/core';
 import { AdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('EnrolleeAdjudicatorDocumentsComponent', () => {
   let component: EnrolleeAdjudicatorDocumentsComponent;
@@ -31,11 +32,13 @@ describe('EnrolleeAdjudicatorDocumentsComponent', () => {
     selector: 'app-adjudicator-document',
     template: '',
     providers: [
-      {
-        provide: AdjudicatorDocumentsComponent,
-        useClass: AdjudicatorDocumentsStubComponent
-      }]
-  })
+        {
+            provide: AdjudicatorDocumentsComponent,
+            useClass: AdjudicatorDocumentsStubComponent
+        }
+    ],
+    standalone: false
+})
   class AdjudicatorDocumentsStubComponent {
     @Input() public documents$: Observable<AdjudicationDocument[]>;
     @Output() public saveDocuments: EventEmitter<string[]>;
@@ -56,24 +59,23 @@ describe('EnrolleeAdjudicatorDocumentsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+    declarations: [
         EnrolleeAdjudicatorDocumentsComponent,
         AdjudicatorDocumentsStubComponent
-      ],
-      imports: [
-        RouterTestingModule,
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
         ReactiveFormsModule,
-        HttpClientTestingModule,
-        MatSnackBarModule
-      ],
-      providers: [
+        MatSnackBarModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

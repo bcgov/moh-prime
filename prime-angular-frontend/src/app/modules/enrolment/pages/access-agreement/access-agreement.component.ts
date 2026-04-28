@@ -28,9 +28,10 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 @Component({
-  selector: 'app-access-agreement',
-  templateUrl: './access-agreement.component.html',
-  styleUrls: ['./access-agreement.component.scss']
+    selector: 'app-access-agreement',
+    templateUrl: './access-agreement.component.html',
+    styleUrls: ['./access-agreement.component.scss'],
+    standalone: false
 })
 export class AccessAgreementComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;

@@ -31,9 +31,10 @@ import { WebApiLoggerService } from '@core/services/web-api-logger.service';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-organization-name-page',
-  templateUrl: './organization-name-page.component.html',
-  styleUrls: ['./organization-name-page.component.scss']
+    selector: 'app-organization-name-page',
+    templateUrl: './organization-name-page.component.html',
+    styleUrls: ['./organization-name-page.component.scss'],
+    standalone: false
 })
 export class OrganizationNamePageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: OrganizationNamePageFormState;

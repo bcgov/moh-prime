@@ -20,10 +20,11 @@ import { exhaustMap } from 'rxjs/operators';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 
 @Component({
-  selector: 'app-absence-management-page',
-  templateUrl: './absence-management-page.component.html',
-  styleUrls: ['./absence-management-page.component.scss'],
-  providers: [FormatDatePipe]
+    selector: 'app-absence-management-page',
+    templateUrl: './absence-management-page.component.html',
+    styleUrls: ['./absence-management-page.component.scss'],
+    providers: [FormatDatePipe],
+    standalone: false
 })
 export class AbsenceManagementPageComponent extends AbstractEnrolmentPage implements OnInit {
   public busy: Subscription;

@@ -2,9 +2,10 @@ import { Component, OnInit, Output, EventEmitter, Input, TemplateRef } from '@an
 import { KeyValue } from '@angular/common';
 
 @Component({
-  selector: 'app-summary-card',
-  templateUrl: './summary-card.component.html',
-  styleUrls: ['./summary-card.component.scss']
+    selector: 'app-summary-card',
+    templateUrl: './summary-card.component.html',
+    styleUrls: ['./summary-card.component.scss'],
+    standalone: false
 })
 export class SummaryCardComponent implements OnInit {
   @Input() public icon: string;

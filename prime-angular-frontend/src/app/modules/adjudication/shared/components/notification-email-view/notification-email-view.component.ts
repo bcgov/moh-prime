@@ -14,9 +14,10 @@ import { EmailTemplate } from '@adjudication/shared/models/email-template.model'
 import { EmailTemplateResourceService } from '@adjudication/shared/services/email-template-resource.service';
 
 @Component({
-  selector: 'app-notification-email-view',
-  templateUrl: './notification-email-view.component.html',
-  styleUrls: ['./notification-email-view.component.scss']
+    selector: 'app-notification-email-view',
+    templateUrl: './notification-email-view.component.html',
+    styleUrls: ['./notification-email-view.component.scss'],
+    standalone: false
 })
 export class NotificationEmailViewComponent implements OnInit {
   @Input() public busy: Subscription;

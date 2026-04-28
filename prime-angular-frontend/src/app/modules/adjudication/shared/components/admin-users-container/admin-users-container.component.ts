@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-admin-users-container',
-  templateUrl: './admin-users-container.component.html',
-  styleUrls: ['./admin-users-container.component.scss']
+    selector: 'app-admin-users-container',
+    templateUrl: './admin-users-container.component.html',
+    styleUrls: ['./admin-users-container.component.scss'],
+    standalone: false
 })
 export class AdminUsersContainerComponent implements OnInit {
   public busy: Subscription;

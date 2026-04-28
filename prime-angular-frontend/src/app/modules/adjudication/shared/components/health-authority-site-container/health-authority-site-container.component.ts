@@ -23,9 +23,10 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 @Component({
-  selector: 'app-health-authority-site-container',
-  templateUrl: './health-authority-site-container.component.html',
-  styleUrls: ['./health-authority-site-container.component.scss']
+    selector: 'app-health-authority-site-container',
+    templateUrl: './health-authority-site-container.component.html',
+    styleUrls: ['./health-authority-site-container.component.scss'],
+    standalone: false
 })
 export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage implements OnInit {
   @Input() public busy: Subscription;

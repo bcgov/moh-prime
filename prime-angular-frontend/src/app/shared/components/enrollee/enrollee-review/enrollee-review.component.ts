@@ -19,9 +19,10 @@ import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.
 import { ConfigService } from '@config/config.service';
 
 @Component({
-  selector: 'app-enrollee-review',
-  templateUrl: './enrollee-review.component.html',
-  styleUrls: ['./enrollee-review.component.scss']
+    selector: 'app-enrollee-review',
+    templateUrl: './enrollee-review.component.html',
+    styleUrls: ['./enrollee-review.component.scss'],
+    standalone: false
 })
 export class EnrolleeReviewComponent {
   @Input() public showEditRedirect: boolean;

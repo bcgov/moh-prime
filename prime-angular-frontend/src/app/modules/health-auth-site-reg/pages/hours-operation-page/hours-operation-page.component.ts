@@ -30,9 +30,10 @@ export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
 }
 
 @Component({
-  selector: 'app-hours-operation-page',
-  templateUrl: './hours-operation-page.component.html',
-  styleUrls: ['./hours-operation-page.component.scss']
+    selector: 'app-hours-operation-page',
+    templateUrl: './hours-operation-page.component.html',
+    styleUrls: ['./hours-operation-page.component.scss'],
+    standalone: false
 })
 export class HoursOperationPageComponent extends AbstractHealthAuthoritySiteRegistrationPage implements OnInit {
   public formState: HoursOperationFormState;

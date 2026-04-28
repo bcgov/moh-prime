@@ -1,7 +1,8 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[appPageSubheaderTitle]'
+    selector: '[appPageSubheaderTitle]',
+    standalone: false
 })
 export class PageSubheaderTitleDirective {
   constructor() { }

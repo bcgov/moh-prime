@@ -5,9 +5,10 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-authorized-user-page',
-  templateUrl: './authorized-user-page.component.html',
-  styleUrls: ['./authorized-user-page.component.scss']
+    selector: 'app-authorized-user-page',
+    templateUrl: './authorized-user-page.component.html',
+    styleUrls: ['./authorized-user-page.component.scss'],
+    standalone: false
 })
 export class AuthorizedUserPageComponent implements OnInit {
   public busy: Subscription;

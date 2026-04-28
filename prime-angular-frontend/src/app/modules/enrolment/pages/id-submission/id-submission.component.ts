@@ -17,9 +17,10 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
-  selector: 'app-id-submission',
-  templateUrl: './id-submission.component.html',
-  styleUrls: ['./id-submission.component.scss']
+    selector: 'app-id-submission',
+    templateUrl: './id-submission.component.html',
+    styleUrls: ['./id-submission.component.scss'],
+    standalone: false
 })
 export class IdSubmissionComponent extends BaseEnrolmentProfilePage implements OnInit {
   public uploadedFile: boolean;

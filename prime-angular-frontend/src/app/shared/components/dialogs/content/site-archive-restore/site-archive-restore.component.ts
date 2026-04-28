@@ -13,9 +13,10 @@ export enum SiteActionEnum {
 }
 
 @Component({
-  selector: 'app-site-archive-restore',
-  templateUrl: './site-archive-restore.component.html',
-  styleUrls: ['./site-archive-restore.component.scss']
+    selector: 'app-site-archive-restore',
+    templateUrl: './site-archive-restore.component.html',
+    styleUrls: ['./site-archive-restore.component.scss'],
+    standalone: false
 })
 export class SiteArchiveRestoreComponent implements OnInit {
   public form: UntypedFormGroup;

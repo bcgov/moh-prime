@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-organization-claim-confirmation-page',
-  templateUrl: './organization-claim-confirmation-page.component.html',
-  styleUrls: ['./organization-claim-confirmation-page.component.scss']
+    selector: 'app-organization-claim-confirmation-page',
+    templateUrl: './organization-claim-confirmation-page.component.html',
+    styleUrls: ['./organization-claim-confirmation-page.component.scss'],
+    standalone: false
 })
 export class OrganizationClaimConfirmationPageComponent implements OnInit {
   public title: string;

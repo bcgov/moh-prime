@@ -26,9 +26,10 @@ export class LicenseMaintenanceConfig implements IWeightedConfig {
 }
 
 @Component({
-  selector: 'app-license-classes-maintenance-page',
-  templateUrl: './license-classes-maintenance-page.component.html',
-  styleUrls: ['./license-classes-maintenance-page.component.scss']
+    selector: 'app-license-classes-maintenance-page',
+    templateUrl: './license-classes-maintenance-page.component.html',
+    styleUrls: ['./license-classes-maintenance-page.component.scss'],
+    standalone: false
 })
 export class LicenseClassesMaintenancePageComponent implements OnInit {
   public busy: Subscription;

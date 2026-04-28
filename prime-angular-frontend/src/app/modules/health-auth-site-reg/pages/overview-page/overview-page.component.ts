@@ -28,9 +28,10 @@ import { HealthAuthoritySiteFormStateService } from '@health-auth/shared/service
 
 @UntilDestroy()
 @Component({
-  selector: 'app-overview-page',
-  templateUrl: './overview-page.component.html',
-  styleUrls: ['./overview-page.component.scss']
+    selector: 'app-overview-page',
+    templateUrl: './overview-page.component.html',
+    styleUrls: ['./overview-page.component.scss'],
+    standalone: false
 })
 export class OverviewPageComponent implements OnInit {
   public busy: Subscription;

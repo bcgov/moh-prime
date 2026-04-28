@@ -6,9 +6,10 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 @Component({
-  selector: 'app-bcsc-enrolment-login-page',
-  templateUrl: './bcsc-enrolment-login-page.component.html',
-  styleUrls: ['./bcsc-enrolment-login-page.component.scss']
+    selector: 'app-bcsc-enrolment-login-page',
+    templateUrl: './bcsc-enrolment-login-page.component.html',
+    styleUrls: ['./bcsc-enrolment-login-page.component.scss'],
+    standalone: false
 })
 export class BcscEnrolmentLoginPageComponent implements OnInit {
   constructor(

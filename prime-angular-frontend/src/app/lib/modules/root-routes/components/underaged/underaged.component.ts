@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-underaged',
-  templateUrl: './underaged.component.html',
-  styleUrls: ['./underaged.component.scss']
+    selector: 'app-underaged',
+    templateUrl: './underaged.component.html',
+    styleUrls: ['./underaged.component.scss'],
+    standalone: false
 })
 export class UnderagedComponent implements OnInit {
   constructor() { }
