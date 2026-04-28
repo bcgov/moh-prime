@@ -59,7 +59,7 @@
     "@angular-eslint/eslint-plugin-template": "^19.8.1",
     "@angular-eslint/schematics": "^19.8.1",
     "@angular-eslint/template-parser": "^19.8.1",
-    "@angular/cli": "^19.2.24",
+    "@angular/cli": "^21.2.8",
     "@angular/compiler-cli": "^19.2.21",
     "@angular/language-service": "^19.2.21",
     "@types/faker": "^4.1.12",
