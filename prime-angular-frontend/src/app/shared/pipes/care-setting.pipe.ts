@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Pipe({
-  name: 'careSetting'
+    name: 'careSetting',
+    standalone: false
 })
 export class CareSettingPipe implements PipeTransform {
   public transform(value: CareSettingEnum | CareSettingEnum[], format: 'name' | 'abbr' = 'name'): string | string[] {

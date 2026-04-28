@@ -8,9 +8,10 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { SatEformsRoutes } from '@sat/sat-eforms.routes';
 
 @Component({
-  selector: 'app-sat-eforms-login-page',
-  templateUrl: './sat-eforms-login-page.component.html',
-  styleUrls: ['./sat-eforms-login-page.component.scss']
+    selector: 'app-sat-eforms-login-page',
+    templateUrl: './sat-eforms-login-page.component.html',
+    styleUrls: ['./sat-eforms-login-page.component.scss'],
+    standalone: false
 })
 export class SatEformsLoginPageComponent implements OnInit {
   public title: string;

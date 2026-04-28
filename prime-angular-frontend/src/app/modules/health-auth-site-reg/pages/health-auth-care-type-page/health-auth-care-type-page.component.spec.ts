@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -15,6 +15,7 @@ import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { HealthAuthCareTypePageComponent } from './health-auth-care-type-page.component';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('HealthAuthCareTypePageComponent', () => {
   const mockActivatedRoute = {
@@ -36,33 +37,32 @@ describe('HealthAuthCareTypePageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [
+        HealthAuthCareTypePageComponent
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
         ReactiveFormsModule,
         NgxMaterialModule,
-        BrowserAnimationsModule
-      ],
-      declarations: [
-        HealthAuthCareTypePageComponent
-      ],
-      providers: [
+        BrowserAnimationsModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
         {
-          provide: ActivatedRoute,
-          useValue: mockActivatedRoute
+            provide: ActivatedRoute,
+            useValue: mockActivatedRoute
         },
-        CapitalizePipe
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+        CapitalizePipe,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

@@ -26,9 +26,10 @@ import { IStep } from '@shared/components/progress-indicator/progress-indicator.
 
 @UntilDestroy()
 @Component({
-  selector: 'app-care-setting-page',
-  templateUrl: './care-setting-page.component.html',
-  styleUrls: ['./care-setting-page.component.scss']
+    selector: 'app-care-setting-page',
+    templateUrl: './care-setting-page.component.html',
+    styleUrls: ['./care-setting-page.component.scss'],
+    standalone: false
 })
 export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: CareSettingPageFormState;

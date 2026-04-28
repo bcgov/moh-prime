@@ -8,9 +8,10 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 
 @Component({
-  selector: 'app-health-auth-site-reg-dashboard',
-  templateUrl: './health-auth-site-reg-dashboard.component.html',
-  styleUrls: ['./health-auth-site-reg-dashboard.component.scss']
+    selector: 'app-health-auth-site-reg-dashboard',
+    templateUrl: './health-auth-site-reg-dashboard.component.html',
+    styleUrls: ['./health-auth-site-reg-dashboard.component.scss'],
+    standalone: false
 })
 export class HealthAuthSiteRegDashboardComponent implements OnInit {
   public dashboardMenuItems: Observable<DashboardMenuItem[]>;

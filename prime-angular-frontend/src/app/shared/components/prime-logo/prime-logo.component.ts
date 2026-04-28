@@ -13,9 +13,10 @@ interface PrimeLogoConfig {
 }
 
 @Component({
-  selector: 'app-prime-logo',
-  templateUrl: './prime-logo.component.svg',
-  styleUrls: ['./prime-logo.component.scss']
+    selector: 'app-prime-logo',
+    templateUrl: './prime-logo.component.svg',
+    styleUrls: ['./prime-logo.component.scss'],
+    standalone: false
 })
 export class PrimeLogoComponent implements OnInit, OnChanges {
   @Input() public fill: primeLogoFill;

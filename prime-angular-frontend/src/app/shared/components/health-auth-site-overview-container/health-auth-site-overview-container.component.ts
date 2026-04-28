@@ -4,9 +4,10 @@ import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority
 import { Contact } from '@lib/models/contact.model';
 
 @Component({
-  selector: 'app-health-auth-site-overview-container',
-  templateUrl: './health-auth-site-overview-container.component.html',
-  styleUrls: ['./health-auth-site-overview-container.component.scss']
+    selector: 'app-health-auth-site-overview-container',
+    templateUrl: './health-auth-site-overview-container.component.html',
+    styleUrls: ['./health-auth-site-overview-container.component.scss'],
+    standalone: false
 })
 export class HealthAuthSiteOverviewContainerComponent implements OnInit {
   @Input() public healthAuthoritySite: HealthAuthoritySite | HealthAuthoritySiteAdmin;

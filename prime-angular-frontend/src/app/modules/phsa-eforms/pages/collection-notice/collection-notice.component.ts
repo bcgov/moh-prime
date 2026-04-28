@@ -7,9 +7,10 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 
 @Component({
-  selector: 'app-collection-notice',
-  templateUrl: './collection-notice.component.html',
-  styleUrls: ['./collection-notice.component.scss']
+    selector: 'app-collection-notice',
+    templateUrl: './collection-notice.component.html',
+    styleUrls: ['./collection-notice.component.scss'],
+    standalone: false
 })
 export class CollectionNoticeComponent implements OnInit {
   public isFull: boolean;

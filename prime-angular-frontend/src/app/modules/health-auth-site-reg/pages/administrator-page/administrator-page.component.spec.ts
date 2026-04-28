@@ -1,7 +1,7 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -18,6 +18,7 @@ import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { HealthAuthorityService } from '@health-auth/shared/services/health-authority.service';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
 import { AdministratorPageComponent } from './administrator-page.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AdministratorPageComponent', () => {
   let component: AdministratorPageComponent;
@@ -36,39 +37,38 @@ describe('AdministratorPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserAnimationsModule,
-        HttpClientTestingModule,
+    declarations: [
+        AdministratorPageComponent
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [BrowserAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
         MatDialogModule,
-        MatSnackBarModule
-      ],
-      declarations: [
-        AdministratorPageComponent
-      ],
-      providers: [
+        MatSnackBarModule],
+    providers: [
         KeycloakService,
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ActivatedRoute,
-          useValue: mockActivatedRoute
+            provide: ActivatedRoute,
+            useValue: mockActivatedRoute
         },
         {
-          provide: HealthAuthorityService,
-          useClass: MockHealthAuthorityService
+            provide: HealthAuthorityService,
+            useClass: MockHealthAuthorityService
         },
         {
-          provide: HealthAuthoritySiteService,
-          useClass: MockHealthAuthoritySiteService
+            provide: HealthAuthoritySiteService,
+            useClass: MockHealthAuthoritySiteService
         },
-        CapitalizePipe
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+        CapitalizePipe,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

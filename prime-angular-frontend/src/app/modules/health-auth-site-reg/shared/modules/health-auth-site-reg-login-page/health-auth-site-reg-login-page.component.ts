@@ -9,9 +9,10 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 import { SiteRegistrationTypeEnum } from '@health-auth/shared/enums/site-registration-type.enum';
 
 @Component({
-  selector: 'app-health-auth-site-reg-login-page',
-  templateUrl: './health-auth-site-reg-login-page.component.html',
-  styleUrls: ['./health-auth-site-reg-login-page.component.scss']
+    selector: 'app-health-auth-site-reg-login-page',
+    templateUrl: './health-auth-site-reg-login-page.component.html',
+    styleUrls: ['./health-auth-site-reg-login-page.component.scss'],
+    standalone: false
 })
 export class HealthAuthSiteRegLoginPageComponent implements OnInit {
   public title: string;

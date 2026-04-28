@@ -2,9 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-preferred-name-form',
-  templateUrl: './preferred-name-form.component.html',
-  styleUrls: ['./preferred-name-form.component.scss']
+    selector: 'app-preferred-name-form',
+    templateUrl: './preferred-name-form.component.html',
+    styleUrls: ['./preferred-name-form.component.scss'],
+    standalone: false
 })
 export class PreferredNameFormComponent implements OnInit {
   /**

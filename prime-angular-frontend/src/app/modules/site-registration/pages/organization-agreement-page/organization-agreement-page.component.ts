@@ -26,9 +26,10 @@ import { OrganizationAgreementPageFormState } from './organization-agreement-pag
 import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
-  selector: 'app-organization-agreement-page',
-  templateUrl: './organization-agreement-page.component.html',
-  styleUrls: ['./organization-agreement-page.component.scss']
+    selector: 'app-organization-agreement-page',
+    templateUrl: './organization-agreement-page.component.html',
+    styleUrls: ['./organization-agreement-page.component.scss'],
+    standalone: false
 })
 export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: OrganizationAgreementPageFormState;

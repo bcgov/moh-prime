@@ -10,9 +10,10 @@ import { BannerResourceService } from '@shared/services/banner-resource.service'
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-enrollee-banner-list-page',
-  templateUrl: './enrollee-banner-list-page.component.html',
-  styleUrls: ['./enrollee-banner-list-page.component.scss']
+    selector: 'app-enrollee-banner-list-page',
+    templateUrl: './enrollee-banner-list-page.component.html',
+    styleUrls: ['./enrollee-banner-list-page.component.scss'],
+    standalone: false
 })
 export class EnrolleeBannerListPageComponent implements OnInit {
   public busy: Subscription;

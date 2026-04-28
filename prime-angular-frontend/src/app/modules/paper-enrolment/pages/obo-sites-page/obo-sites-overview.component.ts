@@ -9,8 +9,8 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { OboSitesForm } from './obo-sites-form.model';
 
 @Component({
-  selector: 'app-obo-sites-overview',
-  template: `
+    selector: 'app-obo-sites-overview',
+    template: `
     <app-page-section *ngIf="oboSites?.oboSites?.length">
 
       <app-page-subheader>
@@ -83,8 +83,9 @@ import { OboSitesForm } from './obo-sites-form.model';
       </button>
     </app-page-section>
   `,
-  styles: ['mat-icon { font-size: 1em; }'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    styles: ['mat-icon { font-size: 1em; }'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class OboSitesOverviewComponent extends AbstractOverview {
   @Input() public oboSites: OboSitesForm;

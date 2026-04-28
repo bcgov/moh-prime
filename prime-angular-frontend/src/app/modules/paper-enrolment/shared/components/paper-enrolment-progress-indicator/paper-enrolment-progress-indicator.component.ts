@@ -7,9 +7,10 @@ import { IProgressIndicator } from '@shared/components/progress-indicator/progre
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 
 @Component({
-  selector: 'app-paper-enrolment-progress-indicator',
-  templateUrl: './paper-enrolment-progress-indicator.component.html',
-  styleUrls: ['./paper-enrolment-progress-indicator.component.scss']
+    selector: 'app-paper-enrolment-progress-indicator',
+    templateUrl: './paper-enrolment-progress-indicator.component.html',
+    styleUrls: ['./paper-enrolment-progress-indicator.component.scss'],
+    standalone: false
 })
 export class PaperEnrolmentProgressIndicatorComponent implements OnInit, IProgressIndicator {
   @Input() public inProgress: boolean;

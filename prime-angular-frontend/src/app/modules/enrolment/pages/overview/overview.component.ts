@@ -37,9 +37,10 @@ import { SiteResource } from '@core/resources/site-resource.service';
 
 
 @Component({
-  selector: 'app-overview',
-  templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.scss']
+    selector: 'app-overview',
+    templateUrl: './overview.component.html',
+    styleUrls: ['./overview.component.scss'],
+    standalone: false
 })
 export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;

@@ -16,9 +16,10 @@ export abstract class AbstractCollectionNoticeAlert {
 }
 
 @Component({
-  selector: 'app-collection-notice-container',
-  templateUrl: './collection-notice-container.component.html',
-  styleUrls: ['./collection-notice-container.component.scss']
+    selector: 'app-collection-notice-container',
+    templateUrl: './collection-notice-container.component.html',
+    styleUrls: ['./collection-notice-container.component.scss'],
+    standalone: false
 })
 export class CollectionNoticeContainerComponent extends AbstractCollectionNoticeAlert implements OnInit {
   public title: string;

@@ -7,8 +7,8 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { CareSettingForm } from './care-setting-form.model';
 
 @Component({
-  selector: 'app-care-setting-overview',
-  template: `
+    selector: 'app-care-setting-overview',
+    template: `
     <app-page-section>
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Care Setting</ng-container>
@@ -65,8 +65,9 @@ import { CareSettingForm } from './care-setting-form.model';
       </button>
     </app-page-section>
   `,
-  styles: ['mat-icon { font-size: 1em; }'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    styles: ['mat-icon { font-size: 1em; }'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CareSettingOverviewComponent extends AbstractOverview {
   @Input() public careSettings: CareSettingForm;

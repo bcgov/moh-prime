@@ -3,9 +3,10 @@ import { Component, Input } from '@angular/core';
 import { Party } from '@lib/models/party.model';
 
 @Component({
-  selector: 'app-party-review',
-  templateUrl: './party-review.component.html',
-  styleUrls: ['./party-review.component.scss']
+    selector: 'app-party-review',
+    templateUrl: './party-review.component.html',
+    styleUrls: ['./party-review.component.scss'],
+    standalone: false
 })
 export class PartyReviewComponent {
   @Input() public party: Party;

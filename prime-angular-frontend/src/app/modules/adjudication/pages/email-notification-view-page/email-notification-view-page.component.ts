@@ -8,9 +8,10 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-email-notification-view-page',
-  templateUrl: './email-notification-view-page.component.html',
-  styleUrls: ['./email-notification-view-page.component.scss']
+    selector: 'app-email-notification-view-page',
+    templateUrl: './email-notification-view-page.component.html',
+    styleUrls: ['./email-notification-view-page.component.scss'],
+    standalone: false
 })
 export class EmailNotificationViewPageComponent implements OnInit {
   public busy: Subscription;

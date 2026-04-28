@@ -22,9 +22,10 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 @Component({
-  selector: 'app-obo-sites-page',
-  templateUrl: './obo-sites-page.component.html',
-  styleUrls: ['./obo-sites-page.component.scss']
+    selector: 'app-obo-sites-page',
+    templateUrl: './obo-sites-page.component.html',
+    styleUrls: ['./obo-sites-page.component.scss'],
+    standalone: false
 })
 export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public jobNames: Config<number>[];

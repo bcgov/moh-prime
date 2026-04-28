@@ -18,9 +18,10 @@ import { SiteListViewModel } from '@registration/shared/models/site.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 
 @Component({
-  selector: 'app-organization-container',
-  templateUrl: './organization-container.component.html',
-  styleUrls: ['./organization-container.component.scss']
+    selector: 'app-organization-container',
+    templateUrl: './organization-container.component.html',
+    styleUrls: ['./organization-container.component.scss'],
+    standalone: false
 })
 export class OrganizationContainerComponent implements OnInit {
   @Input() public content: TemplateRef<any>;

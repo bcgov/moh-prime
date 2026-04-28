@@ -1,7 +1,7 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +16,7 @@ import { SiteRegistrationTableComponent } from './site-registration-table.compon
 import { MockPermissionService } from 'test/mocks/mock-permission.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SiteRegistrationTableComponent', () => {
   let component: SiteRegistrationTableComponent;
@@ -30,33 +31,32 @@ describe('SiteRegistrationTableComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        NgxMaterialModule,
+    declarations: [
+        InRolePipe
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [NgxMaterialModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule
-      ],
-      declarations: [
-        InRolePipe
-      ],
-      providers: [
+        BrowserAnimationsModule],
+    providers: [
         KeycloakService,
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ActivatedRoute,
-          useValue: mockActivatedRoute
+            provide: ActivatedRoute,
+            useValue: mockActivatedRoute
         },
         {
-          provide: PermissionService,
-          useClass: MockPermissionService
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+            provide: PermissionService,
+            useClass: MockPermissionService
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

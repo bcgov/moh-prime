@@ -24,9 +24,10 @@ import { CertSearch } from '@enrolment/shared/models/cert-search.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
-  selector: 'app-remote-access',
-  templateUrl: './remote-access.component.html',
-  styleUrls: ['./remote-access.component.scss']
+    selector: 'app-remote-access',
+    templateUrl: './remote-access.component.html',
+    styleUrls: ['./remote-access.component.scss'],
+    standalone: false
 })
 export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements OnInit {
   @ViewChild('requestAccess') public requestAccess: MatSlideToggle;

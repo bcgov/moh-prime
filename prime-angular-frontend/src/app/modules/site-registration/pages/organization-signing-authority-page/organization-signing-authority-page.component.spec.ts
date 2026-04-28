@@ -1,7 +1,7 @@
 import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 
@@ -22,6 +22,7 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('OrganizationSigningAuthorityPageComponent', () => {
   let component: OrganizationSigningAuthorityPageComponent;
@@ -29,45 +30,44 @@ describe('OrganizationSigningAuthorityPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+    declarations: [
         OrganizationSigningAuthorityPageComponent,
         DefaultPipe,
         FullnamePipe,
         FormatDatePipe,
         ConfigCodePipe,
         PostalPipe
-      ],
-      imports: [
-        BrowserAnimationsModule,
-        HttpClientTestingModule,
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [BrowserAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
         NgxMaterialModule,
         NgxMaskDirective,
-        NgxMaskPipe
-      ],
-      providers: [
+        NgxMaskPipe],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
         {
-          provide: OrganizationService,
-          useClass: MockOrganizationService
+            provide: OrganizationService,
+            useClass: MockOrganizationService
         },
         {
-          provide: AuthService,
-          useClass: MockAuthService
+            provide: AuthService,
+            useClass: MockAuthService
         },
         OrganizationFormStateService,
-        provideNgxMask()
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+        provideNgxMask(),
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(inject(

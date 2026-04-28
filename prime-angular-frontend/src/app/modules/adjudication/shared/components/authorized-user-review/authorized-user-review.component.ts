@@ -19,9 +19,10 @@ import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-
 import { TransferHASiteComponent } from '@shared/components/dialogs/content/transfer-ha-site/transfer-ha-site.component';
 
 @Component({
-  selector: 'app-authorized-user-review',
-  templateUrl: './authorized-user-review.component.html',
-  styleUrls: ['./authorized-user-review.component.scss']
+    selector: 'app-authorized-user-review',
+    templateUrl: './authorized-user-review.component.html',
+    styleUrls: ['./authorized-user-review.component.scss'],
+    standalone: false
 })
 export class AuthorizedUserReviewComponent implements OnInit {
   public routeUtils: RouteUtils;

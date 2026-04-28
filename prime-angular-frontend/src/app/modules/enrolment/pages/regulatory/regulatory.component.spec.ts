@@ -1,6 +1,6 @@
 import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
@@ -31,6 +31,7 @@ import { RegulatoryFormState } from './regulatory-form-state';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { CareSettingForm } from '@paper-enrolment/pages/care-setting-page/care-setting-form.model';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('RegulatoryComponent', () => {
   let component: RegulatoryComponent;
@@ -41,44 +42,43 @@ describe('RegulatoryComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
-        imports: [
-          BrowserAnimationsModule,
-          HttpClientTestingModule,
-          RouterTestingModule,
-          NgxBusyModule,
-          NgxContextualHelpModule,
-          NgxMaterialModule,
-          ReactiveFormsModule,
-          EnrolmentModule,
-          NgxMaskDirective,
-          NgxMaskPipe
-        ],
-        providers: [
-          {
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [BrowserAnimationsModule,
+        RouterTestingModule,
+        NgxBusyModule,
+        NgxContextualHelpModule,
+        NgxMaterialModule,
+        ReactiveFormsModule,
+        EnrolmentModule,
+        NgxMaskDirective,
+        NgxMaskPipe],
+    providers: [
+        {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
-          },
-          {
+        },
+        {
             provide: ConfigService,
             useClass: MockConfigService
-          },
-          {
+        },
+        {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
-          },
-          {
+        },
+        {
             provide: AuthService,
             useClass: MockAuthService
-          },
-          {
+        },
+        {
             provide: AccessTokenService,
             useClass: MockAccessTokenService
-          },
-          KeycloakService,
-          provideNgxMask()
-        ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA]
-      }
+        },
+        KeycloakService,
+        provideNgxMask(),
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}
     ).compileComponents();
   }));
 

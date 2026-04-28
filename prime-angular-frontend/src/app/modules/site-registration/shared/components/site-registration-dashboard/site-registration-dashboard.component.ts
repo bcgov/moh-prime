@@ -10,9 +10,10 @@ import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
-  selector: 'app-site-registration-dashboard',
-  templateUrl: './site-registration-dashboard.component.html',
-  styleUrls: ['./site-registration-dashboard.component.scss']
+    selector: 'app-site-registration-dashboard',
+    templateUrl: './site-registration-dashboard.component.html',
+    styleUrls: ['./site-registration-dashboard.component.scss'],
+    standalone: false
 })
 export class SiteRegistrationDashboardComponent implements OnInit, IDashboard {
   public dashboardMenuItems: Observable<DashboardMenuItem[]>;
