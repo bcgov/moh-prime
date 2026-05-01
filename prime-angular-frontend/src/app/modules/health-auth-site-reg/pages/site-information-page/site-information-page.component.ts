@@ -22,9 +22,10 @@ import { Observable, of } from 'rxjs';
 import { asyncValidator } from '@lib/validators/form-async.validators';
 
 @Component({
-  selector: 'app-site-information-page',
-  templateUrl: './site-information-page.component.html',
-  styleUrls: ['./site-information-page.component.scss']
+    selector: 'app-site-information-page',
+    templateUrl: './site-information-page.component.html',
+    styleUrls: ['./site-information-page.component.scss'],
+    standalone: false
 })
 export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteRegistrationPage implements OnInit {
   public formState: SiteInformationFormState;

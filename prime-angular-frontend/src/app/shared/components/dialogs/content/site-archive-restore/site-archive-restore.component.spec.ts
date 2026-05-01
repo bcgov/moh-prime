@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
@@ -10,6 +10,7 @@ import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { SiteArchiveRestoreComponent } from './site-archive-restore.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SiteArchiveRestoreComponent', () => {
   let component: SiteArchiveRestoreComponent;
@@ -17,37 +18,37 @@ describe('SiteArchiveRestoreComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        ReactiveFormsModule,
+    declarations: [SiteArchiveRestoreComponent],
+    imports: [ReactiveFormsModule,
         BrowserAnimationsModule,
-        NgxMaterialModule
-      ],
-      declarations: [SiteArchiveRestoreComponent],
-      providers: [
+        NgxMaterialModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
         {
-          provide: MatDialogRef,
-          useValue: {
-            close: (dialogResult: any) => { }
-          }
-        },
-        {
-          provide: MAT_DIALOG_DATA,
-          useValue: {
-            data: {
-              siteId: 1,
+            provide: MatDialogRef,
+            useValue: {
+                close: (dialogResult: any) => { }
             }
-          }
-        },]
-    })
+        },
+        {
+            provide: MAT_DIALOG_DATA,
+            useValue: {
+                data: {
+                    siteId: 1,
+                }
+            }
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
       .compileComponents();
   });
 

@@ -1,10 +1,11 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { RootRoutesModule } from '../../root-routes.module';
 import { HelpComponent } from './help.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('HelpComponent', () => {
   let component: HelpComponent;
@@ -12,21 +13,18 @@ describe('HelpComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RootRoutesModule,
-        HttpClientTestingModule,
-      ],
-      declarations: [
-
-      ],
-      providers: [
+    declarations: [],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RootRoutesModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

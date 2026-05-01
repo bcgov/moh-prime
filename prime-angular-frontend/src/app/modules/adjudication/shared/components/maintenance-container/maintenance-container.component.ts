@@ -5,9 +5,10 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-maintenance-container',
-  templateUrl: './maintenance-container.component.html',
-  styleUrls: ['./maintenance-container.component.scss']
+    selector: 'app-maintenance-container',
+    templateUrl: './maintenance-container.component.html',
+    styleUrls: ['./maintenance-container.component.scss'],
+    standalone: false
 })
 export class MaintenanceContainerComponent implements OnInit {
 

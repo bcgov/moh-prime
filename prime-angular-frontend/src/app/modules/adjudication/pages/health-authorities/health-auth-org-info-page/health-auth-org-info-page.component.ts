@@ -12,9 +12,10 @@ import { BaseDocument } from '@shared/components/document-upload/document-upload
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-health-auth-org-info-page',
-  templateUrl: './health-auth-org-info-page.component.html',
-  styleUrls: ['./health-auth-org-info-page.component.scss']
+    selector: 'app-health-auth-org-info-page',
+    templateUrl: './health-auth-org-info-page.component.html',
+    styleUrls: ['./health-auth-org-info-page.component.scss'],
+    standalone: false
 })
 export class HealthAuthOrgInfoPageComponent implements OnInit {
   public busy: Subscription;

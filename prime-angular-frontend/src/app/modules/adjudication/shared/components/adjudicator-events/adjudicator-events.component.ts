@@ -11,9 +11,10 @@ import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { CasePipe } from '@shared/pipes/case.pipe';
 
 @Component({
-  selector: 'app-adjudicator-events',
-  templateUrl: './adjudicator-events.component.html',
-  styleUrls: ['./adjudicator-events.component.scss']
+    selector: 'app-adjudicator-events',
+    templateUrl: './adjudicator-events.component.html',
+    styleUrls: ['./adjudicator-events.component.scss'],
+    standalone: false
 })
 export class AdjudicatorEventsComponent implements OnInit {
   @Input() public businessEvents$: Observable<BusinessEvent[]>;

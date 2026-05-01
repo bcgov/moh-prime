@@ -30,9 +30,10 @@ class ImprovedPageEvent extends PageEvent {
 
 @UntilDestroy()
 @Component({
-  selector: 'app-enrollee-table',
-  templateUrl: './enrollee-table.component.html',
-  styleUrls: ['./enrollee-table.component.scss']
+    selector: 'app-enrollee-table',
+    templateUrl: './enrollee-table.component.html',
+    styleUrls: ['./enrollee-table.component.scss'],
+    standalone: false
 })
 export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Input() public enrollees: EnrolleeListViewModel[];

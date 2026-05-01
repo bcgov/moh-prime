@@ -8,10 +8,11 @@ import { Moment } from 'moment';
 import { DateUtils } from '@lib/utils/date-utils.class';
 
 @Component({
-  selector: 'app-notification-emails-container',
-  templateUrl: './notification-emails-container.component.html',
-  styleUrls: ['./notification-emails-container.component.scss'],
-  providers: [FormatDatePipe]
+    selector: 'app-notification-emails-container',
+    templateUrl: './notification-emails-container.component.html',
+    styleUrls: ['./notification-emails-container.component.scss'],
+    providers: [FormatDatePipe],
+    standalone: false
 })
 export class NotificationEmailsContainerComponent implements OnInit {
   @Input() public emailTemplates: EmailTemplate[];

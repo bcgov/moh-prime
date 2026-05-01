@@ -8,14 +8,15 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: 'input[appToUppercase]',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      multi: true,
-      useExisting: forwardRef(() => UpperCaseInputDirective),
-    },
-  ],
+    selector: 'input[appToUppercase]',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: forwardRef(() => UpperCaseInputDirective),
+        },
+    ],
+    standalone: false
 })
 
 export class UpperCaseInputDirective extends DefaultValueAccessor {

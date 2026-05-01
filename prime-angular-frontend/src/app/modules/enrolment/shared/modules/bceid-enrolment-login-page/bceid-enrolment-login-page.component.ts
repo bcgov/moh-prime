@@ -6,9 +6,10 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
-  selector: 'app-bceid-enrolment-login-page',
-  templateUrl: './bceid-enrolment-login-page.component.html',
-  styleUrls: ['./bceid-enrolment-login-page.component.scss']
+    selector: 'app-bceid-enrolment-login-page',
+    templateUrl: './bceid-enrolment-login-page.component.html',
+    styleUrls: ['./bceid-enrolment-login-page.component.scss'],
+    standalone: false
 })
 export class BceidEnrolmentLoginPageComponent implements OnInit {
   public title: string;

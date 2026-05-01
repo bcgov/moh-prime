@@ -3,9 +3,10 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 
 @Component({
-  selector: 'app-prime-support-email',
-  templateUrl: './prime-support-email.component.html',
-  styleUrls: ['./prime-support-email.component.scss']
+    selector: 'app-prime-support-email',
+    templateUrl: './prime-support-email.component.html',
+    styleUrls: ['./prime-support-email.component.scss'],
+    standalone: false
 })
 export class PrimeSupportEmailComponent implements OnInit {
   constructor(

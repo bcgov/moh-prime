@@ -21,9 +21,10 @@ export enum EscalationType {
 }
 
 @Component({
-  selector: 'app-escalation-note',
-  templateUrl: './escalation-note.component.html',
-  styleUrls: ['./escalation-note.component.scss']
+    selector: 'app-escalation-note',
+    templateUrl: './escalation-note.component.html',
+    styleUrls: ['./escalation-note.component.scss'],
+    standalone: false
 })
 export class EscalationNoteComponent implements OnInit {
   public id: number;

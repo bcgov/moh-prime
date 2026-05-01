@@ -1,5 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { KeycloakService } from 'keycloak-angular';
@@ -12,6 +12,7 @@ import { AdjudicationModule } from '@adjudication/adjudication.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('EnrolleeAccessTermEnrolmentComponent', () => {
   let component: EnrolleeAccessTermEnrolmentComponent;
@@ -22,27 +23,26 @@ describe('EnrolleeAccessTermEnrolmentComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        NgxBusyModule,
+    declarations: [],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [NgxBusyModule,
         NgxMaterialModule,
-        HttpClientTestingModule,
         RouterTestingModule,
-        AdjudicationModule
-      ],
-      declarations: [],
-      providers: [
+        AdjudicationModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: AuthService,
-          useClass: MockAuthService
+            provide: AuthService,
+            useClass: MockAuthService
         },
-        KeycloakService
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

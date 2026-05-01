@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { MockAuthService } from 'test/mocks/mock-auth.service';
@@ -15,6 +15,7 @@ import { ConfigService } from '@config/config.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { EnrolleeBannerListPageComponent } from './enrollee-banner-list-page.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('EnrolleeBannerListPageComponent', () => {
   let component: EnrolleeBannerListPageComponent;
@@ -22,33 +23,32 @@ describe('EnrolleeBannerListPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
         ReactiveFormsModule,
-        HttpClientTestingModule,
         NgxMaterialModule,
-        BrowserAnimationsModule,
-      ],
-      providers: [
+        BrowserAnimationsModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
         {
-          provide: AuthService,
-          useClass: MockAuthService
+            provide: AuthService,
+            useClass: MockAuthService
         },
         {
-          provide: PermissionService,
-          useClass: MockPermissionService
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+            provide: PermissionService,
+            useClass: MockPermissionService
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

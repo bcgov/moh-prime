@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
@@ -17,6 +17,7 @@ import { SiteManagementPageComponent } from './site-management-page.component';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SiteManagementPageComponent', () => {
   let component: SiteManagementPageComponent;
@@ -24,39 +25,38 @@ describe('SiteManagementPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        HttpClientTestingModule,
-        RouterTestingModule,
-        NgxMaterialModule,
-        BrowserAnimationsModule
-      ],
-      declarations: [
+    declarations: [
         SiteManagementPageComponent,
         CapitalizePipe,
         CasePipe
-      ],
-      providers: [
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [ReactiveFormsModule,
+        RouterTestingModule,
+        NgxMaterialModule,
+        BrowserAnimationsModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
         {
-          provide: AuthService,
-          useClass: MockAuthService
+            provide: AuthService,
+            useClass: MockAuthService
         },
         {
-          provide: AuthorizedUserService,
-          useClass: MockAuthorizedUserService
+            provide: AuthorizedUserService,
+            useClass: MockAuthorizedUserService
         },
-        CapitalizePipe
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }
+        CapitalizePipe,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}
     ).compileComponents();
   }));
 

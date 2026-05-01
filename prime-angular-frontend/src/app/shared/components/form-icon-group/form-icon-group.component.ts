@@ -3,9 +3,10 @@ import { Component, Input, Output, EventEmitter, QueryList, ContentChildren } fr
 import { ContextualContentDirective } from '@lib/modules/ngx-contextual-help/contextual-content.directive';
 
 @Component({
-  selector: 'app-form-icon-group',
-  templateUrl: './form-icon-group.component.html',
-  styleUrls: ['./form-icon-group.component.scss']
+    selector: 'app-form-icon-group',
+    templateUrl: './form-icon-group.component.html',
+    styleUrls: ['./form-icon-group.component.scss'],
+    standalone: false
 })
 export class FormIconGroupComponent {
   @Input() public show: boolean;

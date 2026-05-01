@@ -1,5 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -18,6 +18,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 
 describe('PharmanetEnrolmentSummaryComponent', () => {
@@ -27,38 +28,37 @@ describe('PharmanetEnrolmentSummaryComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
-        imports: [
-          BrowserAnimationsModule,
-          HttpClientTestingModule,
-          RouterTestingModule,
-          EnrolmentModule,
-          ReactiveFormsModule
-        ],
-        providers: [
-          {
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [BrowserAnimationsModule,
+        RouterTestingModule,
+        EnrolmentModule,
+        ReactiveFormsModule],
+    providers: [
+        {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
-          },
-          {
+        },
+        {
             provide: AuthService,
             useClass: MockAuthService
-          },
-          {
+        },
+        {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
-          },
-          {
+        },
+        {
             provide: ConfigService,
             useClass: MockConfigService
-          },
-          {
+        },
+        {
             provide: PermissionService,
             useClass: MockPermissionService
-          },
-          KeycloakService
-        ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA]
-      }
+        },
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}
     ).compileComponents();
   }));
 

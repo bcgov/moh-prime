@@ -7,8 +7,8 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 import { HealthAuthCareTypeForm } from './health-auth-care-type-form.model';
 
 @Component({
-  selector: 'app-health-auth-care-type-overview',
-  template: `
+    selector: 'app-health-auth-care-type-overview',
+    template: `
     <app-overview-section title="Health Authority Care Type"
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE"
@@ -21,8 +21,9 @@ import { HealthAuthCareTypeForm } from './health-auth-care-type-form.model';
       </app-enrollee-property>
     </app-overview-section>
   `,
-  styles: ['mat-icon { font-size: 1.2em; }'],
-  changeDetection: ChangeDetectionStrategy.Default
+    styles: ['mat-icon { font-size: 1.2em; }'],
+    changeDetection: ChangeDetectionStrategy.Default,
+    standalone: false
 })
 export class HealthAuthCareTypeOverviewComponent extends AbstractOverview {
   @Input() public healthAuthCareType: HealthAuthCareTypeForm;

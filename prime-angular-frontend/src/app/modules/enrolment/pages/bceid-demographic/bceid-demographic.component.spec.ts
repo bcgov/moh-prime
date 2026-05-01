@@ -1,6 +1,6 @@
 import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -19,6 +19,7 @@ import { BceidDemographicFormState } from './bceid-demographic-form-state.class'
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('BceidDemographicComponent', () => {
   let component: BceidDemographicComponent;
@@ -26,35 +27,34 @@ describe('BceidDemographicComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserAnimationsModule,
-        HttpClientTestingModule,
+    declarations: [
+        BceidDemographicComponent
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [BrowserAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
         NgxMaterialModule,
-        MatDatepickerModule
-      ],
-      declarations: [
-        BceidDemographicComponent
-      ],
-      providers: [
+        MatDatepickerModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: AuthService,
-          useClass: MockAuthService
+            provide: AuthService,
+            useClass: MockAuthService
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
         KeycloakService,
-        EnrolmentFormStateService
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+        EnrolmentFormStateService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(inject(

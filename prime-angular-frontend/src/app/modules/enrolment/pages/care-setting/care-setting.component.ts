@@ -22,9 +22,10 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 @Component({
-  selector: 'app-care-setting',
-  templateUrl: './care-setting.component.html',
-  styleUrls: ['./care-setting.component.scss']
+    selector: 'app-care-setting',
+    templateUrl: './care-setting.component.html',
+    styleUrls: ['./care-setting.component.scss'],
+    standalone: false
 })
 export class CareSettingComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
 

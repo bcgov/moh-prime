@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -10,6 +10,7 @@ import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 import { NextStepsPageComponent } from './next-steps-page.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('NextStepsComponent', () => {
   let component: NextStepsPageComponent;
@@ -20,29 +21,28 @@ describe('NextStepsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+    declarations: [
         NextStepsPageComponent,
         DefaultPipe
-      ],
-      imports: [
-        NgxMaterialModule,
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [NgxMaterialModule,
         ReactiveFormsModule,
-        HttpClientTestingModule,
         RouterTestingModule,
-        BrowserAnimationsModule
-      ],
-      providers: [
+        BrowserAnimationsModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ActivatedRoute,
-          useValue: mockActivatedRoute
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+            provide: ActivatedRoute,
+            useValue: mockActivatedRoute
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

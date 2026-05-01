@@ -2,25 +2,25 @@ import { TestBed } from '@angular/core/testing';
 
 import { AddressAutocompleteResource } from './address-autocomplete-resource.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AddressAutocompleteResource', () => {
   let service: AddressAutocompleteResource;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        MatSnackBarModule
-      ],
-      providers: [
+    imports: [MatSnackBarModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
-      ]
-    });
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+});
     service = TestBed.inject(AddressAutocompleteResource);
   });
 

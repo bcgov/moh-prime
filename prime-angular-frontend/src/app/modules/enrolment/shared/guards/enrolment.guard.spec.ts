@@ -1,5 +1,5 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -13,33 +13,33 @@ import { EnrolmentGuard } from './enrolment.guard';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { ConfigService } from '@config/config.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('EnrolmentGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        HttpClientTestingModule,
+    imports: [ReactiveFormsModule,
         RouterTestingModule,
-        MatSnackBarModule
-      ],
-      providers: [
+        MatSnackBarModule],
+    providers: [
         EnrolmentGuard,
         KeycloakService,
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: AuthService,
-          useClass: MockAuthService
+            provide: AuthService,
+            useClass: MockAuthService
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
-        }
-      ]
-    });
+            provide: ConfigService,
+            useClass: MockConfigService
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+});
   });
 
   it('should create', inject([EnrolmentGuard], (guard: EnrolmentGuard) => {

@@ -9,9 +9,10 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
 @Component({
-  selector: 'app-collection-notice',
-  templateUrl: './collection-notice.component.html',
-  styleUrls: ['./collection-notice.component.scss']
+    selector: 'app-collection-notice',
+    templateUrl: './collection-notice.component.html',
+    styleUrls: ['./collection-notice.component.scss'],
+    standalone: false
 })
 export class CollectionNoticeComponent implements OnInit {
   public isFull: boolean;

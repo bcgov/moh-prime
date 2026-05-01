@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('LinkSiteComponent', () => {
@@ -15,35 +15,32 @@ describe('LinkSiteComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
+    declarations: [LinkSiteComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [ReactiveFormsModule,
         BrowserAnimationsModule,
-        MatSnackBarModule,
-        HttpClientModule
-      ],
-      declarations: [LinkSiteComponent],
-      providers: [
+        MatSnackBarModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: MatDialogRef,
-          useValue: {
-            close: (dialogResult: any) => { },
-            updateSize: () => { }
-          }
-        },
-        {
-          provide: MAT_DIALOG_DATA,
-          useValue: {
-            data: {
+            provide: MatDialogRef,
+            useValue: {
+                close: (dialogResult: any) => { },
+                updateSize: () => { }
             }
-          }
         },
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+        {
+            provide: MAT_DIALOG_DATA,
+            useValue: {
+                data: {}
+            }
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+    ]
+}).compileComponents();
     fixture = TestBed.createComponent(LinkSiteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
@@ -10,6 +10,7 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { OrganizationClaimPageComponent } from './organization-claim-page.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('OrganizationClaimPageComponent', () => {
   let component: OrganizationClaimPageComponent;
@@ -17,25 +18,24 @@ describe('OrganizationClaimPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
+    declarations: [
+        OrganizationClaimPageComponent
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
         ReactiveFormsModule,
         MatDialogModule,
-        MatSnackBarModule
-      ],
-      declarations: [
-        OrganizationClaimPageComponent
-      ],
-      providers: [
+        MatSnackBarModule],
+    providers: [
         KeycloakService,
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

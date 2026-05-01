@@ -10,10 +10,11 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-enrollee-toa-maintenance-list-page',
-  templateUrl: './enrollee-toa-maintenance-list-page.component.html',
-  styleUrls: ['./enrollee-toa-maintenance-list-page.component.scss'],
-  providers: [FormatDatePipe]
+    selector: 'app-enrollee-toa-maintenance-list-page',
+    templateUrl: './enrollee-toa-maintenance-list-page.component.html',
+    styleUrls: ['./enrollee-toa-maintenance-list-page.component.scss'],
+    providers: [FormatDatePipe],
+    standalone: false
 })
 export class EnrolleeToaMaintenanceListPageComponent implements OnInit {
   public busy: Subscription;

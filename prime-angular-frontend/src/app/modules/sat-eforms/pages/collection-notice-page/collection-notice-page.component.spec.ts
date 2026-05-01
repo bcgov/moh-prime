@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { MockAuthService } from 'test/mocks/mock-auth.service';
@@ -8,6 +8,7 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { CollectionNoticePageComponent } from './collection-notice-page.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('CollectionNoticePageComponent', () => {
   let component: CollectionNoticePageComponent;
@@ -15,19 +16,18 @@ describe('CollectionNoticePageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-      ],
-      declarations: [CollectionNoticePageComponent],
-      providers: [
+    declarations: [CollectionNoticePageComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule],
+    providers: [
         {
-          provide: AuthService,
-          useClass: MockAuthService
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+            provide: AuthService,
+            useClass: MockAuthService
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

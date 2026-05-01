@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-overview-section',
-  templateUrl: './overview-section.component.html',
-  styleUrls: ['./overview-section.component.scss']
+    selector: 'app-overview-section',
+    templateUrl: './overview-section.component.html',
+    styleUrls: ['./overview-section.component.scss'],
+    standalone: false
 })
 export class OverviewSectionComponent {
   /**

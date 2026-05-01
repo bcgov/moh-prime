@@ -1,5 +1,5 @@
 import { MockPermissionService } from '../../../../../../test/mocks/mock-permission.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -12,6 +12,7 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 import { TriageComponent } from './triage.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TriageComponent', () => {
   let component: TriageComponent;
@@ -19,29 +20,28 @@ describe('TriageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        BrowserAnimationsModule,
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [BrowserAnimationsModule,
         NgxMaterialModule,
-        SharedModule,
-        HttpClientTestingModule
-      ],
-      providers: [
+        SharedModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: AuthService,
-          useClass: MockAuthService
+            provide: AuthService,
+            useClass: MockAuthService
         },
         {
-          provide: PermissionService,
-          useClass: MockPermissionService
+            provide: PermissionService,
+            useClass: MockPermissionService
         },
-        KeycloakService
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

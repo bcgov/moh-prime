@@ -1,7 +1,7 @@
 import faker from 'faker';
 
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { EnrolmentComponent } from './enrolment.component';
@@ -15,6 +15,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { Address } from '@lib/models/address.model';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('EnrolmentComponent', () => {
   let component: EnrolmentComponent;
@@ -27,23 +28,22 @@ describe('EnrolmentComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
-        imports: [
-          HttpClientTestingModule,
-          NgxBusyModule,
-          NgxContextualHelpModule,
-          NgxMaterialModule,
-          RouterTestingModule,
-          AdjudicationModule
-        ],
-        providers: [
-          {
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [NgxBusyModule,
+        NgxContextualHelpModule,
+        NgxMaterialModule,
+        RouterTestingModule,
+        AdjudicationModule],
+    providers: [
+        {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
-          },
-          KeycloakService
-        ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA]
-      }
+        },
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}
     ).compileComponents();
   }));
 

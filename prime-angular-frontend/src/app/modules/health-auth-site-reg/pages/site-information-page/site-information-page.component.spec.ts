@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -24,6 +24,7 @@ import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySiteService } from '@health-auth/shared/services/health-authority-site.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SiteInformationPageComponent', () => {
   let component: SiteInformationPageComponent;
@@ -43,44 +44,43 @@ describe('SiteInformationPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [SiteInformationPageComponent],
-      imports: [
-        BrowserAnimationsModule,
-        HttpClientTestingModule,
+    declarations: [SiteInformationPageComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [BrowserAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        NgxMaterialModule
-      ],
-      providers: [
+        NgxMaterialModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
         {
-          provide: AuthService,
-          useClass: MockAuthService
+            provide: AuthService,
+            useClass: MockAuthService
         },
         {
-          provide: PermissionService,
-          useClass: MockPermissionService
+            provide: PermissionService,
+            useClass: MockPermissionService
         },
         {
-          provide: ActivatedRoute,
-          useValue: mockActivatedRoute
+            provide: ActivatedRoute,
+            useValue: mockActivatedRoute
         },
         {
-          provide: HealthAuthoritySiteService,
-          useClass: MockHealthAuthoritySiteService
+            provide: HealthAuthoritySiteService,
+            useClass: MockHealthAuthoritySiteService
         },
         KeycloakService,
-        CapitalizePipe
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+        CapitalizePipe,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,5 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
@@ -16,6 +16,7 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
 import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AccessAgreementHistoryComponent', () => {
   let component: AccessAgreementHistoryComponent;
@@ -24,36 +25,35 @@ describe('AccessAgreementHistoryComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
-        imports: [
-          RouterTestingModule,
-          HttpClientTestingModule,
-          EnrolmentModule
-        ],
-        providers: [
-          {
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
+        EnrolmentModule],
+    providers: [
+        {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
-          },
-          {
+        },
+        {
             provide: ConfigService,
             useClass: MockConfigService
-          },
-          {
+        },
+        {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
-          },
-          {
+        },
+        {
             provide: AuthService,
             useClass: MockAuthService
-          },
-          {
+        },
+        {
             provide: AccessTokenService,
             useClass: MockAccessTokenService
-          },
-          KeycloakService
-        ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA]
-      }
+        },
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}
     ).compileComponents();
   }));
 

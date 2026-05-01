@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -16,6 +16,7 @@ import { ConfigService } from '@config/config.service';
 
 import { SiteOverviewPageComponent } from './site-overview-page.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SiteOverviewPageComponent', () => {
   let component: SiteOverviewPageComponent;
@@ -23,31 +24,30 @@ describe('SiteOverviewPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [SiteOverviewPageComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
         NgxMaterialModule,
         ReactiveFormsModule,
-        BrowserAnimationsModule
-      ],
-      declarations: [SiteOverviewPageComponent],
-      providers: [
+        BrowserAnimationsModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: PermissionService,
-          useClass: MockPermissionService
+            provide: PermissionService,
+            useClass: MockPermissionService
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
-        CapitalizePipe
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+        CapitalizePipe,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

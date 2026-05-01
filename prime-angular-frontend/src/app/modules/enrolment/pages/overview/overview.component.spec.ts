@@ -1,5 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -18,6 +18,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('OverviewComponent', () => {
   let component: OverviewComponent;
@@ -26,35 +27,34 @@ describe('OverviewComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
-        imports: [
-          HttpClientTestingModule,
-          NgxBusyModule,
-          NgxContextualHelpModule,
-          NgxMaterialModule,
-          ReactiveFormsModule,
-          RouterTestingModule,
-          EnrolmentModule
-        ],
-        providers: [
-          {
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [NgxBusyModule,
+        NgxContextualHelpModule,
+        NgxMaterialModule,
+        ReactiveFormsModule,
+        RouterTestingModule,
+        EnrolmentModule],
+    providers: [
+        {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
-          },
-          {
+        },
+        {
             provide: ConfigService,
             useClass: MockConfigService
-          },
-          {
+        },
+        {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
-          },
-          {
+        },
+        {
             provide: AuthService,
             useClass: MockAuthService
-          }
-        ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA]
-      }
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}
     ).compileComponents();
   }));
 

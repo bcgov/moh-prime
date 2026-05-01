@@ -2,7 +2,7 @@ import faker from 'faker';
 
 import { of } from 'rxjs';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -16,6 +16,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 import { DateContent } from '@adjudication/shared/components/dated-content-table/dated-content-table.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('EnrolleeEventsComponent', () => {
   let component: EnrolleeEventsComponent;
@@ -26,22 +27,21 @@ describe('EnrolleeEventsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
+    declarations: [],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
         AdjudicationModule,
-        BrowserAnimationsModule,
-      ],
-      declarations: [],
-      providers: [
+        BrowserAnimationsModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
-        KeycloakService
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

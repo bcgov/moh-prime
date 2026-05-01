@@ -14,10 +14,11 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 
 @Component({
-  selector: 'app-health-auth-authorized-users-view',
-  templateUrl: './health-auth-authorized-users-view.component.html',
-  styleUrls: ['./health-auth-authorized-users-view.component.scss'],
-  providers: [FormatDatePipe]
+    selector: 'app-health-auth-authorized-users-view',
+    templateUrl: './health-auth-authorized-users-view.component.html',
+    styleUrls: ['./health-auth-authorized-users-view.component.scss'],
+    providers: [FormatDatePipe],
+    standalone: false
 })
 export class HealthAuthAuthorizedUsersViewComponent implements OnInit {
   public busy: Subscription;

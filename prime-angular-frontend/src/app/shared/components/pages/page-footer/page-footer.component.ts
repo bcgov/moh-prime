@@ -2,9 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange
 
 // TODO footer is too stringent make it more generic and wrap to apply logic
 @Component({
-  selector: 'app-page-footer',
-  templateUrl: './page-footer.component.html',
-  styleUrls: ['./page-footer.component.scss']
+    selector: 'app-page-footer',
+    templateUrl: './page-footer.component.html',
+    styleUrls: ['./page-footer.component.scss'],
+    standalone: false
 })
 export class PageFooterComponent implements OnInit, OnChanges {
   // TODO update not to use the word enrolment
