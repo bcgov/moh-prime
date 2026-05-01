@@ -1,13 +1,14 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { HealthAuthCareTypeOverviewComponent } from './health-auth-care-type-overview.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('HealthAuthCareTypeOverviewComponent', () => {
   let component: HealthAuthCareTypeOverviewComponent;
@@ -15,24 +16,23 @@ describe('HealthAuthCareTypeOverviewComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        MatSnackBarModule
-      ],
-      declarations: [
+    declarations: [
         HealthAuthCareTypeOverviewComponent,
         DefaultPipe,
         ConfigCodePipe,
-      ],
-      providers: [
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
+        MatSnackBarModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

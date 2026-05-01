@@ -6,9 +6,10 @@ import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-to
 import moment from 'moment';
 
 @Component({
-  selector: 'app-business-licence-expiry',
-  templateUrl: './business-licence-expiry.component.html',
-  styleUrls: ['./business-licence-expiry.component.scss']
+    selector: 'app-business-licence-expiry',
+    templateUrl: './business-licence-expiry.component.html',
+    styleUrls: ['./business-licence-expiry.component.scss'],
+    standalone: false
 })
 export class BusinessLicenceExpiryComponent implements OnInit {
   @Input() public form: UntypedFormGroup;

@@ -8,9 +8,10 @@ import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-site-banner-page',
-  templateUrl: './site-banner-page.component.html',
-  styleUrls: ['./site-banner-page.component.scss']
+    selector: 'app-site-banner-page',
+    templateUrl: './site-banner-page.component.html',
+    styleUrls: ['./site-banner-page.component.scss'],
+    standalone: false
 })
 export class SiteBannerPageComponent implements OnInit {
   public locationCode: BannerLocationCode;

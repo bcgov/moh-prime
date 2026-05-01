@@ -2,9 +2,10 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-metabase-reports',
-  templateUrl: './metabase-reports.component.html',
-  styleUrls: ['./metabase-reports.component.scss']
+    selector: 'app-metabase-reports',
+    templateUrl: './metabase-reports.component.html',
+    styleUrls: ['./metabase-reports.component.scss'],
+    standalone: false
 })
 export class MetabaseReportsComponent implements OnInit {
   public metabaseUrl: string;

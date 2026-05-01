@@ -7,9 +7,10 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { DialogOptions } from '../../dialog-options.model';
 
 @Component({
-  selector: 'app-error-logger',
-  templateUrl: './error-logger.component.html',
-  styleUrls: ['./error-logger.component.scss']
+    selector: 'app-error-logger',
+    templateUrl: './error-logger.component.html',
+    styleUrls: ['./error-logger.component.scss'],
+    standalone: false
 })
 export class ErrorLoggerComponent implements OnInit {
   public errorId: number;

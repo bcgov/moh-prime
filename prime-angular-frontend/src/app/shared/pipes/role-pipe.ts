@@ -8,7 +8,8 @@ import { PermissionService } from '@auth/shared/services/permission.service';
   providedIn: 'root'
 })
 @Pipe({
-  name: 'role'
+    name: 'role',
+    standalone: false
 })
 export class RolePipe implements PipeTransform {
   constructor(

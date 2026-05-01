@@ -8,9 +8,10 @@ import { FormUtilsService } from '@core/services/form-utils.service';
  * Debug form errors visually in the template.
  */
 @Component({
-  selector: 'app-form-errors',
-  templateUrl: './form-errors.component.html',
-  styleUrls: ['./form-errors.component.scss']
+    selector: 'app-form-errors',
+    templateUrl: './form-errors.component.html',
+    styleUrls: ['./form-errors.component.scss'],
+    standalone: false
 })
 export class FormErrorsComponent implements OnInit {
   @Input() form: UntypedFormGroup;

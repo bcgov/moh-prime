@@ -14,12 +14,13 @@ import { SiteRegistrationTypeEnum } from '@health-auth/shared/enums/site-registr
 
 @UntilDestroy()
 @Component({
-  selector: 'app-site-reg-access',
-  templateUrl: './site-reg-access.component.html',
-  styleUrls: [
-    './site-reg-access.component.scss',
-    '../access.component.scss'
-  ]
+    selector: 'app-site-reg-access',
+    templateUrl: './site-reg-access.component.html',
+    styleUrls: [
+        './site-reg-access.component.scss',
+        '../access.component.scss'
+    ],
+    standalone: false
 })
 export class SiteRegAccessComponent implements OnInit {
   /**

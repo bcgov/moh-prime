@@ -23,9 +23,10 @@ import { DemographicFormState } from './demographic-form-state.class';
 
 // TODO create inheritable demographic class + mixins for reuse
 @Component({
-  selector: 'app-demographic-page',
-  templateUrl: './demographic-page.component.html',
-  styleUrls: ['./demographic-page.component.scss']
+    selector: 'app-demographic-page',
+    templateUrl: './demographic-page.component.html',
+    styleUrls: ['./demographic-page.component.scss'],
+    standalone: false
 })
 export class DemographicPageComponent extends AbstractEnrolmentPage implements OnInit {
   public title: string;

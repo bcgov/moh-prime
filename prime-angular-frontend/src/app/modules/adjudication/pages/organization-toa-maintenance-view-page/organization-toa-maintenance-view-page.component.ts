@@ -10,9 +10,10 @@ import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { AgreementVersion } from '@shared/models/agreement-version.model';
 
 @Component({
-  selector: 'app-organization-toa-maintenance-view-page',
-  templateUrl: './organization-toa-maintenance-view-page.component.html',
-  styleUrls: ['./organization-toa-maintenance-view-page.component.scss']
+    selector: 'app-organization-toa-maintenance-view-page',
+    templateUrl: './organization-toa-maintenance-view-page.component.html',
+    styleUrls: ['./organization-toa-maintenance-view-page.component.scss'],
+    standalone: false
 })
 export class OrganizationToaMaintenanceViewPageComponent implements OnInit {
   public busy: Subscription;

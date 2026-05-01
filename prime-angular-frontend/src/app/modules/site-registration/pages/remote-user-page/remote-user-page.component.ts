@@ -27,9 +27,10 @@ import { Site } from '@registration/shared/models/site.model';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 @Component({
-  selector: 'app-remote-user-page',
-  templateUrl: './remote-user-page.component.html',
-  styleUrls: ['./remote-user-page.component.scss']
+    selector: 'app-remote-user-page',
+    templateUrl: './remote-user-page.component.html',
+    styleUrls: ['./remote-user-page.component.scss'],
+    standalone: false
 })
 export class RemoteUserPageComponent extends AbstractEnrolmentPage implements OnInit {
   /**

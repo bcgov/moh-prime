@@ -8,9 +8,10 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { APP_DI_CONFIG, APP_CONFIG } from 'app/app-config.module';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { KeycloakService } from 'keycloak-angular';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('EnrolleePageComponent', () => {
   let component: EnrolleePageComponent;
@@ -18,27 +19,26 @@ describe('EnrolleePageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
+    declarations: [EnrolleePageComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
         NgxBusyModule,
         NgxMaterialModule,
-        SharedModule
-      ],
-      declarations: [EnrolleePageComponent],
-      providers: [
+        SharedModule],
+    providers: [
         {
-          provide: EnrolmentService,
-          useClass: MockEnrolmentService
+            provide: EnrolmentService,
+            useClass: MockEnrolmentService
         },
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
-        KeycloakService
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

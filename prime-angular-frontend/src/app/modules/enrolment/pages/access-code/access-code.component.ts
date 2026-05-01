@@ -16,9 +16,10 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
-  selector: 'app-access-code',
-  templateUrl: './access-code.component.html',
-  styleUrls: ['./access-code.component.scss']
+    selector: 'app-access-code',
+    templateUrl: './access-code.component.html',
+    styleUrls: ['./access-code.component.scss'],
+    standalone: false
 })
 export class AccessCodeComponent extends BaseEnrolmentProfilePage implements OnInit {
   constructor(

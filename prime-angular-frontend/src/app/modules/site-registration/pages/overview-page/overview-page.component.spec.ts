@@ -1,7 +1,7 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -17,6 +17,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteService } from '@registration/shared/services/site.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('OverviewPageComponent', () => {
   let component: OverviewPageComponent;
@@ -29,37 +30,36 @@ describe('OverviewPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+    declarations: [
         OverviewPageComponent
-      ],
-      imports: [
-        BrowserAnimationsModule,
-        HttpClientTestingModule,
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [BrowserAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        NgxMaterialModule
-      ],
-      providers: [
+        NgxMaterialModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ActivatedRoute,
-          useValue: mockActivatedRoute
+            provide: ActivatedRoute,
+            useValue: mockActivatedRoute
         },
         {
-          provide: SiteService,
-          useClass: MockCommunitySiteService
+            provide: SiteService,
+            useClass: MockCommunitySiteService
         },
         {
-          provide: OrganizationService,
-          useClass: MockOrganizationService
+            provide: OrganizationService,
+            useClass: MockOrganizationService
         },
         KeycloakService,
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

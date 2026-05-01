@@ -26,9 +26,10 @@ export interface IProgressStep extends IStep {
  * within a list of routes.
  */
 @Component({
-  selector: 'app-progress-indicator',
-  templateUrl: './progress-indicator.component.html',
-  styleUrls: ['./progress-indicator.component.scss']
+    selector: 'app-progress-indicator',
+    templateUrl: './progress-indicator.component.html',
+    styleUrls: ['./progress-indicator.component.scss'],
+    standalone: false
 })
 export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressIndicator {
   /**

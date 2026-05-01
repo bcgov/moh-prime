@@ -12,9 +12,10 @@ import { HttpEnrollee, Enrolment } from '@shared/models/enrolment.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-enrolment',
-  templateUrl: './enrolment.component.html',
-  styleUrls: ['./enrolment.component.scss']
+    selector: 'app-enrolment',
+    templateUrl: './enrolment.component.html',
+    styleUrls: ['./enrolment.component.scss'],
+    standalone: false
 })
 export class EnrolmentComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;

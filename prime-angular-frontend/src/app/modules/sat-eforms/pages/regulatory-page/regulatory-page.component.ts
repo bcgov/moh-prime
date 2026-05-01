@@ -18,9 +18,10 @@ import { SatEformsEnrolmentResource } from '@sat/shared/resource/sat-eforms-enro
 import { SatEnrolleeService } from '@sat/shared/services/sat-enrollee.service';
 
 @Component({
-  selector: 'app-regulatory-page',
-  templateUrl: './regulatory-page.component.html',
-  styleUrls: ['./regulatory-page.component.scss']
+    selector: 'app-regulatory-page',
+    templateUrl: './regulatory-page.component.html',
+    styleUrls: ['./regulatory-page.component.scss'],
+    standalone: false
 })
 export class RegulatoryPageComponent extends AbstractEnrolmentPage implements OnInit, OnDestroy {
   public title: string;

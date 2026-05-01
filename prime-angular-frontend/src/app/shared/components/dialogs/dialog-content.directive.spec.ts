@@ -4,7 +4,8 @@ import { TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
 import { DialogContentDirective } from './dialog-content.directive';
 
 @Component({
-  template: `<ng-template appDialogContent></ng-template>`
+    template: `<ng-template appDialogContent></ng-template>`,
+    standalone: false
 })
 class TestDialogContentComponent {
   constructor(

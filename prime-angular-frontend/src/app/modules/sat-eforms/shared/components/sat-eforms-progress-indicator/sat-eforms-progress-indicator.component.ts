@@ -7,9 +7,10 @@ import { SatEformsRoutes } from '@sat/sat-eforms.routes';
 import { IProgressIndicator } from '@shared/components/progress-indicator/progress-indicator.component';
 
 @Component({
-  selector: 'app-sat-eforms-progress-indicator',
-  templateUrl: './sat-eforms-progress-indicator.component.html',
-  styleUrls: ['./sat-eforms-progress-indicator.component.scss']
+    selector: 'app-sat-eforms-progress-indicator',
+    templateUrl: './sat-eforms-progress-indicator.component.html',
+    styleUrls: ['./sat-eforms-progress-indicator.component.scss'],
+    standalone: false
 })
 export class SatEformsProgressIndicatorComponent implements OnInit, IProgressIndicator {
   @Input() public inProgress: boolean;

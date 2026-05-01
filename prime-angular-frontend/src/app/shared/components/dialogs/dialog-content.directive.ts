@@ -1,7 +1,8 @@
 import { Directive, ViewContainerRef } from '@angular/core';
 
 @Directive({
-  selector: '[appDialogContent]'
+    selector: '[appDialogContent]',
+    standalone: false
 })
 export class DialogContentDirective {
   constructor(

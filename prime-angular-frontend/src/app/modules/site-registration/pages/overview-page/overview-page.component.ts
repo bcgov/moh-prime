@@ -27,9 +27,10 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
-  selector: 'app-overview-page',
-  templateUrl: './overview-page.component.html',
-  styleUrls: ['./overview-page.component.scss']
+    selector: 'app-overview-page',
+    templateUrl: './overview-page.component.html',
+    styleUrls: ['./overview-page.component.scss'],
+    standalone: false
 })
 export class OverviewPageComponent implements OnInit {
   public busy: Subscription;

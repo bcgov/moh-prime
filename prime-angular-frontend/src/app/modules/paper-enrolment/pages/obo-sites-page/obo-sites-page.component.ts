@@ -19,9 +19,10 @@ import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-e
 import { OboSiteFormState } from './obo-sites-form-state.class';
 
 @Component({
-  selector: 'app-obo-sites-page',
-  templateUrl: './obo-sites-page.component.html',
-  styleUrls: ['./obo-sites-page.component.scss']
+    selector: 'app-obo-sites-page',
+    templateUrl: './obo-sites-page.component.html',
+    styleUrls: ['./obo-sites-page.component.scss'],
+    standalone: false
 })
 export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: OboSiteFormState;

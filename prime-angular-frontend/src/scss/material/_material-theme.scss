@@ -8,14 +8,31 @@
 // Define the palettes for your theme using the Material Design palettes available in the material
 // palette.scss (imported above). For each palette, you can optionally specify a default (500),
 // lighter (100), and darker (700) hue.
-$prime-app-primary: mat.define-palette($prime-blue, 500);
-$prime-app-accent: mat.define-palette($prime-yellow, 500);
+$prime-app-primary: mat.m2-define-palette($prime-blue, 500);
+$prime-app-accent: mat.m2-define-palette($prime-yellow, 500);
 
 // The warn palette is optional (defaults to red).
-$prime-app-warn: mat.define-palette(mat.$red-palette);
+$prime-app-warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+//$prime-typography: mat.m2-define-typography-config($font-family: "'BC Sans', sans-serif");
+
+// Define the specific style for buttons
+$button-typography-level: mat.m2-define-typography-level($font-family: "'BC Sans', sans-serif",
+    $font-weight: 500,
+    $font-size: 16px);
+
+// Create the config with the button override
+$prime-typography: mat.m2-define-typography-config($font-family: "'BC Sans', sans-serif",
+    $button: $button-typography-level);
 
 // Create the default theme object (a Sass map containing all of the palettes).
-$prime-app-theme: mat.define-light-theme($prime-app-primary, $prime-app-accent, $prime-app-warn);
+$prime-app-theme: mat.m2-define-light-theme((color: (primary: $prime-app-primary,
+        accent: $prime-app-accent,
+        warn: $prime-app-warn,
+      ),
+      typography: $prime-typography, // Optional: adds default typography
+      density: 0, // Optional: adds default density
+    ));
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
@@ -24,4 +41,10 @@ $prime-app-theme: mat.define-light-theme($prime-app-primary, $prime-app-accent, 
 @include mat.all-component-themes($prime-app-theme);
 
 // Create the dark theme object (a Sass map containing all of the palettes).
-$prime-dark-app-theme: mat.define-dark-theme($prime-app-primary, $prime-app-accent, $prime-app-warn);
+$prime-app-theme: mat.m2-define-dark-theme((color: (primary: $prime-app-primary,
+        accent: $prime-app-accent,
+        warn: $prime-app-warn,
+      ),
+      typography: $prime-typography, // Optional: adds default typography
+      density: 0, // Optional: adds default density
+    ));

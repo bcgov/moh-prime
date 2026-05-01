@@ -2,7 +2,7 @@
 import * as faker from 'faker';
 
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
@@ -15,6 +15,7 @@ import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { EnrolmentStatusReason } from '@shared/enums/enrolment-status-reason.enum';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ReviewStatusContentComponent', () => {
   const mockDocument = {
@@ -96,22 +97,21 @@ describe('ReviewStatusContentComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        AdjudicationModule,
-        HttpClientTestingModule
-      ],
-      providers: [
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [AdjudicationModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+            provide: ConfigService,
+            useClass: MockConfigService
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

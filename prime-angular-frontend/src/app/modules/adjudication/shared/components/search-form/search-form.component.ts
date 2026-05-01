@@ -12,9 +12,10 @@ import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { SearchFormStatusType } from '@adjudication/shared/enums/search-form-status-type.enum';
 
 @Component({
-  selector: 'app-search-form',
-  templateUrl: './search-form.component.html',
-  styleUrls: ['./search-form.component.scss']
+    selector: 'app-search-form',
+    templateUrl: './search-form.component.html',
+    styleUrls: ['./search-form.component.scss'],
+    standalone: false
 })
 export class SearchFormComponent implements OnInit {
   @Input() public hideStatus: boolean;

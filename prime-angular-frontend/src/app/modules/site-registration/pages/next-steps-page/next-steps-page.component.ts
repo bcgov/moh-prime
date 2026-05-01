@@ -7,9 +7,10 @@ import { OrganizationService } from '@registration/shared/services/organization.
 import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
-  selector: 'app-next-steps-page',
-  templateUrl: './next-steps-page.component.html',
-  styleUrls: ['./next-steps-page.component.scss']
+    selector: 'app-next-steps-page',
+    templateUrl: './next-steps-page.component.html',
+    styleUrls: ['./next-steps-page.component.scss'],
+    standalone: false
 })
 export class NextStepsPageComponent implements OnInit {
   public title: string;

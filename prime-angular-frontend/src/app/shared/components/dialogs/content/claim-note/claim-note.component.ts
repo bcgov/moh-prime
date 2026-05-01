@@ -29,9 +29,10 @@ export enum ClaimType {
 }
 
 @Component({
-  selector: 'app-claim-note',
-  templateUrl: './claim-note.component.html',
-  styleUrls: ['./claim-note.component.scss']
+    selector: 'app-claim-note',
+    templateUrl: './claim-note.component.html',
+    styleUrls: ['./claim-note.component.scss'],
+    standalone: false
 })
 export class ClaimNoteComponent implements OnInit {
   public title: string;

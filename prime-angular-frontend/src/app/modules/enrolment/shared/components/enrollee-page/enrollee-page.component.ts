@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-enrollee-page',
-  templateUrl: './enrollee-page.component.html',
-  styleUrls: ['./enrollee-page.component.scss']
+    selector: 'app-enrollee-page',
+    templateUrl: './enrollee-page.component.html',
+    styleUrls: ['./enrollee-page.component.scss'],
+    standalone: false
 })
 export class EnrolleePageComponent implements OnInit {
   @Input() public busy: Subscription;

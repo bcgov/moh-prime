@@ -5,9 +5,10 @@ import { ViewportService } from '@core/services/viewport.service';
 import { DashboardRouteMenuItem } from '../../models/dashboard-menu-item.model';
 
 @Component({
-  selector: 'app-dashboard-route-menu-item',
-  templateUrl: './dashboard-route-menu-item.component.html',
-  styleUrls: ['./dashboard-route-menu-item.component.scss']
+    selector: 'app-dashboard-route-menu-item',
+    templateUrl: './dashboard-route-menu-item.component.html',
+    styleUrls: ['./dashboard-route-menu-item.component.scss'],
+    standalone: false
 })
 export class DashboardRouteMenuItemComponent implements OnInit {
   /**

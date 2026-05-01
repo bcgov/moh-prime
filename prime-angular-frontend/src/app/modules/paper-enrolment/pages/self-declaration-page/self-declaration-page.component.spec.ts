@@ -1,5 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -21,6 +21,7 @@ import { MockConfigService } from 'test/mocks/mock-config.service';
 import { ActivatedRoute } from '@angular/router';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SelfDeclarationPageComponent', () => {
   let component: SelfDeclarationPageComponent;
@@ -32,41 +33,40 @@ describe('SelfDeclarationPageComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
-        declarations: [SelfDeclarationPageComponent, SafePipe],
-        imports: [
-          HttpClientTestingModule,
-          NgxBusyModule,
-          NgxContextualHelpModule,
-          NgxMaterialModule,
-          ReactiveFormsModule,
-          RouterTestingModule,
-          MatTooltipModule,
-        ],
-        providers: [
-          {
+    declarations: [SelfDeclarationPageComponent, SafePipe],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [NgxBusyModule,
+        NgxContextualHelpModule,
+        NgxMaterialModule,
+        ReactiveFormsModule,
+        RouterTestingModule,
+        MatTooltipModule],
+    providers: [
+        {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
-          },
-          {
+        },
+        {
             provide: AuthService,
             useClass: MockAuthService
-          },
-          {
+        },
+        {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
-          },
-          {
+        },
+        {
             provide: ConfigService,
             useClass: MockConfigService
-          },
-          {
+        },
+        {
             provide: ActivatedRoute,
             useValue: mockActivatedRoute
-          },
-          KeycloakService,
-        ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA]
-      }
+        },
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}
     ).compileComponents();
   }));
 

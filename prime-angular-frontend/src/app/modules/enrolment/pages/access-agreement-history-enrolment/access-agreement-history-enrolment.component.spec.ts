@@ -1,5 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
@@ -17,6 +17,7 @@ import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
 import { ConfigService } from '@config/config.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AccessAgreementHistoryEnrolmentComponent', () => {
   let component: AccessAgreementHistoryEnrolmentComponent;
@@ -24,33 +25,32 @@ describe('AccessAgreementHistoryEnrolmentComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        NgxBusyModule,
-        HttpClientTestingModule,
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [NgxBusyModule,
         RouterTestingModule,
-        NgxMaterialModule
-      ],
-      providers: [
+        NgxMaterialModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
         {
-          provide: EnrolmentService,
-          useClass: MockEnrolmentService
+            provide: EnrolmentService,
+            useClass: MockEnrolmentService
         },
         {
-          provide: AuthService,
-          useClass: MockAuthService
+            provide: AuthService,
+            useClass: MockAuthService
         },
-        KeycloakService
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(inject([EnrolmentService], (enrolmentService: EnrolmentService) => {

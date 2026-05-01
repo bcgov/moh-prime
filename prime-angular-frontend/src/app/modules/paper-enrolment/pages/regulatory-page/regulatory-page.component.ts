@@ -21,9 +21,10 @@ import { RegulatoryFormState } from './regulatory-form-state.class';
 import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 
 @Component({
-  selector: 'app-regulatory-page',
-  templateUrl: './regulatory-page.component.html',
-  styleUrls: ['./regulatory-page.component.scss']
+    selector: 'app-regulatory-page',
+    templateUrl: './regulatory-page.component.html',
+    styleUrls: ['./regulatory-page.component.scss'],
+    standalone: false
 })
 export class RegulatoryPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: RegulatoryFormState;

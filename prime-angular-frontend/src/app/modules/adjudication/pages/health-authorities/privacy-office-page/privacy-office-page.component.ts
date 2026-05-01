@@ -16,9 +16,10 @@ import {
 import { NoContent } from '@core/resources/abstract-resource';
 
 @Component({
-  selector: 'app-privacy-officer-page',
-  templateUrl: './privacy-office-page.component.html',
-  styleUrls: ['./privacy-office-page.component.scss']
+    selector: 'app-privacy-officer-page',
+    templateUrl: './privacy-office-page.component.html',
+    styleUrls: ['./privacy-office-page.component.scss'],
+    standalone: false
 })
 export class PrivacyOfficePageComponent extends AbstractEnrolmentPage implements OnInit {
   public title: string;

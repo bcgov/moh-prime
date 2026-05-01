@@ -7,9 +7,10 @@ import { PageSubheaderTitleDirective } from '../page-subheader/page-subheader-ti
 import { PageSubheaderSummaryDirective } from '../page-subheader/page-subheader-summary.directive';
 
 @Component({
-  selector: 'app-page-subheader',
-  templateUrl: './page-subheader.component.html',
-  styleUrls: ['./page-subheader.component.scss']
+    selector: 'app-page-subheader',
+    templateUrl: './page-subheader.component.html',
+    styleUrls: ['./page-subheader.component.scss'],
+    standalone: false
 })
 export class PageSubheaderComponent implements OnInit {
   @ContentChildren(PageSubheaderTitleDirective, { descendants: true })

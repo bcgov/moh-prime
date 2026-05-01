@@ -10,9 +10,10 @@ import { HealthAuthoritySiteResource } from '@core/resources/health-authority-si
 import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 
 @Component({
-  selector: 'app-transfer-ha-site',
-  templateUrl: './transfer-ha-site.component.html',
-  styleUrls: ['./transfer-ha-site.component.scss']
+    selector: 'app-transfer-ha-site',
+    templateUrl: './transfer-ha-site.component.html',
+    styleUrls: ['./transfer-ha-site.component.scss'],
+    standalone: false
 })
 export class TransferHASiteComponent implements OnInit {
   @Output() public transferSite: EventEmitter<boolean>;

@@ -22,9 +22,10 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { BusinessLicenceRenewalPageFormState } from './business-licence-renewal-form-state.class';
 
 @Component({
-  selector: 'app-business-licence-renewal-page',
-  templateUrl: './business-licence-renewal-page.component.html',
-  styleUrls: ['./business-licence-renewal-page.component.scss']
+    selector: 'app-business-licence-renewal-page',
+    templateUrl: './business-licence-renewal-page.component.html',
+    styleUrls: ['./business-licence-renewal-page.component.scss'],
+    standalone: false
 })
 export class BusinessLicenceRenewalPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: BusinessLicenceRenewalPageFormState;

@@ -10,9 +10,10 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
 @Component({
-  selector: 'app-enrollee-adjudicator-documents',
-  templateUrl: './enrollee-adjudicator-documents.component.html',
-  styleUrls: ['./enrollee-adjudicator-documents.component.scss']
+    selector: 'app-enrollee-adjudicator-documents',
+    templateUrl: './enrollee-adjudicator-documents.component.html',
+    styleUrls: ['./enrollee-adjudicator-documents.component.scss'],
+    standalone: false
 })
 export class EnrolleeAdjudicatorDocumentsComponent implements OnInit {
   public documents$: Observable<EnrolleeAdjudicationDocument[]>;

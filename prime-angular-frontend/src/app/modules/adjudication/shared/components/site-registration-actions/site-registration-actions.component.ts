@@ -12,9 +12,10 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
 
 @Component({
-  selector: 'app-site-registration-actions',
-  templateUrl: './site-registration-actions.component.html',
-  styleUrls: ['./site-registration-actions.component.scss']
+    selector: 'app-site-registration-actions',
+    templateUrl: './site-registration-actions.component.html',
+    styleUrls: ['./site-registration-actions.component.scss'],
+    standalone: false
 })
 export class SiteRegistrationActionsComponent implements OnInit {
   @Input() siteRegistration: SiteRegistrationListViewModel | HealthAuthoritySiteAdminList;

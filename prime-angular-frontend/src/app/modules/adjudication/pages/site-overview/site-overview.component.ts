@@ -28,9 +28,10 @@ import { VendorConfig } from '@config/config.model';
 import { LinkSiteComponent } from '@shared/components/dialogs/content/link-site/link-site.component';
 
 @Component({
-  selector: 'app-site-overview',
-  templateUrl: './site-overview.component.html',
-  styleUrls: ['./site-overview.component.scss']
+    selector: 'app-site-overview',
+    templateUrl: './site-overview.component.html',
+    styleUrls: ['./site-overview.component.scss'],
+    standalone: false
 })
 export class SiteOverviewComponent implements OnInit {
   public busy: Subscription;

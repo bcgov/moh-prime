@@ -1,12 +1,13 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 import { SendBulkEmailComponent } from './send-bulk-email.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SendBulkEmailComponent', () => {
   let component: SendBulkEmailComponent;
@@ -14,31 +15,30 @@ describe('SendBulkEmailComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        NgxMaterialModule
-      ],
-      declarations: [
+    declarations: [
         SendEmailComponent
-      ],
-      providers: [
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [NgxMaterialModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: MatDialogRef,
-          useValue: {}
+            provide: MatDialogRef,
+            useValue: {}
         },
         {
-          provide: MAT_DIALOG_DATA,
-          useValue: {
-            title: 'Send Bulk Email'
-          }
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+            provide: MAT_DIALOG_DATA,
+            useValue: {
+                title: 'Send Bulk Email'
+            }
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {
