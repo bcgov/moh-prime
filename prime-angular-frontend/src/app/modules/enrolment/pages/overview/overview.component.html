@@ -179,6 +179,12 @@
           College licence information requires update
         </li>
       </ul>
+      <ul class="mt-3 mb-1"
+          *ngIf="requireCareSetting()">
+        <li>
+          Care setting can not be NA or none
+        </li>
+      </ul>
     </ng-container>
   </app-alert>
 
