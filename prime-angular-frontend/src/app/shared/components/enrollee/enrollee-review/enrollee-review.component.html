@@ -150,6 +150,15 @@
 
   </app-page-subheader>
 
+  <app-alert *ngIf="hasInvalidCareSetting()"
+             type="danger"
+             icon="error">
+    <ng-container #alertContent
+                  class="alert-content">
+      Care setting can not be NA or none. Please select the appropriate care setting.
+    </ng-container>
+  </app-alert>
+
   <ng-container *ngFor="
             let
             careSetting
