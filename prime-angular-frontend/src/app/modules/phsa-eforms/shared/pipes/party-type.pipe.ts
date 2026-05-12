@@ -3,7 +3,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { PartyTypeEnum } from '@phsa/shared/enums/party-type.enum';
 
 @Pipe({
-  name: 'partyType'
+    name: 'partyType',
+    standalone: false
 })
 export class PartyTypePipe implements PipeTransform {
   public transform(partyType: PartyTypeEnum): string {

@@ -86,7 +86,7 @@
     </app-enrollee-property>
 
     <ng-container *ngFor="let remoteSite of certificate.remoteAccessSite">
-      <app-enrollee-property title="Site Information"
+      <app-enrollee-property title="Site Approved for Remote Access"
                              [makeBold]="true">
         <ng-container>
           {{ remoteSite.doingBusinessAs | default }}

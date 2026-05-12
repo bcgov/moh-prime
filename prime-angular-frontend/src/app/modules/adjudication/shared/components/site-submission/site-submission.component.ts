@@ -5,9 +5,10 @@ import { HttpSite, SiteSubmission } from '@shared/models/site-submission.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
-  selector: 'app-site-submission',
-  templateUrl: './site-submission.component.html',
-  styleUrls: ['./site-submission.component.scss']
+    selector: 'app-site-submission',
+    templateUrl: './site-submission.component.html',
+    styleUrls: ['./site-submission.component.scss'],
+    standalone: false
 })
 export class SiteSubmissionComponent implements OnInit {
   @Input() public siteId: number;

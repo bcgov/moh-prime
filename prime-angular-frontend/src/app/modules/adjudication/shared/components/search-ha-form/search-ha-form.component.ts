@@ -11,9 +11,10 @@ import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
-  selector: 'app-search-ha-form',
-  templateUrl: './search-ha-form.component.html',
-  styleUrls: ['./search-ha-form.component.scss']
+    selector: 'app-search-ha-form',
+    templateUrl: './search-ha-form.component.html',
+    styleUrls: ['./search-ha-form.component.scss'],
+    standalone: false
 })
 export class SearchHAFormComponent implements OnInit {
 

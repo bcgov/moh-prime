@@ -6,9 +6,10 @@ import { ContextualTitleDirective } from '../contextual-title.directive';
 import { ContextualContentDirective } from '../contextual-content.directive';
 
 @Component({
-  selector: 'app-contextual-help',
-  templateUrl: './contextual-help.component.html',
-  styleUrls: ['./contextual-help.component.scss']
+    selector: 'app-contextual-help',
+    templateUrl: './contextual-help.component.html',
+    styleUrls: ['./contextual-help.component.scss'],
+    standalone: false
 })
 export class ContextualHelpComponent {
   @Input() public xPosition: MenuPositionX;

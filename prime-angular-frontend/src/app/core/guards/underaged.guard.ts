@@ -4,7 +4,7 @@ import { Route, UrlSegment, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import * as moment from 'moment';
+import moment from 'moment'
 
 import { MINIMUM_AGE } from '@lib/constants';
 
@@ -15,7 +15,7 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 @Injectable({
   providedIn: 'root'
 })
-export class UnderagedGuard  {
+export class UnderagedGuard {
   constructor(
     private router: Router,
     private authService: AuthService

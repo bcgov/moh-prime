@@ -13,9 +13,10 @@ import { BannerResourceService } from '@shared/services/banner-resource.service'
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-banner-list-view',
-  templateUrl: './banner-list-view.component.html',
-  styleUrls: ['./banner-list-view.component.scss']
+    selector: 'app-banner-list-view',
+    templateUrl: './banner-list-view.component.html',
+    styleUrls: ['./banner-list-view.component.scss'],
+    standalone: false
 })
 export class BannerListViewComponent implements OnInit {
   @Input() public banners: Banner[];

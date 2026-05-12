@@ -4,7 +4,8 @@ import { CollegeConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 
 @Pipe({
-  name: 'collegeName'
+    name: 'collegeName',
+    standalone: false
 })
 export class CollegeNamePipe implements PipeTransform {
   constructor(

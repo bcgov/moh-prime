@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialogModule } from '@angular/material/dialog';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -20,7 +20,7 @@ import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { PaperEnrolleeReturneesPageComponent } from './paper-enrollee-returnees-page.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('PaperEnrolleeReturneesComponent', () => {
@@ -29,42 +29,40 @@ describe('PaperEnrolleeReturneesComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        MatDialogModule,
-        HttpClientModule,
-        MatSnackBarModule,
-        ReactiveFormsModule,
-        HttpClientTestingModule
-      ],
-      providers: [
-        {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
-        },
-        {
-          provide: ConfigService,
-          useClass: MockConfigService
-        },
-        {
-          provide: EnrolmentService,
-          useClass: MockEnrolmentService
-        },
-        {
-          provide: AuthService,
-          useClass: MockAuthService
-        },
-        {
-          provde: AccessTokenService,
-          useClass: MockAccessTokenService
-        },
-        KeycloakService
-      ],
-      declarations: [
+    declarations: [
         PaperEnrolleeReturneesPageComponent
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        ReactiveFormsModule],
+    providers: [
+        {
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+        },
+        {
+            provide: ConfigService,
+            useClass: MockConfigService
+        },
+        {
+            provide: EnrolmentService,
+            useClass: MockEnrolmentService
+        },
+        {
+            provide: AuthService,
+            useClass: MockAuthService
+        },
+        {
+            provde: AccessTokenService,
+            useClass: MockAccessTokenService
+        },
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

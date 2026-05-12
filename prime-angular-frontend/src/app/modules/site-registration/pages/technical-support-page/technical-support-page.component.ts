@@ -21,9 +21,10 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { TechnicalSupportPageFormState } from './technical-support-page-form-state.class';
 
 @Component({
-  selector: 'app-technical-support-page',
-  templateUrl: './technical-support-page.component.html',
-  styleUrls: ['./technical-support-page.component.scss']
+    selector: 'app-technical-support-page',
+    templateUrl: './technical-support-page.component.html',
+    styleUrls: ['./technical-support-page.component.scss'],
+    standalone: false
 })
 export class TechnicalSupportPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: TechnicalSupportPageFormState;

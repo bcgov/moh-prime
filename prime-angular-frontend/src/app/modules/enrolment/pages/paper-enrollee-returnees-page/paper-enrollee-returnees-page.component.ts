@@ -27,9 +27,10 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-pr
 import { PaperEnrolleeReturneeFormState } from './paper-enrollee-returnee-form-state.class';
 
 @Component({
-  selector: 'app-paper-enrollee-returnees',
-  templateUrl: './paper-enrollee-returnees-page.component.html',
-  styleUrls: ['./paper-enrollee-returnees-page.component.scss']
+    selector: 'app-paper-enrollee-returnees',
+    templateUrl: './paper-enrollee-returnees-page.component.html',
+    styleUrls: ['./paper-enrollee-returnees-page.component.scss'],
+    standalone: false
 })
 export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePage implements OnInit {
   public isOfflineFormAccessRequested: boolean;

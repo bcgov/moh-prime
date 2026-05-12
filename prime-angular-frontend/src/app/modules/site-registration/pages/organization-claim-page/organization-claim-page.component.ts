@@ -23,9 +23,10 @@ import { OrganizationClaimPageFormState } from './organization-claim-page-form-s
 import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
-  selector: 'app-organization-claim-page',
-  templateUrl: './organization-claim-page.component.html',
-  styleUrls: ['./organization-claim-page.component.scss']
+    selector: 'app-organization-claim-page',
+    templateUrl: './organization-claim-page.component.html',
+    styleUrls: ['./organization-claim-page.component.scss'],
+    standalone: false
 })
 export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: OrganizationClaimPageFormState;

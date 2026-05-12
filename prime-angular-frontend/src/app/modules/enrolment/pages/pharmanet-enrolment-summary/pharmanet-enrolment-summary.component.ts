@@ -30,9 +30,10 @@ import { Site } from '@registration/shared/models/site.model';
  * TODO: https://bcgovmoh.atlassian.net/browse/PRIME-2325 (Refactor common code in both PharmanetEnrolmentSummaryComponent and NextStepsComponent)
  */
 @Component({
-  selector: 'app-pharmanet-enrolment-summary',
-  templateUrl: './pharmanet-enrolment-summary.component.html',
-  styleUrls: ['./pharmanet-enrolment-summary.component.scss']
+    selector: 'app-pharmanet-enrolment-summary',
+    templateUrl: './pharmanet-enrolment-summary.component.html',
+    styleUrls: ['./pharmanet-enrolment-summary.component.scss'],
+    standalone: false
 })
 export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
@@ -230,7 +231,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
                   healthAuthorityCode: config.healthAuthorityCode,
                 }
               });
-              return this.enrolmentResource.sendProvisionerAccessLink(emailPairs.filter((ep) => ep.emails && ep.emails[0].email !== undefined), this.enrolment.id);
+              return this.enrolmentResource.sendProvisionerAccessLink(emailPairs.filter((ep) => ep.emails && ep.emails[0].email !== undefined && ep.emails[0].email !== null), this.enrolment.id);
             } else {
               return EMPTY;
             }
@@ -284,7 +285,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       return 'Next Steps to Get PharmaNet';
     } else {
       if (!this.initialEnrolment) {
-        return 'Share my Global PharmaNet ID (GPID)';
+        return 'Share my PRIME approval and provisioning details';
       } else {
         return 'PRIME Enrolment Complete';
       }
@@ -385,7 +386,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
               healthAuthorityCode: null,
               formArray: this.communityHealthEmails,
               formArrayName: 'communityHealthEmails',
-              subheaderContent: `Send your approval to your private community health practice's PharmaNet administrator (e.g. office manager). If you work in more than one clinic make sure you include every PharmaNet administrator's email. Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.`
+              subheaderContent: `Enter the email address of your clinic’s PharmaNet administrator below. If you work in more than one private community health practice, you will need to send the email separately to each PharmaNet administrator on a separate line. Either your PharmaNet administrator(s), or your PharmaNet software vendor, will contact you once your PharmaNet access has been set up.`
             });
         }
           break;
@@ -519,5 +520,9 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     });
 
     return emailFilled;
+  }
+
+  public getEmailLabel(emailIndex: number): string {
+    return emailIndex === 0 ? 'Email' : `Email #${emailIndex + 1}`;
   }
 }

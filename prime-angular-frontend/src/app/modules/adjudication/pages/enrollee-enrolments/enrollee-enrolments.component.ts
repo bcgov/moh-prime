@@ -15,9 +15,10 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 
 
 @Component({
-  selector: 'app-enrollee-enrolments',
-  templateUrl: './enrollee-enrolments.component.html',
-  styleUrls: ['./enrollee-enrolments.component.scss']
+    selector: 'app-enrollee-enrolments',
+    templateUrl: './enrollee-enrolments.component.html',
+    styleUrls: ['./enrollee-enrolments.component.scss'],
+    standalone: false
 })
 export class EnrolleeEnrolmentsComponent implements OnInit {
   public busy: Subscription;

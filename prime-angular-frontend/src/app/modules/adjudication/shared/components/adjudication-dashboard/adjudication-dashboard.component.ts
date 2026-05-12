@@ -9,9 +9,10 @@ import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-adjudication-dashboard',
-  templateUrl: './adjudication-dashboard.component.html',
-  styleUrls: ['./adjudication-dashboard.component.scss']
+    selector: 'app-adjudication-dashboard',
+    templateUrl: './adjudication-dashboard.component.html',
+    styleUrls: ['./adjudication-dashboard.component.scss'],
+    standalone: false
 })
 export class AdjudicationDashboardComponent implements OnInit, IDashboard {
   public dashboardMenuItems: Observable<DashboardMenuItem[]>;
@@ -33,7 +34,6 @@ export class AdjudicationDashboardComponent implements OnInit, IDashboard {
       new DashboardRouteMenuItem('Organizations', AdjudicationRoutes.ORGANIZATIONS, 'location_city'),
       new DashboardRouteMenuItem('Site Registrations', AdjudicationRoutes.SITE_REGISTRATIONS, 'store'),
       new DashboardRouteMenuItem('Admin Users', AdjudicationRoutes.ADMIN_USERS, 'admin_panel_settings'),
-      new DashboardRouteMenuItem('Metabase Reports', AdjudicationRoutes.METABASE_REPORTS, 'show_chart')
     ]);
   }
 }

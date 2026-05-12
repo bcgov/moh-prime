@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 
@@ -14,6 +14,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { EnrolleeSelfDeclarationsComponent } from './enrollee-self-declarations.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('EnrolleeSelfDeclarationsComponent', () => {
   let component: EnrolleeSelfDeclarationsComponent;
@@ -21,28 +22,27 @@ describe('EnrolleeSelfDeclarationsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
-        NgxMaterialModule
-      ],
-      providers: [
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
+        NgxMaterialModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: AuthService,
-          useValue: MockAuthService
+            provide: AuthService,
+            useValue: MockAuthService
         },
         {
-          provide: EnrolmentService,
-          useClass: MockEnrolmentService
+            provide: EnrolmentService,
+            useClass: MockEnrolmentService
         },
-        KeycloakService
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(inject([EnrolmentService], (enrolmentService: EnrolmentService) => {

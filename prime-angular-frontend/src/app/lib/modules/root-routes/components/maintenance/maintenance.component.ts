@@ -3,9 +3,10 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 @Component({
-  selector: 'app-maintenance',
-  templateUrl: './maintenance.component.html',
-  styleUrls: ['./maintenance.component.scss']
+    selector: 'app-maintenance',
+    templateUrl: './maintenance.component.html',
+    styleUrls: ['./maintenance.component.scss'],
+    standalone: false
 })
 export class MaintenanceComponent implements OnInit {
   constructor(

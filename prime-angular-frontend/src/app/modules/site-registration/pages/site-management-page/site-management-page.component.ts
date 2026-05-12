@@ -29,9 +29,10 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 @Component({
-  selector: 'app-site-management-page',
-  templateUrl: './site-management-page.component.html',
-  styleUrls: ['./site-management-page.component.scss']
+    selector: 'app-site-management-page',
+    templateUrl: './site-management-page.component.html',
+    styleUrls: ['./site-management-page.component.scss'],
+    standalone: false
 })
 export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;

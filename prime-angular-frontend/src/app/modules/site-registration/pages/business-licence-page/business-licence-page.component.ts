@@ -30,9 +30,10 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 // TODO refactor business licence pages into a single page
 @Component({
-  selector: 'app-business-licence-page',
-  templateUrl: './business-licence-page.component.html',
-  styleUrls: ['./business-licence-page.component.scss']
+    selector: 'app-business-licence-page',
+    templateUrl: './business-licence-page.component.html',
+    styleUrls: ['./business-licence-page.component.scss'],
+    standalone: false
 })
 export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: BusinessLicenceFormState;
@@ -101,6 +102,16 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     this.formState.businessLicenceGuid.patchValue(document.documentGuid);
     this.uploadedFile = true;
     this.hasNoBusinessLicenceError = false;
+
+    // Flag business licence as updated if a different document is uploaded
+    if (this.site.businessLicence?.businessLicenceDocument &&
+      document.documentGuid != this.site.businessLicence?.businessLicenceDocument?.documentGuid) {
+
+      const { filename } = this.siteFormStateService.businessLicenceFormState;
+      filename.patchValue(document.filename);
+
+      this.formState.flagBusinessLicenceUpdated(true);
+    }
   }
 
   public onRemoveDocument(_: string): void {

@@ -10,9 +10,10 @@ export interface DateContent {
 }
 
 @Component({
-  selector: 'app-dated-content-table',
-  templateUrl: './dated-content-table.component.html',
-  styleUrls: ['./dated-content-table.component.scss']
+    selector: 'app-dated-content-table',
+    templateUrl: './dated-content-table.component.html',
+    styleUrls: ['./dated-content-table.component.scss'],
+    standalone: false
 })
 export class DatedContentTableComponent implements OnInit {
   @Input() public showTime: boolean;

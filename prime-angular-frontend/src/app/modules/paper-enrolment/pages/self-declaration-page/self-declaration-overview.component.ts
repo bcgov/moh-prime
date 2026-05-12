@@ -7,8 +7,8 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { SelfDeclarationForm } from './self-declaration-form.model';
 
 @Component({
-  selector: 'app-self-declaration-overview',
-  template: `
+    selector: 'app-self-declaration-overview',
+    template: `
     <app-enrollee-self-declarations *ngIf="selfDeclarations?.selfDeclarations"
                                     [showRedirect]="true"
                                     [enrolment]="selfDeclarations"
@@ -20,8 +20,9 @@ import { SelfDeclarationForm } from './self-declaration-form.model';
       </button>
     </app-enrollee-self-declarations>
   `,
-  styles: ['mat-icon { font-size: 1em; }'],
-  changeDetection: ChangeDetectionStrategy.Default
+    styles: ['mat-icon { font-size: 1em; }'],
+    changeDetection: ChangeDetectionStrategy.Default,
+    standalone: false
 })
 export class SelfDeclarationOverviewComponent extends AbstractOverview {
   @Input() public selfDeclarations: SelfDeclarationForm;

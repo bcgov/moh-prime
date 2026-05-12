@@ -9,9 +9,10 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { Site } from '@registration/shared/models/site.model';
 
 @Component({
-  selector: 'app-site-remote-users',
-  templateUrl: './site-remote-users.component.html',
-  styleUrls: ['./site-remote-users.component.scss']
+    selector: 'app-site-remote-users',
+    templateUrl: './site-remote-users.component.html',
+    styleUrls: ['./site-remote-users.component.scss'],
+    standalone: false
 })
 export class SiteRemoteUsersComponent implements OnInit {
   public title: string;

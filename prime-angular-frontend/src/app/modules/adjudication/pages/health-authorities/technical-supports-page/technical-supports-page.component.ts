@@ -24,9 +24,10 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { HealthAuthorityVendor } from '@health-auth/shared/models/health-authority-vendor.model';
 
 @Component({
-  selector: 'app-technical-supports-page',
-  templateUrl: './technical-supports-page.component.html',
-  styleUrls: ['./technical-supports-page.component.scss']
+    selector: 'app-technical-supports-page',
+    templateUrl: './technical-supports-page.component.html',
+    styleUrls: ['./technical-supports-page.component.scss'],
+    standalone: false
 })
 export class TechnicalSupportsPageComponent extends AbstractContactsPage implements OnInit {
 

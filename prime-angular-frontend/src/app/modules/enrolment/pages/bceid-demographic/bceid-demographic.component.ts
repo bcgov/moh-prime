@@ -29,9 +29,10 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BceidDemographicFormState } from './bceid-demographic-form-state.class';
 
 @Component({
-  selector: 'app-bceid-demographic',
-  templateUrl: './bceid-demographic.component.html',
-  styleUrls: ['./bceid-demographic.component.scss']
+    selector: 'app-bceid-demographic',
+    templateUrl: './bceid-demographic.component.html',
+    styleUrls: ['./bceid-demographic.component.scss'],
+    standalone: false
 })
 export class BceidDemographicComponent extends BaseEnrolmentProfilePage implements OnInit {
   public formState: BceidDemographicFormState;

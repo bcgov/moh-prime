@@ -6,9 +6,10 @@ import { DateUtils } from '@lib/utils/date-utils.class';
 import { AlertType } from '@shared/components/alerts/alert/alert.component';
 
 @Component({
-  selector: 'app-expiry-alert',
-  templateUrl: './expiry-alert.component.html',
-  styleUrls: ['./expiry-alert.component.scss']
+    selector: 'app-expiry-alert',
+    templateUrl: './expiry-alert.component.html',
+    styleUrls: ['./expiry-alert.component.scss'],
+    standalone: false
 })
 export class ExpiryAlertComponent implements OnInit, OnChanges {
   /**

@@ -525,6 +525,9 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   ) {
     if (!Array.isArray(careSettings)) {
       careSettings = [];
+    } else {
+      //OHID-478 filter out NA care setting
+      careSettings = careSettings.filter(cs => CareSettingEnum[cs.careSettingCode] !== undefined);
     }
 
     const careSettingsFormArray = this.careSettingsForm.get('careSettings') as UntypedFormArray;

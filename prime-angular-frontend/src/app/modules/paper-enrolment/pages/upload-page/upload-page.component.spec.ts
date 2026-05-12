@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +12,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { UploadPageComponent } from './upload-page.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('UploadPageComponent', () => {
   let component: UploadPageComponent;
@@ -22,31 +23,30 @@ describe('UploadPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [UploadPageComponent],
-      imports: [
-        NgxMaterialModule,
+    declarations: [UploadPageComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [NgxMaterialModule,
         ReactiveFormsModule,
-        HttpClientTestingModule,
         RouterTestingModule,
         BrowserAnimationsModule,
-        MatTooltipModule
-      ],
-      providers: [
+        MatTooltipModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
         {
-          provide: ActivatedRoute,
-          useValue: mockActivatedRoute
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+            provide: ActivatedRoute,
+            useValue: mockActivatedRoute
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

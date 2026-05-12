@@ -4,7 +4,8 @@ import { WeekDay } from '@angular/common';
 import * as moment from 'moment';
 
 @Pipe({
-  name: 'weekday'
+    name: 'weekday',
+    standalone: false
 })
 export class WeekdayPipe implements PipeTransform {
   public transform(value: WeekDay, output: 'full' | 'short' | 'min' = 'full'): string {

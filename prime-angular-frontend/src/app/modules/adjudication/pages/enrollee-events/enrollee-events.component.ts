@@ -10,9 +10,10 @@ import { DateContent } from '@adjudication/shared/components/dated-content-table
 import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
 
 @Component({
-  selector: 'app-enrollee-events',
-  templateUrl: './enrollee-events.component.html',
-  styleUrls: ['./enrollee-events.component.scss']
+    selector: 'app-enrollee-events',
+    templateUrl: './enrollee-events.component.html',
+    styleUrls: ['./enrollee-events.component.scss'],
+    standalone: false
 })
 export class EnrolleeEventsComponent implements OnInit {
   public businessEvents$: Observable<DateContent[]>;

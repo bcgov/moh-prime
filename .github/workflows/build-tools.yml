@@ -28,13 +28,6 @@ jobs:
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
           password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
 
-      - name: "Login to RedHat container repository"
-        uses: docker/login-action@v1
-        with: 
-          registry: ${{secrets.REDHAT_REGISTRY_URL}}
-          username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
-          password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
-
       - name: "Build, tag and push Document Manager image"
         id: build-image
         env:
@@ -65,13 +58,6 @@ jobs:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
           password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
-
-      - name: "Login to RedHat container repository"
-        uses: docker/login-action@v1
-        with: 
-          registry: ${{secrets.REDHAT_REGISTRY_URL}}
-          username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
-          password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
       - name: "Build, tag and push .NET web API image"
         id: build-image
@@ -119,12 +105,6 @@ jobs:
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
           password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
 
-      - name: "Login to RedHat container repository"
-        uses: docker/login-action@v1
-        with: 
-          registry: ${{secrets.REDHAT_REGISTRY_URL}}
-          username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
-          password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
       - name: "Build, tag & push Angular frontend image"
         id: build-image

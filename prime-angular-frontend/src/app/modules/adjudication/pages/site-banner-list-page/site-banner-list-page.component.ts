@@ -9,9 +9,10 @@ import { BannerResourceService } from '@shared/services/banner-resource.service'
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-site-banner-list-page',
-  templateUrl: './site-banner-list-page.component.html',
-  styleUrls: ['./site-banner-list-page.component.scss']
+    selector: 'app-site-banner-list-page',
+    templateUrl: './site-banner-list-page.component.html',
+    styleUrls: ['./site-banner-list-page.component.scss'],
+    standalone: false
 })
 export class SiteBannerListPageComponent implements OnInit {
   public busy: Subscription;
