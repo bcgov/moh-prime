@@ -49,42 +49,59 @@ objects:
 ###########################################
 ###               Frontend              ###
 ###########################################
-#   Frontend Deployment Config
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
+#   Frontend Deployment
+- apiVersion: apps/v1
+  kind: Deployment
   metadata:
     name: ${SVC_NAME}-frontend
     namespace: ${OC_LICENSE_PLATE}-dev
+    annotations:
+      image.openshift.io/triggers: |-
+        [
+          {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "9c33a9-tools",
+              "name": "prime-frontend:dev"
+            },
+            "fieldPath": "spec.template.spec.containers[0].image",
+            "paused": false
+          }
+        ]
     labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
+      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/name: frontend
+      app.kubernetes.io/version: 0.0.1
       app.openshift.io/runtime: nginx
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-frontend
-    strategy:
-      type: Recreate
-      maxSurge: 50%
-      maxUnavailable: 0
+      matchLabels:
+        app.kubernetes.io/instance: ${SVC_NAME}
+        app.kubernetes.io/name: frontend
     template:
       metadata:
         labels:
-          dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-frontend
+          app.kubernetes.io/instance: ${SVC_NAME}
+          app.kubernetes.io/name: frontend
       spec:
         affinity:
           podAntiAffinity:
             preferredDuringSchedulingIgnoredDuringExecution:
-              - weight: 100
+              - weight: 1
                 podAffinityTerm:
-                  topologyKey: kubernetes.io/hostname
                   labelSelector:
                     matchExpressions:
-                      - key: deploymentconfig
+                      - key: app.kubernetes.io/name
                         operator: In
                         values:
-                          - ${SVC_NAME}-frontend
+                          - frontend
+                      - key: app.kubernetes.io/instance
+                        operator: In
+                        values:
+                          - ${SVC_NAME}
+                  topologyKey: kubernetes.io/hostname
         containers:
           - name: ${SVC_NAME}-frontend
             image: >-
@@ -159,17 +176,6 @@ objects:
           configMap:
             name: ${SVC_NAME}-env-config
             defaultMode: 420
-    triggers:
-      - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true
-          containerNames:
-            - ${SVC_NAME}-frontend
-          from:
-            kind: ImageStreamTag
-            namespace: "${OC_LICENSE_PLATE}-tools"
-            name: 'prime-frontend:${IMAGE_TAG}'
 
 #   Environment file
 - apiVersion: v1
@@ -500,20 +506,24 @@ objects:
 ###########################################
 ###           Backend Web API           ###
 ###########################################
-#   Backend Web API Deployment Config
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
+#   Backend Web API Deployment
+- apiVersion: apps/v1
+  kind: Deployment
   metadata:
     name: ${SVC_NAME}-webapi
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: dotnet
+      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/name: webapi
+      app.kubernetes.io/version: 0.0.1
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-webapi
+      matchLabels:
+        app.kubernetes.io/instance: ${SVC_NAME}
+        app.kubernetes.io/name: webapi
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -553,8 +563,8 @@ objects:
     template:
       metadata:
         labels:
-          dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-webapi
+          app.kubernetes.io/instance: ${SVC_NAME}
+        app.kubernetes.io/name: webapi
       spec:
         affinity:
           podAntiAffinity:
@@ -964,32 +974,28 @@ objects:
 ###########################################
 ###                Redis                ###
 ###########################################
-#   Redis Deployment Config
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
+#   Redis Deployment
+- apiVersion: apps/v1
+  kind: Deployment
   metadata:
     name: ${SVC_NAME}-redis
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: redis
+      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/name: redis
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-redis
-    strategy:
-      type: Recreate
-      maxSurge: 50%
-      maxUnavailable: 0
-      recreateParams:
-        timeoutSeconds: 600
-      activeDeadlineSeconds: 21600
+      matchLabels:
+        app.kubernetes.io/instance: ${SVC_NAME}
+        app.kubernetes.io/name: redis
     template:
       metadata:
         labels:
-          dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-redis
+          app.kubernetes.io/instance: ${SVC_NAME}
+          app.kubernetes.io/name: redis
       spec:
         volumes:
           - name: ${SVC_NAME}-redis-data
@@ -1049,6 +1055,13 @@ objects:
               image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/redis-6:tini
         restartPolicy: Always
         dnsPolicy: ClusterFirst
+        securityContext: {}
+        schedulerName: default-scheduler
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 25%
+        maxSurge: 25%
 
 #   Redis Service
 - kind: Service
@@ -1057,7 +1070,9 @@ objects:
     name: ${SVC_NAME}-redis
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
+      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/name: redis
+      app.openshift.io/runtime: redis
   spec:
     ports:
       - name: redis
@@ -1065,4 +1080,5 @@ objects:
         port: 6379
         targetPort: 6379
     selector:
-      name: ${SVC_NAME}-redis
+      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/name: redis
