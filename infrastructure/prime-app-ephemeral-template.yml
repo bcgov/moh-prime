@@ -62,7 +62,7 @@ objects:
             "from": {
               "kind": "ImageStreamTag",
               "namespace": "9c33a9-tools",
-              "name": "prime-frontend:dev"
+              "name": "prime-frontend:${IMAGE_TAG}"
             },
             "fieldPath": "spec.template.spec.containers[0].image",
             "paused": false
@@ -125,9 +125,6 @@ objects:
               - name: DOCUMENT_MANAGER_URL
                 value: https://${SVC_NAME}${URL_STUB}/api/docman
             resources:
-              limits:
-                cpu: 50m
-                memory: 50Mi
               requests:
                 cpu: 15m
                 memory: 10Mi
@@ -564,7 +561,7 @@ objects:
       metadata:
         labels:
           app.kubernetes.io/instance: ${SVC_NAME}
-        app.kubernetes.io/name: webapi
+          app.kubernetes.io/name: webapi
       spec:
         affinity:
           podAntiAffinity:
@@ -652,9 +649,6 @@ objects:
               - containerPort: 8080
                 protocol: TCP
             resources:
-              limits:
-                cpu: 50m
-                memory: 1Gi
               requests:
                 cpu: 15m
                 memory: 500Mi
@@ -918,9 +912,6 @@ objects:
               - configMapRef:
                   name: document-manager
             resources:
-              limits:
-                cpu: 80m
-                memory: 200Mi
               requests:
                 cpu: 10m
                 memory: 28Mi
@@ -1002,9 +993,6 @@ objects:
             emptyDir: {}
         containers:
           - resources:
-              limits:
-                cpu: 25m
-                memory: 100Mi
               requests:
                 cpu: 5m
                 memory: 50Mi

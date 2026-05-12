@@ -199,9 +199,6 @@ objects:
             image: 'docker.io/fluent/fluent-bit:3.0.3'
             imagePullPolicy: IfNotPresent
             resources:
-              limits:
-                cpu: 100m
-                memory: 64Mi
               requests:
                 cpu: 10m
                 memory: 16Mi
@@ -768,9 +765,6 @@ objects:
           - name: fluent-bit
             image: 'docker.io/fluent/fluent-bit:3.0.3'
             resources:
-              limits:
-                cpu: 100m
-                memory: 64Mi
               requests:
                 cpu: 10m
                 memory: 16Mi
@@ -953,9 +947,6 @@ objects:
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-document-manager:${IMAGE_TAG}
             resources:
-              limits:
-                cpu: 80m
-                memory: 200Mi
               requests:
                 cpu: 10m
                 memory: 28Mi
@@ -1085,9 +1076,6 @@ objects:
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/redis-6:tini
             resources:
-              limits:
-                cpu: 25m
-                memory: 512Mi
               requests:
                 cpu: 5m
                 memory: 50Mi
