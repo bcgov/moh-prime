@@ -94,7 +94,7 @@ objects:
       app.kubernetes.io/version: 0.0.1
       app.openshift.io/runtime: nginx
   spec:
-    replicas: ${{{FRONTEND_REPLICAS}}}
+    replicas: ${{FRONTEND_REPLICAS}}
     selector:
       matchLabels:
         app.kubernetes.io/instance: ${SVC_NAME}
