@@ -94,7 +94,6 @@ objects:
       app.kubernetes.io/version: 0.0.1
       app.openshift.io/runtime: nginx
   spec:
-    completionDeadlineSeconds: 1200
     replicas: ${FRONTEND_REPLICAS}
     selector:
       matchLabels:
@@ -580,7 +579,6 @@ objects:
           }
         ]
   spec:
-    completionDeadlineSeconds: 1200
     replicas: ${{BACKEND_REPLICAS}}
     selector:
       matchLabels:
@@ -848,14 +846,15 @@ objects:
 ###########################################
 ###      Document Manager (backend)     ###
 ###########################################
-#   Document Manager (backend) Deployment Config
+#   Document Manager (backend) Deployment
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
     name: ${SVC_NAME}-document-manager
     namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
+      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/name: document-manager
       app.openshift.io/runtime: python
     annotations:
       image.openshift.io/triggers: |-
@@ -871,24 +870,16 @@ objects:
           }
         ]
   spec:
-    completionDeadlineSeconds: 1200
     replicas: 1
     selector:
       matchLabels:
-        name: ${SVC_NAME}-document-manager
-    strategy:
-      type: Recreate
-      rollingParams:
-        updatePeriodSeconds: 1
-        intervalSeconds: 1
-        timeoutSeconds: 120
-        maxSurge: "50%"
-        maxUnavailable: 0
+        app.kubernetes.io/instance: ${SVC_NAME}
+        app.kubernetes.io/name: document-manager
     template:
       metadata:
         labels:
-          dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-document-manager
+          app.kubernetes.io/instance: ${SVC_NAME}
+          app.kubernetes.io/name: document-manager
       spec:
         initContainers:
         - name: run-migrations
@@ -1033,14 +1024,16 @@ objects:
     name: ${SVC_NAME}-document-manager
     namespace: ${OC_LICENSE_PLATE}-${OC_ENV}
     labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
+      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/name: document-manager
   spec:
     ports:
       - name: ${SVC_NAME}-document-manager
         port: 6001
         targetPort: 6001
     selector:
-      name: ${SVC_NAME}-document-manager
+      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/name: document-manager
 
 ###########################################
 ###                Redis                ###

@@ -74,7 +74,6 @@ objects:
       app.kubernetes.io/version: 0.0.1
       app.openshift.io/runtime: nginx
   spec:
-    completionDeadlineSeconds: 1200
     replicas: 1
     selector:
       matchLabels:
@@ -515,7 +514,6 @@ objects:
       app.kubernetes.io/name: webapi
       app.kubernetes.io/version: 0.0.1
   spec:
-    completionDeadlineSeconds: 1200
     replicas: 1
     selector:
       matchLabels:
@@ -750,14 +748,15 @@ objects:
 ###########################################
 ###      Document Manager (backend)     ###
 ###########################################
-#   Document Manager (backend) Deployment Config
+#   Document Manager (backend) Deployment
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
     name: ${SVC_NAME}-document-manager
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
+      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/name: document-manager
       app.openshift.io/runtime: python
     annotations:
       image.openshift.io/triggers: |-
@@ -776,7 +775,8 @@ objects:
     replicas: 1
     selector:
       matchLabels:
-        name: ${SVC_NAME}-document-manager
+        app.kubernetes.io/instance: ${SVC_NAME}
+        app.kubernetes.io/name: document-manager
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -816,8 +816,8 @@ objects:
     template:
       metadata:
         labels:
-          dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-document-manager
+          app.kubernetes.io/instance: ${SVC_NAME}
+          app.kubernetes.io/name: document-manager
       spec:
         initContainers:
         - name: run-migrations
@@ -960,7 +960,8 @@ objects:
         port: 6001
         targetPort: 6001
     selector:
-      name: ${SVC_NAME}-document-manager
+      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/name: document-manager
 
 ###########################################
 ###                Redis                ###
@@ -976,7 +977,6 @@ objects:
       app.kubernetes.io/instance: ${SVC_NAME}
       app.kubernetes.io/name: redis
   spec:
-    completionDeadlineSeconds: 1200
     replicas: 1
     selector:
       matchLabels:
