@@ -10,9 +10,10 @@ import { ToastService } from '@core/services/toast.service';
 import { AddressAutocompleteResource } from '@shared/services/address-autocomplete-resource.service';
 
 @Component({
-  selector: 'app-address-form-autocomplete',
-  templateUrl: './address-autocomplete.component.html',
-  styleUrls: ['./address-autocomplete.component.scss']
+    selector: 'app-address-form-autocomplete',
+    templateUrl: './address-autocomplete.component.html',
+    styleUrls: ['./address-autocomplete.component.scss'],
+    standalone: false
 })
 export class AddressAutocompleteComponent implements OnInit {
   @Input() inBc: boolean;

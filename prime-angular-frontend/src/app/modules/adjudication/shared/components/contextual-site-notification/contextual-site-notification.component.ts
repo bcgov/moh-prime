@@ -4,9 +4,10 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 
 @Component({
-  selector: 'app-contextual-site-notification',
-  templateUrl: './contextual-site-notification.component.html',
-  styleUrls: ['./contextual-site-notification.component.scss']
+    selector: 'app-contextual-site-notification',
+    templateUrl: './contextual-site-notification.component.html',
+    styleUrls: ['./contextual-site-notification.component.scss'],
+    standalone: false
 })
 export class ContextualSiteNotificationComponent implements OnInit {
   @Input() public siteId: number;

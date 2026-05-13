@@ -19,9 +19,10 @@ import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { PhsaEformsFormStateService } from '@phsa/shared/services/phsa-eforms-form-state.service';
 
 @Component({
-  selector: 'app-bcsc-demographic',
-  templateUrl: './bcsc-demographic.component.html',
-  styleUrls: ['./bcsc-demographic.component.scss']
+    selector: 'app-bcsc-demographic',
+    templateUrl: './bcsc-demographic.component.html',
+    styleUrls: ['./bcsc-demographic.component.scss'],
+    standalone: false
 })
 export class BcscDemographicComponent implements OnInit {
   public enrollee: PhsaEnrollee;

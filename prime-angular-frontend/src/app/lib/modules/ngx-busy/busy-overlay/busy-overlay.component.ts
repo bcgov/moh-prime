@@ -3,9 +3,10 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-busy-overlay',
-  templateUrl: './busy-overlay.component.html',
-  styleUrls: ['./busy-overlay.component.scss']
+    selector: 'app-busy-overlay',
+    templateUrl: './busy-overlay.component.html',
+    styleUrls: ['./busy-overlay.component.scss'],
+    standalone: false
 })
 export class BusyOverlayComponent {
   @Input() public busy: Subscription;

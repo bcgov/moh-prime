@@ -7,9 +7,10 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.clas
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
-  selector: 'app-access-locked',
-  templateUrl: './access-locked.component.html',
-  styleUrls: ['./access-locked.component.scss']
+    selector: 'app-access-locked',
+    templateUrl: './access-locked.component.html',
+    styleUrls: ['./access-locked.component.scss'],
+    standalone: false
 })
 export class AccessLockedComponent extends BaseEnrolmentPage implements OnInit {
   constructor(

@@ -20,9 +20,10 @@ interface HealthAuthorityVendorMap extends VendorConfig {
   id?: number;
 }
 @Component({
-  selector: 'app-vendors-page',
-  templateUrl: './vendors-page.component.html',
-  styleUrls: ['./vendors-page.component.scss']
+    selector: 'app-vendors-page',
+    templateUrl: './vendors-page.component.html',
+    styleUrls: ['./vendors-page.component.scss'],
+    standalone: false
 })
 export class VendorsPageComponent implements OnInit {
   public busy: Subscription;

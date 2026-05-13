@@ -9,9 +9,10 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { SatEformsRoutes } from '@sat/sat-eforms.routes';
 
 @Component({
-  selector: 'app-sat-eforms-dashboard',
-  templateUrl: './sat-eforms-dashboard.component.html',
-  styleUrls: ['./sat-eforms-dashboard.component.scss']
+    selector: 'app-sat-eforms-dashboard',
+    templateUrl: './sat-eforms-dashboard.component.html',
+    styleUrls: ['./sat-eforms-dashboard.component.scss'],
+    standalone: false
 })
 export class SatEformsDashboardComponent implements OnInit, IDashboard {
   public dashboardMenuItems: Observable<DashboardMenuItem[]>;

@@ -13,9 +13,10 @@ import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment
 import { LdapUserPageFormState } from './ldap-user-page-form-state.class';
 
 @Component({
-  selector: 'app-ldap-user-page',
-  templateUrl: './ldap-user-page.component.html',
-  styleUrls: ['./ldap-user-page.component.scss']
+    selector: 'app-ldap-user-page',
+    templateUrl: './ldap-user-page.component.html',
+    styleUrls: ['./ldap-user-page.component.scss'],
+    standalone: false
 })
 export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnInit {
   public title: string;

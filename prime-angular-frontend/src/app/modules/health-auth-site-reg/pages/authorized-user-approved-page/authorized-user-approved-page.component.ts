@@ -6,9 +6,10 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 
 @Component({
-  selector: 'app-authorized-user-approved-page',
-  templateUrl: './authorized-user-approved-page.component.html',
-  styleUrls: ['./authorized-user-approved-page.component.scss']
+    selector: 'app-authorized-user-approved-page',
+    templateUrl: './authorized-user-approved-page.component.html',
+    styleUrls: ['./authorized-user-approved-page.component.scss'],
+    standalone: false
 })
 export class AuthorizedUserApprovedPageComponent implements OnInit {
   constructor(

@@ -27,9 +27,10 @@ import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-enrollee-overview',
-  templateUrl: './enrollee-overview.component.html',
-  styleUrls: ['./enrollee-overview.component.scss']
+    selector: 'app-enrollee-overview',
+    templateUrl: './enrollee-overview.component.html',
+    styleUrls: ['./enrollee-overview.component.scss'],
+    standalone: false
 })
 export class EnrolleeOverviewComponent extends AdjudicationContainerComponent implements OnInit {
   public enrollee: HttpEnrollee;

@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 
 @Pipe({
-  name: 'licenseNumberLabel'
+    name: 'licenseNumberLabel',
+    standalone: false
 })
 export class LicenseNumberLabelPipe implements PipeTransform {
   public transform(collegeCode: number): string {

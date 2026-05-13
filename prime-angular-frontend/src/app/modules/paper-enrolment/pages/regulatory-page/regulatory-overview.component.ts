@@ -7,8 +7,8 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { RegulatoryForm } from './regulatory-form.model';
 
 @Component({
-  selector: 'app-regulatory-overview',
-  template: `
+    selector: 'app-regulatory-overview',
+    template: `
     <app-page-section>
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Device Provider ID</ng-container>
@@ -142,8 +142,9 @@ import { RegulatoryForm } from './regulatory-form.model';
       </button>
     </app-page-section>
   `,
-  styles: ['mat-icon { font-size: 1em; }'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    styles: ['mat-icon { font-size: 1em; }'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class RegulatoryOverviewComponent extends AbstractOverview {
   @Input() public regulatory: RegulatoryForm;

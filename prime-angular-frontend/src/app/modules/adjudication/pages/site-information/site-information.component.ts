@@ -8,9 +8,10 @@ import { AbstractComponent } from '@shared/classes/abstract-component';
 import { Site } from '@registration/shared/models/site.model';
 
 @Component({
-  selector: 'app-site-information',
-  templateUrl: './site-information.component.html',
-  styleUrls: ['./site-information.component.scss']
+    selector: 'app-site-information',
+    templateUrl: './site-information.component.html',
+    styleUrls: ['./site-information.component.scss'],
+    standalone: false
 })
 export class SiteInformationComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;

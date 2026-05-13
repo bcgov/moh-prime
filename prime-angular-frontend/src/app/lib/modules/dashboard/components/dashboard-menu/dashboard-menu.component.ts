@@ -3,9 +3,10 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { DashboardMenuItem, DashboardRouteMenuItem } from '@lib/modules/dashboard/models/dashboard-menu-item.model';
 
 @Component({
-  selector: 'app-dashboard-menu',
-  templateUrl: './dashboard-menu.component.html',
-  styleUrls: ['./dashboard-menu.component.scss']
+    selector: 'app-dashboard-menu',
+    templateUrl: './dashboard-menu.component.html',
+    styleUrls: ['./dashboard-menu.component.scss'],
+    standalone: false
 })
 export class DashboardMenuComponent implements OnInit {
   /**

@@ -7,9 +7,10 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 
 @Component({
-  selector: 'app-access-declined',
-  templateUrl: './access-declined.component.html',
-  styleUrls: ['./access-declined.component.scss']
+    selector: 'app-access-declined',
+    templateUrl: './access-declined.component.html',
+    styleUrls: ['./access-declined.component.scss'],
+    standalone: false
 })
 export class AccessDeclinedComponent extends BaseEnrolmentPage implements OnInit {
   constructor(

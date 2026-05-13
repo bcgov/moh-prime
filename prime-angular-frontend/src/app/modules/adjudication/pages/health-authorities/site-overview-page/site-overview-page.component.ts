@@ -23,9 +23,10 @@ interface HealthAuthorityVendorMap extends VendorConfig {
   id?: number;
 }
 @Component({
-  selector: 'app-site-overview-page',
-  templateUrl: './site-overview-page.component.html',
-  styleUrls: ['./site-overview-page.component.scss']
+    selector: 'app-site-overview-page',
+    templateUrl: './site-overview-page.component.html',
+    styleUrls: ['./site-overview-page.component.scss'],
+    standalone: false
 })
 export class SiteOverviewPageComponent implements OnInit {
   public busy: Subscription;

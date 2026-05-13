@@ -5,9 +5,10 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-site-maintenance-page',
-  templateUrl: './site-maintenance-page.component.html',
-  styleUrls: ['./site-maintenance-page.component.scss']
+    selector: 'app-site-maintenance-page',
+    templateUrl: './site-maintenance-page.component.html',
+    styleUrls: ['./site-maintenance-page.component.scss'],
+    standalone: false
 })
 export class SiteMaintenancePageComponent implements OnInit {
   private routeUtils: RouteUtils;

@@ -12,9 +12,10 @@ import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { PhsaEformsFormStateService } from '@phsa/shared/services/phsa-eforms-form-state.service';
 
 @Component({
-  selector: 'app-access-code',
-  templateUrl: './access-code.component.html',
-  styleUrls: ['./access-code.component.scss']
+    selector: 'app-access-code',
+    templateUrl: './access-code.component.html',
+    styleUrls: ['./access-code.component.scss'],
+    standalone: false
 })
 export class AccessCodeComponent implements OnInit {
 

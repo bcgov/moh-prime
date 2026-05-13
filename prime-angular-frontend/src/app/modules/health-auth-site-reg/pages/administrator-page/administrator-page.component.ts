@@ -20,9 +20,10 @@ import { AbstractHealthAuthoritySiteRegistrationPage } from '@health-auth/shared
 import { AdministratorFormState } from './administrator-form-state.class';
 
 @Component({
-  selector: 'app-administrator-page',
-  templateUrl: './administrator-page.component.html',
-  styleUrls: ['./administrator-page.component.scss']
+    selector: 'app-administrator-page',
+    templateUrl: './administrator-page.component.html',
+    styleUrls: ['./administrator-page.component.scss'],
+    standalone: false
 })
 export class AdministratorPageComponent extends AbstractHealthAuthoritySiteRegistrationPage implements OnInit {
   public formState: AdministratorFormState;

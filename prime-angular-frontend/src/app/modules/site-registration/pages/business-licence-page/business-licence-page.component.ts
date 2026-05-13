@@ -30,9 +30,10 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 // TODO refactor business licence pages into a single page
 @Component({
-  selector: 'app-business-licence-page',
-  templateUrl: './business-licence-page.component.html',
-  styleUrls: ['./business-licence-page.component.scss']
+    selector: 'app-business-licence-page',
+    templateUrl: './business-licence-page.component.html',
+    styleUrls: ['./business-licence-page.component.scss'],
+    standalone: false
 })
 export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: BusinessLicenceFormState;
