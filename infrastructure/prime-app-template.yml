@@ -1037,7 +1037,6 @@ objects:
       app.kubernetes.io/instance: ${SVC_NAME}
       app.kubernetes.io/name: redis
   spec:
-    completionDeadlineSeconds: 1200
     replicas: 1
     selector:
       matchLabels:
