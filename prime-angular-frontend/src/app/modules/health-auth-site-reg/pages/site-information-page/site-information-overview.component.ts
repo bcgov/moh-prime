@@ -7,8 +7,8 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 import { SiteInformationForm } from './site-information-form.model';
 
 @Component({
-    selector: 'app-site-information-overview',
-    template: `
+  selector: 'app-site-information-overview',
+  template: `
     <app-overview-section title="Site Details"
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="HealthAuthSiteRegRoutes.SITE_INFORMATION"
@@ -22,6 +22,10 @@ import { SiteInformationForm } from './site-information-form.model';
       <app-enrollee-property title="Site Mnemonic">
         {{ siteInformation?.mnemonic | default }}
       </app-enrollee-property>
+      <app-enrollee-property *ngIf="siteInformation?.pharmacyPhone"
+                      title="Pharmacy Phone Number">
+        {{ siteInformation?.pharmacyPhone | default }}
+      </app-enrollee-property>
 
       <app-address-view title="Site Address"
                       [address]="siteInformation?.physicalAddress"
@@ -31,9 +35,9 @@ import { SiteInformationForm } from './site-information-form.model';
       </app-address-view>
     </app-overview-section>
   `,
-    styles: ['mat-icon { font-size: 1.2em; }'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  styles: ['mat-icon { font-size: 1.2em; }'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class SiteInformationOverviewComponent extends AbstractOverview {
   @Input() public siteInformation: SiteInformationForm;

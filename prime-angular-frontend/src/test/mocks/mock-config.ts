@@ -3024,11 +3024,13 @@ export class MockConfig {
       'careTypes': [
         {
           'code': 1,
-          'name': 'Ambulatory Care'
+          'name': 'Ambulatory Care',
+          'pharmacyPhoneRequired': false,
         },
         {
           'code': 2,
-          'name': 'Acute Care'
+          'name': 'Acute Care',
+          'pharmacyPhoneRequired': true,
         }
       ],
       'securityGroups': [

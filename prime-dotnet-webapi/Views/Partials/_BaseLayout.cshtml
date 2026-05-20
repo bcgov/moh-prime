@@ -1,22 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
   <title>
     @await RenderSectionAsync("Title", true)
   </title>
+  <style>
+        body {
+          font-family: -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            Roboto,
+            "Helvetica Neue",
+            Arial,
+            "Noto Sans",
+            sans-serif,
+            "Apple Color Emoji",
+            "Segoe UI Emoji",
+            "Segoe UI Symbol",
+            "Noto Color Emoji";
+        }
+        .mb-4, .my-4 {
+          margin-bottom: 1.5rem !important;
+        }
+        .ml-2, .mx-2 {
+          margin-left: .5rem !important;
+        }
+  </style>
 
   @await RenderSectionAsync("Theme", required: true)
 
 </head>
+
 <body>
 
-<div class="container">
+  <div class="container">
 
-  @RenderBody()
+    @RenderBody()
 
-</div>
+  </div>
 
 </body>
+
 </html>

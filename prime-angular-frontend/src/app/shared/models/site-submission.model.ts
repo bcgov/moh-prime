@@ -18,6 +18,7 @@ export interface HttpSite {
   careSettingCode: number;
   pec: string;
   mnemonic: string;
+  pharmacyPhone: string;
   doingBusinessAs: string;
   submittedDate: string;
   status: number;

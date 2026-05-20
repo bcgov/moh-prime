@@ -10,5 +10,7 @@ namespace Prime.Models.HealthAuthorities
         public int Code { get; set; }
 
         public string Name { get; set; }
+
+        public bool PharmacyPhoneRequired { get; set; }
     }
 }

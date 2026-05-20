@@ -18,6 +18,7 @@ export interface HealthAuthoritySiteDto extends BaseHealthAuthoritySite {
   siteName: string;
   mnemonic: string;
   pec: string;
+  pharmacyPhone: string;
   securityGroupCode: number;
   physicalAddress: Address;
   businessHours: BusinessDay[];
@@ -35,6 +36,7 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
     public siteName: string,
     public mnemonic: string,
     public pec: string,
+    public pharmacyPhone: string,
     public securityGroupCode: number,
     public physicalAddress: Address,
     public businessHours: BusinessDay[],
@@ -52,6 +54,7 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
     this.healthAuthorityCareType = healthAuthorityCareType;
     this.siteName = siteName;
     this.pec = pec;
+    this.pharmacyPhone = pharmacyPhone;
     this.securityGroupCode = securityGroupCode;
     this.physicalAddress = physicalAddress;
     this.businessHours = businessHours;
@@ -78,6 +81,7 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
       healthAuthoritySite.siteName,
       healthAuthoritySite.mnemonic,
       healthAuthoritySite.pec,
+      healthAuthoritySite.pharmacyPhone,
       healthAuthoritySite.securityGroupCode,
       healthAuthoritySite.physicalAddress,
       healthAuthoritySite.businessHours,
@@ -123,6 +127,7 @@ export class HealthAuthoritySite extends AbstractBaseHealthAuthoritySite impleme
       siteName: this.siteName,
       pec: this.pec,
       mnemonic: this.mnemonic,
+      pharmacyPhone: this.pharmacyPhone,
       securityGroupCode: this.securityGroupCode,
       physicalAddress: { ...this.physicalAddress },
       businessHours: [...this.businessHours],
