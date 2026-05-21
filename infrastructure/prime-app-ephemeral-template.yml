@@ -569,10 +569,14 @@ objects:
                   topologyKey: kubernetes.io/hostname
                   labelSelector:
                     matchExpressions:
-                      - key: deploymentconfig
+                      - key: app.kubernetes.io/name
                         operator: In
                         values:
-                          - ${SVC_NAME}-webapi
+                          - webapi
+                      - key: app.kubernetes.io/instance
+                        operator: In
+                        values:
+                          - ${SVC_NAME}
         initContainers:
         - name: run-migrations
           image: >-
