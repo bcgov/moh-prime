@@ -526,7 +526,6 @@ objects:
             "paused": false
           }
         ]
-
   spec:
     replicas: 1
     selector:
@@ -535,28 +534,6 @@ objects:
         app.kubernetes.io/name: webapi
     strategy:
       type: Recreate
-              - name: PGHOST
-                valueFrom:
-                  configMapKeyRef:
-                    name: database-cm
-                    key: database-host
-              - name: PGDATABASE
-                value: postgres
-              - name: APPUSER
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: app-db-username
-              - name: PGUSER
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: superuser-username
-              - name: PGPASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: superuser-password
     template:
       metadata:
         labels:
