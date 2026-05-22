@@ -69,7 +69,7 @@ objects:
           }
         ]
     labels:
-      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.kubernetes.io/name: frontend
       app.kubernetes.io/version: 0.0.1
       app.openshift.io/runtime: nginx
@@ -77,12 +77,12 @@ objects:
     replicas: 1
     selector:
       matchLabels:
-        app.kubernetes.io/instance: ${SVC_NAME}
+        app.kubernetes.io/part-of: ${SVC_NAME}
         app.kubernetes.io/name: frontend
     template:
       metadata:
         labels:
-          app.kubernetes.io/instance: ${SVC_NAME}
+          app.kubernetes.io/part-of: ${SVC_NAME}
           app.kubernetes.io/name: frontend
       spec:
         affinity:
@@ -96,7 +96,7 @@ objects:
                         operator: In
                         values:
                           - frontend
-                      - key: app.kubernetes.io/instance
+                      - key: app.kubernetes.io/part-of
                         operator: In
                         values:
                           - ${SVC_NAME}
@@ -510,14 +510,14 @@ objects:
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.openshift.io/runtime: dotnet
-      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.kubernetes.io/name: webapi
       app.kubernetes.io/version: 0.0.1
   spec:
     replicas: 1
     selector:
       matchLabels:
-        app.kubernetes.io/instance: ${SVC_NAME}
+        app.kubernetes.io/part-of: ${SVC_NAME}
         app.kubernetes.io/name: webapi
     strategy:
       type: Recreate
@@ -558,7 +558,7 @@ objects:
     template:
       metadata:
         labels:
-          app.kubernetes.io/instance: ${SVC_NAME}
+          app.kubernetes.io/part-of: ${SVC_NAME}
           app.kubernetes.io/name: webapi
       spec:
         affinity:
@@ -573,7 +573,7 @@ objects:
                         operator: In
                         values:
                           - webapi
-                      - key: app.kubernetes.io/instance
+                      - key: app.kubernetes.io/part-of
                         operator: In
                         values:
                           - ${SVC_NAME}
@@ -759,7 +759,7 @@ objects:
     name: ${SVC_NAME}-document-manager
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
-      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.kubernetes.io/name: document-manager
       app.openshift.io/runtime: python
     annotations:
@@ -779,7 +779,7 @@ objects:
     replicas: 1
     selector:
       matchLabels:
-        app.kubernetes.io/instance: ${SVC_NAME}
+        app.kubernetes.io/part-of: ${SVC_NAME}
         app.kubernetes.io/name: document-manager
     strategy:
       type: Recreate
@@ -820,7 +820,7 @@ objects:
     template:
       metadata:
         labels:
-          app.kubernetes.io/instance: ${SVC_NAME}
+          app.kubernetes.io/part-of: ${SVC_NAME}
           app.kubernetes.io/name: document-manager
       spec:
         initContainers:
@@ -964,7 +964,7 @@ objects:
         port: 6001
         targetPort: 6001
     selector:
-      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.kubernetes.io/name: document-manager
 
 ###########################################
@@ -978,18 +978,18 @@ objects:
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.openshift.io/runtime: redis
-      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.kubernetes.io/name: redis
   spec:
     replicas: 1
     selector:
       matchLabels:
-        app.kubernetes.io/instance: ${SVC_NAME}
+        app.kubernetes.io/part-of: ${SVC_NAME}
         app.kubernetes.io/name: redis
     template:
       metadata:
         labels:
-          app.kubernetes.io/instance: ${SVC_NAME}
+          app.kubernetes.io/part-of: ${SVC_NAME}
           app.kubernetes.io/name: redis
       spec:
         volumes:
@@ -1062,7 +1062,7 @@ objects:
     name: ${SVC_NAME}-redis
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
-      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.kubernetes.io/name: redis
       app.openshift.io/runtime: redis
   spec:
@@ -1072,5 +1072,5 @@ objects:
         port: 6379
         targetPort: 6379
     selector:
-      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.kubernetes.io/name: redis
