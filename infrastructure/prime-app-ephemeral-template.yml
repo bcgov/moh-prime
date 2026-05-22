@@ -513,6 +513,19 @@ objects:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.kubernetes.io/name: webapi
       app.kubernetes.io/version: 0.0.1
+    annotations:
+      image.openshift.io/triggers: |-
+        [
+          {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "${OC_LICENSE_PLATE}-tools",
+              "name": "prime-webapi-backend:${IMAGE_TAG}"
+            },
+            "fieldPath": "spec.template.spec.containers[0].image",
+            "paused": false
+          }
+        ]
   spec:
     replicas: 1
     selector:
@@ -521,40 +534,6 @@ objects:
         app.kubernetes.io/name: webapi
     strategy:
       type: Recreate
-      maxSurge: 50%
-      maxUnavailable: 0
-      recreateParams:
-        pre:
-          failurePolicy: Ignore
-          execNewPod:
-            command:
-              - /bin/bash
-              - -c
-              - >
-                createdb -O $(APPUSER) prime-${SVC_NAME} 2> /dev/null || echo "database already exists"
-            env:
-              - name: PGHOST
-                valueFrom:
-                  configMapKeyRef:
-                    name: database-cm
-                    key: database-host
-              - name: PGDATABASE
-                value: postgres
-              - name: APPUSER
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: app-db-username
-              - name: PGUSER
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: superuser-username
-              - name: PGPASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: superuser-password
     template:
       metadata:
         labels:
@@ -578,6 +557,37 @@ objects:
                         values:
                           - ${SVC_NAME}
         initContainers:
+        - name: create-db
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-webapi-backend:${IMAGE_TAG}
+          command:
+            - /bin/bash
+            - -c
+            - >
+              createdb -O $(APPUSER) prime-${SVC_NAME} 2> /dev/null || echo "database already exists"
+          env:
+            - name: PGHOST
+              valueFrom:
+                configMapKeyRef:
+                  name: database-cm
+                  key: database-host
+            - name: PGDATABASE
+              value: postgres
+            - name: APPUSER
+              valueFrom:
+                secretKeyRef:
+                  name: dev-patroni-secret
+                  key: app-db-username
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: dev-patroni-secret
+                  key: superuser-username
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dev-patroni-secret
+                  key: superuser-password    
         - name: run-migrations
           image: >-
             image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-webapi-backend:${IMAGE_TAG}
@@ -720,18 +730,6 @@ objects:
           - name: cert-volume
             secret:
               secretName: pharmanet-api-ssl-certs
-    triggers:
-      - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true
-          containerNames:
-            - ${SVC_NAME}-webapi
-            - run-migrations
-          from:
-            kind: ImageStreamTag
-            namespace: "${OC_LICENSE_PLATE}-tools"
-            name: 'prime-webapi-backend:${IMAGE_TAG}'
 
 #   Backend Web API Service
 - apiVersion: v1
