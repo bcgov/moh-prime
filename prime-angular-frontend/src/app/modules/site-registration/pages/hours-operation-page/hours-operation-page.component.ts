@@ -30,9 +30,10 @@ export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
 }
 
 @Component({
-  selector: 'app-hours-operation-page',
-  templateUrl: './hours-operation-page.component.html',
-  styleUrls: ['./hours-operation-page.component.scss']
+    selector: 'app-hours-operation-page',
+    templateUrl: './hours-operation-page.component.html',
+    styleUrls: ['./hours-operation-page.component.scss'],
+    standalone: false
 })
 export class HoursOperationPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: HoursOperationPageFormState;
@@ -169,7 +170,7 @@ export class HoursOperationPageComponent extends AbstractCommunitySiteRegistrati
       routePath = SiteRoutes.SITE_REVIEW;
     } else {
       switch (site.careSettingCode) {
-        case CareSettingEnum.COMMUNITY_PHARMACIST:
+        case CareSettingEnum.COMMUNITY_PHARMACY:
         case CareSettingEnum.DEVICE_PROVIDER:
           routePath = SiteRoutes.ADMINISTRATOR;
           break;

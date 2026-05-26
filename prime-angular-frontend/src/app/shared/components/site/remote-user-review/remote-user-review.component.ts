@@ -4,9 +4,10 @@ import { RemoteUser } from '@lib/models/remote-user.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
-  selector: 'app-remote-user-review',
-  templateUrl: './remote-user-review.component.html',
-  styleUrls: ['./remote-user-review.component.scss']
+    selector: 'app-remote-user-review',
+    templateUrl: './remote-user-review.component.html',
+    styleUrls: ['./remote-user-review.component.scss'],
+    standalone: false
 })
 export class RemoteUserReviewComponent implements OnInit {
   /**

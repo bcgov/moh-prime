@@ -19,9 +19,10 @@ import { PermissionService } from '@auth/shared/services/permission.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-adjudicator-actions',
-  templateUrl: './adjudicator-actions.component.html',
-  styleUrls: ['./adjudicator-actions.component.scss']
+    selector: 'app-adjudicator-actions',
+    templateUrl: './adjudicator-actions.component.html',
+    styleUrls: ['./adjudicator-actions.component.scss'],
+    standalone: false
 })
 export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   @Input() public enrollee: EnrolleeListViewModel;

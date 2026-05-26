@@ -6,9 +6,10 @@ import { AdminStatusType } from '@adjudication/shared/models/admin-status.enum';
 import { Role } from '@auth/shared/enum/role.enum';
 
 @Component({
-  selector: 'app-admin-users-table',
-  templateUrl: './admin-users-table.component.html',
-  styleUrls: ['./admin-users-table.component.scss']
+    selector: 'app-admin-users-table',
+    templateUrl: './admin-users-table.component.html',
+    styleUrls: ['./admin-users-table.component.scss'],
+    standalone: false
 })
 export class AdminUsersTableComponent implements OnInit {
 

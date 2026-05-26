@@ -133,7 +133,7 @@ namespace Prime.Services
         private async Task<int> GetDuplicatePecCount(int? careSettingCode, string pec, int originalSiteId)
         {
             return await _context.Sites
-                    .Where(s => s.PEC != null && s.PEC == pec && s.CareSettingCode == careSettingCode && originalSiteId != s.Id)
+                    .Where(s => s.PEC != null && s.PEC == pec && s.CareSettingCode == careSettingCode && originalSiteId != s.Id && s.DeletedDate == null)
                     .CountAsync();
         }
         public async Task<CommunitySiteViewModel> GetPredecessorSite(int siteId)
@@ -402,6 +402,7 @@ namespace Prime.Services
                 {nameof(currentContact.JobRoleTitle), "Job Title"},
                 {nameof(currentContact.Email), "Email"},
                 {nameof(currentContact.Phone), "Phone"},
+                {nameof(currentContact.PhoneExtension), "Phone Extension"},
                 {nameof(currentContact.Fax), "Fax"},
                 {nameof(currentContact.SMSPhone), "SMS Phone"},
             };
@@ -742,6 +743,13 @@ namespace Prime.Services
                 .Where(s => s.Id == siteId && s.DeletedDate == null)
                 .Select(s => s.BusinessLicence)
                 .DecompileAsync()
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task<BusinessLicence> GetBusinessLicenceAsync(int siteId, int businessLicenceId)
+        {
+            return await _context.BusinessLicences
+                .Where(bl => bl.SiteId == siteId && bl.Id == businessLicenceId)
                 .SingleOrDefaultAsync();
         }
 

@@ -5,8 +5,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { KeycloakService } from 'keycloak-angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('HaSiteSubmissionListPageComponent', () => {
   let component: HaSiteSubmissionListPageComponent;
@@ -14,21 +15,20 @@ describe('HaSiteSubmissionListPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HaSiteSubmissionListPageComponent],
-      imports: [
-        BrowserAnimationsModule,
-        HttpClientTestingModule,
+    declarations: [HaSiteSubmissionListPageComponent],
+    imports: [BrowserAnimationsModule,
         RouterTestingModule,
-        AdjudicationModule
-      ],
-      providers: [
+        AdjudicationModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
-        KeycloakService
-      ],
-    })
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   });
 

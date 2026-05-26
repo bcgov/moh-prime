@@ -13,9 +13,10 @@ import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enu
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
-  selector: 'app-certificate',
-  templateUrl: './certificate.component.html',
-  styleUrls: ['./certificate.component.scss']
+    selector: 'app-certificate',
+    templateUrl: './certificate.component.html',
+    styleUrls: ['./certificate.component.scss'],
+    standalone: false
 })
 export class CertificateComponent implements OnInit {
   public busy: Subscription;

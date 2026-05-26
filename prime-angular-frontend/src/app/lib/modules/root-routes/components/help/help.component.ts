@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { HelpResource } from './services/help-resource.service';
 
 @Component({
-  selector: 'app-help',
-  templateUrl: './help.component.html',
-  styleUrls: ['./help.component.scss']
+    selector: 'app-help',
+    templateUrl: './help.component.html',
+    styleUrls: ['./help.component.scss'],
+    standalone: false
 })
 export class HelpComponent implements OnInit {
   public helpIdentifier: string;

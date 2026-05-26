@@ -103,7 +103,6 @@ export class EnrolmentRoutes {
   public static enrolmentEditableRoutes(): string[] {
     return [
       EnrolmentRoutes.CURRENT_ACCESS_TERM,
-      EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
       EnrolmentRoutes.PHARMANET_TRANSACTIONS,
       EnrolmentRoutes.ACCESS_TERMS
     ];

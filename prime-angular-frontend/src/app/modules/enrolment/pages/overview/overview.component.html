@@ -116,7 +116,7 @@
                   color="primary"
                   class="mb-3"
                   (click)="routeTo(EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY)">
-            Share my GPID
+            Share my approval and provisioning details
           </button>
         </ng-container>
       </app-page-subheader>
@@ -172,11 +172,17 @@
              icon="error">
     <ng-container #alertContent
                   class="alert-content">
-      Your enrolment contains an error that will need to be updated before submission.
+      Your enrolment contains one or more errors that will need to be updated before submission.
       <ul class="mt-3 mb-1"
           *ngIf="requireLicenceUpdate()">
         <li>
           College licence information requires update
+        </li>
+      </ul>
+      <ul class="mt-3 mb-1"
+          *ngIf="requireCareSetting()">
+        <li>
+          Care setting can not be NA or none. Please select the appropriate care setting.
         </li>
       </ul>
     </ng-container>

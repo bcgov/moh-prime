@@ -13,9 +13,10 @@ import { PhsaEformsResource } from '@phsa/shared/resources/phsa-eforms-resource.
 import { PhsaEformsFormStateService } from '@phsa/shared/services/phsa-eforms-form-state.service';
 
 @Component({
-  selector: 'app-available-access',
-  templateUrl: './available-access.component.html',
-  styleUrls: ['./available-access.component.scss']
+    selector: 'app-available-access',
+    templateUrl: './available-access.component.html',
+    styleUrls: ['./available-access.component.scss'],
+    standalone: false
 })
 export class AvailableAccessComponent implements OnInit {
   public form: UntypedFormGroup;

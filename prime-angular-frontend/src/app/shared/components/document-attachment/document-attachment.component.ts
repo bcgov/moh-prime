@@ -2,9 +2,10 @@ import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { BaseDocument } from '../document-upload/document-upload/document-upload.component';
 
 @Component({
-  selector: 'app-document-attachment',
-  templateUrl: './document-attachment.component.html',
-  styleUrls: ['./document-attachment.component.scss']
+    selector: 'app-document-attachment',
+    templateUrl: './document-attachment.component.html',
+    styleUrls: ['./document-attachment.component.scss'],
+    standalone: false
 })
 export class DocumentAttachmentComponent implements OnInit {
   @Input() public documents: BaseDocument[];

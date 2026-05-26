@@ -8,9 +8,10 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 
 @Component({
-  selector: 'app-gis-login-page',
-  templateUrl: './gis-login-page.component.html',
-  styleUrls: ['./gis-login-page.component.scss']
+    selector: 'app-gis-login-page',
+    templateUrl: './gis-login-page.component.html',
+    styleUrls: ['./gis-login-page.component.scss'],
+    standalone: false
 })
 export class GisLoginPageComponent implements OnInit {
   public title: string;

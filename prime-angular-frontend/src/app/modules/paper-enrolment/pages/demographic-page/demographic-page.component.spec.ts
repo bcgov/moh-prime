@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -11,6 +11,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { DemographicPageComponent } from './demographic-page.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('DemographicPageComponent', () => {
   let component: DemographicPageComponent;
@@ -18,27 +19,26 @@ describe('DemographicPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [DemographicPageComponent],
-      imports: [
-        NgxMaterialModule,
+    declarations: [DemographicPageComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [NgxMaterialModule,
         ReactiveFormsModule,
-        HttpClientTestingModule,
         RouterTestingModule,
         BrowserAnimationsModule,
-        MatDatepickerModule
-      ],
-      providers: [
+        MatDatepickerModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+            provide: ConfigService,
+            useClass: MockConfigService
         },
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
       .compileComponents();
   }));
 

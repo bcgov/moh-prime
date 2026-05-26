@@ -19,9 +19,10 @@ import { SiteRegistrationNote } from '@shared/models/site-registration-note.mode
 import { concat, EMPTY, exhaustMap, forkJoin, map, noop, of, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-organization-sites',
-  templateUrl: './organization-sites.component.html',
-  styleUrls: ['./organization-sites.component.scss']
+    selector: 'app-organization-sites',
+    templateUrl: './organization-sites.component.html',
+    styleUrls: ['./organization-sites.component.scss'],
+    standalone: false
 })
 export class OrganizationSitesComponent implements OnInit {
 
@@ -63,7 +64,7 @@ export class OrganizationSitesComponent implements OnInit {
     ]).subscribe(([organization, sites]: [OrganizationAdminView, PaginatedList<SiteRegistrationListViewModel>]) => {
       this.organization = organization;
 
-      this.communityPharmacies.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST);
+      this.communityPharmacies.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY);
       this.privateCommunityHealthPractices.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
       this.deviceProviders.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
 

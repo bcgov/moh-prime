@@ -18,9 +18,10 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-adjudicator-notes',
-  templateUrl: './adjudicator-notes.component.html',
-  styleUrls: ['./adjudicator-notes.component.scss']
+    selector: 'app-adjudicator-notes',
+    templateUrl: './adjudicator-notes.component.html',
+    styleUrls: ['./adjudicator-notes.component.scss'],
+    standalone: false
 })
 export class AdjudicatorNotesComponent implements OnInit {
   @Input() public noteType: NoteType;

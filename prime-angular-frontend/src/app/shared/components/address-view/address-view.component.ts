@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { Address, AddressLine, optionalAddressLineItems } from '@lib/models/address.model';
 
 @Component({
-  selector: 'app-address-view',
-  templateUrl: './address-view.component.html',
-  styleUrls: ['./address-view.component.scss']
+    selector: 'app-address-view',
+    templateUrl: './address-view.component.html',
+    styleUrls: ['./address-view.component.scss'],
+    standalone: false
 })
 export class AddressViewComponent implements OnInit {
   /**

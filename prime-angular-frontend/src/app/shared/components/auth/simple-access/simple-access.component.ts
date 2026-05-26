@@ -6,12 +6,13 @@ import { ViewportService } from '@core/services/viewport.service';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-simple-access',
-  templateUrl: './simple-access.component.html',
-  styleUrls: [
-    './simple-access.component.scss',
-    '../access.component.scss'
-  ]
+    selector: 'app-simple-access',
+    templateUrl: './simple-access.component.html',
+    styleUrls: [
+        './simple-access.component.scss',
+        '../access.component.scss'
+    ],
+    standalone: false
 })
 export class SimpleAccessComponent implements OnInit {
   @Input() public title: string;

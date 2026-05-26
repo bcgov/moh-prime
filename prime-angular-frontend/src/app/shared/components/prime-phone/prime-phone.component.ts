@@ -2,9 +2,10 @@ import { Component, Inject, Input } from '@angular/core';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 @Component({
-  selector: 'app-prime-phone',
-  templateUrl: './prime-phone.component.html',
-  styleUrls: ['./prime-phone.component.scss']
+    selector: 'app-prime-phone',
+    templateUrl: './prime-phone.component.html',
+    styleUrls: ['./prime-phone.component.scss'],
+    standalone: false
 })
 export class PrimePhoneComponent {
   @Input() public mode: 'vanity' | 'normal';

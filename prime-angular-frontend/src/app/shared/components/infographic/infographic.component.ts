@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-infographic',
-  templateUrl: './infographic.component.html',
-  styleUrls: ['./infographic.component.scss']
+    selector: 'app-infographic',
+    templateUrl: './infographic.component.html',
+    styleUrls: ['./infographic.component.scss'],
+    standalone: false
 })
 export class InfographicComponent implements OnInit {
   @Input() public imageName: string;

@@ -1,0 +1,75 @@
+#!/bin/bash
+# =================================================================================================================
+# PRIME Utility Functions:
+# -----------------------------------------------------------------------------------------------------------------
+
+# Function to get the keycloak token
+function get_keycloak_token() {
+    (
+        local TOKEN_RESPONSE=$(curl -X POST "$KEYCLOAK_URL/realms/$KEYCLOAK_REALM/protocol/openid-connect/token" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "grant_type=client_credentials" \
+            -d "client_id=$KEYCLOAK_CLIENT_ID" \
+            -d "client_secret=$KEYCLOAK_CLIENT_SECRET")
+
+        # Check for errors in the response
+        if grep -q "error" <<< "$TOKEN_RESPONSE"; then
+            echo "Error obtaining token: $TOKEN_RESPONSE"
+            exit 1
+        fi
+
+        ACCESS_TOKEN=$(echo "$TOKEN_RESPONSE" | sed 's/.*access_token":"\([^"]*\)".*/\1/')
+
+        if [ -z "$ACCESS_TOKEN" ]; then
+            echo "Failed to parse access token."
+            exit 1
+        fi
+
+        echo "$ACCESS_TOKEN"
+    )
+}
+
+# Function to get date range as string from prime-webapi
+function get_archive_date_range(){
+    (
+        # echo "run get_archive_date_range"
+
+        local API_TOKEN=$(get_keycloak_token)
+        # Use the token in the Authorization header (assuming Bearer token)
+        local RESPONSE=$(curl -s -X GET "${PRIME_WEB_API_URL}/api/jobs/archive/transaction-log" \
+            -H "Authorization: Bearer $API_TOKEN" \
+            -H "Accept: application/json")
+
+        # Check for curl errors or API specific errors in response
+        if [ $? -ne 0 ] || [[ "$RESPONSE" == *error* ]]; then
+            echo "Error getting string" >&2
+            # return 1
+        fi
+
+        # This pattern matches the value inside the "result_string":"..." field
+        local RESULT_VALUE=$(echo "$RESPONSE" | grep -o '"result":"[^"]*' | sed 's/"result":"//')
+
+        if [ -z "$RESULT_VALUE" ]; then
+        echo "Failed to extract 'result' from API response. Response: $RESPONSE"
+        # exit 1
+        fi
+        
+        echo "$RESULT_VALUE"
+    )
+}
+
+# Function to clear the transaction log archive table
+function clear_archive_table(){
+    (
+        # echo "run clear_archive_table"
+
+        local API_TOKEN=$(get_keycloak_token)
+        # Use the token in the Authorization header (assuming Bearer token)
+        local RESPONSE=$(curl -s -X DELETE "${PRIME_WEB_API_URL}/api/jobs/archive/transaction-log" \
+            -H "Authorization: Bearer $API_TOKEN" \
+            -H "Accept: application/json" )
+    
+        echo "$RESPONSE"
+    )
+}
+# =================================================================================================================

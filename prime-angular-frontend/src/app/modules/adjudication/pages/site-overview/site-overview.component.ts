@@ -28,9 +28,10 @@ import { VendorConfig } from '@config/config.model';
 import { LinkSiteComponent } from '@shared/components/dialogs/content/link-site/link-site.component';
 
 @Component({
-  selector: 'app-site-overview',
-  templateUrl: './site-overview.component.html',
-  styleUrls: ['./site-overview.component.scss']
+    selector: 'app-site-overview',
+    templateUrl: './site-overview.component.html',
+    styleUrls: ['./site-overview.component.scss'],
+    standalone: false
 })
 export class SiteOverviewComponent implements OnInit {
   public busy: Subscription;
@@ -115,6 +116,7 @@ export class SiteOverviewComponent implements OnInit {
       .approveOrganizationClaim(this.orgClaim.organizationId, this.orgClaim.id)
       .subscribe(() => {
         this.refresh.next(true);
+        this.organization.hasClaim = false;
       });
   }
 
@@ -197,7 +199,7 @@ export class SiteOverviewComponent implements OnInit {
         this.orgClaim = orgClaim;
         this.initForm(site, this.siteVendors.find((vendor: VendorConfig) => vendor.code === this.site.siteVendors[0].vendorCode));
         this.showSendNotification = [
-          CareSettingEnum.COMMUNITY_PHARMACIST,
+          CareSettingEnum.COMMUNITY_PHARMACY,
           CareSettingEnum.DEVICE_PROVIDER
         ].includes(site.careSettingCode);
         this.showLinkSection = [

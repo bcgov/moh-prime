@@ -36,6 +36,9 @@ namespace Prime.Services
                 .Include(t => t.Enrollee)
                     .ThenInclude(t => t.EnrolleeHealthAuthorities)
                         .ThenInclude(a => a.HealthAuthority)
+                .Include(t => t.RemoteAccessSites)
+                    .ThenInclude(ras => ras.RemoteAccessSite)
+                        .ThenInclude(s => s.PhysicalAddress)
                 .SingleOrDefaultAsync();
 
             if (token == null || token.Enrollee == null)
@@ -53,7 +56,7 @@ namespace Prime.Services
             return null;
         }
 
-        public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenWithCareSettingAsync(int enrolleeId, int careSettingCode, int? healthAuthorityCode)
+        public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenWithCareSettingAsync(int enrolleeId, int careSettingCode, int? healthAuthorityCode, int[] remoteAccessSiteIds = null)
         {
             EnrolmentCertificateAccessToken token = new EnrolmentCertificateAccessToken()
             {
@@ -66,6 +69,28 @@ namespace Prime.Services
             };
 
             _context.EnrolmentCertificateAccessTokens.Add(token);
+
+            if (remoteAccessSiteIds != null && remoteAccessSiteIds.Length != 0)
+            {
+                foreach (var siteId in remoteAccessSiteIds)
+                {
+                    _context.AccessTokenRemoteAccessSites.Add(new AccessTokenRemoteAccessSite
+                    {
+                        EnrolmentCertificateAccessTokenId = token.Id,
+                        SiteId = siteId
+                    });
+                }
+                token.RemoteAccessSites = new List<AccessTokenRemoteAccessSite>();
+                foreach (var siteId in remoteAccessSiteIds)
+                {
+                    token.RemoteAccessSites.Add(new AccessTokenRemoteAccessSite
+                    {
+                        EnrolmentCertificateAccessTokenId = token.Id,
+                        SiteId = siteId
+                    });
+                }
+            }
+
             await _context.SaveChangesAsync();
 
             return token;

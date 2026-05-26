@@ -2,7 +2,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MockOrganizationService } from 'test/mocks/mock-organization.service';
@@ -13,6 +13,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { OrganizationNamePageComponent } from './organization-name-page.component';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('OrganizationNamePageComponent', () => {
   let component: OrganizationNamePageComponent;
@@ -20,29 +21,28 @@ describe('OrganizationNamePageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+    declarations: [
         OrganizationNamePageComponent
-      ],
-      imports: [
-        BrowserAnimationsModule,
-        HttpClientTestingModule,
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [BrowserAnimationsModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        NgxMaterialModule
-      ],
-      providers: [
+        NgxMaterialModule],
+    providers: [
         KeycloakService,
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: OrganizationService,
-          useClass: MockOrganizationService
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+            provide: OrganizationService,
+            useClass: MockOrganizationService
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

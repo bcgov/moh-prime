@@ -3,9 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { SiteResource } from '@core/resources/site-resource.service';
 
 @Component({
-  selector: 'app-community-site-submission-list-page',
-  templateUrl: './community-site-submission-list-page.component.html',
-  styleUrls: ['./community-site-submission-list-page.component.scss']
+    selector: 'app-community-site-submission-list-page',
+    templateUrl: './community-site-submission-list-page.component.html',
+    styleUrls: ['./community-site-submission-list-page.component.scss'],
+    standalone: false
 })
 export class CommunitySiteSubmissionListPageComponent implements OnInit {
   public hasActions: boolean;

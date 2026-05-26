@@ -1,11 +1,12 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { RootRoutesModule } from '../../root-routes.module';
 import { PageNotFoundComponent } from './page-not-found.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PageNotFoundComponent', () => {
   let component: PageNotFoundComponent;
@@ -14,20 +15,19 @@ describe('PageNotFoundComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
-        imports: [
-          HttpClientTestingModule,
-          RootRoutesModule,
-          RouterTestingModule
-        ],
-        declarations: [],
-        providers: [
-          {
+    declarations: [],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RootRoutesModule,
+        RouterTestingModule],
+    providers: [
+        {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
-          }
-        ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA]
-      }
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}
     ).compileComponents();
   }));
 

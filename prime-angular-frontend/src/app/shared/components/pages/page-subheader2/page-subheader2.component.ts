@@ -4,9 +4,10 @@ import { PageSubheader2SummaryDirective } from './page-subheader2-summary.direct
 import { PageSubheader2MoreInfoDirective } from './page-subheader2-more-info.directive';
 
 @Component({
-  selector: 'app-page-subheader2',
-  templateUrl: './page-subheader2.component.html',
-  styleUrls: ['./page-subheader2.component.scss']
+    selector: 'app-page-subheader2',
+    templateUrl: './page-subheader2.component.html',
+    styleUrls: ['./page-subheader2.component.scss'],
+    standalone: false
 })
 export class PageSubheader2Component implements OnInit {
   @Input() public showUnderline: boolean;

@@ -33,9 +33,10 @@ export class IsSameOrBeforeErrorStateMatcher extends ShowOnDirtyErrorStateMatche
 }
 
 @Component({
-  selector: 'app-banner-maintenance',
-  templateUrl: './banner-maintenance.component.html',
-  styleUrls: ['./banner-maintenance.component.scss']
+    selector: 'app-banner-maintenance',
+    templateUrl: './banner-maintenance.component.html',
+    styleUrls: ['./banner-maintenance.component.scss'],
+    standalone: false
 })
 export class BannerMaintenanceComponent extends AbstractEnrolmentPage implements OnInit {
   @Input() public locationCode: BannerLocationCode;

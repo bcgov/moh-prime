@@ -24,7 +24,8 @@ import { FormArrayValidators } from '@lib/validators/form-array.validators';
 @Component({
   selector: 'app-care-setting',
   templateUrl: './care-setting.component.html',
-  styleUrls: ['./care-setting.component.scss']
+  styleUrls: ['./care-setting.component.scss'],
+  standalone: false
 })
 export class CareSettingComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
 
@@ -62,7 +63,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       authService
     );
 
-    this.careSettingTypes = this.configService.careSettings;
+    this.careSettingTypes = this.configService.careSettings.filter(c => CareSettingEnum[c.code] !== undefined);
     this.healthAuthorities = this.configService.healthAuthorities;
     this.hasNoHealthAuthoritiesError = false;
   }
@@ -267,7 +268,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
         return clear(form.get('communityHealthSites') as UntypedFormArray);
       }
-      case CareSettingEnum.COMMUNITY_PHARMACIST: {
+      case CareSettingEnum.COMMUNITY_PHARMACY: {
         return clear(form.get('communityPharmacySites') as UntypedFormArray);
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {

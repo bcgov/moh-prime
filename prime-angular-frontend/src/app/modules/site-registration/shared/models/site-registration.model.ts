@@ -8,7 +8,7 @@ export interface SiteListViewModelPartial extends
 }
 
 export interface OrganizationListViewModelPartial extends
-  Omit<Organization, 'id' | 'sites' | 'completed' | 'doingBusinessAs' | 'hasSubmittedSite' | 'hasAcceptedAgreement' | 'registrationId' | 'pendingTransfer'> {
+  Omit<Organization, 'id' | 'sites' | 'completed' | 'doingBusinessAs' | 'hasAcceptedAgreement' | 'registrationId' | 'pendingTransfer' | 'isArchived'> {
   organizationId: number;
   organizationDoingBusinessAs: string;
 }
@@ -31,4 +31,5 @@ export interface SiteRegistrationListViewModel extends OrganizationListViewModel
   duplicatePecSiteCount: number;
   predecessorSite: CommunitySiteViewModel;
   successorSite: CommunitySiteViewModel;
+  isOrganizationArchived: boolean;
 }

@@ -4,7 +4,8 @@ import { Role } from '@auth/shared/enum/role.enum';
 import { RolePipe } from './role-pipe';
 
 @Pipe({
-  name: 'inRole'
+    name: 'inRole',
+    standalone: false
 })
 export class InRolePipe implements PipeTransform {
   constructor(

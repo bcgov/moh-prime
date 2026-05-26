@@ -20,9 +20,10 @@ class ImprovedPageEvent extends PageEvent {
 }
 
 @Component({
-  selector: 'app-site-registration-table',
-  templateUrl: './site-registration-table.component.html',
-  styleUrls: ['./site-registration-table.component.scss']
+    selector: 'app-site-registration-table',
+    templateUrl: './site-registration-table.component.html',
+    styleUrls: ['./site-registration-table.component.scss'],
+    standalone: false
 })
 export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
   @Input() public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
@@ -110,7 +111,7 @@ export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
   }
 
   public displayMissingBusinessLicence(row: SiteRegistrationListViewModel): string {
-    if (row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+    if (row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY) {
       if (row.missingBusinessLicence === undefined) {
         row.missingBusinessLicence = row.businessLicence === null ||
           row.businessLicence.businessLicenceDocument === null

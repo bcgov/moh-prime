@@ -19,9 +19,10 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { AdministratorPageFormState } from './administrator-page-form-state.class';
 
 @Component({
-  selector: 'app-administrator-page',
-  templateUrl: './administrator-page.component.html',
-  styleUrls: ['./administrator-page.component.scss']
+    selector: 'app-administrator-page',
+    templateUrl: './administrator-page.component.html',
+    styleUrls: ['./administrator-page.component.scss'],
+    standalone: false
 })
 export class AdministratorPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: AdministratorPageFormState;
@@ -50,7 +51,7 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
   }
 
   public isCommunityPharmacy(): boolean {
-    return this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+    return this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY;
   }
 
   public onSelect(contact: Contact) {
@@ -67,7 +68,7 @@ export class AdministratorPageComponent extends AbstractCommunitySiteRegistratio
       nextRoute = SiteRoutes.SITE_REVIEW;
     } else {
       switch (this.siteService.site.careSettingCode) {
-        case CareSettingEnum.COMMUNITY_PHARMACIST:
+        case CareSettingEnum.COMMUNITY_PHARMACY:
         case CareSettingEnum.DEVICE_PROVIDER:
           nextRoute = SiteRoutes.HOURS_OPERATION;
           break;

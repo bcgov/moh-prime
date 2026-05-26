@@ -55,6 +55,7 @@ namespace Prime.ViewModels.SiteRegistration.ReviewDocument
         public string JobTitle { get; set; }
         public string FullName { get; set; }
         public string Phone { get; set; }
+        public string PhoneExtension { get; set; }
         public string Fax { get; set; }
         public string SmsPhone { get; set; }
         public string Email { get; set; }

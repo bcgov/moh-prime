@@ -8,9 +8,10 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
-  selector: 'app-site-registration-login-page',
-  templateUrl: './site-registration-login-page.component.html',
-  styleUrls: ['./site-registration-login-page.component.scss']
+    selector: 'app-site-registration-login-page',
+    templateUrl: './site-registration-login-page.component.html',
+    styleUrls: ['./site-registration-login-page.component.scss'],
+    standalone: false
 })
 export class SiteRegistrationLoginPageComponent implements OnInit {
   public title: string;
