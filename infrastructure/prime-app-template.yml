@@ -863,6 +863,14 @@ objects:
       matchLabels:
         app.kubernetes.io/instance: ${SVC_NAME}
         app.kubernetes.io/name: document-manager
+    strategy:
+      type: Recreate
+      rollingParams:
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 120
+        maxSurge: "50%"
+        maxUnavailable: 0
     template:
       metadata:
         labels:
@@ -1003,7 +1011,6 @@ objects:
           - name: ${SVC_NAME}-document-manager-pvc
             persistentVolumeClaim:
               claimName: '${SVC_NAME}-document-manager-pvc'
-
 
 #   Document Manager (backend) Service
 - apiVersion: v1
