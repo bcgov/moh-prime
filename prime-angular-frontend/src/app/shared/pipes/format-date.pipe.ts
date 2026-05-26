@@ -5,7 +5,8 @@ import moment, { Moment } from 'moment';
 import { APP_DATE_FORMAT } from '@lib/modules/ngx-material/ngx-material.module';
 
 @Pipe({
-  name: 'formatDate'
+    name: 'formatDate',
+    standalone: false
 })
 export class FormatDatePipe implements PipeTransform {
   public transform(date: string | Moment, format: string = APP_DATE_FORMAT): string {

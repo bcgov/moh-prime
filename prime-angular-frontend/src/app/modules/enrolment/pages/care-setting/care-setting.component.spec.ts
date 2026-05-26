@@ -1,6 +1,6 @@
 import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -22,6 +22,7 @@ import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('CareSettingComponent', () => {
   let component: CareSettingComponent;
@@ -31,37 +32,36 @@ describe('CareSettingComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
-        imports: [
-          BrowserAnimationsModule,
-          HttpClientTestingModule,
-          RouterTestingModule,
-          NgxBusyModule,
-          NgxContextualHelpModule,
-          NgxMaterialModule,
-          ReactiveFormsModule,
-          EnrolmentModule
-        ],
-        providers: [
-          {
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [BrowserAnimationsModule,
+        RouterTestingModule,
+        NgxBusyModule,
+        NgxContextualHelpModule,
+        NgxMaterialModule,
+        ReactiveFormsModule,
+        EnrolmentModule],
+    providers: [
+        {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
-          },
-          {
+        },
+        {
             provide: ConfigService,
             useClass: MockConfigService
-          },
-          {
+        },
+        {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
-          },
-          {
+        },
+        {
             provide: AuthService,
             useClass: MockAuthService
-          },
-          KeycloakService
-        ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA]
-      }
+        },
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}
     ).compileComponents();
   }));
 
@@ -106,7 +106,7 @@ describe('CareSettingComponent', () => {
       it('should return a list shorter than the list of all care setting types', () => {
         const mockCareTypeFormGroup = (component as any).enrolmentFormStateService.buildCareSettingForm() as UntypedFormGroup;
         component.addCareSetting();
-        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACIST });
+        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACY });
 
         expect(component.filterCareSettingTypes(mockCareTypeFormGroup).length).toBeLessThan(component.careSettingTypes.length);
       });
@@ -115,9 +115,9 @@ describe('CareSettingComponent', () => {
     describe('with adding one care setting and making one selection', () => {
       it('should return a list shorter than the list of all care setting types', () => {
         const mockCareTypeFormGroup = (component as any).enrolmentFormStateService.buildCareSettingForm() as UntypedFormGroup;
-        mockCareTypeFormGroup.setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACIST });
+        mockCareTypeFormGroup.setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACY });
         component.addCareSetting();
-        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACIST });
+        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACY });
 
         expect(component.filterCareSettingTypes(mockCareTypeFormGroup).length).toEqual(component.careSettingTypes.length);
       });
@@ -137,7 +137,7 @@ describe('CareSettingComponent', () => {
     describe('with care setting other than Health Authority selected', () => {
       it('hasSelectedHACareSetting should return false', () => {
         component.addCareSetting();
-        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACIST });
+        component.careSettings.controls[0].setValue({ careSettingCode: CareSettingEnum.COMMUNITY_PHARMACY });
 
         expect(component.hasSelectedHACareSetting()).toBeFalse();
       });

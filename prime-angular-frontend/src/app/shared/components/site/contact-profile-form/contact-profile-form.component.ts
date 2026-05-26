@@ -19,9 +19,10 @@ import { Contact } from '@lib/models/contact.model';
 import { PageFooterComponent } from '@shared/components/pages/page-footer/page-footer.component';
 
 @Component({
-  selector: 'app-contact-profile-form',
-  templateUrl: './contact-profile-form.component.html',
-  styleUrls: ['./contact-profile-form.component.scss']
+    selector: 'app-contact-profile-form',
+    templateUrl: './contact-profile-form.component.html',
+    styleUrls: ['./contact-profile-form.component.scss'],
+    standalone: false
 })
 export class ContactProfileFormComponent implements OnInit, AfterContentInit {
   /**
@@ -91,6 +92,10 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
 
   public get phone(): UntypedFormControl {
     return this.form.get('phone') as UntypedFormControl;
+  }
+
+  public get phoneExtension(): UntypedFormControl {
+    return this.form.get('phoneExtension') as UntypedFormControl;
   }
 
   public get fax(): UntypedFormControl {

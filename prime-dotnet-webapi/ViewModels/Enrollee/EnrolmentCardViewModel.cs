@@ -10,6 +10,8 @@ namespace Prime.ViewModels
 
         public DateTimeOffset? AgreementAcceptedDate { get; set; }
 
+        public bool IsCurrent { get; set; }
+
         [JsonIgnore]
         public Submission Submission { get; set; }
 

@@ -28,9 +28,10 @@ import { VendorConfig } from '@config/config.model';
 import { LinkSiteComponent } from '@shared/components/dialogs/content/link-site/link-site.component';
 
 @Component({
-  selector: 'app-site-overview',
-  templateUrl: './site-overview.component.html',
-  styleUrls: ['./site-overview.component.scss']
+    selector: 'app-site-overview',
+    templateUrl: './site-overview.component.html',
+    styleUrls: ['./site-overview.component.scss'],
+    standalone: false
 })
 export class SiteOverviewComponent implements OnInit {
   public busy: Subscription;
@@ -90,29 +91,24 @@ export class SiteOverviewComponent implements OnInit {
     }
   }
 
-  public saveVendor(): void {
-    const existingVendor = this.siteVendors.find((vendor: VendorConfig) => vendor.code === this.site.siteVendors[0].vendorCode).name;
-    const vendor = this.vendors.value;
+  public onEditVendor(): void {
+    const siteId = +this.route.snapshot.params.sid;
+    //const vendorChangeText = `from ${existingVendor} to ${vendor.name}`;
 
-    if (this.vendors.valid && existingVendor !== vendor.name) {
-      const siteId = +this.route.snapshot.params.sid;
-      const vendorChangeText = `from ${existingVendor} to ${vendor.name}`;
-
-      const data: DialogOptions = {
-        data: {
-          siteId,
-          vendorCode: vendor.code,
-          vendorChangeText
+    const data: DialogOptions = {
+      data: {
+        siteId,
+        vendorCode: this.site.siteVendors[0].vendorCode,
+        siteVendors: this.siteVendors,
+      }
+    };
+    this.dialog.open(ChangeVendorNoteComponent, { data }).afterClosed()
+      .subscribe((data) => {
+        if (data?.result) {
+          this.refresh.next(true);
+          this.site.siteVendors[0].vendorCode = data.vendorCode;
         }
-      };
-      this.dialog.open(ChangeVendorNoteComponent, { data }).afterClosed()
-        .subscribe((vendorChanged) => {
-          if (vendorChanged) {
-            this.refresh.next(true);
-            this.site.siteVendors[0].vendorCode = vendor.code;
-          }
-        });
-    }
+      });
   }
 
   public onApproveOrgClaim(): void {
@@ -120,6 +116,7 @@ export class SiteOverviewComponent implements OnInit {
       .approveOrganizationClaim(this.orgClaim.organizationId, this.orgClaim.id)
       .subscribe(() => {
         this.refresh.next(true);
+        this.organization.hasClaim = false;
       });
   }
 
@@ -202,7 +199,7 @@ export class SiteOverviewComponent implements OnInit {
         this.orgClaim = orgClaim;
         this.initForm(site, this.siteVendors.find((vendor: VendorConfig) => vendor.code === this.site.siteVendors[0].vendorCode));
         this.showSendNotification = [
-          CareSettingEnum.COMMUNITY_PHARMACIST,
+          CareSettingEnum.COMMUNITY_PHARMACY,
           CareSettingEnum.DEVICE_PROVIDER
         ].includes(site.careSettingCode);
         this.showLinkSection = [

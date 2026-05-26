@@ -28,7 +28,8 @@ import { IStep } from '@shared/components/progress-indicator/progress-indicator.
 @Component({
   selector: 'app-care-setting-page',
   templateUrl: './care-setting-page.component.html',
-  styleUrls: ['./care-setting-page.component.scss']
+  styleUrls: ['./care-setting-page.component.scss'],
+  standalone: false
 })
 export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: CareSettingPageFormState;
@@ -59,7 +60,7 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-    this.careSettingConfig = this.configService.careSettings;
+    this.careSettingConfig = this.configService.careSettings.filter(c => CareSettingEnum[c.code] !== undefined);;
     this.vendorConfig = this.configService.vendors;
     this.hasNoVendorError = false;
     this.filteredVendorConfig = [];
@@ -69,7 +70,7 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
         return true;
-      case CareSettingEnum.COMMUNITY_PHARMACIST:
+      case CareSettingEnum.COMMUNITY_PHARMACY:
         return true;
       case CareSettingEnum.DEVICE_PROVIDER:
         return true;
@@ -113,7 +114,7 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
             case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
               this.siteSteps = SiteRoutes.pchpSiteSteps();
               break;
-            case CareSettingEnum.COMMUNITY_PHARMACIST:
+            case CareSettingEnum.COMMUNITY_PHARMACY:
               this.siteSteps = SiteRoutes.pharmacySiteSteps();
               break;
             case CareSettingEnum.DEVICE_PROVIDER:
@@ -123,7 +124,7 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
 
           const deferredLicenceReason = this.siteFormStateService.businessLicenceFormState.deferredLicenceReason;
 
-          const allowableDeferedCareSettings = [CareSettingEnum.COMMUNITY_PHARMACIST, CareSettingEnum.DEVICE_PROVIDER];
+          const allowableDeferedCareSettings = [CareSettingEnum.COMMUNITY_PHARMACY, CareSettingEnum.DEVICE_PROVIDER];
           // Reset the deferred licence reason when changing from a care setting that can defer business
           // licence upload to one that can't.
           if (

@@ -30,9 +30,10 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 // TODO refactor business licence pages into a single page
 @Component({
-  selector: 'app-business-licence-page',
-  templateUrl: './business-licence-page.component.html',
-  styleUrls: ['./business-licence-page.component.scss']
+    selector: 'app-business-licence-page',
+    templateUrl: './business-licence-page.component.html',
+    styleUrls: ['./business-licence-page.component.scss'],
+    standalone: false
 })
 export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: BusinessLicenceFormState;
@@ -83,14 +84,14 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
 
   public canDefer(): boolean {
     return [
-      CareSettingEnum.COMMUNITY_PHARMACIST,
+      CareSettingEnum.COMMUNITY_PHARMACY,
       CareSettingEnum.DEVICE_PROVIDER,
       CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
     ].includes(this.siteService.site.careSettingCode);
   }
 
   public isCommunityPharmacy(): boolean {
-    return this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+    return this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY;
   }
 
   public isDeviceProvider(): boolean {
@@ -101,6 +102,16 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     this.formState.businessLicenceGuid.patchValue(document.documentGuid);
     this.uploadedFile = true;
     this.hasNoBusinessLicenceError = false;
+
+    // Flag business licence as updated if a different document is uploaded
+    if (this.site.businessLicence?.businessLicenceDocument &&
+      document.documentGuid != this.site.businessLicence?.businessLicenceDocument?.documentGuid) {
+
+      const { filename } = this.siteFormStateService.businessLicenceFormState;
+      filename.patchValue(document.filename);
+
+      this.formState.flagBusinessLicenceUpdated(true);
+    }
   }
 
   public onRemoveDocument(_: string): void {
@@ -154,7 +165,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
   protected initForm(): void {
     this.site = this.siteService.site;
     this.getBusinessLicence(this.site.id);
-    if (this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+    if (this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY) {
       if (this.site.activeBeforeRegistration) {
         this.formUtilsService.setValidators(this.formState.pec, [Validators.required, FormControlValidators.communityPharmacySiteId])
       } else {
@@ -197,7 +208,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
       this.siteResource.updateSite(this.siteFormStateService.json)
     );
 
-    if (this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST || this.siteFormStateService.businessLicenceFormState.pec.value) {
+    if (this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY || this.siteFormStateService.businessLicenceFormState.pec.value) {
       return request$;
     }
 

@@ -19,9 +19,10 @@ interface HealthAuthorityCareTypeMap {
   name: string;
 }
 @Component({
-  selector: 'app-health-auth-care-types-page',
-  templateUrl: './health-auth-care-types-page.component.html',
-  styleUrls: ['./health-auth-care-types-page.component.scss']
+    selector: 'app-health-auth-care-types-page',
+    templateUrl: './health-auth-care-types-page.component.html',
+    styleUrls: ['./health-auth-care-types-page.component.scss'],
+    standalone: false
 })
 export class HealthAuthCareTypesPageComponent implements OnInit {
   public busy: Subscription;

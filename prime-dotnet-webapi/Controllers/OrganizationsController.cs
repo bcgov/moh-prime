@@ -327,6 +327,62 @@ namespace Prime.Controllers
             return Ok(organization);
         }
 
+        // PUT: api/Organizations/5/archive
+        /// <summary>
+        /// Archive a specific Organization.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        [HttpPut("{organizationId}/archive", Name = nameof(ArchiveOrganization))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> ArchiveOrganization(int organizationId)
+        {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+            if (organization == null)
+            {
+                return NotFound($"Organization not found with id {organizationId}");
+            }
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            await _organizationService.ArchiveOrganizationAsync(organizationId);
+
+            return Ok(organization);
+        }
+
+        // PUT: api/Organizations/5/restore
+        /// <summary>
+        /// Restore a archived Organization.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        [HttpPut("{organizationId}/restore", Name = nameof(RestoreArchivedOrganization))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> RestoreArchivedOrganization(int organizationId)
+        {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+            if (organization == null)
+            {
+                return NotFound($"Organization not found with id {organizationId}");
+            }
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            await _organizationService.RestoreArchivedOrganizationAsync(organizationId);
+
+            return Ok(organization);
+        }
+
         // GET: api/Organizations/5/agreements
         // TODO: security?
         /// <summary>
@@ -604,6 +660,33 @@ namespace Prime.Controllers
             var organization = await _organizationService.GetOrganizationAdminListViewByIdAsync(id);
 
             return Ok(organization);
+        }
+
+
+
+        // POST: api/Organizations/1/editable
+        /// <summary>
+        /// Sets the Organization details to editable.
+        /// </summary>
+        /// <param name="id"></param>
+        [HttpPost("{id}/editable", Name = nameof(SetOrganizationDetailEditable))]
+        [Authorize(Roles = Roles.PrimeAdministrant)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> SetOrganizationDetailEditable(int id)
+        {
+
+            var organization = await _organizationService.GetOrganizationAsync(id);
+            if (organization == null)
+            {
+                return NotFound($"Organization not found with id {id}");
+            }
+
+            await _organizationService.SetOrganizationDetailEditable(id);
+
+            return NoContent();
         }
     }
 }

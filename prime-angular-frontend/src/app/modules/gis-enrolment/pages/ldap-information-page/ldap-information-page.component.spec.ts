@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -9,6 +9,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { LdapInformationPageComponent } from './ldap-information-page.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('LdapInformationPageComponent', () => {
   let component: LdapInformationPageComponent;
@@ -16,24 +17,23 @@ describe('LdapInformationPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+    declarations: [
         LdapInformationPageComponent,
-      ],
-      imports: [
-        ReactiveFormsModule,
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [ReactiveFormsModule,
         RouterTestingModule,
-        HttpClientTestingModule,
         BrowserAnimationsModule,
-        NgxMaterialModule
-      ],
-      providers: [
+        NgxMaterialModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

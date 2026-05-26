@@ -1,25 +1,25 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ApiResource } from './api-resource.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ApiResource', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        MatSnackBarModule
-      ],
-      providers: [
+    imports: [MatSnackBarModule],
+    providers: [
         ApiResource,
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
-        }
-      ]
-    });
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+});
   });
 
   it('should be created', inject([ApiResource], (service: ApiResource) => {

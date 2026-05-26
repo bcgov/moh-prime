@@ -16,6 +16,7 @@ export interface Organization {
   hasSubmittedSite: boolean;
   hasClaim: boolean;
   pendingTransfer: boolean;
+  isArchived: boolean;
   // Children -----
   sites: Site[];
 }
@@ -26,8 +27,10 @@ export interface OrganizationAdminView {
   doingBusinessAs?: string;
   signingAuthorityName: string;
   createdDate: string;
+  isArchived: boolean;
   hidden: boolean;
   hasClaim: boolean;
   siteId: number;
   validSiteCount: number;
+  hasSubmittedSite: boolean;
 }

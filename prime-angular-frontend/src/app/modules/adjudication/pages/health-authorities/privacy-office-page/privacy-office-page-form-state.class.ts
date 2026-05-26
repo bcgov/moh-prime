@@ -24,6 +24,10 @@ export class PrivacyOfficePageFormState extends AbstractFormState<PrivacyOffice>
     return this.formInstance.get('phone') as UntypedFormControl;
   }
 
+  public get phoneExtension(): UntypedFormControl {
+    return this.formInstance.get('phoneExtension') as UntypedFormControl;
+  }
+
   public get physicalAddress(): UntypedFormGroup {
     return this.formInstance.get('physicalAddress') as UntypedFormGroup;
   }
@@ -67,6 +71,7 @@ export class PrivacyOfficePageFormState extends AbstractFormState<PrivacyOffice>
         exclude: ['street2']
       }),
       privacyOfficer: this.fb.group({
+        id: [0, []],
         firstName: [
           { value: null, disabled },
           [Validators.required]
@@ -78,6 +83,10 @@ export class PrivacyOfficePageFormState extends AbstractFormState<PrivacyOffice>
         phone: [
           null,
           [Validators.required, FormControlValidators.phone]
+        ],
+        phoneExtension: [
+          null,
+          []
         ],
         smsPhone: [
           null,

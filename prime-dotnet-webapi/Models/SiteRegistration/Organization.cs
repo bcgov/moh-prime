@@ -41,7 +41,9 @@ namespace Prime.Models
 
         public DateTimeOffset? DeletedDate { get; set; }
 
-        [JsonIgnore]
+        public DateTimeOffset? ArchivedDate { get; set; }
+
+        //   [JsonIgnore]
         public ICollection<CommunitySite> Sites { get; set; }
 
         [JsonIgnore]
@@ -58,12 +60,14 @@ namespace Prime.Models
         }
 
         [NotMapped]
+        [Computed]
         public bool HasAcceptedAgreement
         {
             get => Agreements?.Any(a => a.AcceptedDate.HasValue) ?? false;
         }
 
         [NotMapped]
+        [Computed]
         public bool HasSubmittedSite
         {
             get => Sites?.Any(s => s.SubmittedDate.HasValue) ?? false;
@@ -74,6 +78,13 @@ namespace Prime.Models
         public bool HasClaim
         {
             get => Claims.Any();
+        }
+
+        [NotMapped]
+        [Computed]
+        public bool IsArchived
+        {
+            get => ArchivedDate.HasValue;
         }
     }
 }

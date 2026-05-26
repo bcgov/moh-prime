@@ -116,6 +116,30 @@ export class OrganizationResource {
       );
   }
 
+  /**
+ * @description
+ * Get the organization claim in progress for a signing authority by user ID, and provide null when
+ * a signing authority could not be found.
+ */
+  public getSigningAuthorityOrganizationClaimByUsername(username: string): Observable<Organization[] | null> {
+    return this.apiResource.get<Organization[]>(`parties/signing-authorities/${username}/organization-claims`)
+      .pipe(
+        map((response: ApiHttpResponse<Organization[]>) => response.result),
+        map((organizations: Organization[]) => (organizations?.length) ? organizations : null),
+        tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            // No organization exists for the provided user ID
+            return of(null);
+          }
+
+          this.toastService.openErrorToast('Organization claims could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getSigningAuthorityOrganizationClaimByUsername error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getOrganizationById(organizationId: number): Observable<Organization> {
     return this.apiResource.get<Organization>(`organizations/${organizationId}`)
       .pipe(
@@ -246,6 +270,32 @@ export class OrganizationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be deleted');
           this.logger.error('[Core] OrganizationResource::deleteOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public archiveOrganization(organizationId: number): NoContent {
+    return this.apiResource.put<NoContent>(`organizations/${organizationId}/archive`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Organization has been archived')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization could not be archived');
+          this.logger.error('[Core] OrganizationResource::archiveOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public restoreOrganization(organizationId: number): NoContent {
+    return this.apiResource.put<NoContent>(`organizations/${organizationId}/restore`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Organization has been restored')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization could not be restored');
+          this.logger.error('[Core] OrganizationResource::restoreOrganization error has occurred: ', error);
           throw error;
         })
       );
@@ -387,6 +437,19 @@ export class OrganizationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be accepted');
           this.logger.error('[Core] OrganizationResource::acceptOrganizationAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public enableOrganizationEditable(organizationId: number): NoContent {
+    return this.apiResource.post<NoContent>(`organizations/${organizationId}/editable`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Organization set to editable')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization could not be set to editable');
+          this.logger.error('[Core] OrganizationResource::enableOrganizationEditable error has occurred: ', error);
           throw error;
         })
       );

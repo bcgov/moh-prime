@@ -7,8 +7,8 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { DemographicForm } from './demographic-form.model';
 
 @Component({
-  selector: 'app-demographic-overview',
-  template: `
+    selector: 'app-demographic-overview',
+    template: `
     <app-page-section>
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Enrollee Information</ng-container>
@@ -117,8 +117,9 @@ import { DemographicForm } from './demographic-form.model';
       </button>
     </app-page-section>
   `,
-  styles: ['mat-icon { font-size: 1em; }'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    styles: ['mat-icon { font-size: 1em; }'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class DemographicOverviewComponent extends AbstractOverview {
   @Input() public demographic: DemographicForm;

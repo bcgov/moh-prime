@@ -153,5 +153,35 @@ namespace Prime.Controllers
 
             return Ok(organizations);
         }
+
+
+        // GET: api/SigningAuthority/5fdd17a6-1797-47a4-97b7-5b27949dd614/organization-claims
+        /// <summary>
+        /// Gets all of the Organizations for a signing authority by userId.
+        /// </summary>
+        /// <param name="username"></param>
+        [HttpGet("{username}/organization-claims", Name = nameof(GetSigningAuthorityOrganizationClaimsByUsername))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetSigningAuthorityOrganizationClaimsByUsername(string username)
+        {
+            if (username != User.GetPrimeUsername())
+            {
+                return Forbid();
+            }
+
+            if (!await _partyService.PartyExistsForUsernameAsync(username, PartyType.SigningAuthority))
+            {
+                return NotFound($"SigningAuthority not found with username {username}");
+            }
+
+            var party = await _partyService.GetPartyForUsernameAsync(User.GetPrimeUsername());
+            var organizations = (party != null)
+                ? await _organizationService.GetOrganizationClaimsByPartyIdAsync(party.Id)
+                : Enumerable.Empty<OrganizationListViewModel>();
+
+            return Ok(organizations);
+        }
     }
 }

@@ -15,9 +15,10 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { EnrolleeBannerListPageComponent } from '@adjudication/pages/enrollee-banner-list-page/enrollee-banner-list-page.component';
 
 @Component({
-  selector: 'app-site-information-form',
-  templateUrl: './site-information-form.component.html',
-  styleUrls: ['./site-information-form.component.scss']
+    selector: 'app-site-information-form',
+    templateUrl: './site-information-form.component.html',
+    styleUrls: ['./site-information-form.component.scss'],
+    standalone: false
 })
 export class SiteInformationFormComponent implements OnInit {
   @Input() public form: UntypedFormGroup;
@@ -60,7 +61,7 @@ export class SiteInformationFormComponent implements OnInit {
   }
 
   public isCommunityPharmacy() {
-    return this.siteService.site?.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+    return this.siteService.site?.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY;
   }
 
   // TODO: Share with BusinessLicencePageComponent?
@@ -118,7 +119,7 @@ export class SiteInformationFormComponent implements OnInit {
 
 
   private updatePEC(): void {
-    if ((this.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST || this.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
+    if ((this.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY || this.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
       if (this.activeBeforeRegistration.value || this.isNewWithSiteId.value) {
         this.formUtilsService.setValidators(this.pec, [Validators.required, FormControlValidators.communityPharmacySiteId]);
         this.pec.enable();

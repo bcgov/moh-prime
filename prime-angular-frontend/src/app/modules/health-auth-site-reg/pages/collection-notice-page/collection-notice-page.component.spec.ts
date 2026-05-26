@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
@@ -10,6 +10,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes'
 import { SiteManagementPageComponent } from '@health-auth/pages/site-management-page/site-management-page.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('CollectionNoticePageComponent', () => {
   let component: CollectionNoticePageComponent;
@@ -18,24 +19,23 @@ describe('CollectionNoticePageComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
-        imports: [
-          HttpClientTestingModule,
-          RouterTestingModule.withRoutes([
+    declarations: [CollectionNoticePageComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule.withRoutes([
             {
-              path: HealthAuthSiteRegRoutes.SITE_MANAGEMENT,
-              component: SiteManagementPageComponent
+                path: HealthAuthSiteRegRoutes.SITE_MANAGEMENT,
+                component: SiteManagementPageComponent
             }
-          ])
-        ],
-        declarations: [CollectionNoticePageComponent],
-        providers: [
-          {
+        ])],
+    providers: [
+        {
             provide: AuthService,
             useClass: MockAuthService
-          }
-        ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA]
-      }
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}
     ).compileComponents();
   }));
 

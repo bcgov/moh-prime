@@ -7,8 +7,8 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 import { SiteInformationForm } from './site-information-form.model';
 
 @Component({
-  selector: 'app-site-information-overview',
-  template: `
+    selector: 'app-site-information-overview',
+    template: `
     <app-overview-section title="Site Details"
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="HealthAuthSiteRegRoutes.SITE_INFORMATION"
@@ -31,8 +31,9 @@ import { SiteInformationForm } from './site-information-form.model';
       </app-address-view>
     </app-overview-section>
   `,
-  styles: ['mat-icon { font-size: 1.2em; }'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    styles: ['mat-icon { font-size: 1.2em; }'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SiteInformationOverviewComponent extends AbstractOverview {
   @Input() public siteInformation: SiteInformationForm;

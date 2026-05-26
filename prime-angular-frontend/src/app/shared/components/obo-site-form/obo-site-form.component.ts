@@ -4,9 +4,10 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { Config } from '@config/config.model';
 
 @Component({
-  selector: 'app-obo-site-form',
-  templateUrl: './obo-site-form.component.html',
-  styleUrls: ['./obo-site-form.component.scss']
+    selector: 'app-obo-site-form',
+    templateUrl: './obo-site-form.component.html',
+    styleUrls: ['./obo-site-form.component.scss'],
+    standalone: false
 })
 export class OboSiteFormComponent implements OnInit {
   @Input() public form: UntypedFormGroup;

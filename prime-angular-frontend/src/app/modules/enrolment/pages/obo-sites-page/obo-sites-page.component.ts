@@ -22,9 +22,10 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 @Component({
-  selector: 'app-obo-sites-page',
-  templateUrl: './obo-sites-page.component.html',
-  styleUrls: ['./obo-sites-page.component.scss']
+    selector: 'app-obo-sites-page',
+    templateUrl: './obo-sites-page.component.html',
+    styleUrls: ['./obo-sites-page.component.scss'],
+    standalone: false
 })
 export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public jobNames: Config<number>[];
@@ -148,7 +149,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
         this.enrolmentFormStateService.addNonHealthAuthorityOboSite(site, this.communityHealthSites);
         break;
       }
-      case CareSettingEnum.COMMUNITY_PHARMACIST: {
+      case CareSettingEnum.COMMUNITY_PHARMACY: {
         this.enrolmentFormStateService.addNonHealthAuthorityOboSite(site, this.communityPharmacySites);
         break;
       }
@@ -169,7 +170,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
         this.communityHealthSites.removeAt(index);
         break;
       }
-      case CareSettingEnum.COMMUNITY_PHARMACIST: {
+      case CareSettingEnum.COMMUNITY_PHARMACY: {
         this.communityPharmacySites.removeAt(index);
         break;
       }
@@ -260,7 +261,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
           }
           break;
         }
-        case CareSettingEnum.COMMUNITY_PHARMACIST: {
+        case CareSettingEnum.COMMUNITY_PHARMACY: {
           this.communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
           if (!this.communityPharmacySites.length) {
             this.addOboSite(careSettingCode);

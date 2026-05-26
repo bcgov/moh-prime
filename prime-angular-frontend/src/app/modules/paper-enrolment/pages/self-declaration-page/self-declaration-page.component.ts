@@ -23,9 +23,10 @@ import { SelfDeclarationFormState } from './self-declaration-form-state.class';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
-  selector: 'app-self-declaration-page',
-  templateUrl: './self-declaration-page.component.html',
-  styleUrls: ['./self-declaration-page.component.scss']
+    selector: 'app-self-declaration-page',
+    templateUrl: './self-declaration-page.component.html',
+    styleUrls: ['./self-declaration-page.component.scss'],
+    standalone: false
 })
 export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: SelfDeclarationFormState;

@@ -1,7 +1,7 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ActivatedRoute } from '@angular/router';
 
 import { KeycloakService } from 'keycloak-angular';
@@ -14,6 +14,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationSigningAuthorityPageComponent } from '@registration/pages/organization-signing-authority-page/organization-signing-authority-page.component';
 import { CollectionNoticePageComponent } from './collection-notice-page.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('CollectionNoticePageComponent', () => {
   let component: CollectionNoticePageComponent;
@@ -31,42 +32,41 @@ describe('CollectionNoticePageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule.withRoutes([
-          {
-            path: SiteRoutes.ORGANIZATIONS,
-            children: [
-              {
-                path: ':oid',
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule.withRoutes([
+            {
+                path: SiteRoutes.ORGANIZATIONS,
                 children: [
-                  {
-                    path: SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY,
-                    component: OrganizationSigningAuthorityPageComponent
-                  }
+                    {
+                        path: ':oid',
+                        children: [
+                            {
+                                path: SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY,
+                                component: OrganizationSigningAuthorityPageComponent
+                            }
+                        ]
+                    }
                 ]
-              }
-            ]
-          }
-        ])
-      ],
-      providers: [
+            }
+        ])],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: OrganizationService,
-          useClass: MockOrganizationService
+            provide: OrganizationService,
+            useClass: MockOrganizationService
         },
         {
-          provide: ActivatedRoute,
-          useValue: mockActivatedRoute
+            provide: ActivatedRoute,
+            useValue: mockActivatedRoute
         },
-        KeycloakService
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

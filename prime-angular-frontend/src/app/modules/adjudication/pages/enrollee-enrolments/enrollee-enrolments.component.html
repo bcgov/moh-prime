@@ -33,7 +33,7 @@
   <ng-container *ngFor="let enrolmentCard of enrolmentCards; let first = first; let last = last">
     <ng-container [ngTemplateOutlet]="card"
                   [ngTemplateOutletContext]="{
-                    isCurrent: first && !isUnderAdjudication(enrollee),
+                    isCurrent: enrolmentCard.isCurrent && !isUnderAdjudication(enrollee),
                     submittedDate: enrolmentCard.submissionCreatedDate,
                     acceptedDate: enrolmentCard.agreementAcceptedDate,
                     remoteAccess: enrolmentCard.requestedRemoteAccess,

@@ -21,7 +21,8 @@ import { ConfigService } from '@config/config.service';
 @Component({
   selector: 'app-enrollee-review',
   templateUrl: './enrollee-review.component.html',
-  styleUrls: ['./enrollee-review.component.scss']
+  styleUrls: ['./enrollee-review.component.scss'],
+  standalone: false
 })
 export class EnrolleeReviewComponent {
   @Input() public showEditRedirect: boolean;
@@ -164,6 +165,10 @@ export class EnrolleeReviewComponent {
 
   public isPaperEnrollee(enrollee): boolean {
     return this.enrolmentService.isPaperEnrollee(enrollee);
+  }
+
+  public hasInvalidCareSetting(): boolean {
+    return this.enrolment?.careSettings?.some(careSetting => this.CareSettingEnum[careSetting.careSettingCode] === undefined);
   }
 
 }

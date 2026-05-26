@@ -1,7 +1,8 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[appNotificationInfoSummary]'
+    selector: '[appNotificationInfoSummary]',
+    standalone: false
 })
 export class NotificationInfoSummaryDirective {
   constructor() { }

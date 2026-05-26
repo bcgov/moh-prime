@@ -23,9 +23,10 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { CareSettingFormState } from './care-setting-form-state.class';
 
 @Component({
-  selector: 'app-care-setting-page',
-  templateUrl: './care-setting-page.component.html',
-  styleUrls: ['./care-setting-page.component.scss']
+    selector: 'app-care-setting-page',
+    templateUrl: './care-setting-page.component.html',
+    styleUrls: ['./care-setting-page.component.scss'],
+    standalone: false
 })
 export class CareSettingPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: CareSettingFormState;

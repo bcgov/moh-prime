@@ -17,9 +17,10 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-administrators-page',
-  templateUrl: './administrators-page.component.html',
-  styleUrls: ['./administrators-page.component.scss']
+    selector: 'app-administrators-page',
+    templateUrl: './administrators-page.component.html',
+    styleUrls: ['./administrators-page.component.scss'],
+    standalone: false
 })
 export class AdministratorsPageComponent extends AbstractContactsPage implements OnInit {
   constructor(

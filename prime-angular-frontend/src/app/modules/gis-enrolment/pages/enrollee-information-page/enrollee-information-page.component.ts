@@ -15,9 +15,10 @@ import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment
 import { EnrolleeInformationPageFormState } from './enrollee-information-page-form-state.class';
 
 @Component({
-  selector: 'app-enrollee-information-page',
-  templateUrl: './enrollee-information-page.component.html',
-  styleUrls: ['./enrollee-information-page.component.scss']
+    selector: 'app-enrollee-information-page',
+    templateUrl: './enrollee-information-page.component.html',
+    styleUrls: ['./enrollee-information-page.component.scss'],
+    standalone: false
 })
 export class EnrolleeInformationPageComponent extends AbstractEnrolmentPage implements OnInit {
   public title: string;

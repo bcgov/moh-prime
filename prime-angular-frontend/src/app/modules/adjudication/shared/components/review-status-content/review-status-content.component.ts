@@ -45,9 +45,10 @@ export class Reason {
 }
 
 @Component({
-  selector: 'app-review-status-content',
-  templateUrl: './review-status-content.component.html',
-  styleUrls: ['./review-status-content.component.scss']
+    selector: 'app-review-status-content',
+    templateUrl: './review-status-content.component.html',
+    styleUrls: ['./review-status-content.component.scss'],
+    standalone: false
 })
 export class ReviewStatusContentComponent implements OnInit, OnChanges {
   @Input() public enrollee: HttpEnrollee;

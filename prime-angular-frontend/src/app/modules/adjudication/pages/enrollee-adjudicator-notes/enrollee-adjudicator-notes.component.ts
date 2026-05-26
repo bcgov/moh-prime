@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 
 @Component({
-  selector: 'app-enrollee-adjudicator-notes',
-  templateUrl: './enrollee-adjudicator-notes.component.html',
-  styleUrls: ['./enrollee-adjudicator-notes.component.scss']
+    selector: 'app-enrollee-adjudicator-notes',
+    templateUrl: './enrollee-adjudicator-notes.component.html',
+    styleUrls: ['./enrollee-adjudicator-notes.component.scss'],
+    standalone: false
 })
 export class EnrolleeAdjudicatorNotesComponent implements OnInit {
   public noteType: NoteType;

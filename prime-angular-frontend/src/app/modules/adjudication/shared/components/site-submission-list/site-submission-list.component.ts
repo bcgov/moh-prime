@@ -6,9 +6,10 @@ import { SiteSubmission } from '@shared/models/site-submission.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-site-submission-list',
-  templateUrl: './site-submission-list.component.html',
-  styleUrls: ['./site-submission-list.component.scss']
+    selector: 'app-site-submission-list',
+    templateUrl: './site-submission-list.component.html',
+    styleUrls: ['./site-submission-list.component.scss'],
+    standalone: false
 })
 export class SiteSubmissionListComponent implements OnInit {
   @Input() public siteId: number;

@@ -2,18 +2,6 @@
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [inProgress]="!this.isCompleted"></app-site-progress-indicator>
 
-  <app-expiry-alert [expiryDates]="siteExpiryDate">
-    <!-- Work around for ngProjectAs not passing class reference to alert when applied to ng-content -->
-    <ng-container #alertTitle
-                  class="alert-title">
-      This site requires update.
-    </ng-container>
-    <ng-container #alertContent
-                  class="alert-content">
-      Review information and upload a valid business licence.
-    </ng-container>
-  </app-expiry-alert>
-
   <div class="mb-5">
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>Information Review</ng-container>

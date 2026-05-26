@@ -11,6 +11,13 @@
   </p>
   <form [formGroup]="form">
     <mat-form-field class="w-100">
+      <mat-select placeholder="Vendor"
+                  formControlName="vendor">
+        <mat-option *ngFor="let vendor of siteVendors"
+                    [value]="vendor.code">{{ vendor.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="w-100">
       <mat-label>Requestor</mat-label>
       <input matInput
              formControlName="requester">

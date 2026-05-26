@@ -758,7 +758,7 @@ namespace Prime.Services
             return await _context.EnrolleeRemoteUsers
                 .Where(eru => eru.EnrolleeId == enrolleeId &&
                     _context.RemoteUsers
-                    .Where(ru => ru.Site.DeletedDate == null)
+                    .Where(ru => ru.Site.DeletedDate == null && ru.Site.ArchivedDate == null)
                     .Select(ru => ru.Id).Contains(eru.RemoteUserId))
                 .ProjectTo<EnrolleeRemoteUserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();

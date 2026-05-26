@@ -20,8 +20,7 @@
             <app-page-subheader [divider]="false">
               <ng-container appPageSubheaderTitle>Share your approval with your PharmaNet administrator</ng-container>
               <ng-container appPageSubheaderSummary>
-                PRIME will send your enrolment information to your PharmaNet administrator(s) so they can set up your
-                access.
+                PRIME will send your enrolment information to your PharmaNet administrator(s).
                 <div class="font-italic"
                      *ngIf="enrolment.currentStatus.statusCode === EnrolmentStatus.EDITABLE">
                   Note: You cannot access PharmaNet without completing this step. If necessary, you can leave this blank
@@ -101,30 +100,22 @@
       <div imageName="notification"
            class="col-12">
         <ng-container appInfographicDescription>
-          When PRIME approved you to access PharmaNet, you were assigned a global PharmaNet ID (GPID).
-          <br><br>
-          Examples of when you would need to share your GPID:
-          <ul>
-            <li>If I change work sites</li>
-            <li>If I change jobs</li>
-            <li>If my worksite has new PharmaNet software</li>
-          </ul>
+          <p>
+            Before you will be able to access PharmaNet, you must share your PRIME approval and provisioning details
+            with the PharmaNet administrator for the site(s) where you wish to use PharmaNet. A PharmaNet administrator
+            is the person in your workplace either sets up your PharmaNet access or confirms your request for someone
+            else to set up access.
+          </p>
+          <p>
+            If you need to complete a paper or electronic request form to request access to PharmaNet for your sites,
+            please send the approval and provisioning details to yourself. You will need them to complete the form.
+          </p>
         </ng-container>
         <ng-container appInfographicContent
                       *ngIf="enrolment.currentStatus.statusCode === EnrolmentStatus.EDITABLE">
-
           <p>
-            To share your GPID, enter the email address of your PharmaNet administrator(s) below. A PharmaNet
-            administrator is the person in your workplace who sets up PharmaNet access.
-          </p>
-
-          <p>
-            PRIME will send your enrolment information to your PharmaNet administrator(s) so they can set up your
-            access.
-          </p>
-
-          <p class="mb-4 font-italic">
-            Note: You cannot access PharmaNet without completing this step.
+            To send the approval and provisioning details, enter the email address of your PharmaNet
+            administrator(s)/yourself below.
           </p>
         </ng-container>
 
@@ -171,14 +162,41 @@
 
       <form [formGroup]="emailForm">
         <div class="row">
-          <div class="col col-sm-8"
+          <div class="col col-12"
                [formArrayName]="formArrayName">
             <ng-container *ngFor="let email of formArray.controls; let i = index;"
                           [formGroupName]="i">
+              <div class="mb-2 remote_access_section"
+                   formArrayName="sitesIds"
+                   *ngIf="settingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE && remoteAccessSites?.length > 0">
+                <div class="remote_access_title">Note: Remote Access to PharmaNet </div>
+                <p class="remote_access_text">
+                  If your clinic has registered you for remote access to PharmaNet, you must include the clinic
+                  information in your provisioning details before your PharmaNet administrator is authorized
+                  to set up remote access.
+                </p>
+                <p>
+                  Tick the box beside the details you wish to send to the email address.
+                </p>
+                <ng-container *ngFor="let siteControl of remoteAccessSites; let j = index">
+                  <div class="col col-12">
+                    <mat-checkbox [formControlName]="j">
+                      {{getRemoteAccessSite(j).doingBusinessAs | default}} -
+                      {{getRemoteAccessSite(j).physicalAddress?.street | default}}
+                      {{getRemoteAccessSite(j).physicalAddress?.city | default}}
+                      {{getRemoteAccessSite(j).physicalAddress?.provinceCode | default}}
+                      {{getRemoteAccessSite(j).physicalAddress?.postal | default}}
+                    </mat-checkbox>
+                  </div>
+                </ng-container>
+                <br/>
+              </div>
+
               <app-email-form [form]="email"
                               [index]="i"
                               [validateFormat]="true"
                               [showRemoveButton]="i>0"
+                              [label]="getEmailLabel(i)"
                               (remove)="removeEmail(settingCode, healthAuthorityCode, $event)">
               </app-email-form>
             </ng-container>
@@ -190,7 +208,7 @@
                     color="primary"
                     (click)="addEmptyEmailInput(settingCode, healthAuthorityCode)">
               <mat-icon>add</mat-icon>
-              Add email of PharmaNet administrator
+              Add email of another PharmaNet administrator
             </button>
           </div>
         </div>

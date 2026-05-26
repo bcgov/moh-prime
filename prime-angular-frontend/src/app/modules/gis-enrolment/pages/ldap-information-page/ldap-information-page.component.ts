@@ -17,9 +17,10 @@ import { LdapInformationPageFormState } from './ldap-information-page-form-state
 import { LdapErrorResponse } from '@gis/shared/models/ldap-error-response.model';
 
 @Component({
-  selector: 'app-ldap-information-page',
-  templateUrl: './ldap-information-page.component.html',
-  styleUrls: ['./ldap-information-page.component.scss']
+    selector: 'app-ldap-information-page',
+    templateUrl: './ldap-information-page.component.html',
+    styleUrls: ['./ldap-information-page.component.scss'],
+    standalone: false
 })
 export class LdapInformationPageComponent extends AbstractEnrolmentPage implements OnInit {
   public title: string;

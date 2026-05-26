@@ -9,9 +9,10 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { UtilsService } from '@core/services/utils.service';
 
 @Component({
-  selector: 'app-access-agreement-current',
-  templateUrl: './access-agreement-current.component.html',
-  styleUrls: ['./access-agreement-current.component.scss']
+    selector: 'app-access-agreement-current',
+    templateUrl: './access-agreement-current.component.html',
+    styleUrls: ['./access-agreement-current.component.scss'],
+    standalone: false
 })
 export class AccessAgreementCurrentComponent implements OnInit {
   public busy: Subscription;

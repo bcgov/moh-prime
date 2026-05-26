@@ -16,9 +16,10 @@ import { EscalationNoteComponent, EscalationType } from '../escalation-note/esca
 import { DialogOptions } from '../../dialog-options.model';
 
 @Component({
-  selector: 'app-triage',
-  templateUrl: './triage.component.html',
-  styleUrls: ['./triage.component.scss']
+    selector: 'app-triage',
+    templateUrl: './triage.component.html',
+    styleUrls: ['./triage.component.scss'],
+    standalone: false
 })
 export class TriageComponent implements OnInit {
   @Input() public enrollee: EnrolleeListViewModel;

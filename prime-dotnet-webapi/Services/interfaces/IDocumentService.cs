@@ -5,7 +5,7 @@ namespace Prime.Services
 {
     public interface IDocumentService
     {
-        Task<string> GetDownloadTokenForBusinessLicenceDocument(int siteId);
+        Task<string> GetDownloadTokenForBusinessLicenceDocument(int siteId, int businessLicenceId);
         Task<string> GetDownloadTokenForSignedAgreementDocument(int agreementId);
         Task<string> GetDownloadTokenForSelfDeclarationDocument(int selfDeclarationDocumentId);
         Task<string> GetDownloadTokenForIdentificationDocument(int identificationDocumentId);

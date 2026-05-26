@@ -9,9 +9,10 @@ import { debounceTime } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
 @Component({
-  selector: 'app-date-of-birth',
-  templateUrl: './date-of-birth.component.html',
-  styleUrls: ['./date-of-birth.component.scss']
+    selector: 'app-date-of-birth',
+    templateUrl: './date-of-birth.component.html',
+    styleUrls: ['./date-of-birth.component.scss'],
+    standalone: false
 })
 export class DateOfBirthComponent implements OnInit {
   @Output() public output: EventEmitter<string>;

@@ -113,7 +113,7 @@ namespace Prime.Controllers
             var allEmailsValid = true;
             foreach (var emailPair in providedEmails)
             {
-                allEmailsValid = allEmailsValid && emailPair.Emails.All(ee => Email.IsValidEmail(ee));
+                allEmailsValid = allEmailsValid && emailPair.Emails.All(ee => Email.IsValidEmail(ee.Email));
             }
 
             if (!allEmailsValid)
@@ -142,9 +142,24 @@ namespace Prime.Controllers
             EnrolmentCertificateAccessToken createdToken = null;
             foreach (var emailPair in providedEmails)
             {
-                createdToken = await _certificateService.CreateCertificateAccessTokenWithCareSettingAsync(enrolleeId, emailPair.CareSettingCode, emailPair.HealthAuthorityCode);
-                await _emailService.SendProvisionerLinkAsync(emailPair.Emails, createdToken, emailPair.CareSettingCode);
-                await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", emailPair.Emails)}");
+
+                if (emailPair.CareSettingCode == (int)CareSettingType.CommunityPractice)
+                {
+                    foreach (var email in emailPair.Emails)
+                    {
+                        createdToken = await _certificateService.CreateCertificateAccessTokenWithCareSettingAsync(enrolleeId, emailPair.CareSettingCode, null, [.. email.RemoteAccessSiteIds]);
+                        await _emailService.SendProvisionerLinkAsync([email.Email], createdToken, emailPair.CareSettingCode);
+                        await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email: {email.Email}");
+                    }
+                }
+                else
+                {
+                    var emails = emailPair.Emails.Select(e => e.Email).ToArray();
+                    createdToken = await _certificateService.CreateCertificateAccessTokenWithCareSettingAsync(enrolleeId, emailPair.CareSettingCode, emailPair.HealthAuthorityCode);
+                    await _emailService.SendProvisionerLinkAsync(emails, createdToken, emailPair.CareSettingCode);
+                    await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", emails)}");
+                }
+
             }
 
             return CreatedAtAction(

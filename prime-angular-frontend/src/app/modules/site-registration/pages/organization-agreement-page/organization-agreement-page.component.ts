@@ -26,9 +26,10 @@ import { OrganizationAgreementPageFormState } from './organization-agreement-pag
 import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
-  selector: 'app-organization-agreement-page',
-  templateUrl: './organization-agreement-page.component.html',
-  styleUrls: ['./organization-agreement-page.component.scss']
+    selector: 'app-organization-agreement-page',
+    templateUrl: './organization-agreement-page.component.html',
+    styleUrls: ['./organization-agreement-page.component.scss'],
+    standalone: false
 })
 export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: OrganizationAgreementPageFormState;
@@ -40,6 +41,7 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
   public hasNoUploadError: boolean;
   public isCompleted: boolean;
   public isSubmitted: boolean;
+  public isOrganizationPendingTransfer: boolean;
   public SiteRoutes = SiteRoutes;
 
   @ViewChild('accept') public accepted: MatCheckbox;
@@ -96,7 +98,11 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.TECHNICAL_SUPPORT);
+    if (this.isOrganizationPendingTransfer) {
+      this.routeUtils.routeWithin(SiteRoutes.ORGANIZATIONS);
+    } else {
+      this.routeUtils.routeRelativeTo(SiteRoutes.TECHNICAL_SUPPORT);
+    }
   }
 
   public ngOnInit(): void {
@@ -113,20 +119,23 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
     this.isSubmitted = this.siteService.site?.submittedDate ? true : false;
+    this.isOrganizationPendingTransfer = organization?.pendingTransfer;
+
     this.organizationFormStateService.setForm(organization);
   }
 
   protected initForm() {
-    const organization = this.organizationService.organization;
-    const careSettingCode = this.siteService.site?.careSettingCode;
+    const organizationId = this.route.snapshot.params.oid ?? this.organizationService.organization.id;
+    const careSettingCode = this.route.snapshot.params.csid ?? this.siteService.site?.careSettingCode;
+
     this.busy = this.organizationResource
-      .updateOrganizationAgreement(organization.id, careSettingCode)
+      .updateOrganizationAgreement(organizationId, careSettingCode)
       .pipe(
         map(({ id }: OrganizationAgreement) =>
           this.agreementId = id
         ),
         exhaustMap((agreementId: number) =>
-          this.organizationResource.getOrganizationAgreement(organization.id, agreementId)
+          this.organizationResource.getOrganizationAgreement(organizationId, agreementId)
         )
       )
       .subscribe((organizationAgreement: OrganizationAgreementViewModel) =>
@@ -161,7 +170,11 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
             : this.organizationResource
               .acceptOrganizationAgreement(organizationId, this.agreementId)
         ),
-        exhaustMap(() => this.siteResource.setSiteCompleted((this.route.snapshot.params.sid)))
+        exhaustMap(() =>
+          !this.isOrganizationPendingTransfer
+            ? this.siteResource.setSiteCompleted(this.route.snapshot.params.sid)
+            : of(undefined)
+        ),
       );
   }
 
@@ -171,6 +184,10 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
     this.formState.organizationAgreementGuid.patchValue(null);
     this.formState.form.markAsPristine();
 
-    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    if (this.isOrganizationPendingTransfer) {
+      this.routeUtils.routeRelativeTo(['../'])
+    } else {
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    }
   }
 }
