@@ -48,6 +48,7 @@ import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enu
 import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
 import { AdminStatusType } from '../models/admin-status.enum';
 import { OrganizationAdminView } from '@registration/shared/models/organization.model';
+import { RemoteUserExportModel } from '@shared/models/remote-user-export.model';
 
 @Injectable({
   providedIn: 'root'
@@ -867,6 +868,22 @@ export class AdjudicationResource {
     }
     profileSnapshot.selfDeclarations = orderedSelfDeclarations;
   }
+
+  public getRemoteUserExport(siteId: number, type: string): Observable<string> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ format: type });
+    //const options = { responseType: 'blob' as 'blob' };
+    return this.apiResource.get<string>(`sites/${siteId}/remote-users/export`, params)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap((file: string) => this.logger.info('REMOTE_USER_EXPORT', file)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Remote user export could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getRemoteUserExport error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
 
   /******************************
    * Organization Page resource

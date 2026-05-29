@@ -73,6 +73,7 @@ namespace Prime
             services.AddScoped<IEnrolleeService, EnrolleeService>();
             services.AddScoped<IEnrolleeSubmissionService, EnrolleeSubmissionService>();
             services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
+            services.AddScoped<IExportService, ExportService>();
             services.AddScoped<IGisService, GisService>();
             services.AddScoped<IHealthAuthorityService, HealthAuthorityService>();
             services.AddScoped<IHealthAuthoritySiteService, HealthAuthoritySiteService>();
