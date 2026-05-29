@@ -69,7 +69,7 @@ objects:
           }
         ]
     labels:
-      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.kubernetes.io/name: frontend
       app.kubernetes.io/version: 0.0.1
       app.openshift.io/runtime: nginx
@@ -77,12 +77,12 @@ objects:
     replicas: 1
     selector:
       matchLabels:
-        app.kubernetes.io/instance: ${SVC_NAME}
+        app.kubernetes.io/part-of: ${SVC_NAME}
         app.kubernetes.io/name: frontend
     template:
       metadata:
         labels:
-          app.kubernetes.io/instance: ${SVC_NAME}
+          app.kubernetes.io/part-of: ${SVC_NAME}
           app.kubernetes.io/name: frontend
       spec:
         affinity:
@@ -96,7 +96,7 @@ objects:
                         operator: In
                         values:
                           - frontend
-                      - key: app.kubernetes.io/instance
+                      - key: app.kubernetes.io/part-of
                         operator: In
                         values:
                           - ${SVC_NAME}
@@ -510,55 +510,34 @@ objects:
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.openshift.io/runtime: dotnet
-      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.kubernetes.io/name: webapi
       app.kubernetes.io/version: 0.0.1
+    annotations:
+      image.openshift.io/triggers: |-
+        [
+          {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "${OC_LICENSE_PLATE}-tools",
+              "name": "prime-webapi-backend:${IMAGE_TAG}"
+            },
+            "fieldPath": "spec.template.spec.containers[0].image",
+            "paused": false
+          }
+        ]
   spec:
     replicas: 1
     selector:
       matchLabels:
-        app.kubernetes.io/instance: ${SVC_NAME}
+        app.kubernetes.io/part-of: ${SVC_NAME}
         app.kubernetes.io/name: webapi
     strategy:
       type: Recreate
-      maxSurge: 50%
-      maxUnavailable: 0
-      recreateParams:
-        pre:
-          failurePolicy: Ignore
-          execNewPod:
-            command:
-              - /bin/bash
-              - -c
-              - >
-                createdb -O $(APPUSER) prime-${SVC_NAME} 2> /dev/null || echo "database already exists"
-            env:
-              - name: PGHOST
-                valueFrom:
-                  configMapKeyRef:
-                    name: database-cm
-                    key: database-host
-              - name: PGDATABASE
-                value: postgres
-              - name: APPUSER
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: app-db-username
-              - name: PGUSER
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: superuser-username
-              - name: PGPASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: superuser-password
     template:
       metadata:
         labels:
-          app.kubernetes.io/instance: ${SVC_NAME}
+          app.kubernetes.io/part-of: ${SVC_NAME}
           app.kubernetes.io/name: webapi
       spec:
         affinity:
@@ -569,11 +548,46 @@ objects:
                   topologyKey: kubernetes.io/hostname
                   labelSelector:
                     matchExpressions:
-                      - key: deploymentconfig
+                      - key: app.kubernetes.io/name
                         operator: In
                         values:
-                          - ${SVC_NAME}-webapi
+                          - webapi
+                      - key: app.kubernetes.io/part-of
+                        operator: In
+                        values:
+                          - ${SVC_NAME}
         initContainers:
+        - name: create-db
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-webapi-backend:${IMAGE_TAG}
+          command:
+            - /bin/bash
+            - -c
+            - >
+              createdb -O $(APPUSER) prime-${SVC_NAME} 2> /dev/null || echo "database already exists"
+          env:
+            - name: PGHOST
+              valueFrom:
+                configMapKeyRef:
+                  name: database-cm
+                  key: database-host
+            - name: PGDATABASE
+              value: postgres
+            - name: APPUSER
+              valueFrom:
+                secretKeyRef:
+                  name: dev-patroni-secret
+                  key: app-db-username
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: dev-patroni-secret
+                  key: superuser-username
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dev-patroni-secret
+                  key: superuser-password    
         - name: run-migrations
           image: >-
             image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-webapi-backend:${IMAGE_TAG}
@@ -716,18 +730,6 @@ objects:
           - name: cert-volume
             secret:
               secretName: pharmanet-api-ssl-certs
-    triggers:
-      - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true
-          containerNames:
-            - ${SVC_NAME}-webapi
-            - run-migrations
-          from:
-            kind: ImageStreamTag
-            namespace: "${OC_LICENSE_PLATE}-tools"
-            name: 'prime-webapi-backend:${IMAGE_TAG}'
 
 #   Backend Web API Service
 - apiVersion: v1
@@ -755,7 +757,7 @@ objects:
     name: ${SVC_NAME}-document-manager
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
-      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.kubernetes.io/name: document-manager
       app.openshift.io/runtime: python
     annotations:
@@ -775,7 +777,7 @@ objects:
     replicas: 1
     selector:
       matchLabels:
-        app.kubernetes.io/instance: ${SVC_NAME}
+        app.kubernetes.io/part-of: ${SVC_NAME}
         app.kubernetes.io/name: document-manager
     strategy:
       type: Recreate
@@ -816,7 +818,7 @@ objects:
     template:
       metadata:
         labels:
-          app.kubernetes.io/instance: ${SVC_NAME}
+          app.kubernetes.io/part-of: ${SVC_NAME}
           app.kubernetes.io/name: document-manager
       spec:
         initContainers:
@@ -960,7 +962,7 @@ objects:
         port: 6001
         targetPort: 6001
     selector:
-      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.kubernetes.io/name: document-manager
 
 ###########################################
@@ -974,18 +976,18 @@ objects:
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.openshift.io/runtime: redis
-      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.kubernetes.io/name: redis
   spec:
     replicas: 1
     selector:
       matchLabels:
-        app.kubernetes.io/instance: ${SVC_NAME}
+        app.kubernetes.io/part-of: ${SVC_NAME}
         app.kubernetes.io/name: redis
     template:
       metadata:
         labels:
-          app.kubernetes.io/instance: ${SVC_NAME}
+          app.kubernetes.io/part-of: ${SVC_NAME}
           app.kubernetes.io/name: redis
       spec:
         volumes:
@@ -1058,7 +1060,7 @@ objects:
     name: ${SVC_NAME}-redis
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
-      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.kubernetes.io/name: redis
       app.openshift.io/runtime: redis
   spec:
@@ -1068,5 +1070,5 @@ objects:
         port: 6379
         targetPort: 6379
     selector:
-      app.kubernetes.io/instance: ${SVC_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.kubernetes.io/name: redis
