@@ -924,14 +924,9 @@ namespace Prime.Controllers
 
             byte[] fileContent;
 
-            if (format.ToLower() == "excel")
-            {
-                fileContent = await _exportService.ExportRemoteUsersToExcelAsync(siteId);
-            }
-            else
-            {
-                fileContent = await _exportService.ExportRemoteUsersToCSVAsync(siteId);
-            }
+            fileContent = await (string.Equals(format, "excel", StringComparison.OrdinalIgnoreCase)
+                ? _exportService.ExportRemoteUsersToExcelAsync(siteId)
+                : _exportService.ExportRemoteUsersToCSVAsync(siteId));
 
             return Ok(Convert.ToBase64String(fileContent));
         }
