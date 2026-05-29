@@ -27,7 +27,6 @@ import { ConfigService } from '@config/config.service';
 import { VendorConfig } from '@config/config.model';
 import { LinkSiteComponent } from '@shared/components/dialogs/content/link-site/link-site.component';
 import { UtilsService } from '@core/services/utils.service';
-import { RemoteUserExportModel } from '@shared/models/remote-user-export.model';
 
 @Component({
   selector: 'app-site-overview',

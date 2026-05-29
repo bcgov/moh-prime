@@ -48,7 +48,6 @@ import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enu
 import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
 import { AdminStatusType } from '../models/admin-status.enum';
 import { OrganizationAdminView } from '@registration/shared/models/organization.model';
-import { RemoteUserExportModel } from '@shared/models/remote-user-export.model';
 
 @Injectable({
   providedIn: 'root'
