@@ -10,6 +10,8 @@ using Prime.Services;
 using Prime.Models.Api;
 using Prime.ViewModels;
 using Prime.Services.Razor;
+using System.Linq;
+using System;
 
 namespace Prime.Controllers
 {
@@ -137,22 +139,33 @@ namespace Prime.Controllers
             }
 
             var enrolmentCards = new List<EnrolmentCardViewModel>();
-
+            var submissions = await _enrolleeSubmissionService.GetEnrolleeSubmissionsAsync(enrolleeId);
             var agreements = await _enrolleeAgreementService.GetEnrolleeAgreementsAsync(enrolleeId, filters);
+            var agreementsArg = agreements.ToArray();
+            var lastSubmissionDate = null as DateTimeOffset?;
 
-            foreach (var agreement in agreements)
+            var currentSubmission = submissions.First();
+
+            foreach (var submission in submissions)
             {
-                var submission = await _enrolleeSubmissionService.GetEnrolleeSubmissionBeforeDateAsync(enrolleeId, agreement.AcceptedDate.Value);
-
-                var card = new EnrolmentCardViewModel
+                if (submission.CreatedDate.Year == filters.YearAccepted || filters.YearAccepted == null)
                 {
-                    AgreementId = agreement.Id,
-                    AgreementAcceptedDate = agreement.AcceptedDate,
-                    Submission = submission,
-                    IsCurrent = agreement.IsCurrent
-                };
+                    var agreement = agreements.Where(a => submission.CreatedDate <= a.CreatedDate &&
+                        (lastSubmissionDate == null || a.CreatedDate < lastSubmissionDate)).FirstOrDefault();
+                    var card = new EnrolmentCardViewModel
+                    {
+                        AgreementId = agreement != null ? agreement.Id : 0,
+                        AgreementType = agreement != null ? agreement.AgreementVersion.AccessType : null,
+                        AgreementAcceptedDate = agreement != null ? agreement.AcceptedDate : null,
+                        EnrolmentApprovedDate = agreement != null ? agreement.CreatedDate : null,
+                        Submission = submission,
+                        SubmissionId = submission.Id,
+                        IsCurrent = currentSubmission.Id == submission.Id
+                    };
 
-                enrolmentCards.Add(card);
+                    enrolmentCards.Add(card);
+                    lastSubmissionDate = submission.CreatedDate;
+                }
             }
 
             if (User.IsAdministrant())
@@ -207,13 +220,13 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="agreementId"></param>
-        [HttpGet("{enrolleeId}/agreements/{agreementId}/submission", Name = nameof(GetSubmissionForAgreement))]
+        [HttpGet("{enrolleeId}/agreements/{submissionId}/submission", Name = nameof(GetSubmissionForAgreement))]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Submission>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetSubmissionForAgreement(int enrolleeId, int agreementId)
+        public async Task<ActionResult> GetSubmissionForAgreement(int enrolleeId, int submissionId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -225,16 +238,10 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            Agreement agreement = await _enrolleeAgreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId);
-            if (agreement == null || agreement.AcceptedDate == null)
-            {
-                return NotFound($"Accepted Agreement not found with id {agreementId} for enrollee with id {enrolleeId}");
-            }
-
-            var enrolleeSubmission = await _enrolleeSubmissionService.GetEnrolleeSubmissionBeforeDateAsync(enrolleeId, agreement.AcceptedDate.Value);
+            var enrolleeSubmission = await _enrolleeSubmissionService.GetEnrolleeSubmissionAsync(submissionId);
             if (enrolleeSubmission == null)
             {
-                return NotFound($"No enrolment submissions were found for Agreement with id {agreementId} for enrollee with id {enrolleeId}.");
+                return NotFound($"No enrolment submissions were found for Submission with id {submissionId} for enrollee with id {enrolleeId}.");
             }
 
             if (User.IsAdministrant())
