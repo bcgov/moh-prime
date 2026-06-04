@@ -147,8 +147,10 @@ namespace Prime.Controllers
 
             foreach (var submission in submissions)
             {
+                //filter the submission that within the year selected
                 if (submission.CreatedDate.Year == filters.YearAccepted || filters.YearAccepted == null)
                 {
+                    //find the agreement that created after the submission and before the next submission (if exists)
                     var agreement = agreements.Where(a => submission.CreatedDate <= a.CreatedDate &&
                         (lastSubmissionDate == null || a.CreatedDate < lastSubmissionDate)).FirstOrDefault();
                     var card = new EnrolmentCardViewModel
