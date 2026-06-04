@@ -141,7 +141,6 @@ namespace Prime.Controllers
             var enrolmentCards = new List<EnrolmentCardViewModel>();
             var submissions = await _enrolleeSubmissionService.GetEnrolleeSubmissionsAsync(enrolleeId);
             var agreements = await _enrolleeAgreementService.GetEnrolleeAgreementsAsync(enrolleeId, filters);
-            var agreementsArg = agreements.ToArray();
             var lastSubmissionDate = null as DateTimeOffset?;
 
             var currentSubmission = submissions.First();
