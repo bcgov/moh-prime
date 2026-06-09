@@ -81,9 +81,6 @@ export class SiteInformationPageComponent extends AbstractHealthAuthoritySiteReg
 
     //add validation to PEC
     this.formState.pec.addAsyncValidators(asyncValidator(this.checkPecIsAssignable(), 'assignable'));
-    if (this.isPharmacyPhoneRequired()) {
-      this.formState.pharmacyPhone.setValidators(Validators.required);
-    }
   }
 
   protected createFormInstance(): void {
