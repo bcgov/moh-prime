@@ -867,7 +867,7 @@ objects:
           command:
             # Script force waits migration pod execution until PostgreSQL is verified to
             # be open to query connections.
-            - /app/app.sh
+            - /opt/app-root/src/app.sh
           args:
             - migrate
         containers:
