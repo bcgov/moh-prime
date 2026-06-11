@@ -443,7 +443,8 @@ objects:
         port: 8890
         targetPort: 8890
     selector:
-      name: ${SVC_NAME}-frontend
+      app.kubernetes.io/part-of: ${SVC_NAME} 
+      app.kubernetes.io/name: frontend
 #   Ingress
 - apiVersion: networking.k8s.io/v1
   kind: Ingress
