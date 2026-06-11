@@ -1,4 +1,4 @@
-FROM bitnami/nginx:1.21.5-debian-10-r3
+FROM nginxinc/nginx-unprivileged:1.20
 
 COPY dist/angular-frontend/browser /opt/app-root/src
 

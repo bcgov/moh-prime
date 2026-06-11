@@ -44,7 +44,7 @@ RUN ng build --configuration=production
 ########################################
 ### Stage 2 - Production environment ###
 ########################################
-FROM bitnami/nginx:1.21.5-debian-10-r3
+FROM nginxinc/nginx-unprivileged:1.20
 ARG SVC_NAME
 ENV SVC_NAME ${SVC_NAME}
 
