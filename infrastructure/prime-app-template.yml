@@ -158,7 +158,7 @@ objects:
             volumeMounts:
             - name: vanity-tls-certs
               readOnly: true
-              mountPath: /etc/nginx/certs/certs
+              mountPath: /etc/nginx/certs
             - name: plr-integration-volume
               readOnly: true
               mountPath: /etc/nginx/certs/plr
