@@ -1,4 +1,4 @@
-FROM public.ecr.aws/nginx/nginx:1.21
+FROM bitnami/nginx:1.21.5-debian-10-r3
 
 COPY dist/angular-frontend/browser /opt/app-root/src
 
