@@ -9,16 +9,20 @@ RUN apt-get update -yqq && \
 
 
 # Install the requirements
-COPY requirements.txt .
-RUN pip install --no-cache-dir wheel && \
-    pip install -r requirements.txt
+COPY ./requirements.txt .
+RUN pip install wheel && \
+    pip install -r requirements.txt --src /opt/app-root/src
 
 RUN apt-get purge -y --auto-remove gcc libc6-dev
 
 COPY . .
+# 4. CRITICAL FOR OPENSHIFT: Fix permissions for random user execution
+RUN chgrp -R 0 /opt/app-root && \
+    chmod -R g=u /opt/app-root && \
+    chmod +x /opt/app-root/src/app.sh
 
 ENV FLASK_APP app.py
 
 # Run the server
 EXPOSE 5001 9191
-ENTRYPOINT ["./app.sh", "backend"]
+ENTRYPOINT ["opt/app-root/src/app.sh", "backend"]

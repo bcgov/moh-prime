@@ -884,7 +884,7 @@ objects:
           command:
             - /opt/app-root/src/app.sh
           args:
-            - "migrate"
+            - migrate
           env:
             - name: CACHE_REDIS_HOST
               value: ${SVC_NAME}-redis
