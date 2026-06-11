@@ -748,7 +748,7 @@ objects:
         port: 8080
         targetPort: 8080
     selector:
-      app.kubernetes.io/name: frontend
+      app.kubernetes.io/name: webapi
       app.kubernetes.io/part-of: ${SVC_NAME}
 
 ###########################################

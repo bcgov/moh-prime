@@ -177,7 +177,6 @@ jobs:
     - name: build frontend
       run: yarn run build
 
-
     - name: "Build Angular frontend image"
       run: |
         docker build . \
