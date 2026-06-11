@@ -143,13 +143,13 @@ objects:
             volumeMounts:
             - name: vanity-tls-certs
               readOnly: true
-              mountPath: /opt/bitnami/nginx/conf/certs
+              mountPath: /etc/nginx/certs
             - name: plr-integration-volume
               readOnly: true
-              mountPath: /opt/bitnami/nginx/conf/certs/plr
+              mountPath: /etc/nginx/certs/plr
             - name: nginx-config
               readOnly: true
-              mountPath: /opt/bitnami/nginx/conf/nginx.conf
+              mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
             - name: env-config
               readOnly: true
@@ -218,27 +218,28 @@ objects:
       #user              www www;  ## Default: nobody
 
       worker_processes  auto;
-      error_log         "/opt/bitnami/nginx/logs/error.log";
-      pid               "/opt/bitnami/nginx/tmp/nginx.pid";
+      error_log         "/var/log/nginx/error.log";
+      error_log         "/tmp/error_fluentbit.log";
+      pid               "/tmp/nginx.pid";
 
       events {
           worker_connections  1024;
       }
 
       http {
-          include       mime.types;
+          include       /etc/nginx/mime.types;
           default_type  application/octet-stream;
           log_format    main '$remote_addr - $remote_user [$time_local] '
                             '"$request" $status  $body_bytes_sent "$http_referer" '
                             '"$http_user_agent" "$http_x_forwarded_for"';
-          access_log    "/opt/bitnami/nginx/logs/access.log" main;
+          access_log    "/var/log/nginx/access.log" main;
           # add_header    X-Frame-Options SAMEORIGIN;
 
-          client_body_temp_path  "/opt/bitnami/nginx/tmp/client_body" 1 2;
-          proxy_temp_path        "/opt/bitnami/nginx/tmp/proxy" 1 2;
-          fastcgi_temp_path      "/opt/bitnami/nginx/tmp/fastcgi" 1 2;
-          scgi_temp_path         "/opt/bitnami/nginx/tmp/scgi" 1 2;
-          uwsgi_temp_path        "/opt/bitnami/nginx/tmp/uwsgi" 1 2;
+          client_body_temp_path  "/tmp/client_body" 1 2;
+          proxy_temp_path        "/tmp/proxy" 1 2;
+          fastcgi_temp_path      "/tmp/fastcgi" 1 2;
+          scgi_temp_path         "/tmp/scgi" 1 2;
+          uwsgi_temp_path        "/tmp/uwsgi" 1 2;
 
           sendfile           on;
           # tcp_nopush         on;
@@ -419,6 +420,7 @@ objects:
           }
         }
       }
+ 
 
 #   Frontend Service
 - apiVersion: v1
@@ -443,7 +445,8 @@ objects:
         port: 8890
         targetPort: 8890
     selector:
-      name: ${SVC_NAME}-frontend
+      app.kubernetes.io/part-of: ${SVC_NAME} 
+      app.kubernetes.io/name: frontend
 #   Ingress
 - apiVersion: networking.k8s.io/v1
   kind: Ingress
@@ -745,7 +748,8 @@ objects:
         port: 8080
         targetPort: 8080
     selector:
-      name: ${SVC_NAME}-webapi
+      app.kubernetes.io/name: webapi
+      app.kubernetes.io/part-of: ${SVC_NAME}
 
 ###########################################
 ###      Document Manager (backend)     ###
