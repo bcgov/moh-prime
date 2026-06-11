@@ -1,4 +1,4 @@
-FROM public.ecr.aws/bitnami/nginx:1.21
+FROM nginxinc/nginx-unprivileged:1.20
 
 COPY dist/angular-frontend/browser /opt/app-root/src
 
