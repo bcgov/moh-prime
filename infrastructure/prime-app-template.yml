@@ -881,12 +881,13 @@ objects:
         - name: run-migrations
           image: >-
             image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-document-manager:${IMAGE_TAG}
+          workingDir: /app
           command:
             # Script force waits migration pod execution until PostgreSQL is verified to
             # be open to query connections.
-            - /opt/app-root/src/app.sh
-          args:
-            - migrate
+            - /bin/sh
+            - '-c'
+            - './init-backend.sh migrate'
           env:
             - name: CACHE_REDIS_HOST
               value: ${SVC_NAME}-redis
