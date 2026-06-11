@@ -1,4 +1,4 @@
-FROM nginxinc/nginx-unprivileged:1.20
+FROM public.ecr.aws/nginx/nginx:1.21
 
 COPY dist/angular-frontend/browser /opt/app-root/src
 

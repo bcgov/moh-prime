@@ -44,7 +44,7 @@ RUN ng build --configuration=production
 ########################################
 ### Stage 2 - Production environment ###
 ########################################
-FROM nginxinc/nginx-unprivileged:1.20
+FROM public.ecr.aws/nginx/nginx:1.21
 ARG SVC_NAME
 ENV SVC_NAME ${SVC_NAME}
 
