@@ -178,16 +178,16 @@ jobs:
       run: yarn run build
 
 
-    #- name: "Build Angular frontend image"
-      #run: |
-        # docker build . \
-        # --file ci.dockerfile \
-        # --tag prime-angular-frontend
+    - name: "Build Angular frontend image"
+      run: |
+        docker build . \
+        --file ci.dockerfile \
+        --tag prime-angular-frontend
 
-    #- name: "Docker tag and push Angular frontend image"
-      #run: |
-        # docker tag prime-angular-frontend ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
-        # docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
+    - name: "Docker tag and push Angular frontend image"
+      run: |
+        docker tag prime-angular-frontend ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
+        docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
 
   apply-oc-template:
     runs-on: ubuntu-24.04

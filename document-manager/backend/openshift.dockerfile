@@ -25,4 +25,4 @@ ENV FLASK_APP app.py
 
 # Run the server
 EXPOSE 5001 9191
-ENTRYPOINT ["opt/app-root/src/app.sh", "backend"]
+ENTRYPOINT ["./app.sh", "backend"]
