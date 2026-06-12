@@ -1,11 +1,15 @@
 <h2 mat-dialog-title
     class="d-flex align-items-stretch">
   <mat-icon *ngIf="options.icon && !options.imageSrc"
-            [color]="options.actionType">{{ options.icon }}</mat-icon>
+            [color]="options.actionType"
+            [class.is-mobile]="isMobile">
+    {{ options.icon }}
+  </mat-icon>
   <img *ngIf="options.imageSrc"
        [attr.src]="options.imageSrc"
        alt="">
-  <span class="flex-grow-1">
+  <span class="flex-grow-1"
+      [class.is-mobile]="isMobile">
     {{ options.title }}
   </span>
 </h2>

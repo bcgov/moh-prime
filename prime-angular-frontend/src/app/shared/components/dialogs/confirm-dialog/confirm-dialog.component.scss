@@ -14,12 +14,23 @@ h2 {
     margin-right: 15px;
     width: 75px;
     height: 75px;
+
+    &.is-mobile {
+      margin-right: 20px;
+      width: 90px;
+      height: 75px;
+    }
   }
 
   span {
     border-bottom: 1px solid #eeee;
     font-size: 1.75rem;
     line-height: 3rem;
+
+    &.is-mobile {
+      font-size: 1rem;
+      line-height: 2rem;
+    }
   }
 }
 
