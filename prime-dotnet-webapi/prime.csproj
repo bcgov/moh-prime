@@ -52,6 +52,8 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="EPPlus" Version="7.0.0" />
+    <PackageReference Include="CsvHelper" Version="30.0.0" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Configuration\Database\Resources\com-pharm-terms-v1.html" />

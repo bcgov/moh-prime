@@ -26,12 +26,13 @@ import { OrganizationClaim } from '@registration/shared/models/organization-clai
 import { ConfigService } from '@config/config.service';
 import { VendorConfig } from '@config/config.model';
 import { LinkSiteComponent } from '@shared/components/dialogs/content/link-site/link-site.component';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
-    selector: 'app-site-overview',
-    templateUrl: './site-overview.component.html',
-    styleUrls: ['./site-overview.component.scss'],
-    standalone: false
+  selector: 'app-site-overview',
+  templateUrl: './site-overview.component.html',
+  styleUrls: ['./site-overview.component.scss'],
+  standalone: false
 })
 export class SiteOverviewComponent implements OnInit {
   public busy: Subscription;
@@ -61,6 +62,7 @@ export class SiteOverviewComponent implements OnInit {
     private organizationResource: OrganizationResource,
     private fb: UntypedFormBuilder,
     private configService: ConfigService,
+    private utilsService: UtilsService,
   ) {
     this.hasActions = true;
     this.refresh = new BehaviorSubject<boolean>(null);
@@ -176,6 +178,15 @@ export class SiteOverviewComponent implements OnInit {
               this.predecessorSite = null;
             });
         }
+      });
+  }
+
+  public onExportRemoteUsers(type: string): void {
+    this.busy = this.adjudicationResource.getRemoteUserExport(this.site.id, type)
+      .subscribe((file: string) => {
+        const blob = this.utilsService.base64ToBlob(file, 'text/csv');
+        //const fileBlob = new Blob([file.fileContents], { type: file.contentType });
+        this.utilsService.downloadDocument(blob, "remoteUserExport.csv");
       });
   }
 
