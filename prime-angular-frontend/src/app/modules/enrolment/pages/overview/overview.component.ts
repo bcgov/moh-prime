@@ -37,10 +37,10 @@ import { SiteResource } from '@core/resources/site-resource.service';
 
 
 @Component({
-    selector: 'app-overview',
-    templateUrl: './overview.component.html',
-    styleUrls: ['./overview.component.scss'],
-    standalone: false
+  selector: 'app-overview',
+  templateUrl: './overview.component.html',
+  styleUrls: ['./overview.component.scss'],
+  standalone: false
 })
 export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;
@@ -146,6 +146,10 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
   public requireLicenceUpdate(): boolean {
     return (this.enrolmentErrors) ? this.enrolmentErrors.requiresLicenceUpdate : false;
+  }
+
+  public requireCareSetting(): boolean {
+    return (this.enrolmentErrors) ? this.enrolmentErrors.requireCareSetting : false;
   }
 
   public ngOnInit(): void {
@@ -275,6 +279,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       requiresLicenceUpdate: enrolment.certifications.some((cert: CollegeCertification) =>
         this.configService.licenses.some(l => l.code === cert.licenseCode && l.collegeLicenses.some(cl => cl.collegeCode === cert.collegeCode && cl.discontinued))),
       requireRedoSelfDeclaration: enrolment.requireRedoSelfDeclaration,
+      requireCareSetting: !enrolment.careSettings?.length || enrolment.careSettings.filter(cs => CareSettingEnum[cs.careSettingCode] !== undefined).length === 0,
     };
   }
 
