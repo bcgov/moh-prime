@@ -43,6 +43,7 @@ export class Site {
   completed: boolean;
   submittedDate: string;
   approvedDate: string;
+  hasBeenApproved: boolean;
   // Admin -----
   adjudicatorId: number;
   adjudicator: Admin;
