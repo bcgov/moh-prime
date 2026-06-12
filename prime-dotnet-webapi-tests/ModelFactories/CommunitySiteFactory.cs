@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using Bogus;
 using Bogus.Extensions;
 
@@ -33,6 +34,7 @@ namespace PrimeTests.ModelFactories
             // TODO: What is this property about?
             RuleFor(x => x.Completed, f => f.Random.Bool());
             RuleFor(x => x.Flagged, f => f.Random.Bool(0.1f));
+            RuleFor(x => x.HasBeenApproved, f => f.Random.Bool());
             // TODO: What dates are generated?
             RuleFor(x => x.SubmittedDate, f => f.Date.Past(1).OrNull(f, 0.2f));
             RuleFor(x => x.SiteVendors, (f, x) => new SiteVendorFactory(x).GenerateBetween(1, 3));
