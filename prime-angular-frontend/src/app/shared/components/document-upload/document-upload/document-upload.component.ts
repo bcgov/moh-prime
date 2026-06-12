@@ -26,6 +26,10 @@ export class BaseDocument {
   }
 }
 
+export class HAAdditionalDocument extends BaseDocument {
+  note: string;
+}
+
 @Component({
   selector: 'app-document-upload',
   templateUrl: './document-upload.component.html',

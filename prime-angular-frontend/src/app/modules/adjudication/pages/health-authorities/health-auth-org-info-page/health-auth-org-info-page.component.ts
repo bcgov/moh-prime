@@ -27,6 +27,7 @@ export class HealthAuthOrgInfoPageComponent implements OnInit {
    */
   public isInitial: boolean;
   public hasClickedAddAgreement: boolean;
+  public hasClickedAddDocument: boolean;
 
   public organizationAgreementDocument: BaseDocument;
 
@@ -40,6 +41,7 @@ export class HealthAuthOrgInfoPageComponent implements OnInit {
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
     this.hasClickedAddAgreement = false;
+    this.hasClickedAddDocument = false;
   }
 
   public onRoute(routePath: string | (string | number)[]): void {

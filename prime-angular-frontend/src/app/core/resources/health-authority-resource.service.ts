@@ -205,6 +205,30 @@ export class HealthAuthorityResource {
       );
   }
 
+  public addOrganizationAdditionalDocument(healthAuthorityId: number, documentGuid: string): Observable<BaseDocument> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
+    return this.apiResource.put<BaseDocument>(`health-authorities/${healthAuthorityId}/additional-agreement`, null, params)
+      .pipe(
+        map((response: ApiHttpResponse<BaseDocument>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Core] HealthAuthorityResource::addOrganizationAdditionalDocument error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public deleteOrganizationAdditionalDocument(healthAuthorityId: number, documentGuid: string): Observable<BaseDocument> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
+    return this.apiResource.delete<NoContent>(`health-authorities/${healthAuthorityId}/additional-agreement`, null, params)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.logger.error('[Core] HealthAuthorityResource::deleteOrganizationAdditionalDocument error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getOrganizationAgreementDocumentToken(healthAuthorityId: number): Observable<string> {
     return this.apiResource.get<string>(`health-authorities/${healthAuthorityId}/organization-agreement/token`)
       .pipe(

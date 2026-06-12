@@ -208,6 +208,52 @@
           </div>
 
         </ng-container>
+
+        <button *ngIf="!hasClickedAddDocument"
+                mat-button
+                type="button"
+                color="primary"
+                (click)="addOrgAgreement()">
+          <mat-icon>add</mat-icon>
+          Add organization document
+        </button>
+
+        <ng-container *ngIf="hasClickedAddDocument">
+          <div class="row">
+            <div class="col">
+              <app-document-upload #documentUpload
+                                   componentName="organization-agreement"
+                                   labelMessage="Drag and drop your organization agreement or browse"
+                                   [multiple]="false"
+                                   (completed)="onUpload($event)"
+                                   (remove)="onRemoveDocument($event)"></app-document-upload>
+            </div>
+          </div>
+
+          <div class="row justify-content-between">
+            <div class="col">
+              <button mat-flat-button
+                      class="align-self-start"
+                      type="button"
+                      color="secondary"
+                      (click)="cancelUpload()">
+                Cancel
+              </button>
+            </div>
+            <div class="col text-right">
+              <button mat-flat-button
+                      class="align-self-end"
+                      type="button"
+                      color="primary"
+                      [disabled]="!organizationAgreementDocument"
+                      (click)="updateOrganizationAgreement()">
+                Upload Document
+              </button>
+            </div>
+          </div>
+
+        </ng-container>
+
       </app-page-section>
     </div>
   </div>
