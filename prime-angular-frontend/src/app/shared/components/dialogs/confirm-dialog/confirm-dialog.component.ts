@@ -7,13 +7,14 @@ import { DialogOptions } from '../dialog-options.model';
 import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
 import { DialogContentDirective } from '../dialog-content.directive';
 import { DialogContentOutput } from '../dialog-output.model';
+import { ViewportService } from '@core/services/viewport.service';
 
 @Component({
-    selector: 'app-confirm-dialog',
-    templateUrl: './confirm-dialog.component.html',
-    styleUrls: ['./confirm-dialog.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-confirm-dialog',
+  templateUrl: './confirm-dialog.component.html',
+  styleUrls: ['./confirm-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class ConfirmDialogComponent implements OnInit {
   public options: DialogOptions;
@@ -25,7 +26,8 @@ export class ConfirmDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public customOptions: DialogOptions,
     @Inject(DIALOG_DEFAULT_OPTION) public defaultOptions: DialogDefaultOptions,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private viewportService: ViewportService
   ) {
     this.options = (typeof customOptions === 'string')
       ? this.getOptions(defaultOptions[customOptions]())
@@ -76,5 +78,9 @@ export class ConfirmDialogComponent implements OnInit {
     if (output$) {
       output$.subscribe((value: any) => this.dialogContentOutput = value);
     }
+  }
+
+  public get isMobile(): boolean {
+    return this.viewportService.isMobile;
   }
 }
