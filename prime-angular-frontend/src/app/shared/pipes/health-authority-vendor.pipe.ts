@@ -4,7 +4,8 @@ import { VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 
 @Pipe({
-  name: 'healthAuthorityVendor'
+    name: 'healthAuthorityVendor',
+    standalone: false
 })
 export class HealthAuthorityVendorPipe implements PipeTransform {
   constructor(

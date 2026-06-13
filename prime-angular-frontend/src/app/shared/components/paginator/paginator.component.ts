@@ -6,9 +6,10 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 @Component({
-  selector: 'app-paginator',
-  templateUrl: './paginator.component.html',
-  styleUrls: ['./paginator.component.scss']
+    selector: 'app-paginator',
+    templateUrl: './paginator.component.html',
+    styleUrls: ['./paginator.component.scss'],
+    standalone: false
 })
 export class PaginatorComponent implements AfterContentInit, OnChanges {
   /**

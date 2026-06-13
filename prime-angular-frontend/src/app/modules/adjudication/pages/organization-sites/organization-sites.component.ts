@@ -19,9 +19,10 @@ import { SiteRegistrationNote } from '@shared/models/site-registration-note.mode
 import { concat, EMPTY, exhaustMap, forkJoin, map, noop, of, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-organization-sites',
-  templateUrl: './organization-sites.component.html',
-  styleUrls: ['./organization-sites.component.scss']
+    selector: 'app-organization-sites',
+    templateUrl: './organization-sites.component.html',
+    styleUrls: ['./organization-sites.component.scss'],
+    standalone: false
 })
 export class OrganizationSitesComponent implements OnInit {
 

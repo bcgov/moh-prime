@@ -8,14 +8,15 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: 'input[appTrimSpace]',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      multi: true,
-      useExisting: forwardRef(() => TrimSpaceInputDirective),
-    },
-  ],
+    selector: 'input[appTrimSpace]',
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: forwardRef(() => TrimSpaceInputDirective),
+        },
+    ],
+    standalone: false
 })
 
 export class TrimSpaceInputDirective extends DefaultValueAccessor {

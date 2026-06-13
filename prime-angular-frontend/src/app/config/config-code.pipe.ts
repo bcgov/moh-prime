@@ -4,7 +4,8 @@ import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 
 @Pipe({
-  name: 'configCode'
+    name: 'configCode',
+    standalone: false
 })
 export class ConfigCodePipe implements PipeTransform {
   constructor(

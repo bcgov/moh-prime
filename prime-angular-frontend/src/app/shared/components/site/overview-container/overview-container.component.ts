@@ -16,7 +16,8 @@ import { ValidationErrors } from '@angular/forms';
 @Component({
   selector: 'app-overview-container',
   templateUrl: './overview-container.component.html',
-  styleUrls: ['./overview-container.component.scss']
+  styleUrls: ['./overview-container.component.scss'],
+  standalone: false
 })
 export class OverviewContainerComponent implements OnInit {
   @Input() public showEditRedirect: boolean;
@@ -44,8 +45,7 @@ export class OverviewContainerComponent implements OnInit {
   }
 
   public get showRemnoteUsers(): boolean {
-    return this.site.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY ||
-      this.site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
+    return this.site.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY;
   }
 
   public get showDeviceProviderId(): boolean {

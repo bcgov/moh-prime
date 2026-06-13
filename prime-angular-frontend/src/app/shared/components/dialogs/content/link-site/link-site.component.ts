@@ -11,9 +11,10 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
-  selector: 'app-link-site',
-  templateUrl: './link-site.component.html',
-  styleUrls: ['./link-site.component.scss']
+    selector: 'app-link-site',
+    templateUrl: './link-site.component.html',
+    styleUrls: ['./link-site.component.scss'],
+    standalone: false
 })
 export class LinkSiteComponent implements OnInit {
   @Output() public linkSite: EventEmitter<boolean>;

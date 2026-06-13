@@ -1,5 +1,5 @@
 import { TestBed, waitForAsync, inject } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
@@ -7,6 +7,7 @@ import { MockConfigService } from 'test/mocks/mock-config.service';
 import { ConfigCodePipe } from './config-code.pipe';
 import { ConfigService } from './config.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ConfigCodePipe', () => {
   let pipe: ConfigCodePipe;
@@ -14,21 +15,20 @@ describe('ConfigCodePipe', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        MatSnackBarModule
-      ],
-      providers: [
+    imports: [MatSnackBarModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
-        }
-      ]
-    });
+            provide: ConfigService,
+            useClass: MockConfigService
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+});
 
     configService = TestBed.inject(ConfigService);
     pipe = new ConfigCodePipe(configService);

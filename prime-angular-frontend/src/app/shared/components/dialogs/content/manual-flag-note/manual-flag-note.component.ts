@@ -11,9 +11,10 @@ export class ManualFlagNoteOutput {
 }
 
 @Component({
-  selector: 'app-manual-flag-note',
-  templateUrl: './manual-flag-note.component.html',
-  styleUrls: ['./manual-flag-note.component.scss']
+    selector: 'app-manual-flag-note',
+    templateUrl: './manual-flag-note.component.html',
+    styleUrls: ['./manual-flag-note.component.scss'],
+    standalone: false
 })
 export class ManualFlagNoteComponent implements OnInit {
   @Output() public output: EventEmitter<ManualFlagNoteOutput>;

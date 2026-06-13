@@ -167,7 +167,7 @@
                           site?.physicalAddress?.provinceCode !== null && site?.physicalAddress?.postal !== null"
                         title="Site Address"
                         [showEditRedirect]="showEditRedirect && site.status !== SiteStatusType.IN_REVIEW
-                          && site.status !== SiteStatusType.LOCKED && !site.approvedDate"
+                          && site.status !== SiteStatusType.LOCKED && !site.hasBeenApproved"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
     <app-enrollee-property title="Address">

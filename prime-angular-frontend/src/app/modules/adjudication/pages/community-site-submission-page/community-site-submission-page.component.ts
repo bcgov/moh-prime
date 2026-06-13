@@ -3,9 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractComponent } from '@shared/classes/abstract-component';
 
 @Component({
-  selector: 'app-community-site-submission-page',
-  templateUrl: './community-site-submission-page.component.html',
-  styleUrls: ['./community-site-submission-page.component.scss']
+    selector: 'app-community-site-submission-page',
+    templateUrl: './community-site-submission-page.component.html',
+    styleUrls: ['./community-site-submission-page.component.scss'],
+    standalone: false
 })
 export class CommunitySiteSubmissionPageComponent extends AbstractComponent implements OnInit {
   public hasActions: boolean;

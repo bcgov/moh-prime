@@ -12,7 +12,8 @@ import { PermissionService } from '@auth/shared/services/permission.service';
 import { InRolePipe } from '@shared/pipes/in-role-pipe';
 import { MockPermissionService } from 'test/mocks/mock-permission.service';
 import { AdminUsersTableComponent } from './admin-users-table.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AdminUsersTableComponent', () => {
   let component: AdminUsersTableComponent;
@@ -20,29 +21,28 @@ describe('AdminUsersTableComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
+    declarations: [
+        InRolePipe
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
         ReactiveFormsModule,
         NgxMaterialModule,
-        BrowserAnimationsModule,
-        HttpClientTestingModule
-      ],
-      declarations: [
-        InRolePipe
-      ],
-      providers: [
+        BrowserAnimationsModule],
+    providers: [
         KeycloakService,
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: PermissionService,
-          useClass: MockPermissionService
-        }
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+            provide: PermissionService,
+            useClass: MockPermissionService
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

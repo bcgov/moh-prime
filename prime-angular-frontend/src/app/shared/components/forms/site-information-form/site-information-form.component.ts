@@ -15,9 +15,10 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { EnrolleeBannerListPageComponent } from '@adjudication/pages/enrollee-banner-list-page/enrollee-banner-list-page.component';
 
 @Component({
-  selector: 'app-site-information-form',
-  templateUrl: './site-information-form.component.html',
-  styleUrls: ['./site-information-form.component.scss']
+    selector: 'app-site-information-form',
+    templateUrl: './site-information-form.component.html',
+    styleUrls: ['./site-information-form.component.scss'],
+    standalone: false
 })
 export class SiteInformationFormComponent implements OnInit {
   @Input() public form: UntypedFormGroup;

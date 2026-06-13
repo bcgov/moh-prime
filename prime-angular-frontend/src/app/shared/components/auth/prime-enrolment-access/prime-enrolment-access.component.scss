@@ -9,6 +9,7 @@
 .grad_bg {
   height: 700px;
   width: 100%;
+  background-image: linear-gradient(to bottom, #DEDEDE, #FFFFFF);
 
   @include media-breakpoint-up(xs) {
     margin-top: -24px;
@@ -18,7 +19,6 @@
     margin-top: -32px;
   }
 
-  background-image: linear-gradient(to bottom, #DEDEDE, #FFFFFF);
 }
 
 .card {

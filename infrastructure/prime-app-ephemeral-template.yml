@@ -49,42 +49,58 @@ objects:
 ###########################################
 ###               Frontend              ###
 ###########################################
-#   Frontend Deployment Config
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
+#   Frontend Deployment
+- apiVersion: apps/v1
+  kind: Deployment
   metadata:
     name: ${SVC_NAME}-frontend
     namespace: ${OC_LICENSE_PLATE}-dev
+    annotations:
+      image.openshift.io/triggers: |-
+        [
+          {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "9c33a9-tools",
+              "name": "prime-frontend:${IMAGE_TAG}"
+            },
+            "fieldPath": "spec.template.spec.containers[0].image",
+            "paused": false
+          }
+        ]
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
+      app.kubernetes.io/name: frontend
+      app.kubernetes.io/version: 0.0.1
       app.openshift.io/runtime: nginx
   spec:
-    completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-frontend
-    strategy:
-      type: Recreate
-      maxSurge: 50%
-      maxUnavailable: 0
+      matchLabels:
+        app.kubernetes.io/part-of: ${SVC_NAME}
+        app.kubernetes.io/name: frontend
     template:
       metadata:
         labels:
-          dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-frontend
+          app.kubernetes.io/part-of: ${SVC_NAME}
+          app.kubernetes.io/name: frontend
       spec:
         affinity:
           podAntiAffinity:
             preferredDuringSchedulingIgnoredDuringExecution:
-              - weight: 100
+              - weight: 1
                 podAffinityTerm:
-                  topologyKey: kubernetes.io/hostname
                   labelSelector:
                     matchExpressions:
-                      - key: deploymentconfig
+                      - key: app.kubernetes.io/name
                         operator: In
                         values:
-                          - ${SVC_NAME}-frontend
+                          - frontend
+                      - key: app.kubernetes.io/part-of
+                        operator: In
+                        values:
+                          - ${SVC_NAME}
+                  topologyKey: kubernetes.io/hostname
         containers:
           - name: ${SVC_NAME}-frontend
             image: >-
@@ -108,9 +124,6 @@ objects:
               - name: DOCUMENT_MANAGER_URL
                 value: https://${SVC_NAME}${URL_STUB}/api/docman
             resources:
-              limits:
-                cpu: 50m
-                memory: 50Mi
               requests:
                 cpu: 15m
                 memory: 10Mi
@@ -130,13 +143,13 @@ objects:
             volumeMounts:
             - name: vanity-tls-certs
               readOnly: true
-              mountPath: /opt/bitnami/nginx/conf/certs
+              mountPath: /etc/nginx/certs
             - name: plr-integration-volume
               readOnly: true
-              mountPath: /opt/bitnami/nginx/conf/certs/plr
+              mountPath: /etc/nginx/certs/plr
             - name: nginx-config
               readOnly: true
-              mountPath: /opt/bitnami/nginx/conf/nginx.conf
+              mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
             - name: env-config
               readOnly: true
@@ -159,17 +172,6 @@ objects:
           configMap:
             name: ${SVC_NAME}-env-config
             defaultMode: 420
-    triggers:
-      - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true
-          containerNames:
-            - ${SVC_NAME}-frontend
-          from:
-            kind: ImageStreamTag
-            namespace: "${OC_LICENSE_PLATE}-tools"
-            name: 'prime-frontend:${IMAGE_TAG}'
 
 #   Environment file
 - apiVersion: v1
@@ -216,27 +218,28 @@ objects:
       #user              www www;  ## Default: nobody
 
       worker_processes  auto;
-      error_log         "/opt/bitnami/nginx/logs/error.log";
-      pid               "/opt/bitnami/nginx/tmp/nginx.pid";
+      error_log         "/var/log/nginx/error.log";
+      error_log         "/tmp/error_fluentbit.log";
+      pid               "/tmp/nginx.pid";
 
       events {
           worker_connections  1024;
       }
 
       http {
-          include       mime.types;
+          include       /etc/nginx/mime.types;
           default_type  application/octet-stream;
           log_format    main '$remote_addr - $remote_user [$time_local] '
                             '"$request" $status  $body_bytes_sent "$http_referer" '
                             '"$http_user_agent" "$http_x_forwarded_for"';
-          access_log    "/opt/bitnami/nginx/logs/access.log" main;
+          access_log    "/var/log/nginx/access.log" main;
           # add_header    X-Frame-Options SAMEORIGIN;
 
-          client_body_temp_path  "/opt/bitnami/nginx/tmp/client_body" 1 2;
-          proxy_temp_path        "/opt/bitnami/nginx/tmp/proxy" 1 2;
-          fastcgi_temp_path      "/opt/bitnami/nginx/tmp/fastcgi" 1 2;
-          scgi_temp_path         "/opt/bitnami/nginx/tmp/scgi" 1 2;
-          uwsgi_temp_path        "/opt/bitnami/nginx/tmp/uwsgi" 1 2;
+          client_body_temp_path  "/tmp/client_body" 1 2;
+          proxy_temp_path        "/tmp/proxy" 1 2;
+          fastcgi_temp_path      "/tmp/fastcgi" 1 2;
+          scgi_temp_path         "/tmp/scgi" 1 2;
+          uwsgi_temp_path        "/tmp/uwsgi" 1 2;
 
           sendfile           on;
           # tcp_nopush         on;
@@ -417,6 +420,7 @@ objects:
           }
         }
       }
+ 
 
 #   Frontend Service
 - apiVersion: v1
@@ -441,7 +445,8 @@ objects:
         port: 8890
         targetPort: 8890
     selector:
-      name: ${SVC_NAME}-frontend
+      app.kubernetes.io/part-of: ${SVC_NAME} 
+      app.kubernetes.io/name: frontend
 #   Ingress
 - apiVersion: networking.k8s.io/v1
   kind: Ingress
@@ -500,61 +505,43 @@ objects:
 ###########################################
 ###           Backend Web API           ###
 ###########################################
-#   Backend Web API Deployment Config
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
+#   Backend Web API Deployment
+- apiVersion: apps/v1
+  kind: Deployment
   metadata:
     name: ${SVC_NAME}-webapi
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: dotnet
+      app.kubernetes.io/part-of: ${SVC_NAME}
+      app.kubernetes.io/name: webapi
+      app.kubernetes.io/version: 0.0.1
+    annotations:
+      image.openshift.io/triggers: |-
+        [
+          {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "${OC_LICENSE_PLATE}-tools",
+              "name": "prime-webapi-backend:${IMAGE_TAG}"
+            },
+            "fieldPath": "spec.template.spec.containers[0].image",
+            "paused": false
+          }
+        ]
   spec:
-    completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-webapi
+      matchLabels:
+        app.kubernetes.io/part-of: ${SVC_NAME}
+        app.kubernetes.io/name: webapi
     strategy:
       type: Recreate
-      maxSurge: 50%
-      maxUnavailable: 0
-      recreateParams:
-        pre:
-          failurePolicy: Ignore
-          execNewPod:
-            command:
-              - /bin/bash
-              - -c
-              - >
-                createdb -O $(APPUSER) prime-${SVC_NAME} 2> /dev/null || echo "database already exists"
-            env:
-              - name: PGHOST
-                valueFrom:
-                  configMapKeyRef:
-                    name: database-cm
-                    key: database-host
-              - name: PGDATABASE
-                value: postgres
-              - name: APPUSER
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: app-db-username
-              - name: PGUSER
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: superuser-username
-              - name: PGPASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: superuser-password
     template:
       metadata:
         labels:
-          dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-webapi
+          app.kubernetes.io/part-of: ${SVC_NAME}
+          app.kubernetes.io/name: webapi
       spec:
         affinity:
           podAntiAffinity:
@@ -564,11 +551,46 @@ objects:
                   topologyKey: kubernetes.io/hostname
                   labelSelector:
                     matchExpressions:
-                      - key: deploymentconfig
+                      - key: app.kubernetes.io/name
                         operator: In
                         values:
-                          - ${SVC_NAME}-webapi
+                          - webapi
+                      - key: app.kubernetes.io/part-of
+                        operator: In
+                        values:
+                          - ${SVC_NAME}
         initContainers:
+        - name: create-db
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-webapi-backend:${IMAGE_TAG}
+          command:
+            - /bin/bash
+            - -c
+            - >
+              createdb -O $(APPUSER) prime-${SVC_NAME} 2> /dev/null || echo "database already exists"
+          env:
+            - name: PGHOST
+              valueFrom:
+                configMapKeyRef:
+                  name: database-cm
+                  key: database-host
+            - name: PGDATABASE
+              value: postgres
+            - name: APPUSER
+              valueFrom:
+                secretKeyRef:
+                  name: dev-patroni-secret
+                  key: app-db-username
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: dev-patroni-secret
+                  key: superuser-username
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dev-patroni-secret
+                  key: superuser-password    
         - name: run-migrations
           image: >-
             image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-webapi-backend:${IMAGE_TAG}
@@ -642,9 +664,6 @@ objects:
               - containerPort: 8080
                 protocol: TCP
             resources:
-              limits:
-                cpu: 50m
-                memory: 1Gi
               requests:
                 cpu: 15m
                 memory: 500Mi
@@ -714,18 +733,6 @@ objects:
           - name: cert-volume
             secret:
               secretName: pharmanet-api-ssl-certs
-    triggers:
-      - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true
-          containerNames:
-            - ${SVC_NAME}-webapi
-            - run-migrations
-          from:
-            kind: ImageStreamTag
-            namespace: "${OC_LICENSE_PLATE}-tools"
-            name: 'prime-webapi-backend:${IMAGE_TAG}'
 
 #   Backend Web API Service
 - apiVersion: v1
@@ -741,12 +748,13 @@ objects:
         port: 8080
         targetPort: 8080
     selector:
-      name: ${SVC_NAME}-webapi
+      app.kubernetes.io/name: webapi
+      app.kubernetes.io/part-of: ${SVC_NAME}
 
 ###########################################
 ###      Document Manager (backend)     ###
 ###########################################
-#   Document Manager (backend) Deployment Config
+#   Document Manager (backend) Deployment
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -754,6 +762,7 @@ objects:
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
+      app.kubernetes.io/name: document-manager
       app.openshift.io/runtime: python
     annotations:
       image.openshift.io/triggers: |-
@@ -772,7 +781,8 @@ objects:
     replicas: 1
     selector:
       matchLabels:
-        name: ${SVC_NAME}-document-manager
+        app.kubernetes.io/part-of: ${SVC_NAME}
+        app.kubernetes.io/name: document-manager
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -812,8 +822,8 @@ objects:
     template:
       metadata:
         labels:
-          dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-document-manager
+          app.kubernetes.io/part-of: ${SVC_NAME}
+          app.kubernetes.io/name: document-manager
       spec:
         initContainers:
         - name: run-migrations
@@ -908,9 +918,6 @@ objects:
               - configMapRef:
                   name: document-manager
             resources:
-              limits:
-                cpu: 80m
-                memory: 200Mi
               requests:
                 cpu: 10m
                 memory: 28Mi
@@ -959,46 +966,39 @@ objects:
         port: 6001
         targetPort: 6001
     selector:
-      name: ${SVC_NAME}-document-manager
+      app.kubernetes.io/part-of: ${SVC_NAME}
+      app.kubernetes.io/name: document-manager
 
 ###########################################
 ###                Redis                ###
 ###########################################
-#   Redis Deployment Config
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
+#   Redis Deployment
+- apiVersion: apps/v1
+  kind: Deployment
   metadata:
     name: ${SVC_NAME}-redis
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: redis
+      app.kubernetes.io/part-of: ${SVC_NAME}
+      app.kubernetes.io/name: redis
   spec:
-    completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-redis
-    strategy:
-      type: Recreate
-      maxSurge: 50%
-      maxUnavailable: 0
-      recreateParams:
-        timeoutSeconds: 600
-      activeDeadlineSeconds: 21600
+      matchLabels:
+        app.kubernetes.io/part-of: ${SVC_NAME}
+        app.kubernetes.io/name: redis
     template:
       metadata:
         labels:
-          dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-redis
+          app.kubernetes.io/part-of: ${SVC_NAME}
+          app.kubernetes.io/name: redis
       spec:
         volumes:
           - name: ${SVC_NAME}-redis-data
             emptyDir: {}
         containers:
           - resources:
-              limits:
-                cpu: 25m
-                memory: 100Mi
               requests:
                 cpu: 5m
                 memory: 50Mi
@@ -1049,6 +1049,13 @@ objects:
               image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/redis-6:tini
         restartPolicy: Always
         dnsPolicy: ClusterFirst
+        securityContext: {}
+        schedulerName: default-scheduler
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 25%
+        maxSurge: 25%
 
 #   Redis Service
 - kind: Service
@@ -1058,6 +1065,8 @@ objects:
     namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
+      app.kubernetes.io/name: redis
+      app.openshift.io/runtime: redis
   spec:
     ports:
       - name: redis
@@ -1065,4 +1074,5 @@ objects:
         port: 6379
         targetPort: 6379
     selector:
-      name: ${SVC_NAME}-redis
+      app.kubernetes.io/part-of: ${SVC_NAME}
+      app.kubernetes.io/name: redis

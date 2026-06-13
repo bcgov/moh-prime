@@ -32,9 +32,10 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { CertSearch } from '@enrolment/shared/models/cert-search.model';
 
 @Component({
-  selector: 'app-regulatory',
-  templateUrl: './regulatory.component.html',
-  styleUrls: ['./regulatory.component.scss']
+    selector: 'app-regulatory',
+    templateUrl: './regulatory.component.html',
+    styleUrls: ['./regulatory.component.scss'],
+    standalone: false
 })
 export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public formState: RegulatoryFormState;

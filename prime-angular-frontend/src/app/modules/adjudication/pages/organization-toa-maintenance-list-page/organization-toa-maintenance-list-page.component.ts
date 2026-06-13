@@ -12,10 +12,11 @@ import { AgreementVersion } from '@shared/models/agreement-version.model';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 
 @Component({
-  selector: 'app-organization-toa-maintenance-list-page',
-  templateUrl: './organization-toa-maintenance-list-page.component.html',
-  styleUrls: ['./organization-toa-maintenance-list-page.component.scss'],
-  providers: [FormatDatePipe]
+    selector: 'app-organization-toa-maintenance-list-page',
+    templateUrl: './organization-toa-maintenance-list-page.component.html',
+    styleUrls: ['./organization-toa-maintenance-list-page.component.scss'],
+    providers: [FormatDatePipe],
+    standalone: false
 })
 export class OrganizationToaMaintenanceListPageComponent implements OnInit {
   public busy: Subscription;

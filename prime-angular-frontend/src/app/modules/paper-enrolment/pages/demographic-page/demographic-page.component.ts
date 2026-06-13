@@ -21,9 +21,10 @@ import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-e
 import { DemographicFormState } from './demographic-form-state.class';
 
 @Component({
-  selector: 'app-demographic-page',
-  templateUrl: './demographic-page.component.html',
-  styleUrls: ['./demographic-page.component.scss']
+    selector: 'app-demographic-page',
+    templateUrl: './demographic-page.component.html',
+    styleUrls: ['./demographic-page.component.scss'],
+    standalone: false
 })
 export class DemographicPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: DemographicFormState;

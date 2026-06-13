@@ -5,9 +5,10 @@ import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.mode
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
-  selector: 'app-enrollee-review-status',
-  templateUrl: './enrollee-review-status.component.html',
-  styleUrls: ['./enrollee-review-status.component.scss']
+    selector: 'app-enrollee-review-status',
+    templateUrl: './enrollee-review-status.component.html',
+    styleUrls: ['./enrollee-review-status.component.scss'],
+    standalone: false
 })
 export class EnrolleeReviewStatusComponent implements OnInit {
   public hasActions: boolean;

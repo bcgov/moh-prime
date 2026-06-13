@@ -9,9 +9,10 @@ import { DialogOptions } from '../../dialog-options.model';
 import { VendorConfig } from '@config/config.model';
 
 @Component({
-  selector: 'app-change-vendor-note',
-  templateUrl: './change-vendor-note.component.html',
-  styleUrls: ['./change-vendor-note.component.scss']
+    selector: 'app-change-vendor-note',
+    templateUrl: './change-vendor-note.component.html',
+    styleUrls: ['./change-vendor-note.component.scss'],
+    standalone: false
 })
 export class ChangeVendorNoteComponent implements OnInit {
   @Output() public vendorChanged: EventEmitter<any>;

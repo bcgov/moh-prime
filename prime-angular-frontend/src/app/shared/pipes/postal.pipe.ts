@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'postal'
+    name: 'postal',
+    standalone: false
 })
 export class PostalPipe implements PipeTransform {
   public transform(value: string): string {

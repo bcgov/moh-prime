@@ -27,9 +27,10 @@ import { BcscDemographicFormState } from './bcsc-demographic-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 @Component({
-  selector: 'app-bcsc-demographic',
-  templateUrl: './bcsc-demographic.component.html',
-  styleUrls: ['./bcsc-demographic.component.scss']
+    selector: 'app-bcsc-demographic',
+    templateUrl: './bcsc-demographic.component.html',
+    styleUrls: ['./bcsc-demographic.component.scss'],
+    standalone: false
 })
 export class BcscDemographicComponent extends BaseEnrolmentProfilePage implements OnInit {
   public formState: BcscDemographicFormState;

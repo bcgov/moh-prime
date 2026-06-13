@@ -31,9 +31,10 @@ import {
 import { SiteStatusType } from '@lib/enums/site-status.enum';
 
 @Component({
-  selector: 'app-site-registration-container',
-  templateUrl: './site-registration-container.component.html',
-  styleUrls: ['./site-registration-container.component.scss']
+    selector: 'app-site-registration-container',
+    templateUrl: './site-registration-container.component.html',
+    styleUrls: ['./site-registration-container.component.scss'],
+    standalone: false
 })
 export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage implements OnInit {
   @Input() public hasActions: boolean;

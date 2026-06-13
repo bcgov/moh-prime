@@ -16,9 +16,10 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { PrivacyOfficerPageFormState } from './privacy-officer-page-form-state.class';
 
 @Component({
-  selector: 'app-privacy-officer-page',
-  templateUrl: './privacy-officer-page.component.html',
-  styleUrls: ['./privacy-officer-page.component.scss']
+    selector: 'app-privacy-officer-page',
+    templateUrl: './privacy-officer-page.component.html',
+    styleUrls: ['./privacy-officer-page.component.scss'],
+    standalone: false
 })
 export class PrivacyOfficerPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: PrivacyOfficerPageFormState;

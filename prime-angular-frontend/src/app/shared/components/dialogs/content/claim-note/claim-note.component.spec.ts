@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +12,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 
 import { ClaimNoteComponent, ClaimType } from './claim-note.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ClaimNoteComponent', () => {
   let component: ClaimNoteComponent;
@@ -19,41 +20,40 @@ describe('ClaimNoteComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        MatDialogModule,
-        ReactiveFormsModule,
-        HttpClientTestingModule,
-        NgxMaterialModule,
-        BrowserAnimationsModule,
-      ],
-      declarations: [
+    declarations: [
         ClaimNoteComponent,
         CapitalizePipe
-      ],
-      providers: [
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [MatDialogModule,
+        ReactiveFormsModule,
+        NgxMaterialModule,
+        BrowserAnimationsModule],
+    providers: [
         {
-          provide: MAT_DIALOG_DATA,
-          useValue: {
-            data: {
-              reassign: 1,
-              type: ClaimType.ENROLLEE
+            provide: MAT_DIALOG_DATA,
+            useValue: {
+                data: {
+                    reassign: 1,
+                    type: ClaimType.ENROLLEE
+                }
             }
-          }
         },
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: MatDialogRef,
-          useValue: {
-            close: (dialogResult: any) => { }
-          }
+            provide: MatDialogRef,
+            useValue: {
+                close: (dialogResult: any) => { }
+            }
         },
-        KeycloakService
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+        KeycloakService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

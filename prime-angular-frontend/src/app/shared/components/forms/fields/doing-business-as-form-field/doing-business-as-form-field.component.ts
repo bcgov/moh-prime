@@ -10,9 +10,10 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 
 @Component({
-  selector: 'app-doing-business-as-form-field',
-  templateUrl: './doing-business-as-form-field.component.html',
-  styleUrls: ['./doing-business-as-form-field.component.scss']
+    selector: 'app-doing-business-as-form-field',
+    templateUrl: './doing-business-as-form-field.component.html',
+    styleUrls: ['./doing-business-as-form-field.component.scss'],
+    standalone: false
 })
 export class DoingBusinessAsFormFieldComponent implements OnInit {
   @Input() public organizationId?: number;
