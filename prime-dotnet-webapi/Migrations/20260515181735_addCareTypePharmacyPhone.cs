@@ -37,7 +37,7 @@ namespace Prime.Migrations
                 column: "PharmacyPhoneRequired",
                 value: false);
 
-            migrationBuilder.Sql(@"Update ""CareTypeLookup"" Set ""PharmacyPhoneRequired"" = true Where ""Name"" in ('In-Patient Pharmacy', 'Pharmacy', 'Pharmacy & Device Providers')");
+            migrationBuilder.Sql(@"Update ""CareTypeLookup"" Set ""PharmacyPhoneRequired"" = true Where ""Name"" in ('In-Patient Pharmacy', 'Pharmacy', 'Pharmacy & Device Providers');");
         }
 
         /// <inheritdoc />
