@@ -26,6 +26,7 @@ namespace Prime.Controllers
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
         private readonly ICommunitySiteService _communitySiteService;
+        private readonly IExportService _exportService;
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
         private readonly IDocumentService _documentService;
         private readonly IEmailService _emailService;
@@ -42,6 +43,7 @@ namespace Prime.Controllers
             IHealthAuthoritySiteService healthAuthoritySiteService,
             IDocumentService documentService,
             IEmailService emailService,
+            IExportService exportService,
             IMapper mapper,
             IOrganizationService organizationService,
             ISiteService siteService,
@@ -53,6 +55,7 @@ namespace Prime.Controllers
             _communitySiteService = communitySiteService;
             _documentService = documentService;
             _emailService = emailService;
+            _exportService = exportService;
             _mapper = mapper;
             _organizationService = organizationService;
             _siteService = siteService;
@@ -881,6 +884,51 @@ namespace Prime.Controllers
             await _emailService.SendRemoteUsersUpdatedAsync(site);
             await _businessEventService.CreateSiteEmailEventAsync(siteId, "Sent remote user update notification");
             return NoContent();
+        }
+
+        // GET: api/Sites/5/remote-users/export
+        /// <summary>
+        /// Export remote users of a site to CSV or Excel format
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="format">Export format: 'csv' or 'excel'</param>
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [HttpGet("{siteId}/remote-users/export", Name = nameof(ExportRemoteUsers))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> ExportRemoteUsers(int siteId, [FromQuery] string format = "csv")
+        {
+            var record = await _communitySiteService.GetPermissionsRecordAsync(siteId);
+            if (record == null)
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            if (format != "csv" && format != "excel")
+            {
+                return BadRequest("Format must be 'csv' or 'excel'");
+            }
+
+            var site = await _communitySiteService.GetSiteAsync(siteId);
+            if (site?.RemoteUsers == null || site.RemoteUsers.Count == 0)
+            {
+                return NotFound("No remote users found for this site");
+            }
+
+            byte[] fileContent;
+
+            fileContent = await (string.Equals(format, "excel", StringComparison.OrdinalIgnoreCase)
+                ? _exportService.ExportRemoteUsersToExcelAsync(siteId)
+                : _exportService.ExportRemoteUsersToCSVAsync(siteId));
+
+            return Ok(Convert.ToBase64String(fileContent));
         }
 
         // POST: api/Sites/5/site-reviewed-email

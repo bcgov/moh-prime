@@ -47,6 +47,8 @@ namespace Prime.Models
 
         public ICollection<SiteStatus> SiteStatuses { get; set; }
 
+        public bool HasBeenApproved { get; set; }
+
         public DateTimeOffset? ApprovedDate { get; set; }
 
         public DateTimeOffset? ArchivedDate { get; set; }
