@@ -35,6 +35,7 @@ namespace Prime.Services
         {
             return await _context.Submissions
                 .Where(epv => epv.EnrolleeId == enrolleeId)
+                .OrderByDescending(epv => epv.CreatedDate)
                 .ToListAsync();
         }
 
