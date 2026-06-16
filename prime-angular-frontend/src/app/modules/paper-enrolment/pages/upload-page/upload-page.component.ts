@@ -23,9 +23,10 @@ import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-e
 import { UploadFormState } from './upload-form-state.class';
 
 @Component({
-  selector: 'app-upload-page',
-  templateUrl: './upload-page.component.html',
-  styleUrls: ['./upload-page.component.scss']
+    selector: 'app-upload-page',
+    templateUrl: './upload-page.component.html',
+    styleUrls: ['./upload-page.component.scss'],
+    standalone: false
 })
 export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: UploadFormState;

@@ -7,9 +7,10 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { SatEformsRoutes } from '@sat/sat-eforms.routes';
 
 @Component({
-  selector: 'app-collection-notice-page',
-  templateUrl: './collection-notice-page.component.html',
-  styleUrls: ['./collection-notice-page.component.scss']
+    selector: 'app-collection-notice-page',
+    templateUrl: './collection-notice-page.component.html',
+    styleUrls: ['./collection-notice-page.component.scss'],
+    standalone: false
 })
 export class CollectionNoticePageComponent implements OnInit {
   public isFull: boolean;

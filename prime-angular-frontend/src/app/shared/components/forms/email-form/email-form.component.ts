@@ -6,9 +6,10 @@ import { ViewportService } from '@core/services/viewport.service';
 
 import { NextStepsFormState } from '@paper-enrolment/pages/next-steps-page/next-steps-form-state.class';
 @Component({
-  selector: 'app-email-form',
-  templateUrl: './email-form.component.html',
-  styleUrls: ['./email-form.component.scss']
+    selector: 'app-email-form',
+    templateUrl: './email-form.component.html',
+    styleUrls: ['./email-form.component.scss'],
+    standalone: false
 })
 export class EmailFormComponent implements OnInit {
 
@@ -18,6 +19,7 @@ export class EmailFormComponent implements OnInit {
   @Input() public index: number;
   @Input() public validateFormat: boolean = false;
   @Input() public required: boolean = false;
+  @Input() public label: string = 'Email';
   @Output() public remove: EventEmitter<number>;
 
   constructor(

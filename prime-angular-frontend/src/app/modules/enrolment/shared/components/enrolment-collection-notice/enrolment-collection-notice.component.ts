@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractCollectionNoticeAlert } from '@shared/components/collection-notice-container/collection-notice-container.component';
 
 @Component({
-  selector: 'app-enrolment-collection-notice',
-  template: '',
-  styleUrls: []
+    selector: 'app-enrolment-collection-notice',
+    template: '',
+    styleUrls: [],
+    standalone: false
 })
 export class EnrolmentCollectionNoticeComponent extends AbstractCollectionNoticeAlert implements OnInit {
   constructor() {

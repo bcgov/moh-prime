@@ -26,7 +26,9 @@ namespace Prime.ViewModels.Profiles
                 .ForMember(dest => dest.PrivacyOfficer, opt => opt.MapFrom(src => src.HealthAuthorityOrganization.PrivacyOfficers.Select(x => x.Contact).SingleOrDefault()))
                 .ReverseMap();
 
-            CreateMap<Contact, PrivacyOfficerViewModel>();
+            CreateMap<Contact, PrivacyOfficerViewModel>()
+                .ForMember(dest => dest.ContactId, opt => opt.MapFrom(src => src.Id));
+
             CreateMap<Contact, HealthAuthorityContactViewModel>();
             CreateMap<HealthAuthorityContact, HealthAuthorityContactViewModel>()
                 // See https://automapperdocs.readthedocs.io/en/latest/Mapping-inheritance.html

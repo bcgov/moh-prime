@@ -12,9 +12,10 @@ import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/m
 import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
-  selector: 'app-organization-information',
-  templateUrl: './organization-information.component.html',
-  styleUrls: ['./organization-information.component.scss']
+    selector: 'app-organization-information',
+    templateUrl: './organization-information.component.html',
+    styleUrls: ['./organization-information.component.scss'],
+    standalone: false
 })
 export class OrganizationInformationComponent implements OnInit {
   public busy: Subscription;

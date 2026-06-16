@@ -89,11 +89,16 @@
   </app-page-section>
 
   <app-page-section *ngIf="site?.remoteUsers?.length">
-    <app-page-subheader>
+    <app-page-subheader class="remote-users-header">
       <ng-container appPageSubheaderTitle>
         <mat-icon class="mr-2">account_circle</mat-icon>
         Remote Practitioners
       </ng-container>
+      <button mat-icon-button
+              matTooltip="Remote User Export (csv file)"
+              (click)="onExportRemoteUsers('csv')">
+        <mat-icon>description</mat-icon>
+      </button>
       <button mat-icon-button
               matTooltip="View Remote Practitioners"
               (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_REMOTE_USERS])">

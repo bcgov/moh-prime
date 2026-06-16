@@ -7,8 +7,8 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 import { HoursOperationForm } from './hours-operation-form.model';
 
 @Component({
-  selector: 'app-hours-operation-overview',
-  template: `
+    selector: 'app-hours-operation-overview',
+    template: `
     <app-overview-section title="Hours of Operation"
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="HealthAuthSiteRegRoutes.HOURS_OPERATION"
@@ -22,8 +22,9 @@ import { HoursOperationForm } from './hours-operation-form.model';
       </ng-container>
     </app-overview-section>
   `,
-  styles: [],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class HoursOperationOverviewComponent extends AbstractOverview implements OnInit {
   @Input() public hoursOperation: HoursOperationForm;

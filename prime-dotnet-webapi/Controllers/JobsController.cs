@@ -95,5 +95,66 @@ namespace Prime.Controllers
             var result = await _organizationService.UpdateMissingRegistrationIds();
             return Ok(result);
         }
+
+        // POST: api/jobs/archive/transaction-log
+        /// <summary>
+        /// archive transaction log to archive table.
+        /// numberOfDays - the number of day of log to archive over to the table. By default, numberOfDays is set to 1.
+        /// </summary>
+        [HttpPost("archive/transaction-log", Name = nameof(ArchiveTransactionLog))]
+
+        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> ArchiveTransactionLog(int numberOfDays = 1, bool forceArchive = false)
+        {
+            if (numberOfDays <= 0)
+            {
+                return BadRequest();
+            }
+
+            var result = await _reportingService.ArchiveTransactionLogAsync(numberOfDays, forceArchive);
+            return Ok(result);
+        }
+
+        // GET: api/jobs/archive/transaction-log
+        /// <summary>
+        /// Return a string showing the date range of the transaction log in the archive table, return null if there is no record
+        /// </summary>
+        [HttpGet("archive/transaction-log", Name = nameof(GetArchiveTransactionLogString))]
+
+        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> GetArchiveTransactionLogString()
+        {
+
+            var result = await _reportingService.GetArchiveTransactionLogStringAsync();
+            if (string.IsNullOrEmpty(result))
+            {
+                return NoContent();
+            }
+            return Ok(result);
+        }
+
+        // Delete: api/jobs/archive/transaction-log
+        /// <summary>
+        /// Clear transaction log archive table.
+        /// </summary>
+        [HttpDelete("archive/transaction-log", Name = nameof(ClearArchiveTransactionLog))]
+
+        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> ClearArchiveTransactionLog()
+        {
+
+            var result = await _reportingService.ClearTransactionLogArchiveAsync();
+
+            return Ok(result);
+        }
     }
 }

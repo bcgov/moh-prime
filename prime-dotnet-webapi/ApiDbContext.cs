@@ -67,6 +67,7 @@ namespace Prime
         public DbSet<Address> Addresses { get; set; }
         public DbSet<EnrolmentStatus> EnrolmentStatuses { get; set; }
         public DbSet<EnrolmentCertificateAccessToken> EnrolmentCertificateAccessTokens { get; set; }
+        public DbSet<AccessTokenRemoteAccessSite> AccessTokenRemoteAccessSites { get; set; }
         public DbSet<Privilege> Privileges { get; set; }
         public DbSet<DefaultPrivilege> DefaultPrivileges { get; set; }
         public DbSet<AssignedPrivilege> AssignedPrivileges { get; set; }
@@ -142,6 +143,7 @@ namespace Prime
         public DbSet<PlrProvider> PlrProviders { get; set; }
         public DbSet<PharmanetTransactionLog> PharmanetTransactionLogs { get; set; }
         public DbSet<PharmanetTransactionLogTemp> PharmanetTransactionLogTemps { get; set; }
+        public DbSet<PharmanetTransactionLogArchive> PharmanetTransactionLogArchives { get; set; }
         public DbSet<CollegeForPlrRoleType> CollegeForPlrRoleTypes { get; set; }
         public DbSet<Practitioner> Practitioner { get; set; }
 

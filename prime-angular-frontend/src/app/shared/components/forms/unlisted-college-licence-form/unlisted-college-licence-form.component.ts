@@ -9,9 +9,10 @@ import { ViewportService } from '@core/services/viewport.service';
 import { RegulatoryFormState } from '@paper-enrolment/pages/regulatory-page/regulatory-form-state.class';
 
 @Component({
-  selector: 'app-unlisted-college-licence-form',
-  templateUrl: './unlisted-college-licence-form.component.html',
-  styleUrls: ['./unlisted-college-licence-form.component.scss']
+    selector: 'app-unlisted-college-licence-form',
+    templateUrl: './unlisted-college-licence-form.component.html',
+    styleUrls: ['./unlisted-college-licence-form.component.scss'],
+    standalone: false
 })
 export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
   @Input() public form: UntypedFormGroup;

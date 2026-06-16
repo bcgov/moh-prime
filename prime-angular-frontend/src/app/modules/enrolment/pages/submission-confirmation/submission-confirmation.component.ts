@@ -9,9 +9,10 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.clas
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
-  selector: 'app-submission-confirmation',
-  templateUrl: './submission-confirmation.component.html',
-  styleUrls: ['./submission-confirmation.component.scss']
+    selector: 'app-submission-confirmation',
+    templateUrl: './submission-confirmation.component.html',
+    styleUrls: ['./submission-confirmation.component.scss'],
+    standalone: false
 })
 export class SubmissionConfirmationComponent extends BaseEnrolmentPage implements OnInit {
   public isAutomatic: boolean;

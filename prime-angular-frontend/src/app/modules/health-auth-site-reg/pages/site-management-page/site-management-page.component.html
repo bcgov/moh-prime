@@ -109,16 +109,10 @@
                       }
                     }">
       </ng-container>
-      <ng-container *ngIf="healthAuthoritySite.isApproved() && !healthAuthoritySite.withinRenewalPeriod()"
+      <ng-container *ngIf="healthAuthoritySite.isApproved()"
                     [ngTemplateOutlet]="success_notification"
                     [ngTemplateOutletContext]="{
                       props: getApprovedSiteNotificationProperties(healthAuthoritySite)
-                    }">
-      </ng-container>
-      <ng-container *ngIf="healthAuthoritySite.isApproved() && healthAuthoritySite.withinRenewalPeriod()"
-                    [ngTemplateOutlet]="notification"
-                    [ngTemplateOutletContext]="{
-                      props: getWithinRenewalPeriodSiteNotificationProperties(healthAuthoritySite)
                     }">
       </ng-container>
     </app-summary-card>

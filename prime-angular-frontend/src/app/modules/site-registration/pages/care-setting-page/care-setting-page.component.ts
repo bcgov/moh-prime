@@ -28,7 +28,8 @@ import { IStep } from '@shared/components/progress-indicator/progress-indicator.
 @Component({
   selector: 'app-care-setting-page',
   templateUrl: './care-setting-page.component.html',
-  styleUrls: ['./care-setting-page.component.scss']
+  styleUrls: ['./care-setting-page.component.scss'],
+  standalone: false
 })
 export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: CareSettingPageFormState;
@@ -59,7 +60,7 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-    this.careSettingConfig = this.configService.careSettings;
+    this.careSettingConfig = this.configService.careSettings.filter(c => CareSettingEnum[c.code] !== undefined);;
     this.vendorConfig = this.configService.vendors;
     this.hasNoVendorError = false;
     this.filteredVendorConfig = [];

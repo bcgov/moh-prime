@@ -7,9 +7,10 @@ import { IProgressIndicator } from '@shared/components/progress-indicator/progre
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 
 @Component({
-  selector: 'app-gis-enrolment-progress-indicator',
-  templateUrl: './gis-enrolment-progress-indicator.component.html',
-  styleUrls: ['./gis-enrolment-progress-indicator.component.scss']
+    selector: 'app-gis-enrolment-progress-indicator',
+    templateUrl: './gis-enrolment-progress-indicator.component.html',
+    styleUrls: ['./gis-enrolment-progress-indicator.component.scss'],
+    standalone: false
 })
 export class GisEnrolmentProgressIndicatorComponent implements OnInit, IProgressIndicator {
   @Input() public inProgress: boolean;

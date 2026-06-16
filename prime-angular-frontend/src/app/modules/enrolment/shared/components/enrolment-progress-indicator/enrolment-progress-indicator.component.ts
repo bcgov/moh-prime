@@ -8,9 +8,10 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
-  selector: 'app-enrolment-progress-indicator',
-  templateUrl: './enrolment-progress-indicator.component.html',
-  styleUrls: ['./enrolment-progress-indicator.component.scss']
+    selector: 'app-enrolment-progress-indicator',
+    templateUrl: './enrolment-progress-indicator.component.html',
+    styleUrls: ['./enrolment-progress-indicator.component.scss'],
+    standalone: false
 })
 export class EnrolmentProgressIndicatorComponent implements OnInit, IProgressIndicator {
   @Input() public inProgress: boolean;

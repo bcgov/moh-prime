@@ -5,9 +5,10 @@ import { IDialogContent } from '@shared/components/dialogs/dialog-content.model'
 import { Enrolment } from '@shared/models/enrolment.model';
 
 @Component({
-  selector: 'app-approve-enrolment',
-  templateUrl: './approve-enrolment.component.html',
-  styleUrls: ['./approve-enrolment.component.scss']
+    selector: 'app-approve-enrolment',
+    templateUrl: './approve-enrolment.component.html',
+    styleUrls: ['./approve-enrolment.component.scss'],
+    standalone: false
 })
 export class ApproveEnrolmentComponent implements OnInit, IDialogContent {
   @Output() public output = new EventEmitter<boolean>();

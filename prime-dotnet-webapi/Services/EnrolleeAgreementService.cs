@@ -66,6 +66,7 @@ namespace Prime.Services
             var agreements = await _context.Agreements
                 .AsNoTracking()
                 .Include(at => at.SignedAgreement)
+                .Include(at => at.AgreementVersion)
                 .Where(at => at.EnrolleeId == enrolleeId)
                 .OrderByDescending(at => at.CreatedDate)
                 .If(filters.OnlyLatest, q => q.Take(1))
@@ -74,12 +75,19 @@ namespace Prime.Services
                 .If(filters.IncludeText, q => q.Include(at => at.AgreementVersion).Include(at => at.LimitsConditionsClause))
                 .ToArrayAsync();
 
+            var maxAgreementId = agreements.Select(a => a.Id).DefaultIfEmpty(0).Max();
+
             if (filters.YearAccepted.HasValue)
             {
                 // NpgSQL does not support DateTimeOffset operations, this filtering must be done after fetching all the data :(
                 agreements = agreements
                     .Where(at => at.AcceptedDate.Value.Year == filters.YearAccepted)
                     .ToArray();
+            }
+
+            foreach (var agreement in agreements)
+            {
+                agreement.IsCurrent = agreement.Id == maxAgreementId;
             }
 
             if (filters.IncludeText)

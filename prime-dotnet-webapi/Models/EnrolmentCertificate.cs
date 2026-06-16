@@ -24,6 +24,7 @@ namespace Prime.Models
         public string AccessType { get; set; }
         public string DeviceProviderId { get; set; }
         public IEnumerable<HealthAuthority> HealthAuthories { get; set; }
+        public Site[] RemoteAccessSite { get; set; }
 
 
         public static EnrolmentCertificate Create(EnrolmentCertificateAccessToken token, Enrollee enrollee)
@@ -61,7 +62,8 @@ namespace Prime.Models
                     .FirstOrDefault(),
                 DeviceProviderId = enrollee.EnrolleeDeviceProviders
                     .Select(dp => dp.DeviceProviderId)
-                    .FirstOrDefault()
+                    .FirstOrDefault(),
+                RemoteAccessSite = [.. token.RemoteAccessSites.Select(ras => ras.RemoteAccessSite)]
             };
         }
     }

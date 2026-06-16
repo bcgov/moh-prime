@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { KeycloakInitService } from '@core/modules/keycloak/keycloak-init.service';
 
 @Pipe({
-  name: 'contains'
+    name: 'contains',
+    standalone: false
 })
 export class ContainsPipe implements PipeTransform {
   public transform(

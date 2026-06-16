@@ -6,9 +6,10 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { NotificationInfoSummaryDirective } from './notification-info-summary.directive';
 
 @Component({
-  selector: 'app-contact-information-form',
-  templateUrl: './contact-information-form.component.html',
-  styleUrls: ['./contact-information-form.component.scss']
+    selector: 'app-contact-information-form',
+    templateUrl: './contact-information-form.component.html',
+    styleUrls: ['./contact-information-form.component.scss'],
+    standalone: false
 })
 export class ContactInformationFormComponent implements OnInit {
   /**
