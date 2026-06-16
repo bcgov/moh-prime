@@ -20,7 +20,7 @@ namespace Prime.Migrations
             migrationBuilder.Sql(@"UPDATE ""Site"" s
                 SET ""HasBeenApproved"" = true
                 WHERE s.""Id"" in ( SELECT DISTINCT ""SiteId"" FROM ""BusinessEvent"" e WHERE e.""Description"" = 'Site Approved')
-                OR s.""ApprovedDate"" IS NOT NULL");
+                OR s.""ApprovedDate"" IS NOT NULL;");
         }
 
         /// <inheritdoc />
