@@ -11,6 +11,9 @@ namespace Prime.Services
     static class LicenseCode
     {
         public const int PharmacyTechnician = 29;
+        public const int NaturopathicFull = 166;
+        public const int NaturopathicTemporay = 167;
+        public const int NaturopathicStudent = 168;
     }
 
 

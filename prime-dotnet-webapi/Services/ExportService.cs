@@ -56,7 +56,7 @@ namespace Prime.Services
                 var worksheet = package.Workbook.Worksheets.Add("Remote Users");
 
                 // Set headers
-                var headers = new[] { "First Name", "Last Name", "Email", "College", "License Class", "License Number", "Practitioner Id" };
+                var headers = new[] { "First Name", "Last Name", "Email", "College", "License Class", "Registration Id", "CPS ID Number", "PharmaNet Id", "CreatedDate" };
                 for (int i = 0; i < headers.Length; i++)
                 {
                     worksheet.Cells[1, i + 1].Value = headers[i];
@@ -78,8 +78,10 @@ namespace Prime.Services
                     worksheet.Cells[i + 2, 3].Value = dto.Email;
                     worksheet.Cells[i + 2, 4].Value = dto.College;
                     worksheet.Cells[i + 2, 5].Value = dto.LicenseClass;
-                    worksheet.Cells[i + 2, 6].Value = dto.LicenseNumber;
-                    worksheet.Cells[i + 2, 7].Value = dto.PractitionerId;
+                    worksheet.Cells[i + 2, 6].Value = dto.RegistrationId;
+                    worksheet.Cells[i + 2, 7].Value = dto.CPSIDNumber;
+                    worksheet.Cells[i + 2, 8].Value = dto.PharmaNetId;
+                    worksheet.Cells[i + 2, 9].Value = dto.CreatedDate;
                 }
 
                 // Auto-fit columns
@@ -93,31 +95,62 @@ namespace Prime.Services
         {
             return await _context.RemoteUsers
                 .Where(ru => ru.SiteId == siteId)
+                .OrderBy(ru => ru.CreatedTimeStamp)
                 .Select(ru => new RemoteUserExportDto
-                {
-                    FirstName = ru.FirstName,
-                    LastName = ru.LastName,
-                    Email = ru.Email,
-                    College = ru.RemoteUserCertification.College.Name,
-                    LicenseClass = ru.RemoteUserCertification.License.Name,
-                    LicenseNumber = ru.RemoteUserCertification.LicenseNumber,
-                    PractitionerId = ru.RemoteUserCertification.PractitionerId
-                })
+                (
+                    ru.FirstName,
+                    ru.LastName,
+                    ru.Email,
+                    ru.RemoteUserCertification.College.Name,
+                    ru.RemoteUserCertification.College.Code,
+                    ru.RemoteUserCertification.License.Code,
+                    ru.RemoteUserCertification.License.Name,
+                    ru.RemoteUserCertification.LicenseNumber,
+                    ru.RemoteUserCertification.PractitionerId,
+                    ru.CreatedTimeStamp
+                ))
                 .ToListAsync();
         }
+
 
         /// <summary>
         /// DTO for exporting remote user data
         /// </summary>
         public class RemoteUserExportDto
         {
+            public RemoteUserExportDto(string firstName,
+                string lastName,
+                string email,
+                string college,
+                int collegeCode,
+                int licenseCode,
+                string licenseClass,
+                string licenseNumber,
+                string practitionerId,
+                DateTimeOffset? createdDate)
+            {
+                FirstName = firstName;
+                LastName = lastName;
+                Email = email;
+                College = college;
+                LicenseClass = licenseClass;
+                CPSIDNumber = collegeCode == CollegeCode.CPSBC ? licenseNumber : "";
+                RegistrationId = collegeCode == CollegeCode.CPSBC ? "" : licenseNumber;
+                PharmaNetId = collegeCode == CollegeCode.BCCNM || licenseCode == LicenseCode.NaturopathicFull ||
+                    licenseCode == LicenseCode.NaturopathicTemporay || licenseCode == LicenseCode.NaturopathicStudent
+                    ? practitionerId : "";
+                CreatedDate = createdDate.HasValue ? createdDate.Value.ToString("yyyy-MM-dd HH:mm:ss") : "";
+            }
+
             public string FirstName { get; set; }
             public string LastName { get; set; }
             public string Email { get; set; }
             public string College { get; set; }
             public string LicenseClass { get; set; }
-            public string LicenseNumber { get; set; }
-            public string PractitionerId { get; set; }
+            public string RegistrationId { get; set; }
+            public string PharmaNetId { get; set; }
+            public string CPSIDNumber { get; set; }
+            public string CreatedDate { get; set; }
         }
     }
 }
