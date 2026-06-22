@@ -9,7 +9,7 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 import { UnderagedGuard } from './underaged.guard';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { NonEligibleComponent } from '@lib/modules/root-routes/components/not-eligible/not-eligible.component';
+import { NotEligibleComponent } from '@lib/modules/root-routes/components/not-eligible/not-eligible.component';
 
 
 describe('UnderagedGuard', () => {
@@ -20,7 +20,7 @@ describe('UnderagedGuard', () => {
             imports: [RouterTestingModule.withRoutes([
                 {
                     path: AppRoutes.UNDERAGED,
-                    component: NonEligibleComponent
+                    component: NotEligibleComponent
                 }
             ])],
             providers: [
