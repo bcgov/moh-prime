@@ -34,6 +34,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime FNHAClinicUpdate = new(2025, 07, 01, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime LicenseClassChangeJuly2025 = new(2025, 7, 3, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime PhysicianLicenseClassChangeSept2025 = new(2025, 9, 11, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime CPBCLicenseChange23June2026 = new(2026, 6, 23, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
         {
@@ -487,6 +488,10 @@ namespace Prime.Configuration.Database
 
                     //change CPSBC Educational - Postgraduate Resident Elective to manual review
                     new LicenseDetail { Id = 379, LicenseCode = 180, Prefix = "91", Manual = false, Validate = true, LicensedToProvideCare = true, NamedInImReg = true, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = PhysicianLicenseClassChangeSept2025, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+
+                    //CPBC License changes under HPOA
+                    new LicenseDetail { Id = 380, LicenseCode = 181, Prefix = "P1", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = CPBCLicenseChange23June2026, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
+                    new LicenseDetail { Id = 381, LicenseCode = 182, Prefix = "T9", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = null, AllowRequestRemoteAccess = true, EffectiveDate = CPBCLicenseChange23June2026, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE},
                 };
             }
         }

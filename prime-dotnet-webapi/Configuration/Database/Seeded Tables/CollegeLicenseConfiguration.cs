@@ -51,14 +51,16 @@ namespace Prime.Configuration.Database
 
                     // Pharmacists
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 25 },
-                    new CollegeLicense { CollegeCode = 2, LicenseCode = 26 },
+                    new CollegeLicense { CollegeCode = 2, LicenseCode = 26, Discontinued = true },
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 27 },
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 28 },
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 29 },
-                    new CollegeLicense { CollegeCode = 2, LicenseCode = 30 },
-                    new CollegeLicense { CollegeCode = 2, LicenseCode = 31 },
+                    new CollegeLicense { CollegeCode = 2, LicenseCode = 30, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 2, LicenseCode = 31, Discontinued = true },
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 68 },
-                    new CollegeLicense { CollegeCode = 2, LicenseCode = 178 },
+                    new CollegeLicense { CollegeCode = 2, LicenseCode = 178, Discontinued = true },
+                    new CollegeLicense { CollegeCode = 2, LicenseCode = 181 },
+                    new CollegeLicense { CollegeCode = 2, LicenseCode = 182 },
 
                     // Nurses
                     new CollegeLicense { CollegeCode = 3, LicenseCode = 32,  CollegeLicenseGroupingCode = 2 },
