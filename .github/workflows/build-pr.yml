@@ -12,13 +12,10 @@ on:
   pull_request:
     paths-ignore:
     - prime-database-backup/**
-    branches-ignore:
-    - 'develop'
-    - 'test'
-    - 'master'
 
 jobs:
   build-document-manager-backend:
+    name: build-document-manager-backend
     runs-on: ubuntu-24.04
     environment: Development
     steps:
@@ -37,7 +34,9 @@ jobs:
           prime-docman-
 
     - name: "Login to OpenShift repository"
-      uses: docker/login-action@v2
+      uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee
+      env:
+        ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
       with:
         registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
         username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
@@ -64,6 +63,7 @@ jobs:
         docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-${{steps.PR.outputs.number}}
 
   build-backend:
+    name: build-backend
     runs-on: ubuntu-24.04
     environment: Development
     steps:
@@ -82,7 +82,9 @@ jobs:
           prime-backend-
 
     - name: "Login to OpenShift repository"
-      uses: docker/login-action@v2
+      uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee
+      env:
+        ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
       with:
         registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
         username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
@@ -118,6 +120,7 @@ jobs:
         docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr-${{steps.PR.outputs.number}}
 
   build-frontend:
+    name: build-frontend
     runs-on: ubuntu-latest
     environment: Development
     defaults:
@@ -145,7 +148,9 @@ jobs:
           prime-frontend-
 
     - name: "Login to OpenShift repository"
-      uses: docker/login-action@v2
+      uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee
+      env:
+        ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
       with:
         registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
         username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
@@ -189,6 +194,7 @@ jobs:
         docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
 
   apply-oc-template:
+    name: apply-oc-template
     runs-on: ubuntu-24.04
     environment: Development
     needs: [build-document-manager-backend, build-frontend, build-backend]
