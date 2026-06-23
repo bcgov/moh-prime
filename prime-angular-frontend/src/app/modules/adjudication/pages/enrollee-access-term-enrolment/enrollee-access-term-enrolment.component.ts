@@ -13,10 +13,10 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-    selector: 'app-enrollee-access-term-enrolment',
-    templateUrl: './enrollee-access-term-enrolment.component.html',
-    styleUrls: ['./enrollee-access-term-enrolment.component.scss'],
-    standalone: false
+  selector: 'app-enrollee-access-term-enrolment',
+  templateUrl: './enrollee-access-term-enrolment.component.html',
+  styleUrls: ['./enrollee-access-term-enrolment.component.scss'],
+  standalone: false
 })
 export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
@@ -39,8 +39,8 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
 
   public ngOnInit() {
     const enrolleeId = this.route.snapshot.params.id;
-    const accessTermId = this.route.snapshot.params.aid;
-    this.busy = this.adjudicationResource.getSubmissionForAgreement(enrolleeId, accessTermId)
+    const submissionId = this.route.snapshot.params.aid;
+    this.busy = this.adjudicationResource.getSubmissionForAgreement(enrolleeId, submissionId)
       .subscribe((enrolmentSubmission: HttpEnrolleeSubmission) =>
         this.enrolmentSubmission = this.enrolleeSubmissionAdapterResponse(enrolmentSubmission)
       );

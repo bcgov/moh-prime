@@ -202,6 +202,7 @@ namespace Prime.Services
 
             site.AddStatus(SiteStatusType.Editable);
             site.ApprovedDate = DateTimeOffset.Now;
+            site.HasBeenApproved = true;
             await _context.SaveChangesAsync();
 
             await _businessEventService.CreateSiteEventAsync(site.Id, "Site Approved");
