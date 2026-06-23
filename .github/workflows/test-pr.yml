@@ -22,13 +22,13 @@ jobs:
         node-version: [18.x]
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v6
 
       - name: set-date
         run: |
           echo "GIT_COMMITTED_AT=$(date +%s)" >> ${GITHUB_ENV}
       # - name: Cache node modules.
-      #   uses: actions/cache@v2
+      #   uses: actions/cache@v6
       #   with:
       #     path: ~/.npm
       #     key: ${{ runner.os }}-node-${{ hashFiles('**/prime-angular-frontend/yarn.lock') }}
@@ -64,7 +64,7 @@ jobs:
         dotnet-version: ['8.0']
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
 
       - name: set-date
         run: |
