@@ -12,13 +12,10 @@ on:
   pull_request:
     paths-ignore:
     - prime-database-backup/**
-    branches-ignore:
-    - 'develop'
-    - 'test'
-    - 'master'
 
 jobs:
   build-document-manager-backend:
+    name: build-document-manager-backend
     runs-on: ubuntu-24.04
     environment: Development
     steps:
@@ -66,6 +63,7 @@ jobs:
         docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-${{steps.PR.outputs.number}}
 
   build-backend:
+    name: build-backend
     runs-on: ubuntu-24.04
     environment: Development
     steps:
@@ -122,6 +120,7 @@ jobs:
         docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr-${{steps.PR.outputs.number}}
 
   build-frontend:
+    name: build-frontend
     runs-on: ubuntu-latest
     environment: Development
     defaults:
@@ -195,6 +194,7 @@ jobs:
         docker push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
 
   apply-oc-template:
+    name: apply-oc-template
     runs-on: ubuntu-24.04
     environment: Development
     needs: [build-document-manager-backend, build-frontend, build-backend]
