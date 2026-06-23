@@ -78,7 +78,7 @@ namespace Prime.Configuration.Database
                     new CollegeLicense { CollegeCode = 3, LicenseCode = 176, CollegeLicenseGroupingCode = 3 },
                     new CollegeLicense { CollegeCode = 3, LicenseCode = 47,  CollegeLicenseGroupingCode = 4 },
                     new CollegeLicense { CollegeCode = 3, LicenseCode = 48,  CollegeLicenseGroupingCode = 4 },
-                    new CollegeLicense { CollegeCode = 3, LicenseCode = 49,  CollegeLicenseGroupingCode = 4 },
+                    new CollegeLicense { CollegeCode = 3, LicenseCode = 49,  CollegeLicenseGroupingCode = 4, Discontinued = true },
                     new CollegeLicense { CollegeCode = 3, LicenseCode = 51,  CollegeLicenseGroupingCode = 4 },
                     new CollegeLicense { CollegeCode = 3, LicenseCode = 52,  CollegeLicenseGroupingCode = 1 },
                     new CollegeLicense { CollegeCode = 3, LicenseCode = 53,  CollegeLicenseGroupingCode = 1 },
