@@ -20,62 +20,62 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { OverviewComponent } from '@enrolment/pages/overview/overview.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AppRoutes } from 'app/app.routes';
-import { UnderagedComponent } from '@lib/modules/root-routes/components/underaged/underaged.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { NotEligibleComponent } from '@lib/modules/root-routes/components/not-eligible/not-eligible.component';
 
 describe('CollectionNoticeComponent', () => {
-  let component: CollectionNoticeComponent;
-  let fixture: ComponentFixture<CollectionNoticeComponent>;
+    let component: CollectionNoticeComponent;
+    let fixture: ComponentFixture<CollectionNoticeComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule(
-      {
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [RouterTestingModule.withRoutes([
+    beforeEach(waitForAsync(() => {
+        TestBed.configureTestingModule(
             {
-                path: EnrolmentRoutes.OVERVIEW,
-                component: OverviewComponent
-            },
-            {
-                path: AppRoutes.UNDERAGED,
-                component: UnderagedComponent
+                schemas: [CUSTOM_ELEMENTS_SCHEMA],
+                imports: [RouterTestingModule.withRoutes([
+                    {
+                        path: EnrolmentRoutes.OVERVIEW,
+                        component: OverviewComponent
+                    },
+                    {
+                        path: AppRoutes.UNDERAGED,
+                        component: NotEligibleComponent
+                    }
+                ]),
+                    NgxMaterialModule,
+                    NgxBusyModule,
+                    EnrolmentModule,
+                    SharedModule],
+                providers: [
+                    {
+                        provide: APP_CONFIG,
+                        useValue: APP_DI_CONFIG
+                    },
+                    {
+                        provide: ConfigService,
+                        useClass: MockConfigService
+                    },
+                    {
+                        provide: EnrolmentService,
+                        useClass: MockEnrolmentService
+                    },
+                    {
+                        provide: AuthService,
+                        useClass: MockAuthService
+                    },
+                    provideHttpClient(withInterceptorsFromDi()),
+                    provideHttpClientTesting()
+                ]
             }
-        ]),
-        NgxMaterialModule,
-        NgxBusyModule,
-        EnrolmentModule,
-        SharedModule],
-    providers: [
-        {
-            provide: APP_CONFIG,
-            useValue: APP_DI_CONFIG
-        },
-        {
-            provide: ConfigService,
-            useClass: MockConfigService
-        },
-        {
-            provide: EnrolmentService,
-            useClass: MockEnrolmentService
-        },
-        {
-            provide: AuthService,
-            useClass: MockAuthService
-        },
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting()
-    ]
-}
-    ).compileComponents();
-  }));
+        ).compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(CollectionNoticeComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(CollectionNoticeComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });
