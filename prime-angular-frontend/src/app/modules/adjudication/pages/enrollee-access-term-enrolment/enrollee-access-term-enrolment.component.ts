@@ -97,6 +97,7 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
       phone,
       phoneExtension,
       enrolleeCareSettings,
+      identityInsuranceLevel,
       ...remainder
     } = enrollee;
 
@@ -119,7 +120,8 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
         email,
         smsPhone,
         phone,
-        phoneExtension
+        phoneExtension,
+        identityInsuranceLevel
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,

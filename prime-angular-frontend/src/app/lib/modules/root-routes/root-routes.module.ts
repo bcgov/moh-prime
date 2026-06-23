@@ -7,7 +7,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { MaintenanceComponent } from './components/maintenance/maintenance.component';
 import { PageSimpleComponent } from './components/page-simple/page-simple.component';
 import { HelpComponent } from './components/help/help.component';
-import { UnderagedComponent } from './components/underaged/underaged.component';
+import { NotEligibleComponent } from './components/not-eligible/not-eligible.component';
 
 @NgModule({
   imports: [
@@ -19,7 +19,7 @@ import { UnderagedComponent } from './components/underaged/underaged.component';
     PageNotFoundComponent,
     MaintenanceComponent,
     HelpComponent,
-    UnderagedComponent
+    NotEligibleComponent,
   ],
   exports: [
     PageSimpleComponent,
@@ -27,7 +27,7 @@ import { UnderagedComponent } from './components/underaged/underaged.component';
     PageNotFoundComponent,
     MaintenanceComponent,
     HelpComponent,
-    UnderagedComponent
+    NotEligibleComponent,
   ]
 })
 export class RootRoutesModule { }

@@ -44,7 +44,7 @@ jobs:
 
     - name: "Get current pull request"
       id: PR
-      uses: 8BitJonny/gh-get-current-pr@2.2.0
+      uses: 8BitJonny/gh-get-current-pr@4.0.0
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         filterOutClosed: true
@@ -91,7 +91,7 @@ jobs:
         password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
 
     - name: "Get current pull request"
-      uses: 8BitJonny/gh-get-current-pr@2.2.0
+      uses: 8BitJonny/gh-get-current-pr@4.0.0
       id: PR
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
@@ -157,7 +157,7 @@ jobs:
         password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
 
     - name: "Get current pull request"
-      uses: 8BitJonny/gh-get-current-pr@2.2.0
+      uses: 8BitJonny/gh-get-current-pr@4.0.0
       id: PR
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
@@ -215,7 +215,7 @@ jobs:
         namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}}
 
     - name: "Get current pull request"
-      uses: 8BitJonny/gh-get-current-pr@2.2.0
+      uses: 8BitJonny/gh-get-current-pr@4.0.0
       id: PR
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
