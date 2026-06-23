@@ -16,13 +16,13 @@ jobs:
     environment: Test
     steps:
       - name: "Checkout the repo"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Cache Docker layers
-        uses: actions/cache@v3
+        uses: actions/cache@v6
         with:
           path: /tmp/.docman-cache
           key: prime-docman-${{ github.sha }}
@@ -30,7 +30,9 @@ jobs:
             prime-docman-
 
       - name: "Login to OpenShift repository"
-        uses: docker/login-action@v2
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee
+        env:
+          ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
@@ -55,13 +57,13 @@ jobs:
     environment: Test
     steps:
       - name: "Checkout the repo"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Cache Docker layers
-        uses: actions/cache@v3
+        uses: actions/cache@v6
         with:
           path: /tmp/.backend-cache
           key: prime-backend-${{ github.sha }}
@@ -69,7 +71,9 @@ jobs:
             prime-backend-
 
       - name: "Login to OpenShift repository"
-        uses: docker/login-action@v2
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee
+        env:
+          ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
@@ -105,9 +109,9 @@ jobs:
         working-directory: prime-angular-frontend
     steps:
       - name: "Checkout the repo"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: '18.20.6'
 
@@ -115,7 +119,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Cache Docker layers
-        uses: actions/cache@v3
+        uses: actions/cache@v6
         with:
           path: /tmp/.frontend-cache
           key: prime-frontend-${{ github.sha }}
@@ -123,7 +127,9 @@ jobs:
             prime-frontend-
 
       - name: "Login to OpenShift repository"
-        uses: docker/login-action@v2
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee
+        env:
+          ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
@@ -158,7 +164,7 @@ jobs:
     needs: [build-document-manager-backend,build-frontend,build-backend]
     steps:
       - name: "Use the OpenShift template"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Install OC
         uses: redhat-actions/openshift-tools-installer@v1
