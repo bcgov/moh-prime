@@ -31,11 +31,13 @@ jobs:
             prime-docman-
 
       - name: "Login to OpenShift repository"
-        uses: docker/login-action@v2
+        uses: docker/login-action@v4
+        env:
+          ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
-          password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
+          password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}         
 
       - name: "Build Document Manager image"
         run: |
@@ -69,11 +71,13 @@ jobs:
             prime-backend-
 
       - name: "Login to OpenShift repository"
-        uses: docker/login-action@v2
+        uses: docker/login-action@v4
+        env:
+          ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
-          password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
+          password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}        
 
       - name: "Build .NET web API image"
         run: |
@@ -125,7 +129,9 @@ jobs:
             prime-frontend-
 
       - name: "Login to OpenShift repository"
-        uses: docker/login-action@v2
+        uses: docker/login-action@v4
+        env:
+          ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
