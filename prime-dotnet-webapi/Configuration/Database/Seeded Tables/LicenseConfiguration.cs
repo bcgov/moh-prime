@@ -58,6 +58,8 @@ namespace Prime.Configuration.Database
                     new License { Code = 29, Weight = 60, Name = "Pharmacy Technician"                },
                     new License { Code = 31, Weight = 70, Name = "Non-Practicing Pharmacy Technician" },
                     new License { Code = 68, Weight = 80, Name = "Temporary Pharmacy Technician"      },
+                    new License { Code = 181, Weight = 80, Name = "Provisional Pharmacist"            },
+                    new License { Code = 182, Weight = 80, Name = "Provisional Pharmacy Technician"   },
 
                     // Nursing
                     new License { Code = 47,  Weight = 1,  Name = "Practicing Nurse Practitioner"                          },
