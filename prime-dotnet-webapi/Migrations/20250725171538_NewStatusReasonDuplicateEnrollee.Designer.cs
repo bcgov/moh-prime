@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -11,13 +12,15 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250725171538_NewStatusReasonDuplicateEnrollee")]
+    partial class NewStatusReasonDuplicateEnrollee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.19")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -63,41 +66,6 @@ namespace Prime.Migrations
                         .IsUnique();
 
                     b.ToTable("AccessAgreementNote");
-                });
-
-            modelBuilder.Entity("Prime.Models.AccessTokenRemoteAccessSite", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("EnrolmentCertificateAccessTokenId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("SiteId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolmentCertificateAccessTokenId");
-
-                    b.HasIndex("SiteId");
-
-                    b.ToTable("AccessTokenRemoteAccessSite");
                 });
 
             modelBuilder.Entity("Prime.Models.Address", b =>
@@ -1545,19 +1513,19 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 1,
                             LicenseCode = 87,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
                             LicenseCode = 88,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 1,
                             LicenseCode = 89,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -1579,12 +1547,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            CollegeCode = 1,
-                            LicenseCode = 180,
-                            Discontinued = false
-                        },
-                        new
-                        {
                             CollegeCode = 2,
                             LicenseCode = 25,
                             Discontinued = false
@@ -1593,7 +1555,7 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 2,
                             LicenseCode = 26,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -1617,13 +1579,13 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 2,
                             LicenseCode = 30,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 2,
                             LicenseCode = 31,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -1635,18 +1597,6 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 2,
                             LicenseCode = 178,
-                            Discontinued = true
-                        },
-                        new
-                        {
-                            CollegeCode = 2,
-                            LicenseCode = 181,
-                            Discontinued = false
-                        },
-                        new
-                        {
-                            CollegeCode = 2,
-                            LicenseCode = 182,
                             Discontinued = false
                         },
                         new
@@ -1668,7 +1618,7 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 34,
                             CollegeLicenseGroupingCode = 2,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -1689,7 +1639,7 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 37,
                             CollegeLicenseGroupingCode = 2,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -1731,7 +1681,7 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 43,
                             CollegeLicenseGroupingCode = 3,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -1773,7 +1723,7 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 49,
                             CollegeLicenseGroupingCode = 4,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -1801,7 +1751,7 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 54,
                             CollegeLicenseGroupingCode = 1,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -1843,14 +1793,14 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 63,
                             CollegeLicenseGroupingCode = 5,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 69,
                             CollegeLicenseGroupingCode = 5,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -2835,9 +2785,6 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneExtension")
                         .HasColumnType("text");
 
                     b.Property<int?>("PhysicalAddressId")
@@ -6190,7 +6137,7 @@ namespace Prime.Migrations
 
                     b.ToTable("HealthAuthorityContact");
 
-                    b.HasDiscriminator().HasValue("HealthAuthorityContact");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("HealthAuthorityContact");
 
                     b.UseTphMappingStrategy();
                 });
@@ -7014,12 +6961,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 180,
-                            Name = "Associate",
-                            Weight = 28
-                        },
-                        new
-                        {
                             Code = 89,
                             Name = "USA Certified",
                             Weight = 29
@@ -7106,18 +7047,6 @@ namespace Prime.Migrations
                         {
                             Code = 68,
                             Name = "Temporary Pharmacy Technician",
-                            Weight = 80
-                        },
-                        new
-                        {
-                            Code = 181,
-                            Name = "Provisional Pharmacist",
-                            Weight = 80
-                        },
-                        new
-                        {
-                            Code = 182,
-                            Name = "Provisional Pharmacy Technician",
                             Weight = 80
                         },
                         new
@@ -14039,114 +13968,6 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
-                        },
-                        new
-                        {
-                            Id = 379,
-                            AllowRequestRemoteAccess = true,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2025, 9, 11, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 180,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            Multijurisdictional = false,
-                            NamedInImReg = true,
-                            Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 380,
-                            AllowRequestRemoteAccess = true,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2026, 6, 23, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 181,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Multijurisdictional = false,
-                            NamedInImReg = false,
-                            Prefix = "P1",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 381,
-                            AllowRequestRemoteAccess = true,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2026, 6, 23, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 182,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Multijurisdictional = false,
-                            NamedInImReg = false,
-                            Prefix = "T9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 382,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2026, 6, 24, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 33,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Multijurisdictional = false,
-                            NamedInImReg = false,
-                            NonPrescribingPrefix = "RX",
-                            Prefix = "R9",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 383,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2026, 6, 24, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 40,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Multijurisdictional = false,
-                            NamedInImReg = false,
-                            NonPrescribingPrefix = "RX",
-                            Prefix = "R9",
-                            PrescriberIdType = 1,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 384,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2026, 6, 24, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 46,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Multijurisdictional = false,
-                            NamedInImReg = false,
-                            NonPrescribingPrefix = "YX",
-                            Prefix = "Y9",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
                         });
                 });
 
@@ -14304,9 +14125,6 @@ namespace Prime.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset?>("ArchivedDate")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("Completed")
                         .HasColumnType("boolean");
@@ -14700,61 +14518,6 @@ namespace Prime.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("PharmanetTransactionLog");
-                });
-
-            modelBuilder.Entity("Prime.Models.PharmanetTransactionLogArchive", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("CollegePrefix")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LocationIpAddress")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PharmacyId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PractitionerId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ProviderSoftwareId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ProviderSoftwareVersion")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SourceIpAddress")
-                        .HasColumnType("text");
-
-                    b.Property<long>("TransactionId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("TransactionOutcome")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TransactionSubType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TransactionType")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("TxDateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PharmanetTransactionLogArchive");
                 });
 
             modelBuilder.Entity("Prime.Models.PharmanetTransactionLogTemp", b =>
@@ -19115,7 +18878,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2022, 12, 17, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             SelfDeclarationTypeCode = 4,
-                            Text = "Has an employer ever <u>disciplined you</u>, or <u>terminated your employment</u>, for <u>a matter involving an “unlawful or improper action”</u>?  Has a contract for your services ever been terminated <u>for a matter involving an “unlawful or improper action”</u>?",
+                            Text = "Has an employer ever disciplined you, or terminated your employment, for <u>a matter involving an “unlawful or improper action”</u>?  Has a contract for your services ever been terminated <u>for a matter involving an “unlawful or improper action”</u>?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -19127,7 +18890,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2022, 12, 17, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             SelfDeclarationTypeCode = 3,
-                            Text = "Has your access to <u>PharmaNet</u> or <u>any other health information system</u>, whether or not electronic and whether or not in British Columbia or another jurisdiction, been <u>suspended or cancelled for a matter involving an “unlawful or improper action”</u>?",
+                            Text = "Has your access to <u>PharmaNet</u> or <u>any other health information system</u>, whether or not electronic and whether or not in British Columbia or another jurisdiction, been suspended or cancelled <u>for a matter involving an “unlawful or improper action”</u>?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -19140,18 +18903,6 @@ namespace Prime.Migrations
                             EffectiveDate = new DateTimeOffset(new DateTime(2023, 8, 10, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             SelfDeclarationTypeCode = 5,
                             Text = "Are you, or have you ever been, <u>disciplined, suspended, or expelled</u>, whether by order or with consent, by Orthotics Prosthetics Canada or a similar organization in another jurisdiction <u>for a matter involving an “unlawful or improper action”</u>?",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CareSettingCodeStr = "1,2,3,4",
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTimeOffset(new DateTime(2026, 4, 9, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            SelfDeclarationTypeCode = 2,
-                            Text = "Are you, or have you ever been, subject to the imposition, whether by order or with consent, of <u>prohibitions, limits or conditions on your practice of a health profession:</u> <ol style='list-style-type: lower-alpha;' class='mb-0'><li>in British Columbia, under the Health Professions and Occupations Act, the Health Professions Act or the Pharmacy Operations and Drug Scheduling Act, or</li><li>in any other jurisdiction, by a body that regulates a health profession in that jurisdiction</li></ol><u>for a matter involving an “unlawful or improper action”</u>?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -19236,9 +18987,6 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<bool>("Flagged")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("HasBeenApproved")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsNew")
@@ -20298,23 +20046,6 @@ namespace Prime.Migrations
                     b.Navigation("Adjudicator");
 
                     b.Navigation("Enrollee");
-                });
-
-            modelBuilder.Entity("Prime.Models.AccessTokenRemoteAccessSite", b =>
-                {
-                    b.HasOne("Prime.Models.EnrolmentCertificateAccessToken", null)
-                        .WithMany("RemoteAccessSites")
-                        .HasForeignKey("EnrolmentCertificateAccessTokenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.Site", "RemoteAccessSite")
-                        .WithMany()
-                        .HasForeignKey("SiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RemoteAccessSite");
                 });
 
             modelBuilder.Entity("Prime.Models.Address", b =>
@@ -21749,11 +21480,6 @@ namespace Prime.Migrations
                     b.Navigation("EnrolleeNotification");
 
                     b.Navigation("EnrolmentStatusReference");
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolmentCertificateAccessToken", b =>
-                {
-                    b.Navigation("RemoteAccessSites");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolmentStatus", b =>

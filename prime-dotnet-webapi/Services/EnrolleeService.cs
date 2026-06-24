@@ -1513,5 +1513,16 @@ namespace Prime.Services
                 .Where(a => a.AcceptedDate != null)
                 .Select(a => a.ExpiryDate).FirstOrDefault() < DateTimeOffset.UtcNow;
         }
+
+        public async Task<List<Enrollee>> GetPossibleDuplicate(Enrollee enrollee)
+        {
+            return await _context.Enrollees.Where(e =>
+                e.Id != enrollee.Id &&
+                e.DateOfBirth == enrollee.DateOfBirth &&
+                ((e.FirstName == enrollee.FirstName && e.LastName == enrollee.LastName) ||
+                (e.Email == enrollee.Email) ||
+                (e.Phone == enrollee.Phone))
+                ).ToListAsync();
+        }
     }
 }

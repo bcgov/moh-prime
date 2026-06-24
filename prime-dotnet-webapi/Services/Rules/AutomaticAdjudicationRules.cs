@@ -478,4 +478,32 @@ namespace Prime.Services.Rules
             return Task.FromResult(true);
         }
     }
+
+    public class PossibleDuplicateRule : AutomaticAdjudicationRule
+    {
+        private readonly IEnrolleeService _enrolleeService;
+        public PossibleDuplicateRule(
+            IEnrolleeService enrolleeService)
+        {
+            _enrolleeService = enrolleeService;
+        }
+
+        public override async Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            var possibleDuplicate = await _enrolleeService.GetPossibleDuplicate(enrollee);
+            if (possibleDuplicate.Count() > 0)
+            {
+                var duplicateStr = "";
+                foreach (var d in possibleDuplicate)
+                {
+                    duplicateStr += $"Enrollee ID: {d.Id + 1000}, First Name: {d.FirstName}, Date Of Birth: {d.DateOfBirth:dd MMM, yyyy}, Last Name: {d.LastName}, Email: {d.Email}, Phone: {d.Phone} ";
+                }
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.PossibleDuplicate, $"Possible duplicate - {duplicateStr}");
+
+                return false;
+            }
+
+            return true;
+        }
+    }
 }
