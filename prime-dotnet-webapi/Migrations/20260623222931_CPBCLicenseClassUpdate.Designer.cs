@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -11,9 +12,11 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260623222931_CPBCLicenseClassUpdate")]
+    partial class CPBCLicenseClassUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1668,7 +1671,7 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 34,
                             CollegeLicenseGroupingCode = 2,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -1689,7 +1692,7 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 37,
                             CollegeLicenseGroupingCode = 2,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -1731,7 +1734,7 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 43,
                             CollegeLicenseGroupingCode = 3,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -1773,7 +1776,7 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 49,
                             CollegeLicenseGroupingCode = 4,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -1801,7 +1804,7 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 54,
                             CollegeLicenseGroupingCode = 1,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -1843,14 +1846,14 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 63,
                             CollegeLicenseGroupingCode = 5,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 69,
                             CollegeLicenseGroupingCode = 5,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -14090,63 +14093,6 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
-                        },
-                        new
-                        {
-                            Id = 382,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2026, 6, 24, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 33,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Multijurisdictional = false,
-                            NamedInImReg = false,
-                            NonPrescribingPrefix = "RX",
-                            Prefix = "R9",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 383,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2026, 6, 24, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 40,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Multijurisdictional = false,
-                            NamedInImReg = false,
-                            NonPrescribingPrefix = "RX",
-                            Prefix = "R9",
-                            PrescriberIdType = 1,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 384,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2026, 6, 24, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 46,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Multijurisdictional = false,
-                            NamedInImReg = false,
-                            NonPrescribingPrefix = "YX",
-                            Prefix = "Y9",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
                         });
                 });
 
@@ -19727,11 +19673,6 @@ namespace Prime.Migrations
                         {
                             Code = 22,
                             Name = "Enrollee has unlisted (typically non-BC) licences"
-                        },
-                        new
-                        {
-                            Code = 23,
-                            Name = "Enrollee has selected 4 health authorities or more"
                         });
                 });
 

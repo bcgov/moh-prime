@@ -478,4 +478,20 @@ namespace Prime.Services.Rules
             return Task.FromResult(true);
         }
     }
+
+
+    public class MultipleHealthAuthorityRule : AutomaticAdjudicationRule
+    {
+        public override Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.EnrolleeHealthAuthorities.Count() >= 4 && !enrollee.AlwaysManual)
+            {
+                enrollee.AlwaysManual = true;
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.MultipleHealthAuthorities, $"Enrollee has selected {enrollee.EnrolleeHealthAuthorities.Count()} health authorities.");
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
+        }
+    }
 }
