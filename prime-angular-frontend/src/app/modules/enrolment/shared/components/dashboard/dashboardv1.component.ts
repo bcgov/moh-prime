@@ -35,9 +35,10 @@ interface DashboardNavSectionItemV1 {
 }
 
 @Component({
-  selector: 'app-dashboardv1',
-  templateUrl: './dashboardv1.component.html',
-  styleUrls: ['./dashboardv1.component.scss']
+    selector: 'app-dashboardv1',
+    templateUrl: './dashboardv1.component.html',
+    styleUrls: ['./dashboardv1.component.scss'],
+    standalone: false
 })
 export class DashboardV1Component implements OnInit {
   @ViewChild('sidenav') public sideNav: MatSidenav;

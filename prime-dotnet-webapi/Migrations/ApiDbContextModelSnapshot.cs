@@ -1413,13 +1413,13 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 1,
                             LicenseCode = 8,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 1,
                             LicenseCode = 9,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -1443,13 +1443,13 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 1,
                             LicenseCode = 179,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 1,
                             LicenseCode = 13,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -1585,6 +1585,18 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            CollegeCode = 1,
+                            LicenseCode = 183,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 1,
+                            LicenseCode = 184,
+                            Discontinued = false
+                        },
+                        new
+                        {
                             CollegeCode = 2,
                             LicenseCode = 25,
                             Discontinued = false
@@ -1593,7 +1605,7 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 2,
                             LicenseCode = 26,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -1617,13 +1629,13 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 2,
                             LicenseCode = 30,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 2,
                             LicenseCode = 31,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -1635,6 +1647,18 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 2,
                             LicenseCode = 178,
+                            Discontinued = true
+                        },
+                        new
+                        {
+                            CollegeCode = 2,
+                            LicenseCode = 181,
+                            Discontinued = false
+                        },
+                        new
+                        {
+                            CollegeCode = 2,
+                            LicenseCode = 182,
                             Discontinued = false
                         },
                         new
@@ -1656,7 +1680,7 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 34,
                             CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -1677,7 +1701,7 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 37,
                             CollegeLicenseGroupingCode = 2,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -1719,7 +1743,7 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 43,
                             CollegeLicenseGroupingCode = 3,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -1761,7 +1785,7 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 49,
                             CollegeLicenseGroupingCode = 4,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -1789,7 +1813,7 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 54,
                             CollegeLicenseGroupingCode = 1,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -1831,14 +1855,14 @@ namespace Prime.Migrations
                             CollegeCode = 3,
                             LicenseCode = 63,
                             CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
                             CollegeCode = 3,
                             LicenseCode = 69,
                             CollegeLicenseGroupingCode = 5,
-                            Discontinued = false
+                            Discontinued = true
                         },
                         new
                         {
@@ -7044,6 +7068,18 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            Code = 183,
+                            Name = "Restricted - Family",
+                            Weight = 35
+                        },
+                        new
+                        {
+                            Code = 184,
+                            Name = "Restricted - Specialty",
+                            Weight = 36
+                        },
+                        new
+                        {
                             Code = 25,
                             Name = "Full Pharmacist",
                             Weight = 10
@@ -7094,6 +7130,18 @@ namespace Prime.Migrations
                         {
                             Code = 68,
                             Name = "Temporary Pharmacy Technician",
+                            Weight = 80
+                        },
+                        new
+                        {
+                            Code = 181,
+                            Name = "Provisional Pharmacist",
+                            Weight = 80
+                        },
+                        new
+                        {
+                            Code = 182,
+                            Name = "Provisional Pharmacy Technician",
                             Weight = 80
                         },
                         new
@@ -14032,6 +14080,235 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
+                        },
+                        new
+                        {
+                            Id = 380,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 6, 23, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 181,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = false,
+                            Prefix = "P1",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 381,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 6, 23, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 182,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = false,
+                            Prefix = "T9",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 382,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 6, 24, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 33,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = false,
+                            NonPrescribingPrefix = "RX",
+                            Prefix = "R9",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 383,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 6, 24, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 40,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = false,
+                            NonPrescribingPrefix = "RX",
+                            Prefix = "R9",
+                            PrescriberIdType = 1,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 384,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 6, 24, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 46,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = false,
+                            NonPrescribingPrefix = "YX",
+                            Prefix = "Y9",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 385,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 5,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 386,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 6,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 387,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 183,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 388,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 184,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 389,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 14,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 390,
+                            AllowRequestRemoteAccess = true,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 6, 25, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 15,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = true,
+                            Prefix = "91",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 391,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 6, 24, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 53,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = false,
+                            Prefix = "L9",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 392,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 6, 24, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 61,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = false,
+                            Prefix = "98",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
                         });
                 });
 
@@ -19000,7 +19277,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2022, 12, 17, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             SelfDeclarationTypeCode = 4,
-                            Text = "Has an employer ever disciplined you, or terminated your employment, for <u>a matter involving an “unlawful or improper action”</u>?  Has a contract for your services ever been terminated <u>for a matter involving an “unlawful or improper action”</u>?",
+                            Text = "Has an employer ever <u>disciplined you</u>, or <u>terminated your employment</u>, for <u>a matter involving an “unlawful or improper action”</u>?  Has a contract for your services ever been terminated <u>for a matter involving an “unlawful or improper action”</u>?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -19012,7 +19289,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2022, 12, 17, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             SelfDeclarationTypeCode = 3,
-                            Text = "Has your access to <u>PharmaNet</u> or <u>any other health information system</u>, whether or not electronic and whether or not in British Columbia or another jurisdiction, been suspended or cancelled <u>for a matter involving an “unlawful or improper action”</u>?",
+                            Text = "Has your access to <u>PharmaNet</u> or <u>any other health information system</u>, whether or not electronic and whether or not in British Columbia or another jurisdiction, been <u>suspended or cancelled for a matter involving an “unlawful or improper action”</u>?",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -19121,6 +19398,9 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<bool>("Flagged")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("HasBeenApproved")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsNew")
@@ -19609,6 +19889,11 @@ namespace Prime.Migrations
                         {
                             Code = 22,
                             Name = "Enrollee has unlisted (typically non-BC) licences"
+                        },
+                        new
+                        {
+                            Code = 23,
+                            Name = "Enrollee has selected 4 health authorities or more"
                         });
                 });
 

@@ -3,9 +3,10 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-contextual-enrollee-notification',
-  templateUrl: './contextual-enrollee-notification.component.html',
-  styleUrls: ['./contextual-enrollee-notification.component.scss']
+    selector: 'app-contextual-enrollee-notification',
+    templateUrl: './contextual-enrollee-notification.component.html',
+    styleUrls: ['./contextual-enrollee-notification.component.scss'],
+    standalone: false
 })
 export class ContextualEnrolleeNotificationComponent implements OnInit {
   @Input() public enrolleeId: number;

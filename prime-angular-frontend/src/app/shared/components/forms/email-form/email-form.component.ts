@@ -6,9 +6,10 @@ import { ViewportService } from '@core/services/viewport.service';
 
 import { NextStepsFormState } from '@paper-enrolment/pages/next-steps-page/next-steps-form-state.class';
 @Component({
-  selector: 'app-email-form',
-  templateUrl: './email-form.component.html',
-  styleUrls: ['./email-form.component.scss']
+    selector: 'app-email-form',
+    templateUrl: './email-form.component.html',
+    styleUrls: ['./email-form.component.scss'],
+    standalone: false
 })
 export class EmailFormComponent implements OnInit {
 

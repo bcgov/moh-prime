@@ -7,8 +7,9 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { PrimeEnrolmentAccessComponent } from './prime-enrolment-access.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PrimeEnrolmentAccessComponent', () => {
   let component: PrimeEnrolmentAccessComponent;
@@ -16,23 +17,22 @@ describe('PrimeEnrolmentAccessComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
+    declarations: [PrimeEnrolmentAccessComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
         MatDialogModule,
         ReactiveFormsModule,
-        NgxMaterialModule,
-        HttpClientTestingModule,
-      ],
-      declarations: [PrimeEnrolmentAccessComponent],
-      providers: [
+        NgxMaterialModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
-        CapitalizePipe
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+        CapitalizePipe,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

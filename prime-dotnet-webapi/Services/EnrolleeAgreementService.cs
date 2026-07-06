@@ -66,6 +66,7 @@ namespace Prime.Services
             var agreements = await _context.Agreements
                 .AsNoTracking()
                 .Include(at => at.SignedAgreement)
+                .Include(at => at.AgreementVersion)
                 .Where(at => at.EnrolleeId == enrolleeId)
                 .OrderByDescending(at => at.CreatedDate)
                 .If(filters.OnlyLatest, q => q.Take(1))

@@ -18,7 +18,7 @@ describe('PartyTypePipe', () => {
   });
 
   it('should not fail when passed a unknown party type', () => {
-    const result = pipe.transform(0);
+    const result = pipe.transform(0 as PartyTypeEnum);
     expect(result).toBe('');
   });
 });

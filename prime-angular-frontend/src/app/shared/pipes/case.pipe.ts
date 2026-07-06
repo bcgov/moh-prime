@@ -3,7 +3,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 export type CaseType = 'snake' | 'kebab' | 'camel' | 'pascal' | 'space';
 
 @Pipe({
-  name: 'case'
+    name: 'case',
+    standalone: false
 })
 export class CasePipe implements PipeTransform {
   public transform(value: string, fromCase: CaseType, toCase: CaseType): string {

@@ -47,6 +47,8 @@ namespace Prime.Configuration.Database
                     new License { Code = 65, Weight = 32, Name = "Educational - Podiatric Surgeon Student (Elective)"  },
                     new License { Code = 66, Weight = 33, Name = "Educational - Podiatric Surgeon Resident (Elective)" },
                     new License { Code = 67, Weight = 34, Name = "Conditional - Podiatric Surgeon Disciplined"         },
+                    new License { Code = 183, Weight = 35, Name = "Restricted - Family"                                },
+                    new License { Code = 184, Weight = 36, Name = "Restricted - Specialty"                             },
 
                     // Pharmacy
                     new License { Code = 25, Weight = 10, Name = "Full Pharmacist"                    },
@@ -58,6 +60,8 @@ namespace Prime.Configuration.Database
                     new License { Code = 29, Weight = 60, Name = "Pharmacy Technician"                },
                     new License { Code = 31, Weight = 70, Name = "Non-Practicing Pharmacy Technician" },
                     new License { Code = 68, Weight = 80, Name = "Temporary Pharmacy Technician"      },
+                    new License { Code = 181, Weight = 80, Name = "Provisional Pharmacist"            },
+                    new License { Code = 182, Weight = 80, Name = "Provisional Pharmacy Technician"   },
 
                     // Nursing
                     new License { Code = 47,  Weight = 1,  Name = "Practicing Nurse Practitioner"                          },

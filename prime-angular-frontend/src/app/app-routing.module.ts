@@ -6,7 +6,6 @@ import { AccessDeniedComponent } from '@lib/modules/root-routes/components/acces
 import { MaintenanceComponent } from '@lib/modules/root-routes/components/maintenance/maintenance.component';
 import { PageNotFoundComponent } from '@lib/modules/root-routes/components/page-not-found/page-not-found.component';
 import { HelpComponent } from '@lib/modules/root-routes/components/help/help.component';
-import { UnderagedComponent } from '@lib/modules/root-routes/components/underaged/underaged.component';
 
 import { AuthRoutes } from '@auth/auth.routes';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -19,6 +18,7 @@ import { SatEformsRoutes } from '@sat/sat-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+import { NotEligibleComponent } from '@lib/modules/root-routes/components/not-eligible/not-eligible.component';
 
 const routes: Routes = [
   {
@@ -70,9 +70,16 @@ const routes: Routes = [
   },
   {
     path: AppRoutes.UNDERAGED,
-    component: UnderagedComponent,
+    component: NotEligibleComponent,
     data: {
       title: 'Underaged'
+    }
+  },
+  {
+    path: AppRoutes.IDENTITY_INSURANCE_LEVEL,
+    component: NotEligibleComponent,
+    data: {
+      title: 'Identity Insurance Level Not Met'
     }
   },
   {
@@ -110,4 +117,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { enableTracing: false })],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

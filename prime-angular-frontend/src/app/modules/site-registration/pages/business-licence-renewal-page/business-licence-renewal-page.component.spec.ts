@@ -2,7 +2,7 @@ import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/t
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { MockCommunitySiteService } from 'test/mocks/mock-community-site.service';
 
@@ -11,6 +11,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { BusinessLicenceRenewalPageComponent } from './business-licence-renewal-page.component';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('BusinessLicenceRenewalPageComponent', () => {
   let component: BusinessLicenceRenewalPageComponent;
@@ -18,28 +19,27 @@ describe('BusinessLicenceRenewalPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        ReactiveFormsModule,
-        NgxMaterialModule
-      ],
-      declarations: [
+    declarations: [
         BusinessLicenceRenewalPageComponent
-      ],
-      providers: [
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
+        ReactiveFormsModule,
+        NgxMaterialModule],
+    providers: [
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: SiteService,
-          useClass: MockCommunitySiteService
+            provide: SiteService,
+            useClass: MockCommunitySiteService
         },
-        SiteFormStateService
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    }).compileComponents();
+        SiteFormStateService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   }));
 
   beforeEach(inject(

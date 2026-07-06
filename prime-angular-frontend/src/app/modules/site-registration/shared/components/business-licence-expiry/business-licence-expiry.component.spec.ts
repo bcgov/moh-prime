@@ -1,4 +1,4 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -17,6 +17,7 @@ import { MockPermissionService } from 'test/mocks/mock-permission.service';
 
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { BusinessLicenceExpiryComponent } from './business-licence-expiry.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('BusinessLicenceExpiryComponent', () => {
   let component: BusinessLicenceExpiryComponent;
@@ -24,36 +25,35 @@ describe('BusinessLicenceExpiryComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
+    declarations: [BusinessLicenceExpiryComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
         NgxMaterialModule,
         BrowserAnimationsModule,
         MatInputModule,
         ReactiveFormsModule,
         MatDatepickerModule,
         NgxMaskDirective,
-        NgxMaskPipe
-      ],
-      providers: [
+        NgxMaskPipe],
+    providers: [
         KeycloakService,
         {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
+            provide: APP_CONFIG,
+            useValue: APP_DI_CONFIG
         },
         {
-          provide: AuthService,
-          useClass: MockAuthService
+            provide: AuthService,
+            useClass: MockAuthService
         },
         {
-          provide: PermissionService,
-          useClass: MockPermissionService
+            provide: PermissionService,
+            useClass: MockPermissionService
         },
-        provideNgxMask()
-      ],
-      declarations: [BusinessLicenceExpiryComponent],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
+        provideNgxMask(),
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   }));
 

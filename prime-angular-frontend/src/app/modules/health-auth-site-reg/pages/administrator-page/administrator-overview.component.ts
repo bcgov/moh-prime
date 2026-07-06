@@ -8,8 +8,8 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 import { AdministratorForm } from './administrator-form.model';
 
 @Component({
-  selector: 'app-administrator-overview',
-  template: `
+    selector: 'app-administrator-overview',
+    template: `
     <app-overview-section title="PharmaNet Administrator"
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="HealthAuthSiteRegRoutes.ADMINISTRATOR"
@@ -25,8 +25,9 @@ import { AdministratorForm } from './administrator-form.model';
                         [party]="technicalSupportContact"></app-party-review>
     </app-overview-section>
   `,
-  styles: [],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AdministratorOverviewComponent extends AbstractOverview implements OnInit {
   @Input() administrator: AdministratorForm;

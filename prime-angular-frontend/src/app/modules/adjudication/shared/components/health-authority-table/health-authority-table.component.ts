@@ -14,9 +14,10 @@ import { Role } from '@auth/shared/enum/role.enum';
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 
 @Component({
-  selector: 'app-health-authority-table',
-  templateUrl: './health-authority-table.component.html',
-  styleUrls: ['./health-authority-table.component.scss']
+    selector: 'app-health-authority-table',
+    templateUrl: './health-authority-table.component.html',
+    styleUrls: ['./health-authority-table.component.scss'],
+    standalone: false
 })
 export class HealthAuthorityTableComponent implements OnInit, OnChanges {
   @Input() public sites: (HealthAuthorityRow | HealthAuthoritySiteAdminList)[];

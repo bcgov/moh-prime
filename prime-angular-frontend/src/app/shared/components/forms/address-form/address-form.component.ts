@@ -11,9 +11,10 @@ import { Address, AddressLine } from '@lib/models/address.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 @Component({
-  selector: 'app-address-form',
-  templateUrl: './address-form.component.html',
-  styleUrls: ['./address-form.component.scss']
+    selector: 'app-address-form',
+    templateUrl: './address-form.component.html',
+    styleUrls: ['./address-form.component.scss'],
+    standalone: false
 })
 export class AddressFormComponent implements OnInit {
   /**

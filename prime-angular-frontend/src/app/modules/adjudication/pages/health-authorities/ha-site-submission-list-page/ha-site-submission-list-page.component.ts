@@ -3,9 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
 @Component({
-  selector: 'app-ha-site-submission-list-page',
-  templateUrl: './ha-site-submission-list-page.component.html',
-  styleUrls: ['./ha-site-submission-list-page.component.scss']
+    selector: 'app-ha-site-submission-list-page',
+    templateUrl: './ha-site-submission-list-page.component.html',
+    styleUrls: ['./ha-site-submission-list-page.component.scss'],
+    standalone: false
 })
 export class HaSiteSubmissionListPageComponent implements OnInit {
   public hasActions: boolean;

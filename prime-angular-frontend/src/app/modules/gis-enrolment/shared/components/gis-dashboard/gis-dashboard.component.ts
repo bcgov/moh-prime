@@ -8,9 +8,10 @@ import { DashboardHeaderConfig } from '@lib/modules/dashboard/components/dashboa
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 
 @Component({
-  selector: 'app-gis-dashboard',
-  templateUrl: './gis-dashboard.component.html',
-  styleUrls: ['./gis-dashboard.component.scss']
+    selector: 'app-gis-dashboard',
+    templateUrl: './gis-dashboard.component.html',
+    styleUrls: ['./gis-dashboard.component.scss'],
+    standalone: false
 })
 export class GisDashboardComponent implements OnInit {
   public dashboardHeaderConfig: DashboardHeaderConfig;

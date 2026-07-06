@@ -9,9 +9,10 @@ import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-adjudication-dashboard',
-  templateUrl: './adjudication-dashboard.component.html',
-  styleUrls: ['./adjudication-dashboard.component.scss']
+    selector: 'app-adjudication-dashboard',
+    templateUrl: './adjudication-dashboard.component.html',
+    styleUrls: ['./adjudication-dashboard.component.scss'],
+    standalone: false
 })
 export class AdjudicationDashboardComponent implements OnInit, IDashboard {
   public dashboardMenuItems: Observable<DashboardMenuItem[]>;

@@ -8,9 +8,10 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-options-form',
-  templateUrl: './options-form.component.html',
-  styleUrls: ['./options-form.component.scss']
+    selector: 'app-options-form',
+    templateUrl: './options-form.component.html',
+    styleUrls: ['./options-form.component.scss'],
+    standalone: false
 })
 export class OptionsFormComponent implements OnInit {
   /**

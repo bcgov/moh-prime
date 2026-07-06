@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UnderagedComponent } from './underaged.component';
+import { NotEligibleComponent } from './not-eligible.component';
 
-describe('UnderagedComponent', () => {
-  let component: UnderagedComponent;
-  let fixture: ComponentFixture<UnderagedComponent>;
+describe('NotEligibleComponent', () => {
+  let component: NotEligibleComponent;
+  let fixture: ComponentFixture<NotEligibleComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [UnderagedComponent],
+      declarations: [NotEligibleComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UnderagedComponent);
+    fixture = TestBed.createComponent(NotEligibleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

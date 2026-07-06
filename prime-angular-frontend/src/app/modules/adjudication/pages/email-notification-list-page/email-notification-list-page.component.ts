@@ -11,9 +11,10 @@ import { EmailTemplateResourceService } from '@adjudication/shared/services/emai
 
 
 @Component({
-  selector: 'app-email-notification-list-page',
-  templateUrl: './email-notification-list-page.component.html',
-  styleUrls: ['./email-notification-list-page.component.scss']
+    selector: 'app-email-notification-list-page',
+    templateUrl: './email-notification-list-page.component.html',
+    styleUrls: ['./email-notification-list-page.component.scss'],
+    standalone: false
 })
 export class EmailNotificationListPageComponent implements OnInit {
   public templates: EmailTemplate[];

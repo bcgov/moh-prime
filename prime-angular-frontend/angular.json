@@ -15,12 +15,15 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/angular-frontend",
+            "outputPath": {
+              "base": "dist/angular-frontend"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "src/polyfills.ts"
+            ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
@@ -59,7 +62,12 @@
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src/scss"
-              ]
+              ],
+              "sass": {
+                "silenceDeprecations": [
+                  "import"
+                ]
+              }
             },
             "scripts": [
               "node_modules/tinymce/tinymce.min.js"
@@ -68,12 +76,11 @@
               "keycloak-js",
               "tus-js-client"
             ],
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "src/main.ts"
           },
           "configurations": {
             "es5": {
@@ -97,8 +104,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -121,13 +126,13 @@
           "options": {},
           "configurations": {
             "production": {
-              "browserTarget": "angular-frontend:build:production"
+              "buildTarget": "angular-frontend:build:production"
             },
             "es5": {
-              "browserTarget": "angular-frontend:build:es5"
+              "buildTarget": "angular-frontend:build:es5"
             },
             "development": {
-              "browserTarget": "angular-frontend:build:development"
+              "buildTarget": "angular-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -135,7 +140,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-frontend:build"
+            "buildTarget": "angular-frontend:build"
           }
         },
         "test": {

@@ -8,9 +8,10 @@ import { DialogOptions } from '../../dialog-options.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
-  selector: 'app-terms-of-access',
-  templateUrl: './terms-of-access.component.html',
-  styleUrls: ['./terms-of-access.component.scss']
+    selector: 'app-terms-of-access',
+    templateUrl: './terms-of-access.component.html',
+    styleUrls: ['./terms-of-access.component.scss'],
+    standalone: false
 })
 export class ChangeTermsOfAccessComponent implements OnInit {
   public enrollee: HttpEnrollee;

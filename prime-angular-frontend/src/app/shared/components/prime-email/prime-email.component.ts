@@ -4,7 +4,8 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 @Component({
   selector: 'app-prime-email',
   templateUrl: './prime-email.component.html',
-  styleUrls: ['./prime-email.component.scss']
+  styleUrls: ['./prime-email.component.scss'],
+  standalone: false
 })
 export class PrimeEmailComponent {
   constructor(
@@ -12,7 +13,7 @@ export class PrimeEmailComponent {
   ) { }
 
   public get primeEmail() {
-    return this.config.prime.email;
+    return this.config.prime.supportEmail;
   }
 
   public get primeEmailHref() {

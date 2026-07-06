@@ -9,9 +9,10 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 
 @Component({
-  selector: 'app-access-terms',
-  templateUrl: './access-terms.component.html',
-  styleUrls: ['./access-terms.component.scss']
+    selector: 'app-access-terms',
+    templateUrl: './access-terms.component.html',
+    styleUrls: ['./access-terms.component.scss'],
+    standalone: false
 })
 export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
   public dataSource: MatTableDataSource<EnrolleeAgreement>;

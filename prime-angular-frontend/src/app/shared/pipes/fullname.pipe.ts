@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'fullname'
+    name: 'fullname',
+    standalone: false
 })
 export class FullnamePipe implements PipeTransform {
   public transform(model: { firstName: string, lastName: string, [key: string]: any }): string {

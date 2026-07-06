@@ -10,9 +10,10 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 
 @Component({
-  selector: 'app-document-attachments',
-  templateUrl: './document-attachments.component.html',
-  styleUrls: ['./document-attachments.component.scss']
+    selector: 'app-document-attachments',
+    templateUrl: './document-attachments.component.html',
+    styleUrls: ['./document-attachments.component.scss'],
+    standalone: false
 })
 export class DocumentAttachmentsComponent extends AbstractOverview implements OnInit {
   @Input() public documents: BaseDocument[];
