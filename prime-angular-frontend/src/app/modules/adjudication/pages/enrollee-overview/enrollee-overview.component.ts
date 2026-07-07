@@ -27,10 +27,10 @@ import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-    selector: 'app-enrollee-overview',
-    templateUrl: './enrollee-overview.component.html',
-    styleUrls: ['./enrollee-overview.component.scss'],
-    standalone: false
+  selector: 'app-enrollee-overview',
+  templateUrl: './enrollee-overview.component.html',
+  styleUrls: ['./enrollee-overview.component.scss'],
+  standalone: false
 })
 export class EnrolleeOverviewComponent extends AdjudicationContainerComponent implements OnInit {
   public enrollee: HttpEnrollee;
@@ -144,6 +144,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       phone,
       phoneExtension,
       userProvidedGpid,
+      identityInsuranceLevel,
       ...remainder
     } = enrollee;
 
@@ -168,7 +169,8 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
         smsPhone,
         phone,
         phoneExtension,
-        userProvidedGpid
+        userProvidedGpid,
+        identityInsuranceLevel
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,

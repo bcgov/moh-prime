@@ -106,6 +106,7 @@ export class AuthService implements IAuthService {
     const city = token?.address?.locality;
     const postal = token?.address?.postal_code;
     const givenNames = token?.given_names;
+    const identityInsuranceLevel = token?.identity_assurance_level;
 
     const userId = token?.sub;
     const username = token?.preferred_username;  // Expecting e.g. gtcochh2vajdtodkby27kspv554dn4is@bcsc
@@ -133,6 +134,7 @@ export class AuthService implements IAuthService {
       dateOfBirth,
       verifiedAddress,
       email,
+      identityInsuranceLevel,
       ...claims
     } as BcscUser;
   }
