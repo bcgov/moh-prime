@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -11,9 +12,11 @@ using Prime;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260625182754_CPSBCLicenseClassUpdate")]
+    partial class CPSBCLicenseClassUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -6858,104 +6861,110 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 5,
-                            Name = "Provisional - Family",
+                            Code = 2,
+                            Name = "Full - Specialty",
                             Weight = 2
                         },
                         new
                         {
-                            Code = 18,
-                            Name = "Emergency - Family",
+                            Code = 5,
+                            Name = "Provisional - Family",
                             Weight = 3
-                        },
-                        new
-                        {
-                            Code = 90,
-                            Name = "Assessment - Family",
-                            Weight = 4
-                        },
-                        new
-                        {
-                            Code = 183,
-                            Name = "Restricted - Family",
-                            Weight = 5
-                        },
-                        new
-                        {
-                            Code = 2,
-                            Name = "Full - Specialty",
-                            Weight = 6
                         },
                         new
                         {
                             Code = 6,
                             Name = "Provisional - Specialty",
+                            Weight = 4
+                        },
+                        new
+                        {
+                            Code = 9,
+                            Name = "Conditional - Practice Setting",
+                            Weight = 5
+                        },
+                        new
+                        {
+                            Code = 8,
+                            Name = "Conditional - Practice Limitations",
+                            Weight = 6
+                        },
+                        new
+                        {
+                            Code = 10,
+                            Name = "Conditional - Disciplined",
                             Weight = 7
                         },
                         new
                         {
-                            Code = 19,
-                            Name = "Emergency - Specialty",
+                            Code = 22,
+                            Name = "Surgical Assistant",
                             Weight = 8
                         },
                         new
                         {
-                            Code = 91,
-                            Name = "Assessment - Specialty",
+                            Code = 16,
+                            Name = "Clinical Observership",
                             Weight = 9
-                        },
-                        new
-                        {
-                            Code = 184,
-                            Name = "Restricted - Specialty",
-                            Weight = 10
-                        },
-                        new
-                        {
-                            Code = 12,
-                            Name = "Educational - Postgraduate Resident",
-                            Weight = 11
-                        },
-                        new
-                        {
-                            Code = 179,
-                            Name = "Educational - Postgraduate Resident Clinical Associate",
-                            Weight = 12
-                        },
-                        new
-                        {
-                            Code = 13,
-                            Name = "Educational - Postgraduate Resident Elective",
-                            Weight = 13
-                        },
-                        new
-                        {
-                            Code = 14,
-                            Name = "Educational - Postgraduate Fellow",
-                            Weight = 14
-                        },
-                        new
-                        {
-                            Code = 15,
-                            Name = "Educational - Postgraduate Trainee",
-                            Weight = 15
-                        },
-                        new
-                        {
-                            Code = 11,
-                            Name = "Educational - Medical Student",
-                            Weight = 16
-                        },
-                        new
-                        {
-                            Code = 92,
-                            Name = "Certified Physician Assistant",
-                            Weight = 17
                         },
                         new
                         {
                             Code = 7,
                             Name = "Academic",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 4,
+                            Name = "Osteopathic",
+                            Weight = 11
+                        },
+                        new
+                        {
+                            Code = 3,
+                            Name = "Special",
+                            Weight = 12
+                        },
+                        new
+                        {
+                            Code = 17,
+                            Name = "Visitor",
+                            Weight = 13
+                        },
+                        new
+                        {
+                            Code = 12,
+                            Name = "Educational - Postgraduate Resident",
+                            Weight = 14
+                        },
+                        new
+                        {
+                            Code = 179,
+                            Name = "Educational - Postgraduate Resident Clinical Associate",
+                            Weight = 15
+                        },
+                        new
+                        {
+                            Code = 13,
+                            Name = "Educational - Postgraduate Resident Elective",
+                            Weight = 15
+                        },
+                        new
+                        {
+                            Code = 14,
+                            Name = "Educational - Postgraduate Fellow",
+                            Weight = 16
+                        },
+                        new
+                        {
+                            Code = 15,
+                            Name = "Educational - Postgraduate Trainee",
+                            Weight = 17
+                        },
+                        new
+                        {
+                            Code = 11,
+                            Name = "Educational - Medical Student",
                             Weight = 18
                         },
                         new
@@ -6966,117 +6975,111 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 180,
-                            Name = "Associate",
+                            Code = 20,
+                            Name = "Retired - Life",
                             Weight = 20
                         },
                         new
                         {
-                            Code = 16,
-                            Name = "Clinical Observership",
+                            Code = 90,
+                            Name = "Assessment - Family",
                             Weight = 21
                         },
                         new
                         {
-                            Code = 10,
-                            Name = "Conditional - Disciplined",
+                            Code = 91,
+                            Name = "Assessment - Specialty",
                             Weight = 22
-                        },
-                        new
-                        {
-                            Code = 4,
-                            Name = "Osteopathic",
-                            Weight = 23
-                        },
-                        new
-                        {
-                            Code = 20,
-                            Name = "Retired - Life",
-                            Weight = 24
-                        },
-                        new
-                        {
-                            Code = 3,
-                            Name = "Special",
-                            Weight = 25
-                        },
-                        new
-                        {
-                            Code = 22,
-                            Name = "Surgical Assistant",
-                            Weight = 26
-                        },
-                        new
-                        {
-                            Code = 17,
-                            Name = "Visitor",
-                            Weight = 27
-                        },
-                        new
-                        {
-                            Code = 59,
-                            Name = "Full - Podiatric Surgeon",
-                            Weight = 28
-                        },
-                        new
-                        {
-                            Code = 65,
-                            Name = "Educational - Podiatric Surgeon Student (Elective)",
-                            Weight = 29
-                        },
-                        new
-                        {
-                            Code = 66,
-                            Name = "Educational - Podiatric Surgeon Resident (Elective)",
-                            Weight = 30
-                        },
-                        new
-                        {
-                            Code = 67,
-                            Name = "Conditional - Podiatric Surgeon Disciplined",
-                            Weight = 31
-                        },
-                        new
-                        {
-                            Code = 9,
-                            Name = "Conditional - Practice Setting",
-                            Weight = 32
-                        },
-                        new
-                        {
-                            Code = 8,
-                            Name = "Conditional - Practice Limitations",
-                            Weight = 33
                         },
                         new
                         {
                             Code = 24,
                             Name = "Assessment",
-                            Weight = 34
+                            Weight = 23
+                        },
+                        new
+                        {
+                            Code = 18,
+                            Name = "Emergency - Family",
+                            Weight = 24
+                        },
+                        new
+                        {
+                            Code = 19,
+                            Name = "Emergency - Specialty",
+                            Weight = 25
                         },
                         new
                         {
                             Code = 21,
                             Name = "Temporarily Inactive",
-                            Weight = 34
+                            Weight = 26
                         },
                         new
                         {
                             Code = 87,
                             Name = "Associate - Acute Care",
-                            Weight = 35
+                            Weight = 27
                         },
                         new
                         {
                             Code = 88,
                             Name = "Associate - Community Primary Care",
-                            Weight = 36
+                            Weight = 28
+                        },
+                        new
+                        {
+                            Code = 180,
+                            Name = "Associate",
+                            Weight = 28
                         },
                         new
                         {
                             Code = 89,
                             Name = "USA Certified",
-                            Weight = 37
+                            Weight = 29
+                        },
+                        new
+                        {
+                            Code = 92,
+                            Name = "Certified Physician Assistant",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 59,
+                            Name = "Full - Podiatric Surgeon",
+                            Weight = 31
+                        },
+                        new
+                        {
+                            Code = 65,
+                            Name = "Educational - Podiatric Surgeon Student (Elective)",
+                            Weight = 32
+                        },
+                        new
+                        {
+                            Code = 66,
+                            Name = "Educational - Podiatric Surgeon Resident (Elective)",
+                            Weight = 33
+                        },
+                        new
+                        {
+                            Code = 67,
+                            Name = "Conditional - Podiatric Surgeon Disciplined",
+                            Weight = 34
+                        },
+                        new
+                        {
+                            Code = 183,
+                            Name = "Restricted - Family",
+                            Weight = 35
+                        },
+                        new
+                        {
+                            Code = 184,
+                            Name = "Restricted - Specialty",
+                            Weight = 36
                         },
                         new
                         {
@@ -7086,63 +7089,63 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 27,
-                            Name = "Temporary Pharmacist",
+                            Code = 26,
+                            Name = "Limited Pharmacist",
                             Weight = 20
-                        },
-                        new
-                        {
-                            Code = 181,
-                            Name = "Provisional Pharmacist",
-                            Weight = 30
                         },
                         new
                         {
                             Code = 28,
                             Name = "Student Pharmacist",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 27,
+                            Name = "Temporary Pharmacist",
                             Weight = 40
-                        },
-                        new
-                        {
-                            Code = 29,
-                            Name = "Pharmacy Technician",
-                            Weight = 50
-                        },
-                        new
-                        {
-                            Code = 68,
-                            Name = "Temporary Pharmacy Technician",
-                            Weight = 60
-                        },
-                        new
-                        {
-                            Code = 182,
-                            Name = "Provisional Pharmacy Technician",
-                            Weight = 70
-                        },
-                        new
-                        {
-                            Code = 26,
-                            Name = "Limited Pharmacist",
-                            Weight = 100
                         },
                         new
                         {
                             Code = 178,
                             Name = "Temporary Limited Pharmacist",
-                            Weight = 101
+                            Weight = 45
                         },
                         new
                         {
                             Code = 30,
                             Name = "Non-Practicing Pharmacist",
-                            Weight = 102
+                            Weight = 50
+                        },
+                        new
+                        {
+                            Code = 29,
+                            Name = "Pharmacy Technician",
+                            Weight = 60
                         },
                         new
                         {
                             Code = 31,
                             Name = "Non-Practicing Pharmacy Technician",
-                            Weight = 103
+                            Weight = 70
+                        },
+                        new
+                        {
+                            Code = 68,
+                            Name = "Temporary Pharmacy Technician",
+                            Weight = 80
+                        },
+                        new
+                        {
+                            Code = 181,
+                            Name = "Provisional Pharmacist",
+                            Weight = 80
+                        },
+                        new
+                        {
+                            Code = 182,
+                            Name = "Provisional Pharmacy Technician",
+                            Weight = 80
                         },
                         new
                         {
@@ -7152,21 +7155,21 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 51,
-                            Name = "Temporary Nurse Practitioner (Emergency)",
+                            Code = 48,
+                            Name = "Provisional Nurse Practitioner",
                             Weight = 2
                         },
                         new
                         {
-                            Code = 48,
-                            Name = "Provisional Nurse Practitioner",
-                            Weight = 3
+                            Code = 51,
+                            Name = "Temporary Nurse Practitioner (Emergency)",
+                            Weight = 4
                         },
                         new
                         {
                             Code = 49,
                             Name = "Non-Practicing Nurse Practitioner",
-                            Weight = 4
+                            Weight = 5
                         },
                         new
                         {
@@ -7176,44 +7179,44 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            Code = 33,
+                            Name = "Provisional Registered Nurse",
+                            Weight = 12
+                        },
+                        new
+                        {
                             Code = 39,
                             Name = "Temporary Registered Nurse (Emergency)",
-                            Weight = 12
+                            Weight = 13
                         },
                         new
                         {
                             Code = 175,
                             Name = "RN – Multijurisdictional",
-                            Weight = 13
-                        },
-                        new
-                        {
-                            Code = 33,
-                            Name = "Provisional Registered Nurse",
                             Weight = 14
-                        },
-                        new
-                        {
-                            Code = 40,
-                            Name = "Employed Student Nurse",
-                            Weight = 15
-                        },
-                        new
-                        {
-                            Code = 35,
-                            Name = "Practicing Licensed Graduate Nurse",
-                            Weight = 16
-                        },
-                        new
-                        {
-                            Code = 36,
-                            Name = "Provisional Licensed Graduate Nurse",
-                            Weight = 17
                         },
                         new
                         {
                             Code = 34,
                             Name = "Non-Practicing Registered Nurse",
+                            Weight = 15
+                        },
+                        new
+                        {
+                            Code = 40,
+                            Name = "Employed Student Nurse",
+                            Weight = 16
+                        },
+                        new
+                        {
+                            Code = 35,
+                            Name = "Practicing Licensed Graduate Nurse",
+                            Weight = 17
+                        },
+                        new
+                        {
+                            Code = 36,
+                            Name = "Provisional Licensed Graduate Nurse",
                             Weight = 18
                         },
                         new
@@ -7230,32 +7233,32 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            Code = 42,
+                            Name = "Provisional Registered Psychiatric Nurse",
+                            Weight = 22
+                        },
+                        new
+                        {
                             Code = 45,
                             Name = "Temporary Registered Psychiatric Nurse (Emergency)",
-                            Weight = 22
+                            Weight = 23
                         },
                         new
                         {
                             Code = 176,
                             Name = "RPN – Multijurisdictional",
-                            Weight = 23
-                        },
-                        new
-                        {
-                            Code = 42,
-                            Name = "Provisional Registered Psychiatric Nurse",
                             Weight = 24
-                        },
-                        new
-                        {
-                            Code = 46,
-                            Name = "Employed Student Psychiatric Nurse",
-                            Weight = 25
                         },
                         new
                         {
                             Code = 43,
                             Name = "Non-Practicing Registered Psychiatric Nurse",
+                            Weight = 25
+                        },
+                        new
+                        {
+                            Code = 46,
+                            Name = "Employed Student Psychiatric Nurse",
                             Weight = 26
                         },
                         new
@@ -7266,20 +7269,20 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            Code = 53,
+                            Name = "Provisional Licensed Practical Nurse",
+                            Weight = 32
+                        },
+                        new
+                        {
                             Code = 55,
                             Name = "Temporary Licensed Practical Nurse (Emergency)",
-                            Weight = 32
+                            Weight = 33
                         },
                         new
                         {
                             Code = 177,
                             Name = "LPN – Multijurisdictional",
-                            Weight = 33
-                        },
-                        new
-                        {
-                            Code = 53,
-                            Name = "Provisional Licensed Practical Nurse",
                             Weight = 34
                         },
                         new
@@ -7296,14 +7299,14 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 62,
-                            Name = "Temporary Midwife (Emergency)",
+                            Code = 61,
+                            Name = "Provisional Midwife",
                             Weight = 42
                         },
                         new
                         {
-                            Code = 61,
-                            Name = "Provisional Midwife",
+                            Code = 62,
+                            Name = "Temporary Midwife (Emergency)",
                             Weight = 43
                         },
                         new
@@ -9948,340 +9951,6 @@ namespace Prime.Migrations
                             Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "97",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 94,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 32,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "R9",
-                            PrescriberIdType = 1,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 95,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 33,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "R9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 96,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 34,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "R9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 97,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 39,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "R9",
-                            PrescriberIdType = 1,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 98,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 41,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "Y9",
-                            PrescriberIdType = 1,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 99,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 42,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "Y9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 100,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 43,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "Y9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 101,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 45,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "Y9",
-                            PrescriberIdType = 1,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 102,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 52,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "L9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 103,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 53,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "L9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 104,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 54,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "L9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 105,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 55,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "L9",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 106,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 60,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "98",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 107,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 61,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "98",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 108,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 63,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "98",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 109,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 62,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "98",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 110,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2022, 5, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 48,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            NamedInImReg = false,
-                            Prefix = "96",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false
-                        },
-                        new
-                        {
-                            Id = 89,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 70,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "95",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 90,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 71,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = true,
-                            Prefix = "94",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 91,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 72,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "94",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 92,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 73,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "94",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 93,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2019, 9, 16, 7, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 74,
-                            LicensedToProvideCare = true,
-                            Manual = false,
-                            NamedInImReg = false,
-                            Prefix = "94",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
@@ -14604,42 +14273,6 @@ namespace Prime.Migrations
                             Multijurisdictional = false,
                             NamedInImReg = true,
                             Prefix = "91",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 391,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2026, 6, 24, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 53,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Multijurisdictional = false,
-                            NamedInImReg = false,
-                            Prefix = "L9",
-                            PrescriberIdType = 2,
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true
-                        },
-                        new
-                        {
-                            Id = 392,
-                            AllowRequestRemoteAccess = false,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTime(2026, 6, 24, 8, 0, 0, 0, DateTimeKind.Utc),
-                            LicenseCode = 61,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Multijurisdictional = false,
-                            NamedInImReg = false,
-                            Prefix = "98",
-                            PrescriberIdType = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
@@ -20223,11 +19856,6 @@ namespace Prime.Migrations
                         {
                             Code = 22,
                             Name = "Enrollee has unlisted (typically non-BC) licences"
-                        },
-                        new
-                        {
-                            Code = 23,
-                            Name = "Enrollee has selected 4 health authorities or more"
                         });
                 });
 

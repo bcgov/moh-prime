@@ -521,6 +521,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
                         .ThenInclude(l => l.LicenseDetails)
+                .Include(e => e.EnrolleeHealthAuthorities)
                 .AsSplitQuery();
         }
     }
