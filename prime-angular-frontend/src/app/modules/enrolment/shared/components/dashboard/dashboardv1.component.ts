@@ -222,6 +222,7 @@ export class DashboardV1Component implements OnInit {
           }
         ]
       },
+      /* Remove PRIME History route temporarily
       {
         items: [
           {
@@ -236,7 +237,7 @@ export class DashboardV1Component implements OnInit {
               ? 'lock'
               : 'history',
             route: EnrolmentRoutes.ACCESS_TERMS,
-            showItem: false,
+            showItem: true,
             disabled: (
               !hasAcceptedAtLeastOneToa ||
               [
@@ -248,6 +249,7 @@ export class DashboardV1Component implements OnInit {
           }
         ]
       },
+      */
     ];
   }
 
