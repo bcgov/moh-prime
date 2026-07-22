@@ -452,9 +452,9 @@ export class AdjudicationResource {
       );
   }
 
-  public getSubmissionForAgreement(enrolleeId: number, agreementId: number)
+  public getSubmissionForAgreement(enrolleeId: number, submissionId: number)
     : Observable<HttpEnrolleeSubmission> {
-    return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}/submission`)
+    return this.apiResource.get(`enrollees/${enrolleeId}/submission/${submissionId}`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrolleeSubmission>) => response.result),
         tap((enrolleeSubmission: HttpEnrolleeSubmission) =>
