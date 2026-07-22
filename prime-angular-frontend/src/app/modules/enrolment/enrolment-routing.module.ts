@@ -195,6 +195,7 @@ const routes: Routes = [
         component: AbsenceManagementPageComponent,
         data: { title: 'Absence Management' }
       },
+      /* Remove PRIME History route temporarily
       {
         path: EnrolmentRoutes.ACCESS_TERMS,
         children: [
@@ -220,6 +221,7 @@ const routes: Routes = [
           }
         ]
       },
+      */
       {
         path: '', // Equivalent to `/` and alias for `overview`
         redirectTo: EnrolmentRoutes.OVERVIEW,
