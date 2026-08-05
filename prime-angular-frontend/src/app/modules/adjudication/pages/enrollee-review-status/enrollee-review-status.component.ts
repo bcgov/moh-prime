@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.model';
-import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
-
 @Component({
   selector: 'app-enrollee-review-status',
   templateUrl: './enrollee-review-status.component.html',

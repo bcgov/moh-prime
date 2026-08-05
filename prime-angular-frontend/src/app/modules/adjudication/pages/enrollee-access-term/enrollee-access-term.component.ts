@@ -6,7 +6,6 @@ import { Subscription } from 'rxjs';
 import { AbstractComponent } from '@shared/classes/abstract-component';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 
-import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 
 @Component({

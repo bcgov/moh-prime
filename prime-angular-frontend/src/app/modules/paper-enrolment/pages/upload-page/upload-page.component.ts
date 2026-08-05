@@ -19,7 +19,7 @@ import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@core/resources/paper-enrolment-resource.service';
 import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { UploadFormState } from './upload-form-state.class';
 
@@ -93,7 +93,7 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
       throw new Error('No enrollee ID was provided');
     }
 
-    this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
+    this.enrolmentResource.getEnrolleeById(enrolleeId)
       .subscribe(({ assignedTOAType }: HttpEnrollee) => {
         if (assignedTOAType) {
           this.formState.patchValue({ assignedTOAType });

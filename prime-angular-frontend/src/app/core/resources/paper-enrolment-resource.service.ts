@@ -26,7 +26,7 @@ import { SelfDeclarationDocument } from '@shared/models/self-declaration-documen
 
 import { DemographicForm } from '@paper-enrolment/pages/demographic-page/demographic-form.model';
 import { CareSettingForm } from '@paper-enrolment/pages/care-setting-page/care-setting-form.model';
-import { UnlistedCertification } from '../models/unlisted-certification.model';
+import { UnlistedCertification } from '../../modules/paper-enrolment/shared/models/unlisted-certification.model';
 import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
 
 @Injectable({
@@ -39,45 +39,6 @@ export class PaperEnrolmentResource {
     private toastService: ToastService,
     private logger: ConsoleLoggerService
   ) { }
-
-  public getEnrolleeById(enrolleeId: number): Observable<HttpEnrollee> {
-    return forkJoin({
-      enrollee: this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`)
-        .pipe(map((response: ApiHttpResponse<HttpEnrollee>) => response.result)),
-      enrolleeCareSettings: this.apiResource.get<CareSetting>(`enrollees/${enrolleeId}/care-settings`)
-        .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
-      certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`)
-        .pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
-      enrolleeDeviceProviders: this.apiResource.get<EnrolleeDeviceProvider[]>(`enrollees/${enrolleeId}/device-providers`)
-        .pipe(map((response: ApiHttpResponse<EnrolleeDeviceProvider[]>) => response.result)),
-      unlistedCertifications: this.apiResource.get<UnlistedCertification[]>(`enrollees/${enrolleeId}/unlisted-certifications`)
-        .pipe(map((response: ApiHttpResponse<UnlistedCertification[]>) => response.result)),
-      enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/remote-users`)
-        .pipe(map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)),
-      oboSites: this.apiResource.get<OboSite[]>(`enrollees/${enrolleeId}/obo-sites`)
-        .pipe(map((response: ApiHttpResponse<OboSite[]>) => response.result)),
-      remoteAccessLocations: this.apiResource.get<RemoteAccessLocation[]>(`enrollees/${enrolleeId}/remote-locations`)
-        .pipe(map((response: ApiHttpResponse<RemoteAccessLocation[]>) => response.result)),
-      remoteAccessSites: this.apiResource.get<RemoteAccessSite[]>(`enrollees/${enrolleeId}/remote-sites`)
-        .pipe(map((response: ApiHttpResponse<RemoteAccessSite[]>) => response.result)),
-      selfDeclarations: this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrolleeId}/self-declarations`)
-        .pipe(map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result)),
-      selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrolleeId}/self-declarations/documents`)
-        .pipe(map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result))
-    })
-      .pipe(
-        map(({ enrollee, enrolleeCareSettings, ...remainder }) => {
-          return { ...enrollee, ...enrolleeCareSettings, ...remainder }
-        }),
-        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
-        map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrolment could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeById error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
 
   public createEnrollee(payload: DemographicForm): Observable<HttpEnrollee> {
     return this.apiResource.post<HttpEnrollee>('enrollees/paper-submissions', payload)

@@ -17,7 +17,7 @@ import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enu
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@core/resources/paper-enrolment-resource.service';
 import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { SelfDeclarationFormState } from './self-declaration-form-state.class';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
@@ -96,7 +96,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
     // Start listening for changes triggered by the HTTP response
     this.initForm();
 
-    this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
+    this.enrolmentResource.getEnrolleeById(enrolleeId)
       .pipe(map((enrollee: HttpEnrollee) => this.enrollee = enrollee))
       .subscribe(({ selfDeclarations }: HttpEnrollee) =>
         this.formState.patchValue({ selfDeclarations }, (this.enrollee.profileCompleted) ? false : null)
