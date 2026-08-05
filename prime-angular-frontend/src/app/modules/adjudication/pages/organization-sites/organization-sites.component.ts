@@ -1,5 +1,5 @@
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -19,10 +19,10 @@ import { SiteRegistrationNote } from '@shared/models/site-registration-note.mode
 import { concat, EMPTY, exhaustMap, forkJoin, map, noop, of, Subscription } from 'rxjs';
 
 @Component({
-    selector: 'app-organization-sites',
-    templateUrl: './organization-sites.component.html',
-    styleUrls: ['./organization-sites.component.scss'],
-    standalone: false
+  selector: 'app-organization-sites',
+  templateUrl: './organization-sites.component.html',
+  styleUrls: ['./organization-sites.component.scss'],
+  standalone: false
 })
 export class OrganizationSitesComponent implements OnInit {
 

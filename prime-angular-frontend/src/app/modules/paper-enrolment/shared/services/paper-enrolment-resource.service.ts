@@ -239,19 +239,6 @@ export class PaperEnrolmentResource {
       );
   }
 
-  public getEnrolleeAdjudicationDocumentDownloadToken(enrolleeId: number, documentId: number): Observable<string> {
-    return this.apiResource.get<string>(`enrollees/${enrolleeId}/adjudication-documents/${documentId}`)
-      .pipe(
-        map((response: ApiHttpResponse<string>) => response.result),
-        catchError((error: any) => {
-          this.logger.error('[Enrolment] PaperEnrolmentResource::getEnrolleeAdjudicationDocumentDownloadToken error has occurred: ',
-            error);
-          throw error;
-        })
-      );
-  }
-
-
   public updateAdjudicationDocuments(enrolleeId: number, documentsGuidAndType: { documentGuid, documentType }[]): Observable<NoContent> {
     return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/documents`, documentsGuidAndType)
       .pipe(

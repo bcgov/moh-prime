@@ -20,7 +20,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 

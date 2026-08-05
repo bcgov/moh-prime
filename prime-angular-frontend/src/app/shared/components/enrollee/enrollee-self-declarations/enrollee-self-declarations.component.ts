@@ -1,6 +1,6 @@
 import { EventEmitter, Component, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { UtilsService } from '@core/services/utils.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { Router } from '@angular/router';
 
 import { EnumUtils } from '@lib/utils/enum-utils.class';
@@ -22,10 +22,10 @@ interface SelfDeclarationComposite {
 }
 
 @Component({
-    selector: 'app-enrollee-self-declarations',
-    templateUrl: './enrollee-self-declarations.component.html',
-    styleUrls: ['./enrollee-self-declarations.component.scss'],
-    standalone: false
+  selector: 'app-enrollee-self-declarations',
+  templateUrl: './enrollee-self-declarations.component.html',
+  styleUrls: ['./enrollee-self-declarations.component.scss'],
+  standalone: false
 })
 export class EnrolleeSelfDeclarationsComponent implements OnChanges, OnInit {
   @Input() public enrolment: Enrolment;

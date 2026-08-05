@@ -18,15 +18,15 @@ import { SelfDeclarationDocument } from '@shared/models/self-declaration-documen
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { SelfDeclarationFormState } from './self-declaration-form-state.class';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
-    selector: 'app-self-declaration-page',
-    templateUrl: './self-declaration-page.component.html',
-    styleUrls: ['./self-declaration-page.component.scss'],
-    standalone: false
+  selector: 'app-self-declaration-page',
+  templateUrl: './self-declaration-page.component.html',
+  styleUrls: ['./self-declaration-page.component.scss'],
+  standalone: false
 })
 export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: SelfDeclarationFormState;

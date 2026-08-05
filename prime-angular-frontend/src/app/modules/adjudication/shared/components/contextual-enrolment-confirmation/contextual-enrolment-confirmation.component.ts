@@ -6,19 +6,19 @@ import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 
 @Component({
-    selector: 'app-contextual-enrolment-confirmation',
-    templateUrl: './contextual-enrolment-confirmation.component.html',
-    styleUrls: ['./contextual-enrolment-confirmation.component.scss'],
-    standalone: false
+  selector: 'app-contextual-enrolment-confirmation',
+  templateUrl: './contextual-enrolment-confirmation.component.html',
+  styleUrls: ['./contextual-enrolment-confirmation.component.scss'],
+  standalone: false
 })
 export class ContextualEnrolmentConfirmationComponent {
 

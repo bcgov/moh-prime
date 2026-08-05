@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 
 @Component({
-    selector: 'app-contextual-site-notification',
-    templateUrl: './contextual-site-notification.component.html',
-    styleUrls: ['./contextual-site-notification.component.scss'],
-    standalone: false
+  selector: 'app-contextual-site-notification',
+  templateUrl: './contextual-site-notification.component.html',
+  styleUrls: ['./contextual-site-notification.component.scss'],
+  standalone: false
 })
 export class ContextualSiteNotificationComponent implements OnInit {
   @Input() public siteId: number;

@@ -15,7 +15,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
