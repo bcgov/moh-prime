@@ -4,7 +4,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { of } from 'rxjs';
-import { tap, exhaustMap } from 'rxjs/operators';
 
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -16,17 +15,17 @@ import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { PermissionService } from '@auth/shared/services/permission.service';
-import { Role } from '@auth/shared/enum/role.enum';
 
-import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@core/resources/paper-enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { CareSettingFormState } from './care-setting-form-state.class';
 
 @Component({
-    selector: 'app-care-setting-page',
-    templateUrl: './care-setting-page.component.html',
-    styleUrls: ['./care-setting-page.component.scss'],
-    standalone: false
+  selector: 'app-care-setting-page',
+  templateUrl: './care-setting-page.component.html',
+  styleUrls: ['./care-setting-page.component.scss'],
+  standalone: false
 })
 export class CareSettingPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: CareSettingFormState;
@@ -43,6 +42,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     private fb: UntypedFormBuilder,
     private configService: ConfigService,
     private paperEnrolmentResource: PaperEnrolmentResource,
+    private enrolmentResource: EnrolmentResource,
     private route: ActivatedRoute,
     router: Router,
     private permissionService: PermissionService
@@ -81,7 +81,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
       return;
     }
 
-    this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
+    this.enrolmentResource.getEnrolleeById(enrolleeId)
       .subscribe((enrollee: HttpEnrollee) => {
         this.enrollee = enrollee;
         const { enrolleeCareSettings, enrolleeHealthAuthorities } = enrollee;
@@ -124,7 +124,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     oboSites = this.removeUnselectedHealthAuthOboSites(payload.healthAuthorities, oboSites);
 
     this.paperEnrolmentResource.updateCareSettings(this.enrollee.id, payload)
-    .subscribe();
+      .subscribe();
 
     return of(null);
   }

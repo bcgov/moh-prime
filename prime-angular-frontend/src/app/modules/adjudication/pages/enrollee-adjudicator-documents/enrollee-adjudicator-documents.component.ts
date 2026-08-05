@@ -6,14 +6,14 @@ import { forkJoin, Observable, Subscription } from 'rxjs';
 
 import { UtilsService } from '@core/services/utils.service';
 
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
 @Component({
-    selector: 'app-enrollee-adjudicator-documents',
-    templateUrl: './enrollee-adjudicator-documents.component.html',
-    styleUrls: ['./enrollee-adjudicator-documents.component.scss'],
-    standalone: false
+  selector: 'app-enrollee-adjudicator-documents',
+  templateUrl: './enrollee-adjudicator-documents.component.html',
+  styleUrls: ['./enrollee-adjudicator-documents.component.scss'],
+  standalone: false
 })
 export class EnrolleeAdjudicatorDocumentsComponent implements OnInit {
   public documents$: Observable<EnrolleeAdjudicationDocument[]>;

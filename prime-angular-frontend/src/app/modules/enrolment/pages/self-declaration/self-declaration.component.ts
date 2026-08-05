@@ -16,7 +16,7 @@ import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import moment from 'moment';
@@ -25,10 +25,10 @@ import { CertSearch } from '@enrolment/shared/models/cert-search.model';
 import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-search.model';
 
 @Component({
-    selector: 'app-self-declaration',
-    templateUrl: './self-declaration.component.html',
-    styleUrls: ['./self-declaration.component.scss'],
-    standalone: false
+  selector: 'app-self-declaration',
+  templateUrl: './self-declaration.component.html',
+  styleUrls: ['./self-declaration.component.scss'],
+  standalone: false
 })
 export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implements OnInit {
   public decisions: { code: boolean, name: string }[];

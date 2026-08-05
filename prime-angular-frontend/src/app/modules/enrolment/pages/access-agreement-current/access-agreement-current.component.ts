@@ -4,15 +4,15 @@ import { Subscription } from 'rxjs';
 
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { UtilsService } from '@core/services/utils.service';
 
 @Component({
-    selector: 'app-access-agreement-current',
-    templateUrl: './access-agreement-current.component.html',
-    styleUrls: ['./access-agreement-current.component.scss'],
-    standalone: false
+  selector: 'app-access-agreement-current',
+  templateUrl: './access-agreement-current.component.html',
+  styleUrls: ['./access-agreement-current.component.scss'],
+  standalone: false
 })
 export class AccessAgreementCurrentComponent implements OnInit {
   public busy: Subscription;

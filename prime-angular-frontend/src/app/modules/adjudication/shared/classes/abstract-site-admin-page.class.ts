@@ -20,7 +20,7 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicationResource } from '../services/adjudication-resource.service';
+import { AdjudicationResource } from '../../../../core/resources/adjudication-resource.service';
 import { SiteActionEnum, SiteArchiveRestoreComponent } from '@shared/components/dialogs/content/site-archive-restore/site-archive-restore.component';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteListViewModel } from '@registration/shared/models/site.model';

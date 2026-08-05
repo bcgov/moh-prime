@@ -11,7 +11,7 @@ import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 
 import { AbsenceManagementFormState } from './absence-management-form-state.class';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -20,11 +20,11 @@ import { exhaustMap } from 'rxjs/operators';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 
 @Component({
-    selector: 'app-absence-management-page',
-    templateUrl: './absence-management-page.component.html',
-    styleUrls: ['./absence-management-page.component.scss'],
-    providers: [FormatDatePipe],
-    standalone: false
+  selector: 'app-absence-management-page',
+  templateUrl: './absence-management-page.component.html',
+  styleUrls: ['./absence-management-page.component.scss'],
+  providers: [FormatDatePipe],
+  standalone: false
 })
 export class AbsenceManagementPageComponent extends AbstractEnrolmentPage implements OnInit {
   public busy: Subscription;

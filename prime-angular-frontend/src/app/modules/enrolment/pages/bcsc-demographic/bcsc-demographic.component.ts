@@ -20,17 +20,17 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 import { BcscDemographicFormState } from './bcsc-demographic-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 @Component({
-    selector: 'app-bcsc-demographic',
-    templateUrl: './bcsc-demographic.component.html',
-    styleUrls: ['./bcsc-demographic.component.scss'],
-    standalone: false
+  selector: 'app-bcsc-demographic',
+  templateUrl: './bcsc-demographic.component.html',
+  styleUrls: ['./bcsc-demographic.component.scss'],
+  standalone: false
 })
 export class BcscDemographicComponent extends BaseEnrolmentProfilePage implements OnInit {
   public formState: BcscDemographicFormState;

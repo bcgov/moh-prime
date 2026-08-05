@@ -36,17 +36,18 @@ import { PermissionService } from '@auth/shared/services/permission.service';
 import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 import { SearchFormStatusType } from '@adjudication/shared/enums/search-form-status-type.enum';
 
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentStatusFilterEnum, PaperStatusEnum, StatusFilterEnum } from '@shared/enums/status-filter.enum';
 import { DateOfBirthComponent } from '@shared/components/dialogs/content/date-of-birth/date-of-birth.component';
 import { ChangeTermsOfAccessComponent } from '@shared/components/dialogs/content/terms-of-access/terms-of-access.component';
 
 @Component({
-    selector: 'app-adjudication-container',
-    templateUrl: './adjudication-container.component.html',
-    styleUrls: ['./adjudication-container.component.scss'],
-    standalone: false
+  selector: 'app-adjudication-container',
+  templateUrl: './adjudication-container.component.html',
+  styleUrls: ['./adjudication-container.component.scss'],
+  standalone: false
 })
 export class AdjudicationContainerComponent implements OnInit {
   @Input() public hasActions: boolean;
@@ -70,6 +71,7 @@ export class AdjudicationContainerComponent implements OnInit {
     protected route: ActivatedRoute,
     protected router: Router,
     protected adjudicationResource: AdjudicationResource,
+    protected enrolmentResource: EnrolmentResource,
     private permissionService: PermissionService,
     private dialog: MatDialog,
     protected utilsService: UtilsService,
@@ -498,7 +500,7 @@ export class AdjudicationContainerComponent implements OnInit {
   private getEnrolleeById(enrolleeId: number): void {
     this.busy =
       forkJoin({
-        enrollee: this.adjudicationResource.getEnrolleeById(enrolleeId)
+        enrollee: this.enrolmentResource.getEnrolleeById(enrolleeId)
           .pipe(
             tap((enrollee) => this.enrollee = enrollee),
             map(this.toEnrolleeListViewModel),
@@ -543,14 +545,14 @@ export class AdjudicationContainerComponent implements OnInit {
       status = null;
     }
 
-    return this.adjudicationResource.getEnrollees({ statusCode: status, isLinkedPaperEnrolment, isRenewedManualEnrolment, ...rest })
+    return this.enrolmentResource.getEnrollees({ statusCode: status, isLinkedPaperEnrolment, isRenewedManualEnrolment, ...rest })
       .pipe(
         tap(() => this.showSearchFilter = true)
       );
   }
 
   private updateEnrollee(enrolleeId: number) {
-    this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId)
+    this.busy = this.enrolmentResource.getEnrolleeById(enrolleeId)
       .subscribe((enrollee: HttpEnrollee) => {
         const index = this.enrollees.findIndex(e => e.id === enrollee.id);
         this.enrollees.splice(index, 1, this.toEnrolleeListViewModel(enrollee));

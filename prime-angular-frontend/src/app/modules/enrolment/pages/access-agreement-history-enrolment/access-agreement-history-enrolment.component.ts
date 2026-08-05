@@ -8,13 +8,13 @@ import { EnrolmentSubmission } from '@shared/models/enrollee-submission.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 
 @Component({
-    selector: 'app-access-agreement-history-enrolment',
-    templateUrl: './access-agreement-history-enrolment.component.html',
-    styleUrls: ['./access-agreement-history-enrolment.component.scss'],
-    standalone: false
+  selector: 'app-access-agreement-history-enrolment',
+  templateUrl: './access-agreement-history-enrolment.component.html',
+  styleUrls: ['./access-agreement-history-enrolment.component.scss'],
+  standalone: false
 })
 export class AccessAgreementHistoryEnrolmentComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;
