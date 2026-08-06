@@ -37,6 +37,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime CPBCLicenseChange23June2026 = new(2026, 6, 23, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime BCCNMLicenseChange24June2026 = new(2026, 6, 24, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime CPSBCLicenseChange25June2026 = new(2026, 6, 25, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime NaturopathicLicenseChange6August2026 = new(2026, 8, 6, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
         {
@@ -511,6 +512,11 @@ namespace Prime.Configuration.Database
                     //More BCCNM License changes under HPOA
                     new LicenseDetail { Id = 391, LicenseCode = 53, Prefix = "L9", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, EffectiveDate = BCCNMLicenseChange24June2026, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id = 392, LicenseCode = 61, Prefix = "98", Manual = true, Validate = true, LicensedToProvideCare = true, NamedInImReg = false, PrescriberIdType = PrescriberIdType.Mandatory, AllowRequestRemoteAccess = false, EffectiveDate = BCCNMLicenseChange24June2026, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // Naturopathic Medicine - change to require Pracitioner ID / PharmaNet ID
+                    new LicenseDetail { Id = 393, LicenseCode = 166, Prefix = "97",   Manual = false,  Validate = true, NamedInImReg = true, LicensedToProvideCare = true, PrescriberIdType = PrescriberIdType.Mandatory, EffectiveDate = NaturopathicLicenseChange6August2026, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 394, LicenseCode = 167, Prefix = "97",   Manual = false,  Validate = true, NamedInImReg = true, LicensedToProvideCare = true, PrescriberIdType = PrescriberIdType.Mandatory, EffectiveDate = NaturopathicLicenseChange6August2026, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 395, LicenseCode = 169, Prefix = "97",   Manual = false,  Validate = true, NamedInImReg = false, LicensedToProvideCare = false, PrescriberIdType = PrescriberIdType.Mandatory, EffectiveDate = NaturopathicLicenseChange6August2026, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
 
             }

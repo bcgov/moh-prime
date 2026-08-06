@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ValidationErrors } from '@angular/forms';
+import { NumberValueAccessor, ValidationErrors } from '@angular/forms';
 
 import { RoutePath } from '@lib/utils/route-utils.class';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
@@ -35,6 +35,8 @@ export class EnrolleeReviewComponent {
   public identityProvider: IdentityProviderEnum;
   public IdentityProviderEnum = IdentityProviderEnum;
   public CareSettingEnum = CareSettingEnum;
+  public licenseGroupings = this.configService.collegeLicenseGroupings;
+  public licenses = this.configService.licenses;
   public EnrolmentRoutes = EnrolmentRoutes;
   public AdjudicationRoutes = AdjudicationRoutes;
 
@@ -119,6 +121,10 @@ export class EnrolleeReviewComponent {
       : null;
 
     return (healthAuthorities?.length) ? healthAuthorities : [];
+  }
+
+  public hasPharmaNetIdOption(licenseCode: number): boolean {
+    return this.licenses.find(l => l.code === licenseCode)?.prescriberIdType !== 0;
   }
 
   public getLicenceClassCategory(certification: CollegeCertification): string {
