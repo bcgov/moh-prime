@@ -295,8 +295,7 @@
     <app-enrollee-property [hasError]="enrolmentErrors?.expiredCertification"
                            [showError]="true"
                            errorMessage="Renewal date must be in the future."
-                           title="Renewal Date"
-                           [showError]="true">
+                           title="Renewal Date">
       {{ certification.renewalDate | formatDate | default }}
     </app-enrollee-property>
 
