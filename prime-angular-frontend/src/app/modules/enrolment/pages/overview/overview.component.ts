@@ -145,7 +145,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public requireLicenceUpdate(): boolean {
-    return (this.enrolmentErrors) ? this.enrolmentErrors.requiresLicenceUpdate : false;
+    return (this.enrolmentErrors) ? (this.enrolmentErrors.requiresLicenceUpdate || this.enrolmentErrors.missingPharmaNetId) : false;
   }
 
   public requireCareSetting(): boolean {
