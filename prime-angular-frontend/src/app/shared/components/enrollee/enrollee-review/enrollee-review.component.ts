@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { NumberValueAccessor, ValidationErrors } from '@angular/forms';
+import { ValidationErrors } from '@angular/forms';
 
 import { RoutePath } from '@lib/utils/route-utils.class';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
