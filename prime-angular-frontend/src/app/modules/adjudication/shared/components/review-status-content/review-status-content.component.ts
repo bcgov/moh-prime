@@ -17,8 +17,8 @@ import { BaseDocument } from '@shared/components/document-upload/document-upload
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.model';
 
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import moment from 'moment';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
@@ -45,10 +45,10 @@ export class Reason {
 }
 
 @Component({
-    selector: 'app-review-status-content',
-    templateUrl: './review-status-content.component.html',
-    styleUrls: ['./review-status-content.component.scss'],
-    standalone: false
+  selector: 'app-review-status-content',
+  templateUrl: './review-status-content.component.html',
+  styleUrls: ['./review-status-content.component.scss'],
+  standalone: false
 })
 export class ReviewStatusContentComponent implements OnInit, OnChanges {
   @Input() public enrollee: HttpEnrollee;

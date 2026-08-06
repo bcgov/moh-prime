@@ -11,14 +11,14 @@ import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 
 
 @Component({
-    selector: 'app-enrollee-enrolments',
-    templateUrl: './enrollee-enrolments.component.html',
-    styleUrls: ['./enrollee-enrolments.component.scss'],
-    standalone: false
+  selector: 'app-enrollee-enrolments',
+  templateUrl: './enrollee-enrolments.component.html',
+  styleUrls: ['./enrollee-enrolments.component.scss'],
+  standalone: false
 })
 export class EnrolleeEnrolmentsComponent implements OnInit {
   public busy: Subscription;

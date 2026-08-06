@@ -38,7 +38,9 @@ export class IdentityInsuranceLevelGuard {
     return this.authService.getUser$()
       .pipe(
         map((user: BcscUser) => user.identityInsuranceLevel),
-        map((identityInsuranceLevel: number) => identityInsuranceLevel < 3),
+        map((identityInsuranceLevel: number) => {
+          return identityInsuranceLevel === undefined || identityInsuranceLevel < 3;
+        }),
         map((unauthorized: boolean) => {
           if (unauthorized) {
             this.router.navigate([AppRoutes.IDENTITY_INSURANCE_LEVEL]);

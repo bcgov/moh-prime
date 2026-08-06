@@ -1,12 +1,12 @@
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-    selector: 'app-contextual-enrollee-notification',
-    templateUrl: './contextual-enrollee-notification.component.html',
-    styleUrls: ['./contextual-enrollee-notification.component.scss'],
-    standalone: false
+  selector: 'app-contextual-enrollee-notification',
+  templateUrl: './contextual-enrollee-notification.component.html',
+  styleUrls: ['./contextual-enrollee-notification.component.scss'],
+  standalone: false
 })
 export class ContextualEnrolleeNotificationComponent implements OnInit {
   @Input() public enrolleeId: number;

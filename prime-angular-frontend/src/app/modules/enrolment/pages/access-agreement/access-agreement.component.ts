@@ -24,14 +24,14 @@ import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 @Component({
-    selector: 'app-access-agreement',
-    templateUrl: './access-agreement.component.html',
-    styleUrls: ['./access-agreement.component.scss'],
-    standalone: false
+  selector: 'app-access-agreement',
+  templateUrl: './access-agreement.component.html',
+  styleUrls: ['./access-agreement.component.scss'],
+  standalone: false
 })
 export class AccessAgreementComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;

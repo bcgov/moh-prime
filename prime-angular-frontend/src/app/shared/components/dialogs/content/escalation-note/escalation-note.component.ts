@@ -9,7 +9,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 import { Admin } from '@auth/shared/models/admin.model';
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '../../dialog-options.model';
@@ -21,10 +21,10 @@ export enum EscalationType {
 }
 
 @Component({
-    selector: 'app-escalation-note',
-    templateUrl: './escalation-note.component.html',
-    styleUrls: ['./escalation-note.component.scss'],
-    standalone: false
+  selector: 'app-escalation-note',
+  templateUrl: './escalation-note.component.html',
+  styleUrls: ['./escalation-note.component.scss'],
+  standalone: false
 })
 export class EscalationNoteComponent implements OnInit {
   public id: number;

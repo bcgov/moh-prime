@@ -17,7 +17,7 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { SearchFormStatusType } from '@adjudication/shared/enums/search-form-status-type.enum';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
@@ -26,10 +26,10 @@ import { SearchHAFormComponent } from '../search-ha-form/search-ha-form.componen
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 @Component({
-    selector: 'app-site-registration-tabs',
-    templateUrl: './site-registration-tabs.component.html',
-    styleUrls: ['./site-registration-tabs.component.scss'],
-    standalone: false
+  selector: 'app-site-registration-tabs',
+  templateUrl: './site-registration-tabs.component.html',
+  styleUrls: ['./site-registration-tabs.component.scss'],
+  standalone: false
 })
 export class SiteRegistrationTabsComponent extends AbstractSiteAdminPage implements OnInit {
   public busy: Subscription;

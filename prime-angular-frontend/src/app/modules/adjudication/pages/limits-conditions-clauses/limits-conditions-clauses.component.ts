@@ -7,13 +7,13 @@ import { Subscription } from 'rxjs';
 import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 import { Role } from '@auth/shared/enum/role.enum';
 
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 
 @Component({
-    selector: 'app-limits-conditions-clauses',
-    templateUrl: './limits-conditions-clauses.component.html',
-    styleUrls: ['./limits-conditions-clauses.component.scss'],
-    standalone: false
+  selector: 'app-limits-conditions-clauses',
+  templateUrl: './limits-conditions-clauses.component.html',
+  styleUrls: ['./limits-conditions-clauses.component.scss'],
+  standalone: false
 })
 export class LimitsConditionsClausesComponent implements OnInit {
   public busy: Subscription;
