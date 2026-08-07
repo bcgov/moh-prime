@@ -171,7 +171,8 @@
                        class="uppercase"
                        maxlength="5"
                        (change)="onPractiionerIdChange($event)">
-                <mat-error *ngIf="practitionerId.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="practitionerId.hasError('required')">Required - (5 alphanumeric
+                  characters)</mat-error>
                 <mat-error *ngIf="practitionerId.hasError('alphanumeric') || practitionerId.hasError('length')">
                   Must contain only 5 alphanumeric characters
                 </mat-error>

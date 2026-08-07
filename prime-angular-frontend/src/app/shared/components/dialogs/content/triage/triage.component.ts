@@ -10,16 +10,16 @@ import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatusAdmin } from '@shared/models/enrolment-status-admin.model';
 import { Role } from '@auth/shared/enum/role.enum';
 
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { EscalationNoteComponent, EscalationType } from '../escalation-note/escalation-note.component';
 import { DialogOptions } from '../../dialog-options.model';
 
 @Component({
-    selector: 'app-triage',
-    templateUrl: './triage.component.html',
-    styleUrls: ['./triage.component.scss'],
-    standalone: false
+  selector: 'app-triage',
+  templateUrl: './triage.component.html',
+  styleUrls: ['./triage.component.scss'],
+  standalone: false
 })
 export class TriageComponent implements OnInit {
   @Input() public enrollee: EnrolleeListViewModel;

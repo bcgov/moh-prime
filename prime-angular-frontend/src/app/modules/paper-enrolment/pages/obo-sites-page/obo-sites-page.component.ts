@@ -15,14 +15,15 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@core/resources/paper-enrolment-resource.service';
 import { OboSiteFormState } from './obo-sites-form-state.class';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 
 @Component({
-    selector: 'app-obo-sites-page',
-    templateUrl: './obo-sites-page.component.html',
-    styleUrls: ['./obo-sites-page.component.scss'],
-    standalone: false
+  selector: 'app-obo-sites-page',
+  templateUrl: './obo-sites-page.component.html',
+  styleUrls: ['./obo-sites-page.component.scss'],
+  standalone: false
 })
 export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: OboSiteFormState;
@@ -39,6 +40,7 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
     private configService: ConfigService,
     private fb: UntypedFormBuilder,
     private paperEnrolmentResource: PaperEnrolmentResource,
+    private enrolmentResource: EnrolmentResource,
     private route: ActivatedRoute,
     router: Router,
   ) {
@@ -72,7 +74,7 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
       throw new Error('No enrollee ID was provided');
     }
 
-    this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
+    this.enrolmentResource.getEnrolleeById(enrolleeId)
       .pipe(tap((enrollee: HttpEnrollee) => this.enrollee = enrollee))
       .subscribe((enrollee: HttpEnrollee) =>
         this.formState.patchValue({ oboSites: enrollee.oboSites }, enrollee)

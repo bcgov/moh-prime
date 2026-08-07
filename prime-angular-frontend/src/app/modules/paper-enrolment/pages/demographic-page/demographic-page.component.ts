@@ -17,14 +17,15 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@core/resources/paper-enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { DemographicFormState } from './demographic-form-state.class';
 
 @Component({
-    selector: 'app-demographic-page',
-    templateUrl: './demographic-page.component.html',
-    styleUrls: ['./demographic-page.component.scss'],
-    standalone: false
+  selector: 'app-demographic-page',
+  templateUrl: './demographic-page.component.html',
+  styleUrls: ['./demographic-page.component.scss'],
+  standalone: false
 })
 export class DemographicPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: DemographicFormState;
@@ -41,6 +42,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     private fb: UntypedFormBuilder,
     private location: Location,
     private paperEnrolmentResource: PaperEnrolmentResource,
+    private enrolmentResource: EnrolmentResource,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -72,7 +74,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
       return;
     }
 
-    this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
+    this.enrolmentResource.getEnrolleeById(enrolleeId)
       .subscribe((enrollee: HttpEnrollee) => {
         if (enrollee) {
           this.enrollee = enrollee;

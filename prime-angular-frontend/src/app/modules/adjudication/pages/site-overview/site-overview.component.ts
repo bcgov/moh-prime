@@ -19,7 +19,7 @@ import { ChangeVendorNoteComponent } from '@shared/components/dialogs/content/ch
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { Organization } from '@registration/shared/models/organization.model';
 import { CommunitySiteViewModel, Site } from '@registration/shared/models/site.model';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';

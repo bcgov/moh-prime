@@ -6,13 +6,13 @@ import { Subscription } from 'rxjs';
 import { AbstractComponent } from '@shared/classes/abstract-component';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 
 @Component({
-    selector: 'app-enrollee-access-term',
-    templateUrl: './enrollee-access-term.component.html',
-    styleUrls: ['./enrollee-access-term.component.scss'],
-    standalone: false
+  selector: 'app-enrollee-access-term',
+  templateUrl: './enrollee-access-term.component.html',
+  styleUrls: ['./enrollee-access-term.component.scss'],
+  standalone: false
 })
 export class EnrolleeAccessTermComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
@@ -21,7 +21,7 @@ export class EnrolleeAccessTermComponent extends AbstractComponent implements On
   constructor(
     protected router: Router,
     protected route: ActivatedRoute,
-    private adjudicationResource: AdjudicationResource
+    private enrolmentResource: EnrolmentResource
   ) {
     super(route, router);
   }
@@ -33,7 +33,7 @@ export class EnrolleeAccessTermComponent extends AbstractComponent implements On
   private getAccessTerm() {
     const enrolleeId = this.route.snapshot.params.id;
     const accessTermId = this.route.snapshot.params.aid;
-    this.busy = this.adjudicationResource.getAccessTerm(enrolleeId, accessTermId)
+    this.busy = this.enrolmentResource.getAccessTerm(enrolleeId, accessTermId)
       .subscribe((accessTerm: EnrolleeAgreement) => this.accessTerm = accessTerm);
   }
 }
