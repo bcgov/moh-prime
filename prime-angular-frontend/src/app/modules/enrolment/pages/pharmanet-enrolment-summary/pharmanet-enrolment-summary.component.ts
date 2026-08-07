@@ -14,7 +14,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
@@ -30,10 +30,10 @@ import { Site } from '@registration/shared/models/site.model';
  * TODO: https://bcgovmoh.atlassian.net/browse/PRIME-2325 (Refactor common code in both PharmanetEnrolmentSummaryComponent and NextStepsComponent)
  */
 @Component({
-    selector: 'app-pharmanet-enrolment-summary',
-    templateUrl: './pharmanet-enrolment-summary.component.html',
-    styleUrls: ['./pharmanet-enrolment-summary.component.scss'],
-    standalone: false
+  selector: 'app-pharmanet-enrolment-summary',
+  templateUrl: './pharmanet-enrolment-summary.component.html',
+  styleUrls: ['./pharmanet-enrolment-summary.component.scss'],
+  standalone: false
 })
 export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;

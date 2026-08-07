@@ -9,7 +9,7 @@ import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
 import { RoutePath, RouteUtils } from '@lib/utils/route-utils.class';
 import { PAPER_ENROLLEE_GPID_PREFIX } from '@lib/constants';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
@@ -20,9 +20,9 @@ import { AdjudicationContainerComponent } from '@adjudication/shared/components/
 import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
 
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
-import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@core/resources/paper-enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
@@ -47,8 +47,8 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     protected route: ActivatedRoute,
     protected router: Router,
     protected adjudicationResource: AdjudicationResource,
+    protected enrolmentResource: EnrolmentResource,
     private paperEnrolmentResource: PaperEnrolmentResource,
-    private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
     permissionService: PermissionService,
     dialog: MatDialog,
@@ -59,6 +59,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       route,
       router,
       adjudicationResource,
+      enrolmentResource,
       permissionService,
       dialog,
       utilsService,
@@ -88,7 +89,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   private loadEnrollee(enrolleeId: number): void {
     this.busy =
       forkJoin({
-        enrollee: this.adjudicationResource.getEnrolleeById(enrolleeId)
+        enrollee: this.enrolmentResource.getEnrolleeById(enrolleeId)
           .pipe(
             map(enrollee => ({
               enrollee,

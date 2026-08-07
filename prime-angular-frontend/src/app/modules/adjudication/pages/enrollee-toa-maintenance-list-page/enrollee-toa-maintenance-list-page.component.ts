@@ -1,5 +1,5 @@
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -10,11 +10,11 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector: 'app-enrollee-toa-maintenance-list-page',
-    templateUrl: './enrollee-toa-maintenance-list-page.component.html',
-    styleUrls: ['./enrollee-toa-maintenance-list-page.component.scss'],
-    providers: [FormatDatePipe],
-    standalone: false
+  selector: 'app-enrollee-toa-maintenance-list-page',
+  templateUrl: './enrollee-toa-maintenance-list-page.component.html',
+  styleUrls: ['./enrollee-toa-maintenance-list-page.component.scss'],
+  providers: [FormatDatePipe],
+  standalone: false
 })
 export class EnrolleeToaMaintenanceListPageComponent implements OnInit {
   public busy: Subscription;

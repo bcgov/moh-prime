@@ -17,17 +17,17 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-search.model';
 import { CertSearch } from '@enrolment/shared/models/cert-search.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
-    selector: 'app-remote-access',
-    templateUrl: './remote-access.component.html',
-    styleUrls: ['./remote-access.component.scss'],
-    standalone: false
+  selector: 'app-remote-access',
+  templateUrl: './remote-access.component.html',
+  styleUrls: ['./remote-access.component.scss'],
+  standalone: false
 })
 export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements OnInit {
   @ViewChild('requestAccess') public requestAccess: MatSlideToggle;

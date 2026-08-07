@@ -15,13 +15,14 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@core/resources/paper-enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 
 @Component({
-    selector: 'app-overview-page',
-    templateUrl: './overview-page.component.html',
-    styleUrls: ['./overview-page.component.scss'],
-    standalone: false
+  selector: 'app-overview-page',
+  templateUrl: './overview-page.component.html',
+  styleUrls: ['./overview-page.component.scss'],
+  standalone: false
 })
 export class OverviewPageComponent implements OnInit {
   public busy: Subscription;
@@ -35,6 +36,7 @@ export class OverviewPageComponent implements OnInit {
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private paperEnrolmentResource: PaperEnrolmentResource,
+    private enrolmentResource: EnrolmentResource,
     private route: ActivatedRoute,
     private utilsService: UtilsService,
     router: Router
@@ -69,7 +71,7 @@ export class OverviewPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.paperEnrolmentResource.getEnrolleeById(+this.route.snapshot.params.eid)
+    this.enrolmentResource.getEnrolleeById(+this.route.snapshot.params.eid)
       .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
 
     this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.eid)

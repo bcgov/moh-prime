@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { EnrolleeReviewStatus } from '@shared/models/enrollee-review-status.model';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-
 @Component({
-    selector: 'app-enrollee-review-status',
-    templateUrl: './enrollee-review-status.component.html',
-    styleUrls: ['./enrollee-review-status.component.scss'],
-    standalone: false
+  selector: 'app-enrollee-review-status',
+  templateUrl: './enrollee-review-status.component.html',
+  styleUrls: ['./enrollee-review-status.component.scss'],
+  standalone: false
 })
 export class EnrolleeReviewStatusComponent implements OnInit {
   public hasActions: boolean;

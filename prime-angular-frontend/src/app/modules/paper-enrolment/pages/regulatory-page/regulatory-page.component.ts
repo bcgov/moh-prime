@@ -16,15 +16,16 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@core/resources/paper-enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { RegulatoryFormState } from './regulatory-form-state.class';
 import { ToggleContentChange } from '@shared/components/toggle-content/toggle-content.component';
 
 @Component({
-    selector: 'app-regulatory-page',
-    templateUrl: './regulatory-page.component.html',
-    styleUrls: ['./regulatory-page.component.scss'],
-    standalone: false
+  selector: 'app-regulatory-page',
+  templateUrl: './regulatory-page.component.html',
+  styleUrls: ['./regulatory-page.component.scss'],
+  standalone: false
 })
 export class RegulatoryPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: RegulatoryFormState;
@@ -39,6 +40,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     private configService: ConfigService,
     private fb: UntypedFormBuilder,
     private paperEnrolmentResource: PaperEnrolmentResource,
+    private enrolmentResource: EnrolmentResource,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -101,7 +103,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
       throw new Error('No enrollee ID was provided');
     }
 
-    return this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
+    return this.enrolmentResource.getEnrolleeById(enrolleeId)
       .pipe(
         map((enrollee: HttpEnrollee) => {
           if (enrollee) {

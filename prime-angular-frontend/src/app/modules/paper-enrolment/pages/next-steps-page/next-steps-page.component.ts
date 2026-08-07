@@ -3,26 +3,25 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntypedFormBuilder } from '@angular/forms';
 
-import { forkJoin, merge, of } from 'rxjs';
-import { catchError, exhaustMap, map } from 'rxjs/operators';
+import { merge } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { UtilsService } from '@core/services/utils.service';
-import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 import { NextStepsFormState } from '@paper-enrolment/pages/next-steps-page/next-steps-form-state.class';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@core/resources/paper-enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 
 @Component({
-    selector: 'app-next-steps',
-    templateUrl: './next-steps-page.component.html',
-    styleUrls: ['./next-steps-page.component.scss'],
-    standalone: false
+  selector: 'app-next-steps',
+  templateUrl: './next-steps-page.component.html',
+  styleUrls: ['./next-steps-page.component.scss'],
+  standalone: false
 })
 export class NextStepsPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: NextStepsFormState;
@@ -35,6 +34,7 @@ export class NextStepsPageComponent extends AbstractEnrolmentPage implements OnI
     private fb: UntypedFormBuilder,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private utilsService: UtilsService,
+    private enrolmentResource: EnrolmentResource,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -66,7 +66,7 @@ export class NextStepsPageComponent extends AbstractEnrolmentPage implements OnI
       throw new Error('No enrollee ID was provided');
     }
 
-    this.paperEnrolmentResource.getEnrolleeById(+this.route.snapshot.params.eid)
+    this.enrolmentResource.getEnrolleeById(+this.route.snapshot.params.eid)
       .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
   }
 

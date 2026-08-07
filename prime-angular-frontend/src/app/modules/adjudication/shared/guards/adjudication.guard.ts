@@ -9,7 +9,7 @@ import { BaseGuard } from '@core/guards/base.guard';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { Admin } from '@auth/shared/models/admin.model';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { AdminStatusType } from '../models/admin-status.enum';
 
