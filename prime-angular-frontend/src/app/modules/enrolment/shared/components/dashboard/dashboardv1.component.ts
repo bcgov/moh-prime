@@ -312,7 +312,9 @@ export class DashboardV1Component implements OnInit {
 
     }
 
-    if (currentTOAStatus === "" || hasSentRenewalEmail) certificate = 'lock'
+    if (currentTOAStatus === "" || hasSentRenewalEmail) {
+      certificate = 'lock';
+    }
 
     return { enrollee, accessAgreement, certificate, absence };
   }
