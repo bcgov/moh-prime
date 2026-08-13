@@ -86,7 +86,7 @@
              class="col-sm-12 pl-5">
 
           <mat-form-field class="w-100">
-            <mat-label>{{ getRegNumberFieldLabel(collegeCode.value) }}</mat-label>
+            <mat-label>{{ getRegNumberFieldLabel(collegeCode.value, selectedCollegeLicenseGroupCode) }}</mat-label>
             <input matInput
                    formControlName="licenseNumber">
             <mat-error *ngIf="licenseNumber.hasError('required')">Required</mat-error>
