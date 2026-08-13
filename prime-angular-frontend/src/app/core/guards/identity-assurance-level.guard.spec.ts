@@ -17,7 +17,7 @@ describe('IdentityAssuranceLevelGuard', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([
         {
-          path: AppRoutes.IDENTITY_INSURANCE_LEVEL,
+          path: AppRoutes.IDENTITY_ASSURANCE_LEVEL,
           component: NotEligibleComponent
         }
       ])],
