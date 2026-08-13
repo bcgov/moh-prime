@@ -6,12 +6,12 @@ import { AppRoutes } from 'app/app.routes';
 import { KeycloakService } from 'keycloak-angular';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
-import { IdentityInsuranceLevelGuard } from './identity-insurance-level.guard';
+import { IdentityAssuranceLevelGuard } from './identity-assurance-level.guard';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NotEligibleComponent } from '@lib/modules/root-routes/components/not-eligible/not-eligible.component';
 
-describe('IdentityInsuranceLevelGuard', () => {
-  let guard: IdentityInsuranceLevelGuard;
+describe('IdentityAssuranceLevelGuard', () => {
+  let guard: IdentityAssuranceLevelGuard;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -31,7 +31,7 @@ describe('IdentityInsuranceLevelGuard', () => {
         provideHttpClientTesting()
       ]
     });
-    guard = TestBed.inject(IdentityInsuranceLevelGuard);
+    guard = TestBed.inject(IdentityAssuranceLevelGuard);
   });
 
   it('should be created', () => {

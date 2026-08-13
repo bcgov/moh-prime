@@ -70,7 +70,7 @@ export class MockAuthService implements IAuthService {
       },
       email: faker.internet.email(),
       username: `${faker.random.uuid()}@bcsc`,
-      identityInsuranceLevel: 3
+      identityAssuranceLevel: 3
     }));
   }
 
