@@ -145,7 +145,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       phone,
       phoneExtension,
       userProvidedGpid,
-      identityInsuranceLevel,
+      identityAssuranceLevel,
       ...remainder
     } = enrollee;
 
@@ -171,7 +171,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
         phone,
         phoneExtension,
         userProvidedGpid,
-        identityInsuranceLevel
+        identityAssuranceLevel
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,

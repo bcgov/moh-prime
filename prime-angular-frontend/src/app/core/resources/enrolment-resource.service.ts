@@ -783,7 +783,7 @@ export class EnrolmentResource {
       smsPhone,
       phone,
       phoneExtension,
-      identityInsuranceLevel,
+      identityAssuranceLevel,
       ...remainder
     } = enrollee;
 
@@ -807,7 +807,7 @@ export class EnrolmentResource {
         smsPhone,
         phone,
         phoneExtension,
-        identityInsuranceLevel,
+        identityAssuranceLevel,
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,
