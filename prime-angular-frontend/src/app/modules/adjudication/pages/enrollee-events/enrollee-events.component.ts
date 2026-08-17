@@ -5,15 +5,15 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { DateContent } from '@adjudication/shared/components/dated-content-table/dated-content-table.component';
 import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
 
 @Component({
-    selector: 'app-enrollee-events',
-    templateUrl: './enrollee-events.component.html',
-    styleUrls: ['./enrollee-events.component.scss'],
-    standalone: false
+  selector: 'app-enrollee-events',
+  templateUrl: './enrollee-events.component.html',
+  styleUrls: ['./enrollee-events.component.scss'],
+  standalone: false
 })
 export class EnrolleeEventsComponent implements OnInit {
   public businessEvents$: Observable<DateContent[]>;

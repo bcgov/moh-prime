@@ -12,10 +12,10 @@ import { HttpEnrollee, Enrolment } from '@shared/models/enrolment.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-    selector: 'app-enrolment',
-    templateUrl: './enrolment.component.html',
-    styleUrls: ['./enrolment.component.scss'],
-    standalone: false
+  selector: 'app-enrolment',
+  templateUrl: './enrolment.component.html',
+  styleUrls: ['./enrolment.component.scss'],
+  standalone: false
 })
 export class EnrolmentComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
@@ -76,6 +76,7 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
       smsPhone,
       phone,
       phoneExtension,
+      identityAssuranceLevel,
       ...remainder
     } = enrollee;
 
@@ -100,7 +101,8 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
         email,
         smsPhone,
         phone,
-        phoneExtension
+        phoneExtension,
+        identityAssuranceLevel
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,

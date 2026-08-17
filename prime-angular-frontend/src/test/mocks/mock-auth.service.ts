@@ -69,7 +69,8 @@ export class MockAuthService implements IAuthService {
         postal: faker.address.zipCode()
       },
       email: faker.internet.email(),
-      username: `${faker.random.uuid()}@bcsc`
+      username: `${faker.random.uuid()}@bcsc`,
+      identityAssuranceLevel: 3
     }));
   }
 

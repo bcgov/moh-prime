@@ -7,7 +7,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 
 import { Admin } from '@auth/shared/models/admin.model';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdminStatusType } from '@adjudication/shared/models/admin-status.enum';
@@ -29,10 +29,10 @@ export enum ClaimType {
 }
 
 @Component({
-    selector: 'app-claim-note',
-    templateUrl: './claim-note.component.html',
-    styleUrls: ['./claim-note.component.scss'],
-    standalone: false
+  selector: 'app-claim-note',
+  templateUrl: './claim-note.component.html',
+  styleUrls: ['./claim-note.component.scss'],
+  standalone: false
 })
 export class ClaimNoteComponent implements OnInit {
   public title: string;

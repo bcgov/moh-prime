@@ -34,6 +34,7 @@ import { RemoteAccessComponent } from './pages/remote-access/remote-access.compo
 import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
 import { PaperEnrolleeReturneesPageComponent } from './pages/paper-enrollee-returnees-page/paper-enrollee-returnees-page.component';
 import { AbsenceManagementPageComponent } from './pages/absence-management-page/absence-management-page.component';
+import { IdentityAssuranceLevelGuard } from '@core/guards/identity-assurance-level.guard';
 
 const routes: Routes = [
   {
@@ -41,7 +42,8 @@ const routes: Routes = [
     component: DashboardV1Component,
     canActivate: [
       AuthenticationGuard,
-      UnderagedGuard
+      UnderagedGuard,
+      IdentityAssuranceLevelGuard
     ],
     canActivateChild: [
       AuthenticationGuard,
@@ -193,6 +195,7 @@ const routes: Routes = [
         component: AbsenceManagementPageComponent,
         data: { title: 'Absence Management' }
       },
+      /* Remove PRIME History route temporarily
       {
         path: EnrolmentRoutes.ACCESS_TERMS,
         children: [
@@ -218,6 +221,7 @@ const routes: Routes = [
           }
         ]
       },
+      */
       {
         path: '', // Equivalent to `/` and alias for `overview`
         redirectTo: EnrolmentRoutes.OVERVIEW,

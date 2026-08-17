@@ -18,15 +18,15 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 
 import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-authority-admin-site-list.model';
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 @Component({
-    selector: 'app-health-authority-site-container',
-    templateUrl: './health-authority-site-container.component.html',
-    styleUrls: ['./health-authority-site-container.component.scss'],
-    standalone: false
+  selector: 'app-health-authority-site-container',
+  templateUrl: './health-authority-site-container.component.html',
+  styleUrls: ['./health-authority-site-container.component.scss'],
+  standalone: false
 })
 export class HealthAuthoritySiteContainerComponent extends AbstractSiteAdminPage implements OnInit {
   @Input() public busy: Subscription;

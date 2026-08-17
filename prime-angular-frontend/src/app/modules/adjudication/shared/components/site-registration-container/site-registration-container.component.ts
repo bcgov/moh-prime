@@ -20,7 +20,7 @@ import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { AbstractSiteAdminPage } from '@adjudication/shared/classes/abstract-site-admin-page.class';
 import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
@@ -31,10 +31,10 @@ import {
 import { SiteStatusType } from '@lib/enums/site-status.enum';
 
 @Component({
-    selector: 'app-site-registration-container',
-    templateUrl: './site-registration-container.component.html',
-    styleUrls: ['./site-registration-container.component.scss'],
-    standalone: false
+  selector: 'app-site-registration-container',
+  templateUrl: './site-registration-container.component.html',
+  styleUrls: ['./site-registration-container.component.scss'],
+  standalone: false
 })
 export class SiteRegistrationContainerComponent extends AbstractSiteAdminPage implements OnInit {
   @Input() public hasActions: boolean;

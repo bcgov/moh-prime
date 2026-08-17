@@ -1,4 +1,4 @@
-import { EnrolleeNavigation } from './../../../../shared/models/enrollee-navigation-model';
+import { EnrolleeNavigation } from '../../shared/models/enrollee-navigation-model';
 import { Injectable } from '@angular/core';
 
 import { forkJoin, Observable, of } from 'rxjs';
@@ -12,14 +12,12 @@ import { NoContent, NoContentResponse } from '@core/resources/abstract-resource'
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { ApiResource } from '@core/resources/api-resource.service';
-import { PaginatedList } from '@core/models/paginated-list.model';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
-import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
-import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
 import { EnrolmentCard } from '@shared/models/enrolment-card.model';
 import { BulkEmailType } from '@shared/enums/bulk-email-type';
@@ -30,23 +28,15 @@ import { SiteRegistrationNote } from '@shared/models/site-registration-note.mode
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
-import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
 import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
-import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
-import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
-import { EnrolleeNotification } from '../models/enrollee-notification.model';
-import { SiteNotification } from '../models/site-notification.model';
-import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
+import { EnrolleeNotification } from '../../modules/adjudication/shared/models/enrollee-notification.model';
+import { SiteNotification } from '../../modules/adjudication/shared/models/site-notification.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
-import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
-import { AdminStatusType } from '../models/admin-status.enum';
+import { AdminStatusType } from '../../modules/adjudication/shared/models/admin-status.enum';
 import { OrganizationAdminView } from '@registration/shared/models/organization.model';
 
 @Injectable({
@@ -59,73 +49,6 @@ export class AdjudicationResource {
     private toastService: ToastService,
     private logger: ConsoleLoggerService
   ) { }
-
-  public getEnrollees(params: {
-    textSearch?: string,
-    statusCode?: number,
-    isLinkedPaperEnrolment?: boolean,
-    isRenewedManualEnrolment?: boolean,
-    page?: number,
-    sortOrder?: string,
-    assignedTo?: number,
-    appliedDateStart?: string,
-    appliedDateEnd?: string,
-    renewalDateStart?: string,
-    renewalDateEnd?: string
-  }): Observable<PaginatedList<EnrolleeListViewModel>> {
-    const httpParams = this.apiResourceUtilsService.makeHttpParams(params);
-    return this.apiResource.get<PaginatedList<EnrolleeListViewModel>>('enrollees', httpParams)
-      .pipe(
-        map((response: ApiHttpResponse<PaginatedList<EnrolleeListViewModel>>) => response.result),
-        tap((enrollees: PaginatedList<EnrolleeListViewModel>) => this.logger.info('PAGINATED_ENROLLEES', enrollees)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrolments could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrollees error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getEnrolleeById(enrolleeId: number): Observable<HttpEnrollee> {
-    return forkJoin({
-      enrollee: this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`)
-        .pipe(map((response: ApiHttpResponse<HttpEnrollee>) => response.result)),
-      enrolleeCareSettings: this.apiResource.get<CareSetting>(`enrollees/${enrolleeId}/care-settings`)
-        .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
-      certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`)
-        .pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
-      enrolleeDeviceProviders: this.apiResource.get<EnrolleeDeviceProvider[]>(`enrollees/${enrolleeId}/device-providers`)
-        .pipe(map((response: ApiHttpResponse<EnrolleeDeviceProvider[]>) => response.result)),
-      unlistedCertifications: this.apiResource.get<UnlistedCertification[]>(`enrollees/${enrolleeId}/unlisted-certifications`)
-        .pipe(map((response: ApiHttpResponse<UnlistedCertification[]>) => response.result)),
-      enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/remote-users`)
-        .pipe(map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)),
-      oboSites: this.apiResource.get<OboSite[]>(`enrollees/${enrolleeId}/obo-sites`)
-        .pipe(map((response: ApiHttpResponse<OboSite[]>) => response.result)),
-      remoteAccessLocations: this.apiResource.get<RemoteAccessLocation[]>(`enrollees/${enrolleeId}/remote-locations`)
-        .pipe(map((response: ApiHttpResponse<RemoteAccessLocation[]>) => response.result)),
-      remoteAccessSites: this.apiResource.get<RemoteAccessSite[]>(`enrollees/${enrolleeId}/remote-sites`)
-        .pipe(map((response: ApiHttpResponse<RemoteAccessSite[]>) => response.result)),
-      selfDeclarations: this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrolleeId}/self-declarations`)
-        .pipe(map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result)),
-      selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrolleeId}/self-declarations/documents`)
-        .pipe(map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result)),
-      adjudicatorIdir: this.apiResource.get<string>(`enrollees/${enrolleeId}/adjudicator-idir`)
-        .pipe(map((response: ApiHttpResponse<string>) => response.result))
-    })
-      .pipe(
-        map(({ enrollee, enrolleeCareSettings, ...remainder }) => {
-          return { ...enrollee, ...enrolleeCareSettings, ...remainder }
-        }),
-        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
-        map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrolment could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeById error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
 
   public getPlrInfoByEnrolleeId(enrolleeId: number): Observable<PlrInfo[]> {
     return this.apiResource.get<PlrInfo[]>(`enrollees/${enrolleeId}/plrs`)
@@ -412,20 +335,6 @@ export class AdjudicationResource {
       );
   }
 
-  public getAcceptedAccessTermsByYear(enrolleeId: number, yearAccepted: number): Observable<EnrolleeAgreement[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ yearAccepted });
-    return this.apiResource.get<EnrolleeAgreement[]>(`enrollees/${enrolleeId}/agreements`, params)
-      .pipe(
-        map((response: ApiHttpResponse<EnrolleeAgreement[]>) => response.result),
-        tap((accessTerms: EnrolleeAgreement[]) => this.logger.info('ENROLLEE_AGREEMENT', accessTerms)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee agreements could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getAccessTerms error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
   public getEnrolmentCardsByYear(enrolleeId: number, yearAccepted: number): Observable<EnrolmentCard[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ yearAccepted });
     return this.apiResource.get<EnrolmentCard[]>(`enrollees/${enrolleeId}/cards`, params)
@@ -440,21 +349,9 @@ export class AdjudicationResource {
       );
   }
 
-  public getAccessTerm(enrolleeId: number, agreementId: number): Observable<EnrolleeAgreement> {
-    return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}`)
-      .pipe(
-        map((response: ApiHttpResponse<EnrolleeAgreement>) => response.result),
-        tap((accessTerm: EnrolleeAgreement) => this.logger.info('ACCESS_TERM', accessTerm)),
-        catchError((error: any) => {
-          this.logger.error('[Adjudication] AdjudicationResource::getAccessTerm error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getSubmissionForAgreement(enrolleeId: number, agreementId: number)
+  public getSubmissionForAgreement(enrolleeId: number, submissionId: number)
     : Observable<HttpEnrolleeSubmission> {
-    return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}/submission`)
+    return this.apiResource.get(`enrollees/${enrolleeId}/submission/${submissionId}`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrolleeSubmission>) => response.result),
         tap((enrolleeSubmission: HttpEnrolleeSubmission) =>
@@ -867,6 +764,22 @@ export class AdjudicationResource {
     }
     profileSnapshot.selfDeclarations = orderedSelfDeclarations;
   }
+
+  public getRemoteUserExport(siteId: number, type: string): Observable<string> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ format: type });
+    //const options = { responseType: 'blob' as 'blob' };
+    return this.apiResource.get<string>(`sites/${siteId}/remote-users/export`, params)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap((file: string) => this.logger.info('REMOTE_USER_EXPORT', file)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Remote user export could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getRemoteUserExport error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
 
   /******************************
    * Organization Page resource

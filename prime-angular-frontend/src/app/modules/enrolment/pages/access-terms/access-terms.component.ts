@@ -4,15 +4,15 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 
 @Component({
-    selector: 'app-access-terms',
-    templateUrl: './access-terms.component.html',
-    styleUrls: ['./access-terms.component.scss'],
-    standalone: false
+  selector: 'app-access-terms',
+  templateUrl: './access-terms.component.html',
+  styleUrls: ['./access-terms.component.scss'],
+  standalone: false
 })
 export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
   public dataSource: MatTableDataSource<EnrolleeAgreement>;

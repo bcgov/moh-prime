@@ -1,5 +1,5 @@
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -10,10 +10,10 @@ import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { AgreementVersion } from '@shared/models/agreement-version.model';
 
 @Component({
-    selector: 'app-organization-toa-maintenance-view-page',
-    templateUrl: './organization-toa-maintenance-view-page.component.html',
-    styleUrls: ['./organization-toa-maintenance-view-page.component.scss'],
-    standalone: false
+  selector: 'app-organization-toa-maintenance-view-page',
+  templateUrl: './organization-toa-maintenance-view-page.component.html',
+  styleUrls: ['./organization-toa-maintenance-view-page.component.scss'],
+  standalone: false
 })
 export class OrganizationToaMaintenanceViewPageComponent implements OnInit {
   public busy: Subscription;

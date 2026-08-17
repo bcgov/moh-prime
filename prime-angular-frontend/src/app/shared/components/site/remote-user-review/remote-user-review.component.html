@@ -4,14 +4,17 @@
                       (route)="onRoute($event)">
 
   <ng-container *ngIf="remoteUsers?.length; else noRemoteUsers">
-    <ng-container *ngFor="let remoteUser of remoteUsers">
+    <ng-container *ngFor="let remoteUser of remoteUsers; first as first">
+      <hr *ngIf="!first" />
       <div class="mb-3">
-        <app-enrollee-property title="Name">
+        <app-enrollee-property title="Name"
+                               makeBold="true">
           {{ remoteUser | fullname | default }}
         </app-enrollee-property>
       </div>
       <div class="mb-3">
-        <app-enrollee-property title="Email">
+        <app-enrollee-property title="Email"
+                               makeBold="true">
           {{ remoteUser.email }}
         </app-enrollee-property>
       </div>
@@ -30,7 +33,7 @@
         </app-enrollee-property>
 
         <app-enrollee-property *ngIf="remoteUser.remoteUserCertification.licenseNumber"
-                               [title]="remoteUser.remoteUserCertification.collegeCode | licenseNumberLabel">
+                               [title]="remoteUser.remoteUserCertification.collegeCode | licenseNumberLabel : remoteUser.remoteUserCertification.licenseCode">
           {{ remoteUser.remoteUserCertification.licenseNumber | default }}
         </app-enrollee-property>
 
@@ -41,7 +44,8 @@
       </div>
 
       <div class="mb-3">
-        <app-enrollee-property title="Created Date">
+        <app-enrollee-property title="Created Date"
+                               makeBold="true">
           {{ remoteUser.createdDate | formatDate }}
         </app-enrollee-property>
       </div>

@@ -19,13 +19,14 @@ import { ChangeVendorNoteComponent } from '@shared/components/dialogs/content/ch
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { Organization } from '@registration/shared/models/organization.model';
 import { CommunitySiteViewModel, Site } from '@registration/shared/models/site.model';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
 import { ConfigService } from '@config/config.service';
 import { VendorConfig } from '@config/config.model';
 import { LinkSiteComponent } from '@shared/components/dialogs/content/link-site/link-site.component';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-site-overview',
@@ -61,6 +62,7 @@ export class SiteOverviewComponent implements OnInit {
     private organizationResource: OrganizationResource,
     private fb: UntypedFormBuilder,
     private configService: ConfigService,
+    private utilsService: UtilsService,
   ) {
     this.hasActions = true;
     this.refresh = new BehaviorSubject<boolean>(null);
@@ -185,6 +187,15 @@ export class SiteOverviewComponent implements OnInit {
               this.predecessorSite = null;
             });
         }
+      });
+  }
+
+  public onExportRemoteUsers(type: string): void {
+    this.busy = this.adjudicationResource.getRemoteUserExport(this.site.id, type)
+      .subscribe((file: string) => {
+        const blob = this.utilsService.base64ToBlob(file, 'text/csv');
+        //const fileBlob = new Blob([file.fileContents], { type: file.contentType });
+        this.utilsService.downloadDocument(blob, "remoteUserExport.csv");
       });
   }
 

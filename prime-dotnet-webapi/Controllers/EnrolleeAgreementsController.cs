@@ -10,6 +10,8 @@ using Prime.Services;
 using Prime.Models.Api;
 using Prime.ViewModels;
 using Prime.Services.Razor;
+using System.Linq;
+using System;
 
 namespace Prime.Controllers
 {
@@ -137,22 +139,34 @@ namespace Prime.Controllers
             }
 
             var enrolmentCards = new List<EnrolmentCardViewModel>();
-
+            var submissions = await _enrolleeSubmissionService.GetEnrolleeSubmissionsAsync(enrolleeId);
             var agreements = await _enrolleeAgreementService.GetEnrolleeAgreementsAsync(enrolleeId, filters);
+            var lastSubmissionDate = null as DateTimeOffset?;
 
-            foreach (var agreement in agreements)
+            var currentSubmission = submissions.First();
+
+            foreach (var submission in submissions)
             {
-                var submission = await _enrolleeSubmissionService.GetEnrolleeSubmissionBeforeDateAsync(enrolleeId, agreement.AcceptedDate.Value);
-
-                var card = new EnrolmentCardViewModel
+                //filter the submission that within the year selected
+                if (submission.CreatedDate.Year == filters.YearAccepted || filters.YearAccepted == null)
                 {
-                    AgreementId = agreement.Id,
-                    AgreementAcceptedDate = agreement.AcceptedDate,
-                    Submission = submission,
-                    IsCurrent = agreement.IsCurrent
-                };
+                    //find the agreement that created after the submission and before the next submission (if exists)
+                    var agreement = agreements.Where(a => submission.CreatedDate <= a.CreatedDate &&
+                        (lastSubmissionDate == null || a.CreatedDate < lastSubmissionDate)).FirstOrDefault();
+                    var card = new EnrolmentCardViewModel
+                    {
+                        AgreementId = agreement != null ? agreement.Id : 0,
+                        AgreementType = agreement != null ? agreement.AgreementVersion.AccessType : null,
+                        AgreementAcceptedDate = agreement != null ? agreement.AcceptedDate : null,
+                        EnrolmentApprovedDate = agreement != null ? agreement.CreatedDate : null,
+                        Submission = submission,
+                        SubmissionId = submission.Id,
+                        IsCurrent = currentSubmission.Id == submission.Id
+                    };
 
-                enrolmentCards.Add(card);
+                    enrolmentCards.Add(card);
+                    lastSubmissionDate = submission.CreatedDate;
+                }
             }
 
             if (User.IsAdministrant())
@@ -235,6 +249,45 @@ namespace Prime.Controllers
             if (enrolleeSubmission == null)
             {
                 return NotFound($"No enrolment submissions were found for Agreement with id {agreementId} for enrollee with id {enrolleeId}.");
+            }
+
+            if (User.IsAdministrant())
+            {
+                await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Enrolment in PRIME History");
+            }
+
+            return Ok(enrolleeSubmission);
+        }
+
+
+        // GET: api/enrollees/5/submission/3
+        /// <summary>
+        /// Get the submission for a given agreement.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="submissionId"></param>
+        [HttpGet("{enrolleeId}/submission/{submissionId}", Name = nameof(GetSubmissionForEnrollee))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Submission>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetSubmissionForEnrollee(int enrolleeId, int submissionId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var enrolleeSubmission = await _enrolleeSubmissionService.GetEnrolleeSubmissionAsync(submissionId);
+            if (enrolleeSubmission == null)
+            {
+                return NotFound($"No enrolment submissions were found for Submission with id {submissionId} for enrollee with id {enrolleeId}.");
             }
 
             if (User.IsAdministrant())
