@@ -63,7 +63,7 @@ import { RegulatoryForm } from './regulatory-form.model';
           {{ certification?.licenseCode | configCode: 'licenses' | default }}
         </app-enrollee-property>
 
-        <app-enrollee-property [title]="certification?.collegeCode | licenseNumberLabel">
+        <app-enrollee-property [title]="certification?.collegeCode | licenseNumberLabel : certification?.licenseCode">
           {{ certification?.licenseNumber | default }}
         </app-enrollee-property>
 
