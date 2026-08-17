@@ -5273,6 +5273,21 @@ namespace Prime.Migrations
                             TemplateName = "HA Site Approval",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2026, 6, 5, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered when PRIME admin deny a organization claim.",
+                            EmailType = 24,
+                            ModifiedDate = new DateTimeOffset(new DateTime(2026, 6, 5, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Recipient = "To: New SA",
+                            Subject = "Organization Claim was Denied",
+                            Template = "Hello, <p><p>Your claim of the organization @Model.OrganizationName, which the site with SiteID/PEC @Model.ProvidedSiteId is part of, has been denied. Please contact PRIMESupport@gov.bc.ca for further information. <p><p> Thank you, <p><p> PRIME Support Team<br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Organization Claim Denial Notification",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2026, 6, 5, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 

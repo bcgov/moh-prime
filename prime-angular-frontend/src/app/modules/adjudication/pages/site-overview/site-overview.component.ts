@@ -28,10 +28,10 @@ import { VendorConfig } from '@config/config.model';
 import { LinkSiteComponent } from '@shared/components/dialogs/content/link-site/link-site.component';
 
 @Component({
-    selector: 'app-site-overview',
-    templateUrl: './site-overview.component.html',
-    styleUrls: ['./site-overview.component.scss'],
-    standalone: false
+  selector: 'app-site-overview',
+  templateUrl: './site-overview.component.html',
+  styleUrls: ['./site-overview.component.scss'],
+  standalone: false
 })
 export class SiteOverviewComponent implements OnInit {
   public busy: Subscription;
@@ -114,6 +114,15 @@ export class SiteOverviewComponent implements OnInit {
   public onApproveOrgClaim(): void {
     this.busy = this.organizationResource
       .approveOrganizationClaim(this.orgClaim.organizationId, this.orgClaim.id)
+      .subscribe(() => {
+        this.refresh.next(true);
+        this.organization.hasClaim = false;
+      });
+  }
+
+  public onDenyOrgClaim(): void {
+    this.busy = this.organizationResource
+      .denyOrganizationClaim(this.orgClaim.organizationId, this.orgClaim.id)
       .subscribe(() => {
         this.refresh.next(true);
         this.organization.hasClaim = false;

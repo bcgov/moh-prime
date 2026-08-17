@@ -343,13 +343,35 @@ namespace Prime.Services
                 .Select(p => p.Email)
                 .SingleAsync();
 
-            var viewModel = new OrgClaimApprovalNotificationViewModel
+            var viewModel = new OrgClaimNotificationViewModel
             {
                 OrganizationName = orgName,
                 ProvidedSiteId = organizationClaim.ProvidedSiteId
             };
 
             var email = await _emailRenderingService.RenderOrgClaimApprovalNotificationEmailAsync(newSigningAuthorityEmail, viewModel);
+            await Send(email);
+        }
+
+        public async Task SendOrgClaimDenialNotificationAsync(OrganizationClaim organizationClaim)
+        {
+            var orgName = await _context.Organizations
+                .Where(o => o.Id == organizationClaim.OrganizationId)
+                .Select(o => o.Name)
+                .SingleAsync();
+
+            var newSigningAuthorityEmail = await _context.Parties
+                .Where(p => p.Id == organizationClaim.NewSigningAuthorityId)
+                .Select(p => p.Email)
+                .SingleAsync();
+
+            var viewModel = new OrgClaimNotificationViewModel
+            {
+                OrganizationName = orgName,
+                ProvidedSiteId = organizationClaim.ProvidedSiteId
+            };
+
+            var email = await _emailRenderingService.RenderOrgClaimDenialNotificationEmailAsync(newSigningAuthorityEmail, viewModel);
             await Send(email);
         }
 
