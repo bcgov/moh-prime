@@ -19,7 +19,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
@@ -32,10 +32,10 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { CertSearch } from '@enrolment/shared/models/cert-search.model';
 
 @Component({
-    selector: 'app-regulatory',
-    templateUrl: './regulatory.component.html',
-    styleUrls: ['./regulatory.component.scss'],
-    standalone: false
+  selector: 'app-regulatory',
+  templateUrl: './regulatory.component.html',
+  styleUrls: ['./regulatory.component.scss'],
+  standalone: false
 })
 export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public formState: RegulatoryFormState;

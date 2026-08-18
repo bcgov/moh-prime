@@ -8,7 +8,7 @@ import { HttpEnrollee, Enrolment } from '@shared/models/enrolment.model';
 import { AbstractComponent } from '@shared/classes/abstract-component';
 import { HttpEnrolleeSubmission, EnrolmentSubmission } from '@shared/models/enrollee-submission.model';
 
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
@@ -97,7 +97,7 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
       phone,
       phoneExtension,
       enrolleeCareSettings,
-      identityInsuranceLevel,
+      identityAssuranceLevel,
       ...remainder
     } = enrollee;
 
@@ -121,7 +121,7 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
         smsPhone,
         phone,
         phoneExtension,
-        identityInsuranceLevel
+        identityAssuranceLevel
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,

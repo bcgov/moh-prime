@@ -14,7 +14,7 @@ import { ToastService } from '@core/services/toast.service';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { Enrollee } from '@shared/models/enrollee.model';
-import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolleeListViewModel, Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
@@ -36,6 +36,7 @@ import { EmailsForCareSetting } from '@shared/models/email-for-care-setting.mode
 import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.model';
 import { DeviceProviderSite } from "@shared/models/device-provider-site.model";
 import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
+import { PaginatedList } from '@core/models/paginated-list.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,73 @@ export class EnrolmentResource {
     private toastService: ToastService,
     private logger: ConsoleLoggerService
   ) { }
+
+  public getEnrolleeById(enrolleeId: number): Observable<HttpEnrollee> {
+    return forkJoin({
+      enrollee: this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`)
+        .pipe(map((response: ApiHttpResponse<HttpEnrollee>) => response.result)),
+      enrolleeCareSettings: this.apiResource.get<CareSetting>(`enrollees/${enrolleeId}/care-settings`)
+        .pipe(map((response: ApiHttpResponse<CareSetting>) => response.result)),
+      certifications: this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`)
+        .pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
+      enrolleeDeviceProviders: this.apiResource.get<EnrolleeDeviceProvider[]>(`enrollees/${enrolleeId}/device-providers`)
+        .pipe(map((response: ApiHttpResponse<EnrolleeDeviceProvider[]>) => response.result)),
+      unlistedCertifications: this.apiResource.get<UnlistedCertification[]>(`enrollees/${enrolleeId}/unlisted-certifications`)
+        .pipe(map((response: ApiHttpResponse<UnlistedCertification[]>) => response.result)),
+      enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/remote-users`)
+        .pipe(map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)),
+      oboSites: this.apiResource.get<OboSite[]>(`enrollees/${enrolleeId}/obo-sites`)
+        .pipe(map((response: ApiHttpResponse<OboSite[]>) => response.result)),
+      remoteAccessLocations: this.apiResource.get<RemoteAccessLocation[]>(`enrollees/${enrolleeId}/remote-locations`)
+        .pipe(map((response: ApiHttpResponse<RemoteAccessLocation[]>) => response.result)),
+      remoteAccessSites: this.apiResource.get<RemoteAccessSite[]>(`enrollees/${enrolleeId}/remote-sites`)
+        .pipe(map((response: ApiHttpResponse<RemoteAccessSite[]>) => response.result)),
+      selfDeclarations: this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrolleeId}/self-declarations`)
+        .pipe(map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result)),
+      selfDeclarationDocuments: this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrolleeId}/self-declarations/documents`)
+        .pipe(map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result)),
+      adjudicatorIdir: this.apiResource.get<string>(`enrollees/${enrolleeId}/adjudicator-idir`)
+        .pipe(map((response: ApiHttpResponse<string>) => response.result))
+    })
+      .pipe(
+        map(({ enrollee, enrolleeCareSettings, ...remainder }) => {
+          return { ...enrollee, ...enrolleeCareSettings, ...remainder }
+        }),
+        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
+        map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponseToHttpEnrollee(enrollee)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolment could not be retrieved');
+          this.logger.error('[Enrolment] EnrolmentResource::getEnrolleeById error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getEnrollees(params: {
+    textSearch?: string,
+    statusCode?: number,
+    isLinkedPaperEnrolment?: boolean,
+    isRenewedManualEnrolment?: boolean,
+    page?: number,
+    sortOrder?: string,
+    assignedTo?: number,
+    appliedDateStart?: string,
+    appliedDateEnd?: string,
+    renewalDateStart?: string,
+    renewalDateEnd?: string
+  }): Observable<PaginatedList<EnrolleeListViewModel>> {
+    const httpParams = this.apiResourceUtilsService.makeHttpParams(params);
+    return this.apiResource.get<PaginatedList<EnrolleeListViewModel>>('enrollees', httpParams)
+      .pipe(
+        map((response: ApiHttpResponse<PaginatedList<EnrolleeListViewModel>>) => response.result),
+        tap((enrollees: PaginatedList<EnrolleeListViewModel>) => this.logger.info('PAGINATED_ENROLLEES', enrollees)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolments could not be retrieved');
+          this.logger.error('[Enrolment] EnrolmentResource::getEnrollees error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 
   public enrollee(username: string): Observable<Enrolment> {
     const selfDeclarationDocumentsParams = this.apiResourceUtilsService.makeHttpParams({ includeHidden: false });
@@ -602,6 +670,55 @@ export class EnrolmentResource {
       });
     }
   }
+  private enrolleeAdapterResponseToHttpEnrollee(enrollee: HttpEnrollee): HttpEnrollee {
+    addressTypes.forEach((addressType: AddressType) => {
+      if (!enrollee[addressType]) {
+        enrollee[addressType] = new Address();
+      }
+    });
+
+    if (!enrollee.certifications) {
+      enrollee.certifications = [];
+    }
+
+    if (!enrollee.unlistedCertifications) {
+      enrollee.unlistedCertifications = [];
+    }
+
+    if (!enrollee.oboSites) {
+      enrollee.oboSites = [];
+    }
+
+    if (!enrollee.enrolleeCareSettings) {
+      enrollee.enrolleeCareSettings = [];
+    }
+
+    if (!enrollee.enrolleeRemoteUsers) {
+      enrollee.enrolleeRemoteUsers = [];
+    }
+
+    if (!enrollee.remoteAccessSites) {
+      enrollee.remoteAccessSites = [];
+    }
+
+    if (!enrollee.enrolleeHealthAuthorities) {
+      enrollee.enrolleeHealthAuthorities = [];
+    }
+
+    if (!enrollee.remoteAccessLocations) {
+      enrollee.remoteAccessLocations = [];
+    }
+
+    if (!enrollee.selfDeclarations) {
+      enrollee.selfDeclarations = [];
+    }
+
+    if (!enrollee.selfDeclarationDocuments) {
+      enrollee.selfDeclarationDocuments = [];
+    }
+
+    return enrollee;
+  }
 
   private enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
     addressTypes.forEach((addressType: AddressType) => {
@@ -666,7 +783,7 @@ export class EnrolmentResource {
       smsPhone,
       phone,
       phoneExtension,
-      identityInsuranceLevel,
+      identityAssuranceLevel,
       ...remainder
     } = enrollee;
 
@@ -690,7 +807,7 @@ export class EnrolmentResource {
         smsPhone,
         phone,
         phoneExtension,
-        identityInsuranceLevel,
+        identityAssuranceLevel,
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,

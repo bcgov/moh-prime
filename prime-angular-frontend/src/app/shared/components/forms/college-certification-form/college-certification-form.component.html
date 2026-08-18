@@ -86,7 +86,7 @@
              class="col-sm-12 pl-5">
 
           <mat-form-field class="w-100">
-            <mat-label>{{ getRegNumberFieldLabel(collegeCode.value) }}</mat-label>
+            <mat-label>{{ getRegNumberFieldLabel(collegeCode.value, selectedCollegeLicenseGroupCode) }}</mat-label>
             <input matInput
                    formControlName="licenseNumber">
             <mat-error *ngIf="licenseNumber.hasError('required')">Required</mat-error>
@@ -171,7 +171,8 @@
                        class="uppercase"
                        maxlength="5"
                        (change)="onPractiionerIdChange($event)">
-                <mat-error *ngIf="practitionerId.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="practitionerId.hasError('required')">Required - (5 alphanumeric
+                  characters)</mat-error>
                 <mat-error *ngIf="practitionerId.hasError('alphanumeric') || practitionerId.hasError('length')">
                   Must contain only 5 alphanumeric characters
                 </mat-error>

@@ -11,7 +11,8 @@ import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@core/resources/paper-enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,8 @@ export class PaperEnrolmentGuard extends BaseGuard {
     protected logger: ConsoleLoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
-    private paperEnrolmentResource: PaperEnrolmentResource
+    private paperEnrolmentResource: PaperEnrolmentResource,
+    private enrolmentResource: EnrolmentResource
   ) {
     super(authService, logger);
   }
@@ -30,7 +32,7 @@ export class PaperEnrolmentGuard extends BaseGuard {
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
     const enrolleeId = +params.eid;
     return (enrolleeId)
-      ? this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
+      ? this.enrolmentResource.getEnrolleeById(enrolleeId)
         .pipe(
           map((enrollee: HttpEnrollee) => this.routeDestination(routePath, enrollee, params))
         )

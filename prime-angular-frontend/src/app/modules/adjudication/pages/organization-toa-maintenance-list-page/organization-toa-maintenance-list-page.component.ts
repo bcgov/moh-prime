@@ -1,5 +1,5 @@
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -12,11 +12,11 @@ import { AgreementVersion } from '@shared/models/agreement-version.model';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 
 @Component({
-    selector: 'app-organization-toa-maintenance-list-page',
-    templateUrl: './organization-toa-maintenance-list-page.component.html',
-    styleUrls: ['./organization-toa-maintenance-list-page.component.scss'],
-    providers: [FormatDatePipe],
-    standalone: false
+  selector: 'app-organization-toa-maintenance-list-page',
+  templateUrl: './organization-toa-maintenance-list-page.component.html',
+  styleUrls: ['./organization-toa-maintenance-list-page.component.scss'],
+  providers: [FormatDatePipe],
+  standalone: false
 })
 export class OrganizationToaMaintenanceListPageComponent implements OnInit {
   public busy: Subscription;

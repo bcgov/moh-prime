@@ -1,5 +1,5 @@
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { Component, Inject, Input, OnInit, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,10 +18,10 @@ import { SiteListViewModel } from '@registration/shared/models/site.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 
 @Component({
-    selector: 'app-organization-container',
-    templateUrl: './organization-container.component.html',
-    styleUrls: ['./organization-container.component.scss'],
-    standalone: false
+  selector: 'app-organization-container',
+  templateUrl: './organization-container.component.html',
+  styleUrls: ['./organization-container.component.scss'],
+  standalone: false
 })
 export class OrganizationContainerComponent implements OnInit {
   @Input() public content: TemplateRef<any>;

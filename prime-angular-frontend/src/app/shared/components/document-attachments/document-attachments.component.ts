@@ -7,13 +7,13 @@ import { AbstractOverview } from '@lib/classes/abstract-overview.class';
 import { DocumentSectionMap } from '@shared/enums/document-type.enum';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 
 @Component({
-    selector: 'app-document-attachments',
-    templateUrl: './document-attachments.component.html',
-    styleUrls: ['./document-attachments.component.scss'],
-    standalone: false
+  selector: 'app-document-attachments',
+  templateUrl: './document-attachments.component.html',
+  styleUrls: ['./document-attachments.component.scss'],
+  standalone: false
 })
 export class DocumentAttachmentsComponent extends AbstractOverview implements OnInit {
   @Input() public documents: BaseDocument[];
@@ -26,7 +26,7 @@ export class DocumentAttachmentsComponent extends AbstractOverview implements On
   constructor(
     route: ActivatedRoute,
     router: Router,
-    private paperEnrolmentResource: PaperEnrolmentResource,
+    private enrolmentResource: EnrolmentResource,
     private utilsService: UtilsService
   ) {
     super(route, router, PaperEnrolmentRoutes.MODULE_PATH);
@@ -39,7 +39,7 @@ export class DocumentAttachmentsComponent extends AbstractOverview implements On
     const enrolleeId = +this.route.snapshot.params.id
       ? this.route.snapshot.params.id
       : this.route.snapshot.params.eid;
-    this.paperEnrolmentResource.getEnrolleeAdjudicationDocumentDownloadToken(enrolleeId, documentId)
+    this.enrolmentResource.getEnrolleeAdjudicationDocumentDownloadToken(enrolleeId, documentId)
       .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 

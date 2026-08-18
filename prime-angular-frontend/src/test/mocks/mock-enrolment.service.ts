@@ -42,7 +42,7 @@ export class MockEnrolmentService implements IEnrolmentService {
         gpid: null,
         hpdid: null,
         username: `${faker.random.uuid()}@bcsc`,
-        identityInsuranceLevel: 3
+        identityAssuranceLevel: 3
       },
       appliedDate: null,
       approvedDate: null,
