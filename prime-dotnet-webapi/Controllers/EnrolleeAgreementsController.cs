@@ -221,13 +221,58 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="agreementId"></param>
-        [HttpGet("{enrolleeId}/agreements/{submissionId}/submission", Name = nameof(GetSubmissionForAgreement))]
+        [HttpGet("{enrolleeId}/agreements/{agreementId}/submission", Name = nameof(GetSubmissionForAgreement))]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Submission>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetSubmissionForAgreement(int enrolleeId, int submissionId)
+        public async Task<ActionResult> GetSubmissionForAgreement(int enrolleeId, int agreementId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            Agreement agreement = await _enrolleeAgreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId);
+            if (agreement == null || agreement.AcceptedDate == null)
+            {
+                return NotFound($"Accepted Agreement not found with id {agreementId} for enrollee with id {enrolleeId}");
+            }
+
+            var enrolleeSubmission = await _enrolleeSubmissionService.GetEnrolleeSubmissionBeforeDateAsync(enrolleeId, agreement.AcceptedDate.Value);
+            if (enrolleeSubmission == null)
+            {
+                return NotFound($"No enrolment submissions were found for Agreement with id {agreementId} for enrollee with id {enrolleeId}.");
+            }
+
+            if (User.IsAdministrant())
+            {
+                await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Enrolment in PRIME History");
+            }
+
+            return Ok(enrolleeSubmission);
+        }
+
+
+        // GET: api/enrollees/5/submission/3
+        /// <summary>
+        /// Get the submission for a given agreement.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="submissionId"></param>
+        [HttpGet("{enrolleeId}/submission/{submissionId}", Name = nameof(GetSubmissionForEnrollee))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Submission>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetSubmissionForEnrollee(int enrolleeId, int submissionId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)

@@ -16,7 +16,8 @@ export class GisEnrolment implements Omit<BcscUser, 'verifiedAddress'> {
     public organization: string = null,
     public role: string = null,
     public submittedDate: string = null,
-    public id: number = 0
+    public id: number = 0,
+    public identityAssuranceLevel: number = null,
   ) {
     this.hpdid = hpdid;
     this.userId = userId;
@@ -33,6 +34,7 @@ export class GisEnrolment implements Omit<BcscUser, 'verifiedAddress'> {
     this.role = role;
     this.submittedDate = submittedDate;
     this.id = id;
+    this.identityAssuranceLevel = identityAssuranceLevel;
   }
 
   public static fromBcscUser(bcscUser: BcscUser): GisEnrolment {
@@ -48,7 +50,7 @@ export class GisEnrolment implements Omit<BcscUser, 'verifiedAddress'> {
   }
 
   public static toBcscUser(enrolment: GisEnrolment): Omit<BcscUser, 'verifiedAddress'> {
-    const { hpdid, userId, username, givenNames, dateOfBirth, email, firstName, lastName } = enrolment;
-    return { hpdid, userId, username, givenNames, dateOfBirth, email, firstName, lastName };
+    const { hpdid, userId, username, givenNames, dateOfBirth, email, firstName, lastName, identityAssuranceLevel } = enrolment;
+    return { hpdid, userId, username, givenNames, dateOfBirth, email, firstName, lastName, identityAssuranceLevel };
   }
 }

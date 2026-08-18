@@ -12,16 +12,16 @@ import { PermissionService } from '@auth/shared/services/permission.service';
 
 import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 import { Role } from '@auth/shared/enum/role.enum';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { DateContent } from '@adjudication/shared/components/dated-content-table/dated-content-table.component';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-    selector: 'app-adjudicator-notes',
-    templateUrl: './adjudicator-notes.component.html',
-    styleUrls: ['./adjudicator-notes.component.scss'],
-    standalone: false
+  selector: 'app-adjudicator-notes',
+  templateUrl: './adjudicator-notes.component.html',
+  styleUrls: ['./adjudicator-notes.component.scss'],
+  standalone: false
 })
 export class AdjudicatorNotesComponent implements OnInit {
   @Input() public noteType: NoteType;

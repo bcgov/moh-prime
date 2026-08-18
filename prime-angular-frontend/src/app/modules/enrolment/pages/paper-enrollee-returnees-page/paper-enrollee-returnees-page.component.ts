@@ -19,7 +19,7 @@ import { ToggleContentChange } from '@shared/components/toggle-content/toggle-co
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
@@ -27,10 +27,10 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-pr
 import { PaperEnrolleeReturneeFormState } from './paper-enrollee-returnee-form-state.class';
 
 @Component({
-    selector: 'app-paper-enrollee-returnees',
-    templateUrl: './paper-enrollee-returnees-page.component.html',
-    styleUrls: ['./paper-enrollee-returnees-page.component.scss'],
-    standalone: false
+  selector: 'app-paper-enrollee-returnees',
+  templateUrl: './paper-enrollee-returnees-page.component.html',
+  styleUrls: ['./paper-enrollee-returnees-page.component.scss'],
+  standalone: false
 })
 export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePage implements OnInit {
   public isOfflineFormAccessRequested: boolean;

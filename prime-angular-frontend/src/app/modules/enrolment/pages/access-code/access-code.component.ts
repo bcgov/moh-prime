@@ -11,15 +11,15 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentResource } from '@core/resources/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
-    selector: 'app-access-code',
-    templateUrl: './access-code.component.html',
-    styleUrls: ['./access-code.component.scss'],
-    standalone: false
+  selector: 'app-access-code',
+  templateUrl: './access-code.component.html',
+  styleUrls: ['./access-code.component.scss'],
+  standalone: false
 })
 export class AccessCodeComponent extends BaseEnrolmentProfilePage implements OnInit {
   constructor(

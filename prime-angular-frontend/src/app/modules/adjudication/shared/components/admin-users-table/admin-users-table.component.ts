@@ -1,4 +1,4 @@
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationResource } from '@core/resources/adjudication-resource.service';
 import { Component, OnInit } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Admin, AdminUser } from '@auth/shared/models/admin.model';
@@ -6,10 +6,10 @@ import { AdminStatusType } from '@adjudication/shared/models/admin-status.enum';
 import { Role } from '@auth/shared/enum/role.enum';
 
 @Component({
-    selector: 'app-admin-users-table',
-    templateUrl: './admin-users-table.component.html',
-    styleUrls: ['./admin-users-table.component.scss'],
-    standalone: false
+  selector: 'app-admin-users-table',
+  templateUrl: './admin-users-table.component.html',
+  styleUrls: ['./admin-users-table.component.scss'],
+  standalone: false
 })
 export class AdminUsersTableComponent implements OnInit {
 
