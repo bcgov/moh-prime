@@ -122,6 +122,15 @@ export class SiteOverviewComponent implements OnInit {
       });
   }
 
+  public onDenyOrgClaim(): void {
+    this.busy = this.organizationResource
+      .denyOrganizationClaim(this.orgClaim.organizationId, this.orgClaim.id)
+      .subscribe(() => {
+        this.refresh.next(true);
+        this.organization.hasClaim = false;
+      });
+  }
+
   public onSendNotification(): void {
     const data: DialogOptions = {
       title: 'PharmaCare Provider Enrolment',
