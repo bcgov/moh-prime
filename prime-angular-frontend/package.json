@@ -19,7 +19,7 @@
   "dependencies": {
     "@angular/animations": "^19.2.21",
     "@angular/cdk": "^19.2.19",
-    "@angular/common": "^19.2.21",
+    "@angular/common": "^19.2.23",
     "@angular/compiler": "^19.2.21",
     "@angular/core": "^19.2.21",
     "@angular/forms": "^19.2.21",
@@ -62,6 +62,7 @@
     "@angular/cli": "^19.2.24",
     "@angular/compiler-cli": "^19.2.21",
     "@angular/language-service": "^19.2.21",
+    "@babel/plugin-transform-modules-systemjs": "^7.29.4",
     "@types/faker": "^4.1.12",
     "@types/jasmine": "~3.10.3",
     "@types/jasminewd2": "^2.0.8",
