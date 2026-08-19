@@ -258,9 +258,22 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderOrgClaimApprovalNotificationEmailAsync(string newSigningAuthorityEmail, OrgClaimApprovalNotificationViewModel viewModel)
+        public async Task<Email> RenderOrgClaimApprovalNotificationEmailAsync(string newSigningAuthorityEmail, OrgClaimNotificationViewModel viewModel)
         {
             var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(EmailTemplateType.OrganizationClaimApprovalNotification);
+
+            return new Email
+            (
+                from: PrimeEmail,
+                to: newSigningAuthorityEmail,
+                subject: emailTemplate.Subject,
+                body: _razorConverterService.RenderEmailTemplateToString(emailTemplate, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderOrgClaimDenialNotificationEmailAsync(string newSigningAuthorityEmail, OrgClaimNotificationViewModel viewModel)
+        {
+            var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(EmailTemplateType.OrganizationClaimDenialNotification);
 
             return new Email
             (
