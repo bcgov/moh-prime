@@ -246,6 +246,39 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // POST: api/Organizations/5/claims/1/deny
+        /// <summary>
+        /// Approve claim for an existing Organization.
+        /// </summary>
+        [HttpPost("{organizationId}/claims/{claimId}/deny", Name = nameof(DenyOrganizationClaim))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> DenyOrganizationClaim(int organizationId, int claimId)
+        {
+            var orgClaim = await _organizationClaimService.GetOrganizationClaimAsync(claimId);
+            if (orgClaim == null || organizationId != orgClaim.OrganizationId)
+            {
+                return NotFound("Cannot locate Claim for given Organization.");
+            }
+
+            var existingSigningAuthorityId = await _organizationService.GetOrganizationSigningAuthorityIdAsync(organizationId);
+            var notificationRequired = existingSigningAuthorityId != orgClaim.NewSigningAuthorityId;
+
+            await _organizationClaimService.DeleteClaimAsync(orgClaim.Id);
+
+            if (notificationRequired)
+            {
+                await _businessEventService.CreateOrganizationEventAsync(organizationId, orgClaim.NewSigningAuthorityId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}) has been denied.");
+                await _emailService.SendOrgClaimDenialNotificationAsync(orgClaim);
+                await _businessEventService.CreateOrganizationEventAsync(organizationId, orgClaim.NewSigningAuthorityId, "Sent organization claim denial notification");
+            }
+
+            return NoContent();
+        }
+
         // PUT: api/Organizations/5
         /// <summary>
         /// Updates a specific Organization.
