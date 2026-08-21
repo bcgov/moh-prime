@@ -1,6 +1,6 @@
 namespace Prime.ViewModels.Emails
 {
-    public class OrgClaimApprovalNotificationViewModel
+    public class OrgClaimNotificationViewModel
     {
         public string OrganizationName { get; set; }
         public string ProvidedSiteId { get; set; }

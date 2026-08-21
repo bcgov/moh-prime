@@ -238,6 +238,19 @@ export class OrganizationResource {
       );
   }
 
+  public denyOrganizationClaim(organizationId: number, claimId: number): NoContent {
+    return this.apiResource.post<NoContent>(`organizations/${organizationId}/claims/${claimId}/deny`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Signing Authority change request is denied')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization Claim could not be denied');
+          this.logger.error('[Core] OrganizationResource::denyOrganizationClaim error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public updateOrganization(organization: Organization): NoContent {
     return this.apiResource.put<NoContent>(`organizations/${organization.id}`, organization)
       .pipe(
