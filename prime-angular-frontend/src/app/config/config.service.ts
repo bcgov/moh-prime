@@ -6,7 +6,8 @@ import { catchError, map } from 'rxjs/operators';
 import {
   Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig,
   LicenseConfig, VendorConfig, CollegeLicenseGroupingConfig, DeviceProviderRoleConfig,
-  HAConfig
+  HAConfig,
+  CareTypeConfig
 } from '@config/config.model';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
@@ -105,9 +106,9 @@ export class ConfigService implements IConfigService {
       .sort(this.utilsService.sortByKey<CollegeLicenseGroupingConfig>('weight'));
   }
 
-  public get careTypes(): Config<number>[] {
+  public get careTypes(): CareTypeConfig[] {
     return [...this.configuration.careTypes]
-      .sort(this.utilsService.sortByKey<Config<number>>('name'));
+      .sort(this.utilsService.sortByKey<CareTypeConfig>('name'));
   }
 
   public get securityGroups(): Config<number>[] {

@@ -32,6 +32,7 @@ export class MockHealthAuthoritySiteService {
       },
       siteName: faker.random.words(2),
       pec: faker.random.number().toString(),
+      pharmacyPhone: faker.phone.phoneNumber(),
       mnemonic: faker.random.words(5),
       securityGroupCode: faker.random.number(),
       physicalAddress: address,

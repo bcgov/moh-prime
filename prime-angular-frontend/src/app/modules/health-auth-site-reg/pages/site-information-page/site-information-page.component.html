@@ -32,6 +32,19 @@
         </div>
       </div>
 
+      <div class="row"
+           *ngIf="isPharmacyPhoneRequired()">
+        <div class="col">
+          <mat-form-field class="w-100">
+            <mat-label>Pharmacy Phone Number</mat-label>
+            <input matInput
+                   [formControl]="formState.pharmacyPhone"
+                   mask="(000) 000-0000">
+            <mat-error *ngIf="formState.pharmacyPhone.hasError('phone')">Must be a valid phone number</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
       <div class="row">
         <div class="col">
 

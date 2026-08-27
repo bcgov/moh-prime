@@ -13,7 +13,7 @@ export interface Configuration {
   vendors: VendorConfig[];
   healthAuthorities: HAConfig[];
   facilities: Config<number>[];
-  careTypes: Config<number>[];
+  careTypes: CareTypeConfig[];
   securityGroups: Config<number>[];
   collegeLicenseGroupings: CollegeLicenseGroupingConfig[];
   deviceProviderRoles: DeviceProviderRoleConfig[];
@@ -76,6 +76,10 @@ export interface CollegePracticeConfig {
 
 export interface VendorConfig extends Config<number> {
   careSettingCode: number;
+}
+
+export interface CareTypeConfig extends Config<number> {
+  pharmacyPhoneRequired: boolean;
 }
 
 export interface HAConfig extends Config<number> {

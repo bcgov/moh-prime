@@ -11,6 +11,8 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public string HealthAuthorityName { get; set; }
         public string CareType { get; set; }
         public string PEC { get; set; }
+        public string Mnemonic { get; set; }
+        public string PharmacyPhone { get; set; }
         public string NewOrExisting
         {
             get

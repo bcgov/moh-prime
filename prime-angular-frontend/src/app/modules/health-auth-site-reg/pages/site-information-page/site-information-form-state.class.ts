@@ -3,6 +3,7 @@ import { UntypedFormBuilder, UntypedFormControl, Validators, UntypedFormGroup } 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteInformationForm } from './site-information-form.model';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 export class SiteInformationFormState extends AbstractFormState<SiteInformationForm> {
   private siteId: number;
@@ -26,6 +27,10 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
 
   public get pec(): UntypedFormControl {
     return this.formInstance.get('pec') as UntypedFormControl;
+  }
+
+  public get pharmacyPhone(): UntypedFormControl {
+    return this.formInstance.get('pharmacyPhone') as UntypedFormControl;
   }
 
   public get securityGroupCode(): UntypedFormControl {
@@ -58,6 +63,7 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
       siteName: ['', [Validators.required]],
       pec: [null, []],
       mnemonic: [null, []],
+      pharmacyPhone: [null, [FormControlValidators.phone]],
       securityGroupCode: [null, [Validators.required]],
       physicalAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],

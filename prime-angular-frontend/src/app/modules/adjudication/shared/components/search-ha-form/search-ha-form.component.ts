@@ -4,17 +4,17 @@ import { ActivatedRoute } from '@angular/router';
 
 import { debounceTime } from 'rxjs/operators';
 
-import { Config } from '@config/config.model';
+import { CareTypeConfig, Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { LocalStorageService } from '@core/services/local-storage.service';
 import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
-    selector: 'app-search-ha-form',
-    templateUrl: './search-ha-form.component.html',
-    styleUrls: ['./search-ha-form.component.scss'],
-    standalone: false
+  selector: 'app-search-ha-form',
+  templateUrl: './search-ha-form.component.html',
+  styleUrls: ['./search-ha-form.component.scss'],
+  standalone: false
 })
 export class SearchHAFormComponent implements OnInit {
 
@@ -30,7 +30,7 @@ export class SearchHAFormComponent implements OnInit {
 
   public siteStatuses: Config<number>[];
   public vendors: Config<number>[];
-  public careTypes: Config<number>[];
+  public careTypes: CareTypeConfig[];
 
   private textSearchKey: string = "ha-search-form-textSearch";
   private siteStatusCodeKey: string = "ha-search-form-siteStatusCode";

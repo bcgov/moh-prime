@@ -53,6 +53,11 @@
       {{ submission?.mnemonic | default }}
     </app-enrollee-property>
 
+    <app-enrollee-property *ngIf="submission?.pharmacyPhone"
+                           title="Pharmacy Phone Number">
+      {{ submission?.pharmacyPhone | default }}
+    </app-enrollee-property>
+
 
     <app-enrollee-property *ngIf="submission?.deviceProviderId"
                            title="Device Provider ID">

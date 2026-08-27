@@ -33,7 +33,7 @@ RUN dotnet build "prime.csproj" -c Release -o /opt/app-root/app/out
 RUN dotnet publish "prime.csproj" -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 
 # Begin database migration setup
-RUN dotnet tool install --global dotnet-ef --version 8.0.3
+RUN dotnet tool install --global dotnet-ef --version 8.0.19
 RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
 
 ########################################
