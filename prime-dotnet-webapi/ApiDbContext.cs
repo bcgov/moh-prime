@@ -111,6 +111,7 @@ namespace Prime
         // Health Authorities
         public DbSet<HealthAuthoritySite> HealthAuthoritySites { get; set; }
         public DbSet<HealthAuthorityOrganization> HealthAuthorities { get; set; }
+        public DbSet<HealthAuthorityOrganizationAdditionalDocument> HealthAuthorityOrganizationAdditionalDocuments { get; set; }
         public DbSet<HealthAuthorityCareType> HealthAuthorityCareTypes { get; set; }
         public DbSet<HealthAuthorityContact> HealthAuthorityContacts { get; set; }
         public DbSet<HealthAuthorityVendor> HealthAuthorityVendors { get; set; }
