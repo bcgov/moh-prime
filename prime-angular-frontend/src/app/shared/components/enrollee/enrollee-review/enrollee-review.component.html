@@ -18,15 +18,15 @@
 
   <ng-container *ngIf="hasPreferredName; else noPreferredName">
     <app-enrollee-property title="Alternate First Name">
-      {{ enrollee?.preferredFirstName | default }}
+      {{ enrollee?.preferredFirstName | alternateName | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Alternate Middle Name">
-      {{ enrollee?.preferredMiddleName | default }}
+      {{ enrollee?.preferredMiddleName | alternateName | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Alternate Last Name">
-      {{ enrollee?.preferredLastName | default }}
+      {{ enrollee?.preferredLastName | alternateName | default }}
     </app-enrollee-property>
   </ng-container>
 
