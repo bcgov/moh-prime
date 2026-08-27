@@ -227,6 +227,45 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // PUT: api/health-authorities/5/care-type-vendor
+        /// <summary>
+        /// Updates a specific Health authorities care type vendor mapping.
+        /// </summary>
+        /// <param name="healthAuthorityId"></param>
+        /// <param name="careTypeVendors"></param>
+        [HttpPut("{healthAuthorityId}/care-type-vendor", Name = nameof(UpdateCareTypeVendor))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdateCareTypeVendor(int healthAuthorityId, IEnumerable<HealthAuthorityCareTypeVendorModel> careTypeVendors)
+        {
+
+            if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
+            {
+                return NotFound($"Health Authority not found with id {healthAuthorityId}");
+            }
+
+            if (careTypeVendors.Count() == 0)
+            {
+                return BadRequest("Unable to update care type vendor ");
+            }
+
+            if (careTypeVendors == null)
+            {
+                return BadRequest("Health authority vendors cannot be null.");
+            }
+
+            if (!await _healthAuthorityService.UpdateCareTypeVendorsAsync(healthAuthorityId, careTypeVendors))
+            {
+                return BadRequest("Unable to update care type vendor");
+            }
+
+            return NoContent();
+        }
+
         // PUT: api/health-authorities/1/privacy-office
         /// <summary>
         /// Updates the Privacy Office on a Health Authority
