@@ -198,7 +198,11 @@ export class EnrolmentGuard extends BaseGuard {
       deniedRoutes.push(EnrolmentRoutes.REMOTE_ACCESS);
     }
 
-    if (enrolment?.currentTOAStatus === "") {
+    // check if the enrollee has a renewal email sent, if so, disable access to the pharmanet summary page
+    let expiryDate = enrolment && !!enrolment.expiryDate ? new Date(enrolment.expiryDate) : null;
+    const hasSentRenewalEmail = expiryDate ? (expiryDate.getDate() - new Date().getDate()) <= 1000 * 60 * 60 * 24 * 14 : false;
+
+    if (enrolment?.currentTOAStatus === "" || hasSentRenewalEmail) {
       deniedRoutes.push(EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY)
     }
 
