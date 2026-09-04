@@ -35,7 +35,7 @@
     "brace-expansion": "^1.1.18",
     "classlist.js": "^1.1.20150312",
     "engine.io": "^6.6.9",
-    "fast-uri": "^3.1.5",
+    "fast-uri": "^3.1.7",
     "filepond": "^4.22.1",
     "filepond-plugin-file-validate-size": "^2.2.1",
     "filepond-plugin-file-validate-type": "^1.2.5",
