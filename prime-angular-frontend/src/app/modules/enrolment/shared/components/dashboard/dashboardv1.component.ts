@@ -151,7 +151,12 @@ export class DashboardV1Component implements OnInit {
     const hasAcceptedAtLeastOneToa = (enrolment)
       ? !!enrolment.expiryDate
       : false;
-    const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, hasAcceptedAtLeastOneToa, enrolment?.currentTOAStatus);
+
+    let expiryDate = enrolment && !!enrolment.expiryDate ? new Date(enrolment.expiryDate) : null;
+
+    const hasSentRenewalEmail = expiryDate ? (expiryDate.getDate() - new Date().getDate()) <= 1000 * 60 * 60 * 24 * 14 : false;
+
+    const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, hasAcceptedAtLeastOneToa, enrolment?.currentTOAStatus, hasSentRenewalEmail);
     const currentRoute = this.router.url.slice(1).split('/')[1];
 
     const termsOfAccessRoute = (enrolmentStatus === EnrolmentStatusEnum.UNDER_REVIEW)
@@ -160,6 +165,10 @@ export class DashboardV1Component implements OnInit {
         ? EnrolmentRoutes.PENDING_ACCESS_TERM
         : EnrolmentRoutes.CURRENT_ACCESS_TERM;
 
+    // note:
+    // 1 - disabled property is not in used currently
+    // 2 - disabled business logic pass on to getEnrolmentStatusIcons() function
+    // 3 - also, disable business logic also implemented separately in enrolment.guard.ts to prevent user from accessing the route directly
     return [
       {
         items: [
@@ -199,13 +208,16 @@ export class DashboardV1Component implements OnInit {
             icon: statusIcons.certificate,
             route: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
             showItem: true,
-            disabled: (
-              !hasAcceptedAtLeastOneToa ||
-              [
-                EnrolmentStatusEnum.LOCKED,
-                EnrolmentStatusEnum.DECLINED
-              ].includes(enrolmentStatus)
-            ) || enrolment?.currentTOAStatus === ""
+            disabled:
+              (
+                !hasAcceptedAtLeastOneToa ||
+                [
+                  EnrolmentStatusEnum.LOCKED,
+                  EnrolmentStatusEnum.DECLINED
+                ].includes(enrolmentStatus)
+              ) ||
+              enrolment?.currentTOAStatus === "" ||
+              hasSentRenewalEmail
           },
           {
             name: 'Absence Management',
@@ -253,7 +265,7 @@ export class DashboardV1Component implements OnInit {
     ];
   }
 
-  private getEnrolmentStatusIcons(enrolmentStatus: EnrolmentStatusEnum, hasAcceptedAtLeastOneToa: boolean, currentTOAStatus: string) {
+  private getEnrolmentStatusIcons(enrolmentStatus: EnrolmentStatusEnum, hasAcceptedAtLeastOneToa: boolean, currentTOAStatus: string, hasSentRenewalEmail: boolean) {
     let enrollee = 'assignment_ind';
     let accessAgreement = 'assignment';
     let certificate = 'mail';
@@ -300,7 +312,9 @@ export class DashboardV1Component implements OnInit {
 
     }
 
-    if (currentTOAStatus === "") certificate = 'lock'
+    if (currentTOAStatus === "" || hasSentRenewalEmail) {
+      certificate = 'lock';
+    }
 
     return { enrollee, accessAgreement, certificate, absence };
   }
