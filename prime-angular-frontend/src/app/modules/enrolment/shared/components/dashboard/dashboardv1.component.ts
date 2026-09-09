@@ -178,7 +178,7 @@ export class DashboardV1Component implements OnInit {
             route: EnrolmentRoutes.OVERVIEW,
             showItem: true,
             disabled: (
-              !hasAcceptedAtLeastOneToa ||
+
               [
                 EnrolmentStatusEnum.LOCKED,
                 EnrolmentStatusEnum.DECLINED
