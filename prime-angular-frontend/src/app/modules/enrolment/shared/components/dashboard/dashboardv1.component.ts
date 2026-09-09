@@ -154,7 +154,7 @@ export class DashboardV1Component implements OnInit {
 
     let expiryDate = enrolment && !!enrolment.expiryDate ? new Date(enrolment.expiryDate) : null;
 
-    const hasSentRenewalEmail = expiryDate ? (expiryDate.getDate() - new Date().getDate()) <= 1000 * 60 * 60 * 24 * 14 : false;
+    const hasSentRenewalEmail = expiryDate ? (expiryDate.getTime() - new Date().getTime()) <= 1000 * 60 * 60 * 24 * 14 : false;
 
     const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, hasAcceptedAtLeastOneToa, enrolment?.currentTOAStatus, hasSentRenewalEmail);
     const currentRoute = this.router.url.slice(1).split('/')[1];
