@@ -38,6 +38,7 @@
   .mat-mdc-list-item.disabled {
     // Prevent interacting with the link
     pointer-events: none;
+    opacity: 0.4;
   }
 
   .mat-mdc-list-item {
