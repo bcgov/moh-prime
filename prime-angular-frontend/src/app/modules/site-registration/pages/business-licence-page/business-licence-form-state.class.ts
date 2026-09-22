@@ -63,7 +63,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       return;
     }
 
-    const { expiryDate, deferredLicenceReason, doingBusinessAs, pec, activeBeforeRegistration, physicalAddress, isNewWithSiteId, isNewWithoutSiteId, careSettingCode, deviceProviderId } = this.formInstance.getRawValue();
+    const { expiryDate, deferredLicenceReason, doingBusinessAs, pec, activeBeforeRegistration, existingPharmacyNoPEC, physicalAddress, isNewWithSiteId, isNewWithoutSiteId, careSettingCode, deviceProviderId } = this.formInstance.getRawValue();
 
     const isNew = isNewWithSiteId || isNewWithoutSiteId;
 
@@ -76,6 +76,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       doingBusinessAs,
       pec,
       activeBeforeRegistration,
+      existingPharmacyNoPEC,
       physicalAddress,
       isNew,
       careSettingCode,
@@ -98,7 +99,10 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
 
     this.siteId = siteId;
 
-    const { doingBusinessAs, pec, businessLicence, physicalAddress, isNew, careSettingCode, activeBeforeRegistration, deviceProviderId } = model;
+    const {
+      doingBusinessAs, pec, businessLicence,
+      physicalAddress, isNew, careSettingCode,
+      activeBeforeRegistration, deviceProviderId, existingPharmacyNoPEC } = model;
     // Preserve the business licence for use when
     // creating JSON format from the form
     this.businessLicence = businessLicence;
@@ -113,6 +117,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       physicalAddress,
       isNewWithSiteId,
       isNewWithoutSiteId,
+      existingPharmacyNoPEC,
       careSettingCode,
       activeBeforeRegistration,
       deviceProviderId
@@ -172,6 +177,10 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
         false,
         []
       ],
+      existingPharmacyNoPEC: [
+        false,
+        []
+      ],
       careSettingCode: [
         null,
         []
@@ -199,11 +208,11 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
 
       const isNewWSiteId = form.get("isNewWithSiteId");
       const isNewWOSiteId = form.get("isNewWithoutSiteId");
-      const activeBeforeRegistration = form.get("activeBeforeRegistration");
+      const existingPharmacyNoPEC = form.get("existingPharmacyNoPEC");
       const careSettingCode = form.get("careSettingCode");
 
       if ((careSettingCode.value === CareSettingEnum.COMMUNITY_PHARMACY || careSettingCode.value === CareSettingEnum.DEVICE_PROVIDER) &&
-        !(isNewWOSiteId.value || isNewWSiteId.value || activeBeforeRegistration.value) && this.siteService.site?.approvedDate === null) {
+        !(isNewWOSiteId.value || isNewWSiteId.value || existingPharmacyNoPEC.value) && this.siteService.site?.approvedDate === null) {
         return { 'checkboxRequired': true };
       }
 

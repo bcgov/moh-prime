@@ -77,11 +77,19 @@
         </div>
       </mat-checkbox>
     </div>
-    <div>
+    <div *ngIf="!isCommunityPharmacy() && !isDeviceProvider()">
       <mat-checkbox formControlName="activeBeforeRegistration"
                     (change)="checkAsOperational($event)">
         <div class="pl-3">
           This site is already operational and submitting PharmaNet transactions, and we have a Site ID.
+        </div>
+      </mat-checkbox>
+    </div>
+    <div *ngIf="isCommunityPharmacy() || isDeviceProvider()">
+      <mat-checkbox formControlName="existingPharmacyNoPEC"
+                    (change)="checkAsExistingPharmacyNoPEC($event)">
+        <div class="pl-3">
+          This is an existing pharmacy. PRIME will complete the site ID.
         </div>
       </mat-checkbox>
     </div>
