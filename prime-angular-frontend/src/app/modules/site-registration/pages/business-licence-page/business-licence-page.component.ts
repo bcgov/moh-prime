@@ -30,10 +30,10 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 // TODO refactor business licence pages into a single page
 @Component({
-    selector: 'app-business-licence-page',
-    templateUrl: './business-licence-page.component.html',
-    styleUrls: ['./business-licence-page.component.scss'],
-    standalone: false
+  selector: 'app-business-licence-page',
+  templateUrl: './business-licence-page.component.html',
+  styleUrls: ['./business-licence-page.component.scss'],
+  standalone: false
 })
 export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: BusinessLicenceFormState;
@@ -166,11 +166,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
     this.site = this.siteService.site;
     this.getBusinessLicence(this.site.id);
     if (this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY) {
-      if (this.site.activeBeforeRegistration) {
-        this.formUtilsService.setValidators(this.formState.pec, [Validators.required, FormControlValidators.communityPharmacySiteId])
-      } else {
-        this.formUtilsService.setValidators(this.formState.pec, [FormControlValidators.communityPharmacySiteId])
-      }
+      this.formUtilsService.setValidators(this.formState.pec, [FormControlValidators.communityPharmacySiteId])
     } else {
       this.formUtilsService.setValidators(this.formState.pec, []);
     }
