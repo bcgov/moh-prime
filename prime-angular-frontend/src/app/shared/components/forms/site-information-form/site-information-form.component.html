@@ -77,7 +77,7 @@
         </div>
       </mat-checkbox>
     </div>
-    <div *ngIf="!isCommunityPharmacy() && !isDeviceProvider()">
+    <div *ngIf="!isCommunityPharmacy() && !isDeviceProvider() || showActiveBeforeRegistrationCheckbox">
       <mat-checkbox formControlName="activeBeforeRegistration"
                     (change)="checkAsOperational($event)">
         <div class="pl-3">

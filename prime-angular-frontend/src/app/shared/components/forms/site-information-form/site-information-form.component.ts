@@ -26,6 +26,7 @@ export class SiteInformationFormComponent implements OnInit {
   @Input() public careSettingCode: number;
   public busy: Subscription;
   public doingBusinessAsNames: string[];
+  public showActiveBeforeRegistrationCheckbox: boolean;
 
   constructor(
     private organizationResource: OrganizationResource,
@@ -82,6 +83,10 @@ export class SiteInformationFormComponent implements OnInit {
   protected initForm(): void {
     if (this.organizationId) {
       this.getDoingBusinessAs(this.organizationId);
+      this.showActiveBeforeRegistrationCheckbox = this.activeBeforeRegistration.value;
+    }
+    if (this.isCommunityPharmacy() || this.isDeviceProvider()) {
+      this.activeBeforeRegistration.disable();
     }
   }
 
@@ -101,6 +106,7 @@ export class SiteInformationFormComponent implements OnInit {
     if (change.checked) {
       this.isNewWithoutSiteId.setValue(false);
       this.existingPharmacyNoPEC.setValue(false);
+      this.activeBeforeRegistration.setValue(false);
     }
     this.updatePEC();
   }
@@ -109,14 +115,19 @@ export class SiteInformationFormComponent implements OnInit {
     if (change.checked) {
       this.isNewWithSiteId.setValue(false);
       this.existingPharmacyNoPEC.setValue(false);
+      this.activeBeforeRegistration.setValue(false);
     }
     this.updatePEC();
   }
 
   public checkAsOperational(change: MatCheckboxChange): void {
     if (change.checked) {
-      this.isNewWithoutSiteId.setValue(false);
-      this.isNewWithSiteId.setValue(false);
+      if (this.isCommunityPharmacy() || this.isDeviceProvider()) {
+        change.checked = false;
+      } else {
+        this.isNewWithoutSiteId.setValue(false);
+        this.isNewWithSiteId.setValue(false);
+      }
     }
     this.updatePEC();
   }
@@ -125,6 +136,7 @@ export class SiteInformationFormComponent implements OnInit {
     if (change.checked) {
       this.isNewWithoutSiteId.setValue(false);
       this.isNewWithSiteId.setValue(false);
+      this.activeBeforeRegistration.setValue(false);
     }
     this.updatePEC();
   }

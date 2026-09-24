@@ -208,11 +208,12 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
 
       const isNewWSiteId = form.get("isNewWithSiteId");
       const isNewWOSiteId = form.get("isNewWithoutSiteId");
+      const activeBeforeRegistration = form.get("activeBeforeRegistration");
       const existingPharmacyNoPEC = form.get("existingPharmacyNoPEC");
       const careSettingCode = form.get("careSettingCode");
 
       if ((careSettingCode.value === CareSettingEnum.COMMUNITY_PHARMACY || careSettingCode.value === CareSettingEnum.DEVICE_PROVIDER) &&
-        !(isNewWOSiteId.value || isNewWSiteId.value || existingPharmacyNoPEC.value) && this.siteService.site?.approvedDate === null) {
+        !(isNewWOSiteId.value || isNewWSiteId.value || existingPharmacyNoPEC.value || activeBeforeRegistration.value) && this.siteService.site?.approvedDate === null) {
         return { 'checkboxRequired': true };
       }
 
