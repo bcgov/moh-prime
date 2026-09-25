@@ -37,6 +37,8 @@ namespace Prime.Models
 
         public bool ActiveBeforeRegistration { get; set; }
 
+        public bool ExistingPharmacyNoPEC { get; set; }
+
         public bool Completed { get; set; }
 
         public bool Flagged { get; set; }

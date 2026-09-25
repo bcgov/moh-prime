@@ -84,6 +84,7 @@ export class MockCommunitySiteService {
       mnemonic: null,
       flagged: false,
       activeBeforeRegistration: false,
+      existingPharmacyNoPEC: false,
       isNew: false,
       individualDeviceProviders: [],
       deviceProviderId: null,
