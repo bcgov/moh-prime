@@ -15,10 +15,10 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { EnrolleeBannerListPageComponent } from '@adjudication/pages/enrollee-banner-list-page/enrollee-banner-list-page.component';
 
 @Component({
-    selector: 'app-site-information-form',
-    templateUrl: './site-information-form.component.html',
-    styleUrls: ['./site-information-form.component.scss'],
-    standalone: false
+  selector: 'app-site-information-form',
+  templateUrl: './site-information-form.component.html',
+  styleUrls: ['./site-information-form.component.scss'],
+  standalone: false
 })
 export class SiteInformationFormComponent implements OnInit {
   @Input() public form: UntypedFormGroup;
@@ -26,6 +26,7 @@ export class SiteInformationFormComponent implements OnInit {
   @Input() public careSettingCode: number;
   public busy: Subscription;
   public doingBusinessAsNames: string[];
+  public showActiveBeforeRegistrationCheckbox: boolean;
 
   constructor(
     private organizationResource: OrganizationResource,
@@ -56,6 +57,10 @@ export class SiteInformationFormComponent implements OnInit {
     return this.form.get('activeBeforeRegistration') as UntypedFormControl;
   }
 
+  public get existingPharmacyNoPEC(): UntypedFormControl {
+    return this.form.get('existingPharmacyNoPEC') as UntypedFormControl;
+  }
+
   public get deviceProviderId(): UntypedFormControl {
     return this.form.get('deviceProviderId') as UntypedFormControl;
   }
@@ -78,6 +83,10 @@ export class SiteInformationFormComponent implements OnInit {
   protected initForm(): void {
     if (this.organizationId) {
       this.getDoingBusinessAs(this.organizationId);
+      this.showActiveBeforeRegistrationCheckbox = this.activeBeforeRegistration.value;
+    }
+    if (this.isCommunityPharmacy() || this.isDeviceProvider()) {
+      this.activeBeforeRegistration.disable();
     }
   }
 
@@ -95,28 +104,42 @@ export class SiteInformationFormComponent implements OnInit {
 
   public checkAsIsNewWithSiteId(change: MatCheckboxChange): void {
     if (change.checked) {
-      this.activeBeforeRegistration.setValue(false);
       this.isNewWithoutSiteId.setValue(false);
+      this.existingPharmacyNoPEC.setValue(false);
+      this.activeBeforeRegistration.setValue(false);
     }
     this.updatePEC();
   }
 
   public checkAsIsNewWithoutSiteId(change: MatCheckboxChange): void {
     if (change.checked) {
-      this.activeBeforeRegistration.setValue(false);
       this.isNewWithSiteId.setValue(false);
+      this.existingPharmacyNoPEC.setValue(false);
+      this.activeBeforeRegistration.setValue(false);
     }
     this.updatePEC();
   }
 
   public checkAsOperational(change: MatCheckboxChange): void {
     if (change.checked) {
-      this.isNewWithoutSiteId.setValue(false);
-      this.isNewWithSiteId.setValue(false);
+      if (this.isCommunityPharmacy() || this.isDeviceProvider()) {
+        change.checked = false;
+      } else {
+        this.isNewWithoutSiteId.setValue(false);
+        this.isNewWithSiteId.setValue(false);
+      }
     }
     this.updatePEC();
   }
 
+  public checkAsExistingPharmacyNoPEC(change: MatCheckboxChange): void {
+    if (change.checked) {
+      this.isNewWithoutSiteId.setValue(false);
+      this.isNewWithSiteId.setValue(false);
+      this.activeBeforeRegistration.setValue(false);
+    }
+    this.updatePEC();
+  }
 
   private updatePEC(): void {
     if ((this.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY || this.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {

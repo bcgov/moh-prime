@@ -43,6 +43,8 @@ namespace Prime.ViewModels
 
         public bool ActiveBeforeRegistration { get; set; }
 
+        public bool ExistingPharmacyNoPEC { get; set; }
+
         public IEnumerable<IndividualDeviceProviderChangeModel> IndividualDeviceProviders { get; set; }
     }
 }

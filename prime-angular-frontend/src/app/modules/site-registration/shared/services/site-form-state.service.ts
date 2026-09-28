@@ -86,7 +86,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get json(): Site {
     const { careSettingCode, siteVendors } = this.careSettingPageFormState.json;
-    const { businessLicence, doingBusinessAs, pec, activeBeforeRegistration, physicalAddress, isNew, deviceProviderId } = this.businessLicenceFormState.json;
+    const { businessLicence, doingBusinessAs, pec, activeBeforeRegistration, existingPharmacyNoPEC, physicalAddress, isNew, deviceProviderId } = this.businessLicenceFormState.json;
     const businessHours = this.hoursOperationPageFormState.json;
     const remoteUsers = this.remoteUsersPageFormState.json;
     const administratorPharmaNet = this.administratorPharmaNetFormState.json;
@@ -122,6 +122,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       // submittedDate (N/A)
       pec,
       activeBeforeRegistration,
+      existingPharmacyNoPEC,
       isNew,
       deviceProviderId
     } as Site; // Enforced type due to N/A properties
@@ -252,10 +253,10 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       return;
     }
 
-    const { id, careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence, activeBeforeRegistration, physicalAddress, isNew, deviceProviderId } = site;
+    const { id, careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence, activeBeforeRegistration, existingPharmacyNoPEC, physicalAddress, isNew, deviceProviderId } = site;
 
     this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors });
-    this.businessLicenceFormState.patchValue({ doingBusinessAs, pec, businessLicence, activeBeforeRegistration, physicalAddress, isNew, careSettingCode, deviceProviderId }, id);
+    this.businessLicenceFormState.patchValue({ doingBusinessAs, pec, businessLicence, activeBeforeRegistration, existingPharmacyNoPEC, physicalAddress, isNew, careSettingCode, deviceProviderId }, id);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);
     this.administratorPharmaNetFormState.patchValue(site?.administratorPharmaNet);

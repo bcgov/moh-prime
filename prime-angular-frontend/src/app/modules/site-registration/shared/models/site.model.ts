@@ -52,6 +52,7 @@ export class Site {
   mnemonic: string;
   flagged: boolean;
   activeBeforeRegistration: boolean;
+  existingPharmacyNoPEC: boolean;
   isNew: boolean;
   deviceProviderId: string;
   currentSubmission: SiteSubmission;
