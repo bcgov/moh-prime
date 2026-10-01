@@ -11,10 +11,10 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
-    selector: 'app-link-site',
-    templateUrl: './link-site.component.html',
-    styleUrls: ['./link-site.component.scss'],
-    standalone: false
+  selector: 'app-link-site',
+  templateUrl: './link-site.component.html',
+  styleUrls: ['./link-site.component.scss'],
+  standalone: false
 })
 export class LinkSiteComponent implements OnInit {
   @Output() public linkSite: EventEmitter<boolean>;
@@ -32,6 +32,7 @@ export class LinkSiteComponent implements OnInit {
   public organizationSearchClicked: boolean;
   public showSiteList: boolean;
   public showSaveButton: boolean;
+  public targetCareSettingCode: CareSettingEnum = CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
 
   constructor(
     private siteResource: SiteResource,
@@ -42,13 +43,16 @@ export class LinkSiteComponent implements OnInit {
   ) {
 
     this.linkSite = new EventEmitter<boolean>();
-    this.siteId = data.data.siteId;
+    this.siteId = data?.data?.siteId;
 
-    if (data.data.organizationId) {
-      this.orgId = data.data.organizationId;
+    if (data?.data?.organizationId) {
+      this.orgId = data?.data?.organizationId;
     }
-    if (data.data.predecessorSiteId) {
-      this.preSiteId = data.data.predecessorSiteId
+    if (data?.data?.predecessorSiteId) {
+      this.preSiteId = data?.data?.predecessorSiteId
+    }
+    if (data?.data?.targetCareSettingCode) {
+      this.targetCareSettingCode = data?.data?.targetCareSettingCode;
     }
   }
 
@@ -151,7 +155,7 @@ export class LinkSiteComponent implements OnInit {
         this.siteResource.getSites(orgId)
           .subscribe(sites => {
             this.sites = sites.filter(s => s.id !== this.siteId && s.completed &&
-              s.careSettingCode == CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
+              s.careSettingCode == this.targetCareSettingCode);
             this.showSiteList = true;
           });
       }
