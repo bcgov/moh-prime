@@ -8,6 +8,7 @@ import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enu
 
 import { EnrolmentRegulatoryForm } from './enrolment-regulatory-form.model';
 import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
+import { UnlicensedStudent } from '@enrolment/shared/models/unlicensed-student.model';
 export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryForm> {
   public colleges: CollegeConfig[];
 
@@ -44,6 +45,10 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     return this.formInstance.get('unlistedCertifications') as UntypedFormArray;
   }
 
+  public get unlicensedStudents(): UntypedFormArray {
+    return this.formInstance.get('unlicensedStudents') as UntypedFormArray;
+  }
+
   /**
    * @description
    * Access to college certifications where a self-documenting
@@ -60,7 +65,7 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
       return;
     }
 
-    const { certifications: rawCertifications, deviceProviderId, deviceProviderRoleCode, certificationNumber, unlistedCertifications } = this.formInstance.getRawValue();
+    const { certifications: rawCertifications, deviceProviderId, deviceProviderRoleCode, certificationNumber, unlistedCertifications, unlicensedStudents } = this.formInstance.getRawValue();
     let certifications = rawCertifications.map(c => {
       const { category, ...collegeCertification } = c;
       return collegeCertification;
@@ -74,10 +79,10 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     const enrolleeDeviceProviders = deviceProviderRoleCode ?
       [{ deviceProviderId, deviceProviderRoleCode, certificationNumber }] : [];
 
-    return { certifications, enrolleeDeviceProviders, unlistedCertifications }
+    return { certifications, enrolleeDeviceProviders, unlistedCertifications, unlicensedStudents }
   }
 
-  public patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications }: EnrolmentRegulatoryForm): void {
+  public patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications, unlicensedStudents }: EnrolmentRegulatoryForm): void {
 
     if (!this.formInstance || !Array.isArray(certifications)) {
       return;
@@ -86,12 +91,16 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     //clear the form array before patching the value
     this.removeCollegeCertifications();
     this.removeUnlistedCertifications();
+    this.removeUnlicensedStudents();
 
     if (certifications.length) {
       certifications.forEach((c: CollegeCertification) => this.addCollegeCertification(c));
     }
     if (unlistedCertifications && unlistedCertifications.length) {
       unlistedCertifications.forEach((c: UnlistedCertification) => this.addUnlistedCertification(c));
+    }
+    if (unlicensedStudents && unlicensedStudents.length) {
+      unlicensedStudents.forEach((c: UnlicensedStudent) => this.addUnlistedStudentNurse(c));
     }
     if (enrolleeDeviceProviders && enrolleeDeviceProviders.length) {
       const { deviceProviderId, deviceProviderRoleCode, certificationNumber } = enrolleeDeviceProviders[0];
@@ -109,6 +118,7 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
       deviceProviderRoleCode: [null, []],
       certificationNumber: [null, []],
       unlistedCertifications: this.fb.array([]),
+      unlicensedStudents: this.fb.array([]),
     });
   }
 
@@ -156,6 +166,10 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     this.unlistedCertifications.clear();
   }
 
+  public removeUnlicensedStudents() {
+    this.unlicensedStudents.clear();
+  }
+
   public collegeHasGrouping(collegeCode: number): boolean {
     if (collegeCode === 0) {
       return false;
@@ -173,6 +187,12 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     })
   }
 
+  public buildUnlicensedStudentNurseForm(): UntypedFormGroup {
+    return this.fb.group({
+      studentTypeCode: [null, []],
+    })
+  }
+
   public addUnlistedCertification(unlistedCertification?: UnlistedCertification): void {
     const unlistedCert = this.buildUnlistedCollegeCertificationForm();
     unlistedCert.patchValue({ ...unlistedCertification });
@@ -181,5 +201,15 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
 
   public addEmptyUnlistedCollegeCertification(): void {
     this.addUnlistedCertification();
+  }
+
+  public addUnlistedStudentNurse(unlicensedStudentNurse?: UnlicensedStudent): void {
+    const unlicensedStudent = this.buildUnlicensedStudentNurseForm();
+    unlicensedStudent.patchValue({ ...unlicensedStudentNurse });
+    this.unlicensedStudents.push(unlicensedStudent);
+  }
+
+  public addEmptyUnlicensedStudentNurse(): void {
+    this.addUnlistedStudentNurse();
   }
 }

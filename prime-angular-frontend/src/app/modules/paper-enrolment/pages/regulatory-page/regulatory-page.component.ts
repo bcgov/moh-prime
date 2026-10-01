@@ -113,7 +113,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
             this.isDeviceProvider = enrollee.enrolleeCareSettings.some((careSetting) =>
               careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
             this.enableDeviceProviderValidator();
-            this.formState.patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications });
+            this.formState.patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications, unlicensedStudents: enrollee.unlicensedStudents });
           }
         })
       );

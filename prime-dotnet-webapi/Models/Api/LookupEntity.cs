@@ -9,6 +9,7 @@ namespace Prime.Models.Api
         public List<College> Colleges { get; set; }
         public List<JobName> JobNames { get; set; }
         public List<LicenseViewModel> Licenses { get; set; }
+        public List<StudentType> StudentTypes { get; set; }
         public List<CareSetting> CareSettings { get; set; }
         public List<Practice> Practices { get; set; }
         public List<Status> Statuses { get; set; }

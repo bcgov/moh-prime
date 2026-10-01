@@ -42,7 +42,8 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
       deviceProviderRoleCode,
       deviceProviderId,
       certificationNumber,
-      unlistedCertifications
+      unlistedCertifications,
+      unlicensedStudents,
     } = this.formInstance.getRawValue();
 
     const certifications = rawCertifications.map(c => {
@@ -59,11 +60,12 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
     return {
       certifications,
       enrolleeDeviceProviders,
-      unlistedCertifications
+      unlistedCertifications,
+      unlicensedStudents,
     }
   }
 
-  public patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications }: RegulatoryForm): void {
+  public patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications, unlicensedStudents }: RegulatoryForm): void {
 
     if (!this.formInstance || !Array.isArray(certifications) || !Array.isArray(unlistedCertifications)) {
       return;
@@ -87,6 +89,7 @@ export class RegulatoryFormState extends BaseRegulatoryPageFormState {
       deviceProviderId, certificationNumber, unlistedCertifications
     });
     this.unlistedCertifications.patchValue(unlistedCertifications);
+    this.unlicensedStudents.patchValue(unlicensedStudents);
   }
 
   public buildForm(): void {
