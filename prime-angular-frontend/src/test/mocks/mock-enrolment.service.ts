@@ -51,6 +51,7 @@ export class MockEnrolmentService implements IEnrolmentService {
       requireRedoSelfDeclaration: false,
       certifications: [],
       unlistedCertifications: [],
+      unlicensedStudents: [],
       enrolleeRemoteUsers: [],
       remoteAccessSites: [],
       remoteAccessLocations: [],

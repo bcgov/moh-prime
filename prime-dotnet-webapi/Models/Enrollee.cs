@@ -65,6 +65,8 @@ namespace Prime.Models
 
         public ICollection<UnlistedCertification> UnlistedCertifications { get; set; }
 
+        public ICollection<UnlicensedStudent> UnlicensedStudents { get; set; }
+
         public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
 
         // Currently enrollee has only 1 device provider (1-to-1 relation) with option to support 1 to manay in the future

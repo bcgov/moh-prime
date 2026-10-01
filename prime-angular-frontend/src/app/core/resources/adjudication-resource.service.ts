@@ -640,6 +640,10 @@ export class AdjudicationResource {
       enrollee.unlistedCertifications = [];
     }
 
+    if (!enrollee.unlicensedStudents) {
+      enrollee.unlicensedStudents = [];
+    }
+
     if (!enrollee.oboSites) {
       enrollee.oboSites = [];
     }

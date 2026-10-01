@@ -6,6 +6,7 @@ export interface Configuration {
   countries: Config<string>[];
   jobNames: Config<number>[];
   licenses: LicenseConfig[];
+  studentTypes: StudentTypeConfig[];
   careSettings: Config<number>[];
   provinces: ProvinceConfig[];
   statuses: Config<number>[];
@@ -50,6 +51,12 @@ export class LicenseConfig extends Config<number> implements IWeightedConfig {
   prescriberIdType: PrescriberIdTypeEnum;
   multijurisdictional: boolean;
   remoteAccessTypeLicenses: RemoteAccessTypeLicense[];
+}
+
+export class StudentTypeConfig extends Config<number> implements IWeightedConfig {
+  code: number;
+  name: string;
+  weight: number;
 }
 
 export interface CollegeLicenseConfig {

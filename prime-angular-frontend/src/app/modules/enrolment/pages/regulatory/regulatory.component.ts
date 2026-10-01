@@ -45,6 +45,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   public deviceProviderRoles: DeviceProviderRoleConfig[];
   public deviceProviderSite: DeviceProviderSite;
   public hasUnlistedCertification: boolean;
+  public hasUnlicensedStudent: boolean;
   public unlistedCertificationRequired: boolean;
   public disableUnlistedCertificationToggle: boolean;
   public multijurisdictionalLicences: LicenseConfig[];
@@ -150,6 +151,9 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     if (this.formState.unlistedCertifications.length) {
       this.hasUnlistedCertification = true;
     }
+    if (this.formState.unlicensedStudents.length) {
+      this.hasUnlicensedStudent = true;
+    }
     this.setupDeviceProvider();
 
     // Always have at least one certification ready for
@@ -195,8 +199,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     }
 
     // Replace previous values on deactivation so updates are discarded
-    const { certifications, enrolleeDeviceProviders, unlistedCertifications } = this.enrolmentService.enrolment;
-    this.formState.patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications });
+    const { certifications, enrolleeDeviceProviders, unlistedCertifications, unlicensedStudents } = this.enrolmentService.enrolment;
+    this.formState.patchValue({ certifications, enrolleeDeviceProviders, unlistedCertifications, unlicensedStudents });
   }
 
   public onSubmit() {
@@ -389,6 +393,18 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     }
   }
 
+  public toggleUnlicensedStudent({ checked }: ToggleContentChange) {
+    if (!checked) {
+      this.hasUnlicensedStudent = false;
+      this.formState.unlicensedStudents.clear();
+    } else {
+      this.hasUnlicensedStudent = true;
+      if (!this.formState.unlicensedStudents.length) {
+        this.formState.addEmptyUnlicensedStudentNurse();
+      }
+    }
+  }
+
   public removeUnlistedCertification(index: number): void {
     if (index === 0 && this.disableUnlistedCertificationToggle) {
       // Force enrollee to complete sub-form
@@ -399,5 +415,9 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     if (!this.formState.unlistedCertifications.length) {
       this.hasUnlistedCertification = false;
     }
+  }
+
+  public removeUnlicensedStudentNurse(index: number): void {
+    this.formState.unlicensedStudents.removeAt(index);
   }
 }

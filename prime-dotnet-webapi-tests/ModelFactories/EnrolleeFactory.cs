@@ -64,6 +64,7 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.EnrolleeToPaperLink);
             Ignore(x => x.PaperToEnrolleeLink);
             Ignore(x => x.UnlistedCertifications);
+            Ignore(x => x.UnlicensedStudents);
             Ignore(x => x.SelfDeclarationCompletedDate);
             Ignore(x => x.EnrolleeDeviceProviders);
 

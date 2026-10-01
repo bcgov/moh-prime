@@ -30,6 +30,7 @@ namespace Prime.Services
         Task<IEnumerable<CertificationViewModel>> GetCertificationsAsync(int enrolleeId);
         Task<IEnumerable<EnrolleeDeviceProviderViewModel>> GetEnrolleeDeviceProvidersAsync(int enrolleeId);
         Task<IEnumerable<UnlistedCertificationViewModel>> GetUnlistedCertificationsAsync(int enrolleeId);
+        Task<IEnumerable<UnlicensedStudentViewModel>> GetUnlicensedStudentsAsync(int enrolleeId);
         Task<IEnumerable<EnrolleeRemoteUserViewModel>> GetEnrolleeRemoteUsersAsync(int enrolleeId);
         Task<IEnumerable<OboSiteViewModel>> GetOboSitesAsync(int enrolleeId);
         Task<IEnumerable<RemoteAccessLocationViewModel>> GetRemoteAccessLocationsAsync(int enrolleeId);
