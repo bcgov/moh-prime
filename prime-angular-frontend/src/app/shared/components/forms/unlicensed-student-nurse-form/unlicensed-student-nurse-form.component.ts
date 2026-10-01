@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { CollegeConfig, CollegeLicenseGroupingConfig, Config, LicenseConfig, StudentTypeConfig } from '@config/config.model';
+import { LicenseConfig, StudentTypeConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
