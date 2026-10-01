@@ -357,6 +357,31 @@ namespace Prime.Controllers
             return Ok(await _enrolleeService.GetUnlistedCertificationsAsync(enrolleeId));
         }
 
+        // GET: api/enrollees/5/unlicensed-students
+        /// <summary>
+        /// Gets an Enrollee's Unlicensed Students.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/unlicensed-students", Name = nameof(GetUnlicensedStudents))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<UnlicensedStudentViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetUnlicensedStudents(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(await _enrolleeService.GetUnlicensedStudentsAsync(enrolleeId));
+        }
+
         // GET: api/enrollees/5/device-provider
         /// <summary>
         /// Gets an Enrollee's device providers.

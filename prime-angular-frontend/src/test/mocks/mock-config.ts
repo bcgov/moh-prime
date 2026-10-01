@@ -2126,6 +2126,33 @@ export class MockConfig {
           'remoteAccessTypeLicenses': null
         }
       ],
+      'studentTypes': [
+        {
+          'code': 1,
+          'name': 'Student Nurse Practitioner',
+          'weight': 10
+        },
+        {
+          'code': 2,
+          'name': 'Student Registered Nurse',
+          'weight': 20
+        },
+        {
+          'code': 3,
+          'name': 'Student Registered Psychiatric Nurse',
+          'weight': 30
+        },
+        {
+          'code': 4,
+          'name': 'Student Licensed Practical Nurse',
+          'weight': 40
+        },
+        {
+          'code': 5,
+          'name': 'Student Midwife',
+          'weight': 50
+        },
+      ],
       'careSettings': [
         {
           'code': 1,

@@ -156,7 +156,8 @@ export class SiteOverviewComponent implements OnInit {
       data: {
         siteId: this.site.id,
         organizationId: this.predecessorSite?.organization.id,
-        predecessorSiteId: this.predecessorSite?.site.id
+        predecessorSiteId: this.predecessorSite?.site.id,
+        targetCareSettingCode: this.site.careSettingCode
       },
     };
     this.busy = this.dialog.open(LinkSiteComponent, { data })
@@ -223,7 +224,9 @@ export class SiteOverviewComponent implements OnInit {
           CareSettingEnum.DEVICE_PROVIDER
         ].includes(site.careSettingCode);
         this.showLinkSection = [
-          CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
+          CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
+          CareSettingEnum.COMMUNITY_PHARMACY,
+          CareSettingEnum.DEVICE_PROVIDER
         ].includes(site.careSettingCode);
         return of(orgClaim?.newSigningAuthorityId);
       }),

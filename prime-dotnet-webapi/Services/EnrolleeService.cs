@@ -334,6 +334,7 @@ namespace Prime.Services
                 .Include(e => e.OboSites)
                     .ThenInclude(s => s.PhysicalAddress)
                 .Include(e => e.SelfDeclarationDocuments)
+                .Include(e => e.UnlicensedStudents)
                 .SingleAsync(e => e.Id == enrolleeId);
 
             var currentSelfDeclarationDate = enrollee.SelfDeclarationCompletedDate;
@@ -363,6 +364,7 @@ namespace Prime.Services
             ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeHealthAuthorities, updateModel.EnrolleeHealthAuthorities, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeDeviceProviders, updateModel.EnrolleeDeviceProviders, enrolleeId);
+            ReplaceExistingItems(enrollee.UnlicensedStudents, updateModel.UnlicensedStudents, enrolleeId);
 
             UpdateEnrolleeRemoteUsers(enrollee, updateModel);
             UpdateRemoteAccessSites(enrollee, updateModel);
@@ -743,6 +745,14 @@ namespace Prime.Services
             .Where(c => c.EnrolleeId == enrolleeId)
             .ProjectTo<UnlistedCertificationViewModel>(_mapper.ConfigurationProvider)
             .ToListAsync();
+        }
+
+        public async Task<IEnumerable<UnlicensedStudentViewModel>> GetUnlicensedStudentsAsync(int enrolleeId)
+        {
+            return await _context.UnlicensedStudents
+                .Where(us => us.EnrolleeId == enrolleeId)
+                .ProjectTo<UnlicensedStudentViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<EnrolleeDeviceProviderViewModel>> GetEnrolleeDeviceProvidersAsync(int enrolleeId)
