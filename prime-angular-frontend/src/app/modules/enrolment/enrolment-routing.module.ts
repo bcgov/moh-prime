@@ -34,7 +34,7 @@ import { RemoteAccessComponent } from './pages/remote-access/remote-access.compo
 import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
 import { PaperEnrolleeReturneesPageComponent } from './pages/paper-enrollee-returnees-page/paper-enrollee-returnees-page.component';
 import { AbsenceManagementPageComponent } from './pages/absence-management-page/absence-management-page.component';
-import { IdentityInsuranceLevelGuard } from '@core/guards/identity-insurance-level.guard';
+import { IdentityAssuranceLevelGuard } from '@core/guards/identity-assurance-level.guard';
 
 const routes: Routes = [
   {
@@ -43,7 +43,7 @@ const routes: Routes = [
     canActivate: [
       AuthenticationGuard,
       UnderagedGuard,
-      IdentityInsuranceLevelGuard
+      IdentityAssuranceLevelGuard
     ],
     canActivateChild: [
       AuthenticationGuard,

@@ -87,6 +87,8 @@ namespace Prime.ViewModels.Profiles
             CreateMap<DeviceProviderSite, DeviceProviderSiteViewModel>();
 
             CreateMap<UnlistedCertification, UnlistedCertificationViewModel>();
+
+            CreateMap<UnlicensedStudent, UnlicensedStudentViewModel>();
         }
     }
 }

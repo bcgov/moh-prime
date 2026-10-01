@@ -10,7 +10,7 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 @Injectable({
   providedIn: 'root'
 })
-export class IdentityInsuranceLevelGuard {
+export class IdentityAssuranceLevelGuard {
   constructor(
     private router: Router,
     private authService: AuthService
@@ -19,7 +19,7 @@ export class IdentityInsuranceLevelGuard {
   public canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.checkIdentityInsuranceLevel();
+    return this.checkIdentityAssuranceLevel();
   }
 
   public canActivateChild(
@@ -31,19 +31,19 @@ export class IdentityInsuranceLevelGuard {
   public canLoad(
     route: Route,
     segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
-    return this.checkIdentityInsuranceLevel();
+    return this.checkIdentityAssuranceLevel();
   }
 
-  private checkIdentityInsuranceLevel(): Observable<boolean> | Promise<boolean> | boolean {
+  private checkIdentityAssuranceLevel(): Observable<boolean> | Promise<boolean> | boolean {
     return this.authService.getUser$()
       .pipe(
-        map((user: BcscUser) => user.identityInsuranceLevel),
-        map((identityInsuranceLevel: number) => {
-          return identityInsuranceLevel === undefined || identityInsuranceLevel < 3;
+        map((user: BcscUser) => user.identityAssuranceLevel),
+        map((identityAssuranceLevel: number) => {
+          return identityAssuranceLevel === undefined || identityAssuranceLevel < 3;
         }),
         map((unauthorized: boolean) => {
           if (unauthorized) {
-            this.router.navigate([AppRoutes.IDENTITY_INSURANCE_LEVEL]);
+            this.router.navigate([AppRoutes.IDENTITY_ASSURANCE_LEVEL]);
             return false;
           }
 

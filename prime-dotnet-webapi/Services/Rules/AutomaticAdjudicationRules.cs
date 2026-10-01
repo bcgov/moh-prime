@@ -480,6 +480,20 @@ namespace Prime.Services.Rules
     }
 
 
+    public class UnlicensedStudentRule : AutomaticAdjudicationRule
+    {
+        public override Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.UnlicensedStudents != null && enrollee.UnlicensedStudents.Any())
+            {
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.HasUnlicensedStudent, $"Enrollee is a unlicensed student.");
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
+        }
+    }
+
     public class MultipleHealthAuthorityRule : AutomaticAdjudicationRule
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)

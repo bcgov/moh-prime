@@ -65,6 +65,9 @@ namespace Prime.Services
                     .ProjectTo<LicenseViewModel>(_mapper.ConfigurationProvider)
                     .DecompileAsync()
                     .ToListAsync(),
+                StudentTypes = await _context.Set<StudentType>()
+                    .AsNoTracking()
+                    .ToListAsync(),
                 CareSettings = await _context.Set<CareSetting>()
                     .AsNoTracking()
                     .ToListAsync(),

@@ -28,9 +28,9 @@ namespace Prime.ViewModels
         public string PEC { get; set; }
 
         public string DoingBusinessAs { get; set; }
-
         public bool ActiveBeforeRegistration { get; set; }
 
+        public bool ExistingPharmacyNoPEC { get; set; }
         public bool IsNew { get; set; }
 
         public string DeviceProviderId { get; set; }

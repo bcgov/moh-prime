@@ -56,7 +56,8 @@ namespace Prime.Services
                 new NoAssignedAgreementRule(),
                 new IsPotentialPaperEnrolleeReturnee(_businessEventService, _enrolleePaperSubmissionService),
                 new UnlistedCertificationRule(),
-                new MultipleHealthAuthorityRule()
+                new MultipleHealthAuthorityRule(),
+                new UnlicensedStudentRule()
             };
 
             return await ProcessRules(rules, enrollee);

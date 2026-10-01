@@ -31,7 +31,7 @@ export class MockSatEnrolleeService implements ISatEnrolleeService {
       partyCertifications: [],
       submittedDate: faker.date.past(1).toDateString(),
       username: `${faker.random.uuid()}@bcsc`,
-      identityInsuranceLevel: 3
+      identityAssuranceLevel: 3
     });
   }
 

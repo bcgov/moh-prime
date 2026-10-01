@@ -134,6 +134,7 @@ import { TransferHASiteComponent } from './components/dialogs/content/transfer-h
 import { SiteArchiveRestoreComponent } from './components/dialogs/content/site-archive-restore/site-archive-restore.component';
 import { ChangeTermsOfAccessComponent } from './components/dialogs/content/terms-of-access/terms-of-access.component';
 import { LinkSiteComponent } from './components/dialogs/content/link-site/link-site.component';
+import { UnlicensedStudentNurseFormComponent } from './components/forms/unlicensed-student-nurse-form/unlicensed-student-nurse-form.component';
 
 @NgModule({
   declarations: [
@@ -243,6 +244,7 @@ import { LinkSiteComponent } from './components/dialogs/content/link-site/link-s
     HealthAuthSiteOverviewContainerComponent,
     DateOfBirthComponent,
     UnlistedCollegeLicenceFormComponent,
+    UnlicensedStudentNurseFormComponent,
     EmailFormComponent,
     SelfDeclarationTermComponent,
     TransferHASiteComponent,
@@ -360,6 +362,7 @@ import { LinkSiteComponent } from './components/dialogs/content/link-site/link-s
     SiteInformationOverviewComponent,
     HealthAuthSiteOverviewContainerComponent,
     UnlistedCollegeLicenceFormComponent,
+    UnlicensedStudentNurseFormComponent,
     EmailFormComponent,
     SelfDeclarationTermComponent,
   ],

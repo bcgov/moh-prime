@@ -26,6 +26,7 @@ namespace Prime.Services
         /// </summary>
         Task<IEnumerable<int>> SendEnrolleeRenewalEmails();
         Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim);
+        Task SendOrgClaimDenialNotificationAsync(OrganizationClaim organizationClaim);
         Task RetryIncompleteEmailsAsync();
         Task<int> UpdateEmailLogStatuses(int limit);
         Task SendPaperEnrolmentSubmissionEmailAsync(int enrolleeId);

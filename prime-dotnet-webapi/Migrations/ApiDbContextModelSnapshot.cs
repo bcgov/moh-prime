@@ -1449,7 +1449,7 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 1,
                             LicenseCode = 13,
-                            Discontinued = true
+                            Discontinued = false
                         },
                         new
                         {
@@ -5296,6 +5296,21 @@ namespace Prime.Migrations
                             Template = "Hello, <p><p>@Model.DoingBusinessAs (@Model.HealthAuthority) with SiteID @Model.Pec has been approved by the Ministry of Health for PharmaNet access. Please notify the PharmaNet software vendor (@Model.Vendor) for this site and complete any remaining tasks to activate the site.</p><p>Please connect by phone or email if you have any questions. <br/><br/>Thank you, <br/><br/>PRIME Support team <br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
                             TemplateName = "HA Site Approval",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2023, 10, 27, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2026, 6, 5, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Description = "The email will be triggered when PRIME admin deny a organization claim.",
+                            EmailType = 24,
+                            ModifiedDate = new DateTimeOffset(new DateTime(2026, 6, 5, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Recipient = "To: New SA",
+                            Subject = "Organization Claim was Denied",
+                            Template = "Hello, <p><p>Your claim of the organization @Model.OrganizationName, which the site with SiteID/PEC @Model.ProvidedSiteId is part of, has been denied. Please contact PRIMESupport@gov.bc.ca for further information. <p><p> Thank you, <p><p> PRIME Support Team<br/>1-844-397-7463<br/> PRIMESupport@gov.bc.ca",
+                            TemplateName = "Organization Claim Denial Notification",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2026, 6, 5, 8, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
@@ -19451,6 +19466,9 @@ namespace Prime.Migrations
                     b.Property<string>("DoingBusinessAs")
                         .HasColumnType("text");
 
+                    b.Property<bool>("ExistingPharmacyNoPEC")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("Flagged")
                         .HasColumnType("boolean");
 
@@ -19948,6 +19966,63 @@ namespace Prime.Migrations
                         {
                             Code = 23,
                             Name = "Enrollee has selected 4 health authorities or more"
+                        },
+                        new
+                        {
+                            Code = 24,
+                            Name = "Enrollee is a unlicensed student"
+                        });
+                });
+
+            modelBuilder.Entity("Prime.Models.StudentType", b =>
+                {
+                    b.Property<int>("Code")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Code"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Weight")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("StudentTypeLookup");
+
+                    b.HasData(
+                        new
+                        {
+                            Code = 1,
+                            Name = "Student Nurse Practitioner",
+                            Weight = 10
+                        },
+                        new
+                        {
+                            Code = 2,
+                            Name = "Student Registered Nurse",
+                            Weight = 20
+                        },
+                        new
+                        {
+                            Code = 3,
+                            Name = "Student Registered Psychiatric Nurse",
+                            Weight = 30
+                        },
+                        new
+                        {
+                            Code = 4,
+                            Name = "Student Licensed Practical Nurse",
+                            Weight = 40
+                        },
+                        new
+                        {
+                            Code = 5,
+                            Name = "Student Midwife",
+                            Weight = 50
                         });
                 });
 
@@ -19995,6 +20070,41 @@ namespace Prime.Migrations
                     b.HasIndex("EnrolleeId");
 
                     b.ToTable("Submission");
+                });
+
+            modelBuilder.Entity("Prime.Models.UnlicensedStudent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StudentTypeCode")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.HasIndex("StudentTypeCode");
+
+                    b.ToTable("UnlicensedStudent");
                 });
 
             modelBuilder.Entity("Prime.Models.UnlistedCertification", b =>
@@ -21715,6 +21825,25 @@ namespace Prime.Migrations
                     b.Navigation("Enrollee");
                 });
 
+            modelBuilder.Entity("Prime.Models.UnlicensedStudent", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany("UnlicensedStudents")
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.StudentType", "StudentType")
+                        .WithMany()
+                        .HasForeignKey("StudentTypeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Enrollee");
+
+                    b.Navigation("StudentType");
+                });
+
             modelBuilder.Entity("Prime.Models.UnlistedCertification", b =>
                 {
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
@@ -21956,6 +22085,8 @@ namespace Prime.Migrations
                     b.Navigation("SelfDeclarations");
 
                     b.Navigation("Submissions");
+
+                    b.Navigation("UnlicensedStudents");
 
                     b.Navigation("UnlistedCertifications");
                 });

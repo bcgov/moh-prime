@@ -26,10 +26,10 @@ import { ConfigCodePipe } from '@config/config-code.pipe';
 
 @UntilDestroy()
 @Component({
-    selector: 'app-remote-users-page',
-    templateUrl: './remote-users-page.component.html',
-    styleUrls: ['./remote-users-page.component.scss'],
-    standalone: false
+  selector: 'app-remote-users-page',
+  templateUrl: './remote-users-page.component.html',
+  styleUrls: ['./remote-users-page.component.scss'],
+  standalone: false
 })
 export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationPage implements OnInit {
   public formState: RemoteUsersPageFormState;
@@ -75,7 +75,7 @@ export class RemoteUsersPageComponent extends AbstractCommunitySiteRegistrationP
         value: this.configCodePipe.transform(remoteUserCertification.value.licenseCode, 'licenses')
       },
       {
-        key: this.licenseNumberLabelPipe.transform(remoteUserCertification.value.collegeCode),
+        key: this.licenseNumberLabelPipe.transform(remoteUserCertification.value.collegeCode, remoteUserCertification.value.licenseCode),
         value: remoteUserCertification.value.licenseNumber,
       },
       {

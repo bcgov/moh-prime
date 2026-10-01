@@ -8,5 +8,5 @@ export interface BcscUser extends User {
   givenNames: string;
   dateOfBirth: string;
   verifiedAddress: Address;
-  identityInsuranceLevel: number;
+  identityAssuranceLevel: number;
 }

@@ -168,7 +168,7 @@
           </app-enrollee-property>
 
           <app-enrollee-property *ngIf="remoteUser.remoteUserCertification?.licenseNumber"
-                                 [title]="remoteUser.remoteUserCertification?.collegeCode | licenseNumberLabel">
+                                 [title]="remoteUser.remoteUserCertification?.collegeCode | licenseNumberLabel : remoteUser.remoteUserCertification?.licenseCode">
             {{ remoteUser.remoteUserCertification?.licenseNumber | default }}
           </app-enrollee-property>
 

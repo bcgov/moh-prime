@@ -46,14 +46,16 @@ export class ChangeSigningAuthorityGuard extends AbstractRoutingWorkflowGuard {
       return this.manageNoPartyExistsRouting(routePath);
     }
 
-    if (organizations) {
-      //ToCheck
-      return this.manageAlreadySigningAuthorityRouting(routePath);
-    }
-
-    if (hasClaim) {
+    if (!organizations && hasClaim) {
       return this.manageSigningAuthorityHasExistingClaimRouting(routePath);
     }
+
+    if (organizations) {
+      // if the SA already has 1 or more organizations, redirect them to a different organization claim page
+      return this.manageAlreadyOwnOrganizationRouting();
+    }
+
+
 
     // Route exclusions when no organization or claim exists
     if ([
@@ -95,6 +97,11 @@ export class ChangeSigningAuthorityGuard extends AbstractRoutingWorkflowGuard {
       SiteRoutes.CHANGE_SIGNING_AUTHORITY_WORKFLOW,
       SiteRoutes.ORGANIZATION_CLAIMED
     ]);
+  }
+
+  protected manageAlreadyOwnOrganizationRouting(): boolean {
+    this.router.navigate([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS, '0', SiteRoutes.ORGANIZATION_CLAIM]);
+    return true;
   }
 
   /**

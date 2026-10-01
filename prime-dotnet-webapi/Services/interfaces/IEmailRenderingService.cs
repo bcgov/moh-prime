@@ -24,7 +24,8 @@ namespace Prime.Services.EmailInternal
         Task<Email> RenderSiteApprovedSigningAuthorityEmailAsync(string recipientEmail, SiteApprovalEmailViewModel viewModel);
         Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel, CareSettingType careSettingCode, int siteId, bool isNew = false);
         Task<Email> RenderSiteReviewedNotificationEmailAsync(SiteReviewedEmailViewModel viewModel);
-        Task<Email> RenderOrgClaimApprovalNotificationEmailAsync(string newSigningAuthorityEmail, OrgClaimApprovalNotificationViewModel viewModel);
+        Task<Email> RenderOrgClaimApprovalNotificationEmailAsync(string newSigningAuthorityEmail, OrgClaimNotificationViewModel viewModel);
+        Task<Email> RenderOrgClaimDenialNotificationEmailAsync(string newSigningAuthorityEmail, OrgClaimNotificationViewModel viewModel);
         Task<Email> RenderSiteActiveBeforeRegistrationEmailAsync(string newSigningAuthorityEmail, SiteActiveBeforeRegistrationEmailViewModel viewModel);
         Task<Email> RenderPaperEnrolleeSubmissionEmail(string enrolleeEmail, PaperEnrolleeSubmissionEmailViewModel viewModel);
         Task<Email> RenderUnsignedToaEmailAsync(string enrolleeEmail, EnrolleeUnsignedToaEmailViewModel viewModel);

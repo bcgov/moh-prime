@@ -280,7 +280,7 @@
       {{ certification.licenseCode | configCode: 'licenses' | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property [title]="certification.collegeCode | licenseNumberLabel">
+    <app-enrollee-property [title]="certification.collegeCode | licenseNumberLabel : certification.licenseCode">
       {{ certification.licenseNumber | default }}
     </app-enrollee-property>
 
@@ -319,6 +319,30 @@
           mat-flat-button
           color="primary"
           (click)="onRoute(EnrolmentRoutes.REGULATORY)">Edit College Licence Information
+  </button>
+</app-page-section>
+
+<app-page-section *ngIf="enrolment?.unlicensedStudents?.length">
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Unlicensed Student Information</ng-container>
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Student Information"
+            (click)="onRoute(EnrolmentRoutes.REGULATORY)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+  <ng-container *ngFor="let unlicensedStudent of enrolment?.unlicensedStudents; let i = index;">
+    <app-enrollee-property title="Student Type"
+                           [makeBold]="true">
+      {{ unlicensedStudent.studentTypeCode | configCode: 'studentTypes' | default }}
+    </app-enrollee-property>
+  </ng-container>
+
+  <button *ngIf="showEditRedirect"
+          mat-flat-button
+          color="primary"
+          (click)="onRoute(EnrolmentRoutes.REGULATORY)">Edit Unlicensed Student Information
   </button>
 </app-page-section>
 

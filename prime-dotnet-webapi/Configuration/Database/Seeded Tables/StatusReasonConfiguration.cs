@@ -33,6 +33,7 @@ namespace Prime.Configuration.Database
                     new StatusReason { Code = (int)StatusReasonType.UnableToLinkToPaperEnrolment, Name = "Unable to link enrollee to paper enrolment"                                     },
                     new StatusReason { Code = (int)StatusReasonType.HasUnlistedLicence,           Name = "Enrollee has unlisted (typically non-BC) licences"                              },
                     new StatusReason { Code = (int)StatusReasonType.MultipleHealthAuthorities,    Name = "Enrollee has selected 4 health authorities or more"                              },
+                    new StatusReason { Code = (int)StatusReasonType.HasUnlicensedStudent,         Name = "Enrollee is a unlicensed student"                                                   },
                 };
             }
         }

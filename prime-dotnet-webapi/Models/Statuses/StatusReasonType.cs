@@ -24,6 +24,7 @@ namespace Prime.Models
         PossiblePaperEnrolmentMatch = 20,
         UnableToLinkToPaperEnrolment = 21,
         HasUnlistedLicence = 22,
-        MultipleHealthAuthorities = 23
+        MultipleHealthAuthorities = 23,
+        HasUnlicensedStudent = 24,
     }
 }

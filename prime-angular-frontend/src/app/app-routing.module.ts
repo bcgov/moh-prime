@@ -76,7 +76,7 @@ const routes: Routes = [
     }
   },
   {
-    path: AppRoutes.IDENTITY_INSURANCE_LEVEL,
+    path: AppRoutes.IDENTITY_ASSURANCE_LEVEL,
     component: NotEligibleComponent,
     data: {
       title: 'Identity Insurance Level Not Met'

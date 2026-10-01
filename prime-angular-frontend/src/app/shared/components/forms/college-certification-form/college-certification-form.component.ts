@@ -15,13 +15,13 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { NonNursingLicenseGrouping, NursingLicenseGrouping } from '@shared/enums/college-licence-grouping.enum';
+import { CollegeLicenceGroupingEnum, NonNursingLicenseGrouping, NursingLicenseGrouping } from '@shared/enums/college-licence-grouping.enum';
 
 @Component({
-    selector: 'app-college-certification-form',
-    templateUrl: './college-certification-form.component.html',
-    styleUrls: ['./college-certification-form.component.scss'],
-    standalone: false
+  selector: 'app-college-certification-form',
+  templateUrl: './college-certification-form.component.html',
+  styleUrls: ['./college-certification-form.component.scss'],
+  standalone: false
 })
 export class CollegeCertificationFormComponent implements OnInit {
   @Input() public form: UntypedFormGroup;
@@ -49,6 +49,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public hasPractices: boolean;
   public licenseClassDiscontinued: boolean;
   public collegeDiscontinued: boolean;
+  public selectedCollegeLicenseGroupCode: CollegeLicenceGroupingEnum;
 
   /**
    * @description
@@ -208,11 +209,15 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.practitionerId.patchValue(event.target.value.toUpperCase());
   }
 
-  public getRegNumberFieldLabel(collegeCode: CollegeLicenceClassEnum): string {
-    return (collegeCode === CollegeLicenceClassEnum.CPBC
-      || collegeCode === CollegeLicenceClassEnum.CDSBC
-      || collegeCode === CollegeLicenceClassEnum.OptometryBC)
-      ? 'Registration Number' : 'Registration ID';
+  public getRegNumberFieldLabel(collegeCode: CollegeLicenceClassEnum, collegeLicenceGroupCode: CollegeLicenceGroupingEnum): string {
+    if (collegeLicenceGroupCode === CollegeLicenceGroupingEnum.HealthProfessionOfNaturopathicMedicine) {
+      return 'Licensee Number';
+    } else {
+      return (collegeCode === CollegeLicenceClassEnum.CPBC
+        || collegeCode === CollegeLicenceClassEnum.CDSBC
+        || collegeCode === CollegeLicenceClassEnum.OptometryBC)
+        ? 'Registration Number' : 'Registration ID';
+    }
   }
 
   public getPNetIdFieldLabel(collegeCode: CollegeLicenceClassEnum): string {
@@ -266,6 +271,7 @@ export class CollegeCertificationFormComponent implements OnInit {
           } else if (this.nonNursingLicenseGrouping.some(g => g === collegeLicenseGroupingCode)) {
             this.setNonNursingLicenseGroupingValidators();
           }
+          this.selectedCollegeLicenseGroupCode = collegeLicenseGroupingCode;
           this.loadLicensesByCategory(collegeLicenseGroupingCode);
         });
     } else {

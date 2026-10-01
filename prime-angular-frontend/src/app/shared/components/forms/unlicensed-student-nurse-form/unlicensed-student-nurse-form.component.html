@@ -1,0 +1,27 @@
+<ng-container [formGroup]="form">
+
+  <app-form-icon-group [show]="total > 1"
+                       (event)="removeUnlicensedStudent()">
+
+    <div class="row">
+      <ng-container>
+        <div class="col-sm-12 pl-5">
+
+          <mat-form-field class="w-100">
+            <mat-label>Student Type</mat-label>
+            <mat-select formControlName="studentTypeCode">
+              <mat-option *ngFor="let studentType of studentTypes"
+                          [value]="studentType.code">
+                {{ studentType.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="studentTypeCode.hasError('required')">Required</mat-error>
+          </mat-form-field>
+        </div>
+      </ng-container>
+
+    </div>
+
+  </app-form-icon-group>
+
+</ng-container>
