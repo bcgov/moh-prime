@@ -18,6 +18,7 @@ import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
 import { EnrolleeDeviceProvider } from './enrollee-device-provider.model';
+import { UnlicensedStudent } from '@enrolment/shared/models/unlicensed-student.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -28,6 +29,7 @@ export interface HttpEnrollee extends Enrollee {
   certifications: CollegeCertification[];
   //deviceProviderIdentifier: string;
   unlistedCertifications: UnlistedCertification[];
+  unlicensedStudents: UnlicensedStudent[];
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
@@ -87,6 +89,7 @@ export interface Enrolment {
   certifications: CollegeCertification[];
   //deviceProviderIdentifier: string;
   unlistedCertifications: UnlistedCertification[];
+  unlicensedStudents: UnlicensedStudent[];
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];

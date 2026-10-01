@@ -327,7 +327,8 @@ namespace PrimeTests.UnitTests
                 typeof(ICollection<RemoteAccessLocation>),
                 typeof(ICollection<SelfDeclaration>),
                 typeof(ICollection<RemoteAccessSiteUpdateModel>),
-                typeof(ICollection<UnlistedCertificationUpdateModel>)
+                typeof(ICollection<UnlistedCertificationUpdateModel>),
+                typeof(ICollection<UnlicensedStudent>),
             };
 
             var unknownTypes = typeof(EnrolleeUpdateModel)

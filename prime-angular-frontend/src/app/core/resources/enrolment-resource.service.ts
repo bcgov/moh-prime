@@ -37,6 +37,7 @@ import { EnrolleeDeviceProvider } from '@shared/models/enrollee-device-provider.
 import { DeviceProviderSite } from "@shared/models/device-provider-site.model";
 import { UnlistedCertification } from '@paper-enrolment/shared/models/unlisted-certification.model';
 import { PaginatedList } from '@core/models/paginated-list.model';
+import { UnlicensedStudent } from '@enrolment/shared/models/unlicensed-student.model';
 
 @Injectable({
   providedIn: 'root'
@@ -61,6 +62,8 @@ export class EnrolmentResource {
         .pipe(map((response: ApiHttpResponse<EnrolleeDeviceProvider[]>) => response.result)),
       unlistedCertifications: this.apiResource.get<UnlistedCertification[]>(`enrollees/${enrolleeId}/unlisted-certifications`)
         .pipe(map((response: ApiHttpResponse<UnlistedCertification[]>) => response.result)),
+      unlicensedStudents: this.apiResource.get<UnlicensedStudent[]>(`enrollees/${enrolleeId}/unlicensed-students`)
+        .pipe(map((response: ApiHttpResponse<UnlicensedStudent[]>) => response.result)),
       enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/remote-users`)
         .pipe(map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)),
       oboSites: this.apiResource.get<OboSite[]>(`enrollees/${enrolleeId}/obo-sites`)
@@ -130,6 +133,8 @@ export class EnrolmentResource {
               .pipe(map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
             unlistedCertifications: this.apiResource.get<UnlistedCertification[]>(`enrollees/${enrollee.id}/unlisted-certifications`)
               .pipe(map((response: ApiHttpResponse<UnlistedCertification[]>) => response.result)),
+            unlicensedStudents: this.apiResource.get<UnlicensedStudent[]>(`enrollees/${enrollee.id}/unlicensed-students`)
+              .pipe(map((response: ApiHttpResponse<UnlicensedStudent[]>) => response.result)),
             enrolleeDeviceProviders: this.apiResource.get<EnrolleeDeviceProvider[]>(`enrollees/${enrollee.id}/device-providers`)
               .pipe(map((response: ApiHttpResponse<EnrolleeDeviceProvider[]>) => response.result)),
             enrolleeRemoteUsers: this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrollee.id}/remote-users`)
@@ -683,6 +688,10 @@ export class EnrolmentResource {
 
     if (!enrollee.unlistedCertifications) {
       enrollee.unlistedCertifications = [];
+    }
+
+    if (!enrollee.unlicensedStudents) {
+      enrollee.unlicensedStudents = [];
     }
 
     if (!enrollee.oboSites) {
