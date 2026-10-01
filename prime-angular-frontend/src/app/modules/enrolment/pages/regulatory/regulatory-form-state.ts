@@ -96,10 +96,10 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     if (certifications.length) {
       certifications.forEach((c: CollegeCertification) => this.addCollegeCertification(c));
     }
-    if (unlistedCertifications && unlistedCertifications.length) {
+    if (unlistedCertifications?.length) {
       unlistedCertifications.forEach((c: UnlistedCertification) => this.addUnlistedCertification(c));
     }
-    if (unlicensedStudents && unlicensedStudents.length) {
+    if (unlicensedStudents?.length) {
       unlicensedStudents.forEach((c: UnlicensedStudent) => this.addUnlistedStudentNurse(c));
     }
     if (enrolleeDeviceProviders && enrolleeDeviceProviders.length) {
