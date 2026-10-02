@@ -166,6 +166,32 @@ export class OrganizationResource {
       );
   }
 
+  public getOrganizationSiteBySiteID(siteId: string): Observable<Organization[]> {
+    return this.apiResource.get<Organization[]>(`organizations/sites/siteid/${siteId}`)
+      .pipe(
+        map((response: ApiHttpResponse<Organization[]>) => response.result),
+        tap((organizations: Organization[]) => this.logger.info('ORGANIZATION', organizations)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organizations could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getOrganizationSiteBySiteID error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getOrganizationSiteBySiteName(siteName: string): Observable<Organization[]> {
+    return this.apiResource.get<Organization[]>(`organizations/sites/sitename/${siteName}`)
+      .pipe(
+        map((response: ApiHttpResponse<Organization[]>) => response.result),
+        tap((organizations: Organization[]) => this.logger.info('ORGANIZATION', organizations)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organizations could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getOrganizationSiteBySiteName error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getOrganizationClaim(queryParam: { pec?: string, username?: string }): Observable<boolean> {
     const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
     return this.apiResource.get<boolean>(`organizations/claims`, params)
