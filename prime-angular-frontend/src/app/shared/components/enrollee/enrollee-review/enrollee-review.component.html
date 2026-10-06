@@ -482,6 +482,7 @@
 
     <app-enrollee-property *ngIf="!enrolment.oboSites.length"
                            title="Job Sites"
+                           [showError]="true"
                            [hasError]="enrolmentErrors?.certificateOrOboSite"
                            errorMessage="Must have a {{
                             !hasCertification && enrolmentErrors?.deviceProvider
