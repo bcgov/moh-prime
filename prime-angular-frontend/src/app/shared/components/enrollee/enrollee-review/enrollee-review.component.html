@@ -308,7 +308,7 @@
 
   <app-enrollee-property *ngIf="!hasCertification"
                          title="College Licence"
-                         [hasError]="enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.deviceProvider"
+                         [hasError]="enrolmentErrors?.certificateOrOboSite"
                          [showError]="true"
                          errorMessage="Must have a college licence or job site information"
                          [makeBold]="true">
@@ -400,7 +400,7 @@
 
 <app-page-section>
   <ng-container
-                *ngIf="enrolment.oboSites?.length || enrolment.jobs?.length || (enrolmentErrors?.certificateOrOboSite);">
+                *ngIf="enrolment.oboSites?.length || enrolment.jobs?.length || enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.onlyMissingOboSite;">
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Job Site Information</ng-container>
 
@@ -412,7 +412,7 @@
       </button>
     </app-page-subheader>
   </ng-container>
-  <app-alert *ngIf="this.enrolmentErrors?.missingOboSite && !this.enrolmentErrors?.certificateOrOboSite"
+  <app-alert *ngIf="this.enrolmentErrors?.missingOboSiteForCareSetting && enrolment.oboSites?.length"
              type="danger"
              icon="error">
     <ng-container #alertContent
@@ -421,7 +421,8 @@
     </ng-container>
   </app-alert>
 
-  <ng-container *ngIf="enrolment.oboSites?.length || (enrolmentErrors?.certificateOrOboSite); else legacyJobInfo">
+  <ng-container
+                *ngIf="enrolment.oboSites?.length || enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.onlyMissingOboSite; else legacyJobInfo">
     <ng-container *ngFor="let careSetting of enrolment.careSettings">
       <ng-container *ngFor="let site of enrolment?.oboSites">
         <ng-container *ngIf="site.careSettingCode === careSetting.careSettingCode">
@@ -483,14 +484,14 @@
     <app-enrollee-property *ngIf="!enrolment.oboSites.length"
                            title="Job Sites"
                            [showError]="true"
-                           [hasError]="enrolmentErrors?.certificateOrOboSite"
-                           errorMessage="Must have a {{
-                            !hasCertification && enrolmentErrors?.deviceProvider
-                             ? 'college licence and a device provider ID'
-                             : !hasCertification
-                                ? 'college licence'
-                                : 'device provider ID'
-                            }} or job site information"
+                           [hasError]="enrolmentErrors?.certificateOrOboSite || enrolmentErrors?.onlyMissingOboSite"
+                           errorMessage="{{
+                              enrolmentErrors?.onlyMissingOboSite
+                                ? 'Must have job site information for the selected care setting(s)'
+                                : enrolmentErrors?.certificateOrOboSite
+                                  ? 'Must have a college licence or job site information'
+                                  : ''
+                            }}"
                            [makeBold]="true">
       None
     </app-enrollee-property>

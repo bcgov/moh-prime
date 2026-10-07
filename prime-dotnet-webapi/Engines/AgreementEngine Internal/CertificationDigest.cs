@@ -13,7 +13,9 @@ namespace Prime.Engines.AgreementEngineInternal
 
     public static class CertificationDigest
     {
-        public static ICertificationDigest Create(ICollection<CertificationDto> certs, ICollection<EnrolleeDeviceProvider> dps)
+        public static ICertificationDigest Create(ICollection<CertificationDto> certs,
+            ICollection<EnrolleeDeviceProvider> dps,
+            ICollection<UnlicensedStudent> unlicensedStudents)
         {
             if (dps != null && dps.Count > 0)
             {
@@ -28,6 +30,11 @@ namespace Prime.Engines.AgreementEngineInternal
             if (certs.Count == 0)
             {
                 return new NoCollege();
+            }
+
+            if (unlicensedStudents != null && unlicensedStudents.Count > 0)
+            {
+                return new UnlicensedStudentNurse();
             }
 
             var cert = certs.Single();
@@ -129,6 +136,14 @@ namespace Prime.Engines.AgreementEngineInternal
             {
                 return AgreementType.OboTOA;
             }
+        }
+    }
+
+    public class UnlicensedStudentNurse : ICertificationDigest
+    {
+        public AgreementType? ResolveWith(SettingsDigest settings)
+        {
+            return AgreementType.OboTOA;
         }
     }
 
