@@ -9,12 +9,12 @@ import { ViewportService } from '@core/services/viewport.service';
 import { RegulatoryFormState } from '@paper-enrolment/pages/regulatory-page/regulatory-form-state.class';
 
 @Component({
-    selector: 'app-unlisted-college-licence-form',
-    templateUrl: './unlisted-college-licence-form.component.html',
-    styleUrls: ['./unlisted-college-licence-form.component.scss'],
-    standalone: false
+  selector: 'app-unlisted-college-licence-form',
+  templateUrl: './unlisted-college-licence-form.component.html',
+  styleUrls: ['./unlisted-college-licence-form.component.scss'],
+  standalone: false
 })
-export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
+export class UnlistedCollegeLicenceFormComponent implements OnChanges {
   @Input() public form: UntypedFormGroup;
   @Input() public formState: RegulatoryFormState;
   @Input() public index: number;
@@ -25,8 +25,8 @@ export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
   public minRenewalDate: moment.Moment;
 
   constructor(
-    private viewportService: ViewportService,
-    private formUtilsService: FormUtilsService
+    private readonly viewportService: ViewportService,
+    private readonly formUtilsService: FormUtilsService
   ) {
     this.remove = new EventEmitter<number>();
     this.minRenewalDate = moment();
@@ -65,9 +65,6 @@ export class UnlistedCollegeLicenceFormComponent implements OnInit, OnChanges {
         this.removeValidations();
       }
     }
-  }
-
-  public ngOnInit(): void {
   }
 
   private setUnlistedCollegeCertificationValidators(): void {
