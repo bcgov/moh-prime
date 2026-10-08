@@ -158,6 +158,10 @@ export class RegulatoryFormState extends AbstractFormState<EnrolmentRegulatoryFo
     this.certifications.push(certification);
   }
 
+  public hasUnlicensedStudentNurse(): boolean {
+    return this.unlicensedStudents.length > 0;
+  }
+
   public removeCollegeCertifications() {
     this.certifications.clear();
   }
