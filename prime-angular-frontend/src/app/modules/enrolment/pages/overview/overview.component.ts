@@ -266,12 +266,14 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
    */
   private getEnrolmentErrors(enrolment: Enrolment): ValidationErrors {
     return {
+      onlyMissingOboSite: this.isOnlyMissingOboSite(enrolment),
       certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length
+        && !enrolment.unlistedCertifications.length && !enrolment.unlicensedStudents.length
         && !enrolment.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER),
       deviceProvider: enrolment.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
         && (!enrolment.enrolleeDeviceProviders || enrolment.enrolleeDeviceProviders.length === 0),
       missingHAOboSite: enrolment.oboSites?.length && enrolment.oboSites.some(s => s.careSettingCode == CareSettingEnum.HEALTH_AUTHORITY && s.healthAuthorityCode === null),
-      missingOboSite: this.isMissingOboSite(enrolment),
+      missingOboSiteForCareSetting: this.isMissingOboSiteForCareSetting(enrolment),
       missingPharmaNetId: this.isMissingPharmaNetId(enrolment.certifications),
       missingHealthAuthorityCareSetting: enrolment.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)
         && !enrolment.enrolleeHealthAuthorities?.some(ha => ha.healthAuthorityCode),
@@ -281,6 +283,15 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       requireRedoSelfDeclaration: enrolment.requireRedoSelfDeclaration,
       requireCareSetting: !enrolment.careSettings?.length || enrolment.careSettings.filter(cs => CareSettingEnum[cs.careSettingCode] !== undefined).length === 0,
     };
+  }
+
+  private isOnlyMissingOboSite(enrolment: Enrolment): boolean {
+    if ((enrolment.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)
+      || enrolment.unlicensedStudents.length || (!enrolment.certifications.length && enrolment.unlistedCertifications?.length))
+      && !enrolment.oboSites?.length) {
+      return true;
+    }
+    return false;
   }
 
   private isMissingPharmaNetId(certifications: CollegeCertification[]): boolean {
@@ -293,7 +304,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     });
   }
 
-  private isMissingOboSite(enrolment: Enrolment): boolean {
+  private isMissingOboSiteForCareSetting(enrolment: Enrolment): boolean {
     if (!enrolment.careSettings.some((careSetting) => careSetting.careSettingCode === CareSettingEnum.DEVICE_PROVIDER)) {
       if (!enrolment.certifications?.length) {
         let missingOboJob = false;

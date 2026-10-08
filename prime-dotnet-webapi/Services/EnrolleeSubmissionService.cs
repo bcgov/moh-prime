@@ -67,6 +67,7 @@ namespace Prime.Services
                     .ThenInclude(c => c.License)
                         .ThenInclude(l => l.LicenseDetails).AsSplitQuery()
                 .Include(e => e.UnlistedCertifications)
+                .Include(e => e.UnlicensedStudents)
                 .Include(e => e.OboSites)
                     .ThenInclude(s => s.PhysicalAddress).AsSplitQuery()
                 .Include(e => e.EnrolleeCareSettings)
