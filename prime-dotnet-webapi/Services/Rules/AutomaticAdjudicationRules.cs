@@ -184,18 +184,20 @@ namespace Prime.Services.Rules
                     //save the prefix
                     await _enrolleeService.UpdateCertificationPrefix(cert.Id, cert.Prefix);
                     await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.Prefix, cert.LicenseNumber,
-                        $"The record with licence prefix {cert.Prefix}, licence number {cert.LicenseNumber}, effective date {record.EffectiveDate:d MMM yyyy} and status {record.Status} was selected for PRIME.",
+                        $"A record is found with licence prefix {cert.Prefix}, licence number {cert.LicenseNumber}, effective date {record.EffectiveDate:d MMM yyyy} and status {record.Status}.",
                         true);
                 }
 
                 if (!record.MatchesEnrolleeByName(enrollee))
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.NameDiscrepancy, $"{cert} returned First Name \"{record.FirstName}\" and Last Name \"{record.LastName}\".");
+                    await _businessEventService.CreateEnrolleeEventAsync(enrollee.Id, $"The licence has mismatch name(s): {cert} returned First Name \"{record.FirstName}\" and Last Name \"{record.LastName}\".");
                     passed = false;
                 }
                 if (!_ignoreDOBDiscrepancy && record.DateofBirth.Date != enrollee.DateOfBirth.Date)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.BirthdateDiscrepancy, $"{cert} returned {record.DateofBirth:d MMM yyyy}");
+                    await _businessEventService.CreateEnrolleeEventAsync(enrollee.Id, $"The licence has mismatch DOB: {cert} {record.DateofBirth:d MMM yyyy}.");
                     passed = false;
                 }
                 if (record.Status != "P")
