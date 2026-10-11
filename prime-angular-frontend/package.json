@@ -44,7 +44,7 @@
     "js-yaml": "^4.3.1",
     "keycloak-angular": "^19.0.2",
     "keycloak-js": "^25.0.0",
-    "moment": "^2.29.3",
+    "moment": "^2.31.0",
     "ng-busy": "^18.0.0",
     "ngx-filepond": "^7.0.0",
     "ngx-mask": "^16.0.0",
