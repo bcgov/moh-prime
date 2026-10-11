@@ -21,6 +21,7 @@ namespace Prime.Services
         Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<IContactViewModel> contacts) where T : HealthAuthorityContact, new();
         Task UpdatePrivacyOfficeAsync(int healthAuthorityId, PrivacyOfficeViewModel privacyOffice);
         Task<bool> UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes);
+        Task<bool> UpdateCareTypeVendorsAsync(int healthAuthorityId, IEnumerable<HealthAuthorityCareTypeVendorModel> careTypeVendors);
         Task<bool> ValidateSiteSelectionsAsync(int healthAuthorityId, HealthAuthoritySiteUpdateModel updateModel);
         Task<bool> ValidateSiteSelectionsAsync(int healthAuthorityId, int healthAuthoritySiteId);
         Task<bool> VendorExistsOnHealthAuthorityAsync(int healthAuthorityId, int healthAuthorityVendorId);
