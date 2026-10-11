@@ -27,5 +27,6 @@ namespace Prime.Models.HealthAuthorities
         public int? HealthAuthorityOrganizationAgreementDocumentId { get; set; }
 
         public HealthAuthorityOrganizationAgreementDocument HealthAuthorityOrganizationAgreementDocument { get; set; }
+        public HealthAuthorityOrganizationAdditionalDocument[] HealthAuthorityOrganizationAdditionalDocuments { get; set; }
     }
 }
