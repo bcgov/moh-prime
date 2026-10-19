@@ -105,7 +105,7 @@ export class SiteRoutes {
   public static editSiteRegistrationRouteOrder(): string[] {
     return [
       this.CARE_SETTING,
-      //this.BUSINESS_LICENCE,
+      this.BUSINESS_LICENCE,
       this.HOURS_OPERATION,
       this.REMOTE_USERS,
       this.REMOTE_USER, // Included since it's a child of remote_users
