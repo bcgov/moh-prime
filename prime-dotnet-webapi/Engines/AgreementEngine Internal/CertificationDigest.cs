@@ -15,7 +15,8 @@ namespace Prime.Engines.AgreementEngineInternal
     {
         public static ICertificationDigest Create(ICollection<CertificationDto> certs,
             ICollection<EnrolleeDeviceProvider> dps,
-            ICollection<UnlicensedStudent> unlicensedStudents)
+            ICollection<UnlicensedStudent> unlicensedStudents,
+            ICollection<Agreement> agreements)
         {
             if (dps != null && dps.Count > 0)
             {
@@ -27,14 +28,14 @@ namespace Prime.Engines.AgreementEngineInternal
                 return new MultipleColleges();
             }
 
+            if (unlicensedStudents != null && unlicensedStudents.Count > 0)
+            {
+                return new UnlicensedStudentNurse(certs, agreements);
+            }
+
             if (certs.Count == 0)
             {
                 return new NoCollege();
-            }
-
-            if (unlicensedStudents != null && unlicensedStudents.Count > 0)
-            {
-                return new UnlicensedStudentNurse();
             }
 
             var cert = certs.Single();
@@ -141,9 +142,27 @@ namespace Prime.Engines.AgreementEngineInternal
 
     public class UnlicensedStudentNurse : ICertificationDigest
     {
+        public ICollection<Agreement> _agreements { get; set; }
+        public ICollection<CertificationDto> _certifications { get; set; }
+
+        public UnlicensedStudentNurse(ICollection<CertificationDto> certifications, ICollection<Agreement> agreements)
+        {
+            this._agreements = agreements;
+            this._certifications = certifications;
+        }
+
         public AgreementType? ResolveWith(SettingsDigest settings)
         {
-            return AgreementType.OboTOA;
+            if (this._agreements != null &&
+                this._certifications.Count > 0 &&
+                this._agreements.OrderByDescending(a => a.CreatedDate).FirstOrDefault()?.AgreementVersion.AgreementType != AgreementType.OboTOA)
+            {
+                return null;
+            }
+            else
+            {
+                return AgreementType.OboTOA;
+            }
         }
     }
 
