@@ -55,12 +55,13 @@
         </div>
       </div>
 
-      <mat-form-field class="w-100 mb-3">
+      <mat-form-field class="w-100 mb-3 custom-placeholder-field">
         <mat-label>Job Title</mat-label>
         <input matInput
                #input
                type="text"
                formControlName="jobTitle"
+               placeholder="Enter job title or select from the list"
                [matAutocomplete]="auto"
                (focus)="removeNone(input)">
         <mat-autocomplete #auto="matAutocomplete"
