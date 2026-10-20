@@ -81,6 +81,9 @@ export class SiteGuard extends BaseGuard {
     if (site.approvedDate) {
       allowlistRoutes.push(SiteRoutes.BUSINESS_LICENCE_RENEWAL);
       allowlistRoutes.push(SiteRoutes.NEXT_STEPS);
+
+      // Once a site is approved, SA is not allow to update the address
+      allowlistRoutes.splice(allowlistRoutes.indexOf(SiteRoutes.BUSINESS_LICENCE), 1);
     }
 
     // Redirect to an appropriate default route

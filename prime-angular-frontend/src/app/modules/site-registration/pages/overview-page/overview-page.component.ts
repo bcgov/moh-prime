@@ -27,10 +27,10 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
-    selector: 'app-overview-page',
-    templateUrl: './overview-page.component.html',
-    styleUrls: ['./overview-page.component.scss'],
-    standalone: false
+  selector: 'app-overview-page',
+  templateUrl: './overview-page.component.html',
+  styleUrls: ['./overview-page.component.scss'],
+  standalone: false
 })
 export class OverviewPageComponent implements OnInit {
   public busy: Subscription;
@@ -185,12 +185,13 @@ export class OverviewPageComponent implements OnInit {
     if (this.siteFormStateService.isPatched) {
       // Replace site with the version from the form for the user
       // to review, but maintain a subset of immutable properties
-      const { status, submittedDate, approvedDate } = site;
+      const { status, submittedDate, approvedDate, hasBeenApproved } = site;
       site = {
         ...this.siteFormStateService.json,
         status,
         submittedDate,
-        approvedDate
+        approvedDate,
+        hasBeenApproved
       };
     }
 
