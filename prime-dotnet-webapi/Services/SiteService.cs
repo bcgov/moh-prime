@@ -213,11 +213,42 @@ namespace Prime.Services
         public async Task<Site> DeclineSite(int siteId)
         {
             var site = await GetSiteAsync(siteId);
-            site.AddStatus(SiteStatusType.Locked);
+            site.AddStatus(SiteStatusType.Rejected);
             site.ApprovedDate = null;
             await _context.SaveChangesAsync();
 
             await _businessEventService.CreateSiteEventAsync(site.Id, "Site Declined");
+
+            return site;
+        }
+
+        public async Task<Site> LockSite(int siteId)
+        {
+            var site = await GetSiteAsync(siteId);
+            site.AddStatus(SiteStatusType.Locked);
+
+            await _context.SaveChangesAsync();
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Locked");
+
+            return site;
+        }
+
+        public async Task<Site> UnlockSite(int siteId)
+        {
+            var site = await GetSiteAsync(siteId);
+            // To unlock a site, we need to find the last site status that was not locked and set it as the current status.
+            var lastNonLockedStatus = site.SiteStatuses
+                .Where(ss => ss.StatusType != SiteStatusType.Locked)
+                .OrderByDescending(ss => ss.StatusDate)
+                .FirstOrDefault();
+
+            if (lastNonLockedStatus != null)
+            {
+                site.AddStatus(lastNonLockedStatus.StatusType);
+            }
+
+            await _context.SaveChangesAsync();
+            await _businessEventService.CreateSiteEventAsync(site.Id, "Site Unlocked");
 
             return site;
         }
@@ -587,6 +618,7 @@ namespace Prime.Services
         private IQueryable<Site> GetBaseSiteQuery()
         {
             return _context.Sites
+                .Include(s => s.SiteStatuses)
                 .Where(s => s.DeletedDate == null);
         }
 

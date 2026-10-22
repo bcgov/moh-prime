@@ -59,7 +59,7 @@ describe('HealthAuthoritySiteUtils', () => {
           approvedDate: moment().toString()
         },
         {
-          status: SiteStatusType.LOCKED,
+          status: SiteStatusType.REJECTED,
           submittedDate: moment().toString(),
           approvedDate: moment().toString()
         }
@@ -79,17 +79,17 @@ describe('HealthAuthoritySiteUtils', () => {
     it('should be a site that is not in review', () => {
       const healthAuthoritySites = [
         SiteStatusType.EDITABLE,
-        SiteStatusType.LOCKED
+        SiteStatusType.REJECTED
       ].map(status => createHealthAuthoritySite({ status }));
       const results = healthAuthoritySites.map(HealthAuthoritySiteUtils.isInReview);
       expect(results.every(r => r)).toBeFalse();
     });
   });
 
-  describe('HealthAuthoritySiteUtils.isLocked', () => {
-    it('should be a site that is locked', () => {
-      const healthAuthoritySite = createHealthAuthoritySite({ status: SiteStatusType.LOCKED });
-      const result = HealthAuthoritySiteUtils.isLocked(healthAuthoritySite);
+  describe('HealthAuthoritySiteUtils.isRejected', () => {
+    it('should be a site that is rejected', () => {
+      const healthAuthoritySite = createHealthAuthoritySite({ status: SiteStatusType.REJECTED });
+      const result = HealthAuthoritySiteUtils.isRejected(healthAuthoritySite);
       expect(result).toBeTrue();
     });
 
@@ -98,7 +98,7 @@ describe('HealthAuthoritySiteUtils', () => {
         SiteStatusType.EDITABLE,
         SiteStatusType.IN_REVIEW
       ].map(status => createHealthAuthoritySite({ status }));
-      const results = healthAuthoritySites.map(HealthAuthoritySiteUtils.isLocked);
+      const results = healthAuthoritySites.map(HealthAuthoritySiteUtils.isRejected);
       expect(results.every(r => r)).toBeFalse();
     });
   });
@@ -124,11 +124,11 @@ describe('HealthAuthoritySiteUtils', () => {
           approvedDate: moment().toString()
         },
         {
-          status: SiteStatusType.LOCKED,
+          status: SiteStatusType.REJECTED,
           approvedDate: moment().toString()
         },
         {
-          status: SiteStatusType.LOCKED,
+          status: SiteStatusType.REJECTED,
           approvedDate: null
         },
         {
