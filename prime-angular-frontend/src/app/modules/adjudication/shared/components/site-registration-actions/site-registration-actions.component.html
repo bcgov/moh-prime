@@ -16,6 +16,7 @@
     </button>
     <button mat-menu-item
             [disabled]="!(Role.EDIT_SITE | inRole) || !isActionAllowed(SiteAdjudicationAction.REJECT)"
+            *ngIf="isActionAllowed(SiteAdjudicationAction.REJECT)"
             (click)="onReject()">
       <mat-icon>block</mat-icon>
       <span>Reject Site</span>
@@ -26,6 +27,20 @@
             (click)="onUnreject()">
       <mat-icon>arrow_circle_up</mat-icon>
       <span>Unreject Site</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!(Role.EDIT_SITE | inRole) || !isActionAllowed(SiteAdjudicationAction.LOCK)"
+            *ngIf="isActionAllowed(SiteAdjudicationAction.LOCK)"
+            (click)="onLock()">
+      <mat-icon>lock</mat-icon>
+      <span>Lock Site</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!(Role.EDIT_SITE | inRole)"
+            *ngIf="isActionAllowed(SiteAdjudicationAction.UNLOCK)"
+            (click)="onUnlock()">
+      <mat-icon>arrow_circle_up</mat-icon>
+      <span>Unlock Site</span>
     </button>
 
     <ng-container *ngIf="isCommunitySite">

@@ -171,12 +171,21 @@
                           props: getInReviewSiteNotificationProperties(site)
                         }">
           </ng-container>
-          <ng-container *ngIf="isLocked(site)"
+          <ng-container *ngIf="isRejected(site)"
                         [ngTemplateOutlet]="notification"
                         [ngTemplateOutletContext]="{
                           props: {
                             icon: 'not_interested',
                             text: 'Declined'
+                          }
+                        }">
+          </ng-container>
+          <ng-container *ngIf="isLocked(site)"
+                        [ngTemplateOutlet]="notification"
+                        [ngTemplateOutletContext]="{
+                          props: {
+                            icon: 'not_interested',
+                            text: 'Locked'
                           }
                         }">
           </ng-container>
@@ -269,7 +278,7 @@
               type="button"
               color="primary"
               title="View/Update Site Information"
-              [disabled]="isPendingTransfer()"
+              [disabled]="isPendingTransfer() || site.status === SiteStatusType.LOCKED"
               (click)="viewSite(organizationId, site)">
         <mat-icon>description</mat-icon>
         <span class="icon-text">Site Info</span>
@@ -280,7 +289,8 @@
               color="primary"
               title="View/Update Remote Practitioners"
               *ngIf="site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE"
-              [disabled]="isPendingTransfer() || !site.completed || site.status === SiteStatusType.IN_REVIEW || site.status === SiteStatusType.LOCKED"
+              [disabled]="isPendingTransfer() || !site.completed || site.status === SiteStatusType.IN_REVIEW ||
+                 site.status === SiteStatusType.REJECTED || site.status === SiteStatusType.LOCKED"
               (click)="viewSiteRemoteUsers(organizationId, site)">
         <mat-icon>folder_shared</mat-icon>
         <span class="icon-text">Remote Practitioners</span>

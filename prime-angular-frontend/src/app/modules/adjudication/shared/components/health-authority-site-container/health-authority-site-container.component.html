@@ -39,6 +39,8 @@
             <app-site-registration-actions [siteRegistration]="healthAuthoritySite"
                                            (approve)="onApprove($event)"
                                            (reject)="onReject($event)"
+                                           (lock)="onLock($event)"
+                                           (unlock)="onUnlock($event)"
                                            (unreject)="onUnreject($event)"
                                            (escalate)="onEscalate($event)"
                                            (enableEditing)="onEnableEditing($event)"

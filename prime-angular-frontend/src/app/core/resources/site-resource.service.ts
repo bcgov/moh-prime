@@ -513,6 +513,33 @@ export class SiteResource {
       );
   }
 
+  public lockSite(siteId: number): NoContent {
+    return this.apiResource.put<NoContent>(`sites/${siteId}/lock`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Site has been locked')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site registration could not be locked');
+          this.logger.error('[SiteRegistration] SiteResource::lockSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public unlockSite(siteId: number): NoContent {
+    return this.apiResource.put<NoContent>(`sites/${siteId}/unlock`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Site has been unlocked')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site registration could not be unlocked');
+          this.logger.error('[SiteRegistration] SiteResource::unlockSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+
   public flagSite(siteId: number, flagged: boolean): NoContent {
     const url = `sites/${siteId}/flag`;
     const body = { data: flagged };

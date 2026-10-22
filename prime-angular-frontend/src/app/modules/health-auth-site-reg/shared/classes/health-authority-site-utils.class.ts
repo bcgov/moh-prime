@@ -18,6 +18,10 @@ export class HealthAuthoritySiteUtils {
     return healthAuthoritySite.status === SiteStatusType.IN_REVIEW;
   }
 
+  public static isRejected(healthAuthoritySite: BaseHealthAuthoritySite): boolean {
+    return healthAuthoritySite.status === SiteStatusType.REJECTED;
+  }
+
   public static isLocked(healthAuthoritySite: BaseHealthAuthoritySite): boolean {
     return healthAuthoritySite.status === SiteStatusType.LOCKED;
   }

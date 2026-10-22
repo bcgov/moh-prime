@@ -54,7 +54,7 @@ export class OverviewContainerComponent implements OnInit {
 
   public showUpdateBusinessLicence(): boolean {
     return this.showEditRedirect && this.site.status !== SiteStatusType.IN_REVIEW &&
-      this.site.status !== SiteStatusType.LOCKED && this.site.approvedDate !== null;
+      this.site.status !== SiteStatusType.REJECTED && this.site.approvedDate !== null;
   }
 
   public onRoute(routePath: string | (string | number)[]) {
