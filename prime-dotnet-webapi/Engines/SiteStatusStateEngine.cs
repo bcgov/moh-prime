@@ -19,12 +19,17 @@ namespace Prime.Engines
                 // Approve
                 (SiteRegistrationAction.Approve, SiteStatusType.InReview) => true,
                 // Unreject
-                (SiteRegistrationAction.Unreject, SiteStatusType.Locked) => true,
+                (SiteRegistrationAction.Unreject, SiteStatusType.Rejected) => true,
                 // Archive
                 (SiteRegistrationAction.Archive, SiteStatusType.Editable) => true,
                 (SiteRegistrationAction.Archive, SiteStatusType.InReview) => true,
                 // Restore
                 (SiteRegistrationAction.Restore, SiteStatusType.Archived) => true,
+                // Lock
+                (SiteRegistrationAction.Lock, SiteStatusType.Editable) => true,
+                (SiteRegistrationAction.Lock, SiteStatusType.InReview) => true,
+                // Unlock
+                (SiteRegistrationAction.Unlock, SiteStatusType.Locked) => true,
 
                 _ => false
             };

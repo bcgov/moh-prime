@@ -5,4 +5,6 @@ export enum SiteAdjudicationAction {
   UNREJECT = 4,
   ARCHIVE = 7,
   RESTORE = 8,
+  LOCK = 9,
+  UNLOCK = 10
 }

@@ -20,10 +20,10 @@ class ImprovedPageEvent extends PageEvent {
 }
 
 @Component({
-    selector: 'app-site-registration-table',
-    templateUrl: './site-registration-table.component.html',
-    styleUrls: ['./site-registration-table.component.scss'],
-    standalone: false
+  selector: 'app-site-registration-table',
+  templateUrl: './site-registration-table.component.html',
+  styleUrls: ['./site-registration-table.component.scss'],
+  standalone: false
 })
 export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
   @Input() public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
@@ -103,8 +103,10 @@ export class SiteRegistrationTableComponent implements OnInit, AfterViewInit {
         return 'Editable';
       case SiteStatusType.IN_REVIEW:
         return 'In Review';
+      case SiteStatusType.REJECTED:
+        return 'Rejected';
       case SiteStatusType.LOCKED:
-        return 'Locked';
+        return "Locked";
       default:
         return 'Editable';
     }
