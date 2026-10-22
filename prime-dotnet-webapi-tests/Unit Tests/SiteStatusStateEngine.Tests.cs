@@ -45,7 +45,8 @@ namespace PrimeTests.UnitTests
             {
                 SiteRegistrationAction.Submit,
                 SiteRegistrationAction.Reject,
-                SiteRegistrationAction.Archive
+                SiteRegistrationAction.Archive,
+                SiteRegistrationAction.Lock
             }.Contains(action);
 
             // Act
@@ -65,7 +66,8 @@ namespace PrimeTests.UnitTests
                 SiteRegistrationAction.Approve,
                 SiteRegistrationAction.Reject,
                 SiteRegistrationAction.RequestChange,
-                SiteRegistrationAction.Archive
+                SiteRegistrationAction.Archive,
+                SiteRegistrationAction.Lock
             }.Contains(action);
 
             // Act
