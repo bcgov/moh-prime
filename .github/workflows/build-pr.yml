@@ -17,6 +17,9 @@ jobs:
   build-document-manager-backend:
     name: build-document-manager-backend
     runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: read
+      contents: read 
     environment: Development
     steps:
     - name: "Checkout the repo"
@@ -65,6 +68,9 @@ jobs:
   build-backend:
     name: build-backend
     runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: read
+      contents: read 
     environment: Development
     steps:
     - name: "Checkout the repo"
@@ -122,6 +128,9 @@ jobs:
   build-frontend:
     name: build-frontend
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+      contents: read 
     environment: Development
     defaults:
       run:
@@ -196,6 +205,9 @@ jobs:
   apply-oc-template:
     name: apply-oc-template
     runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: read
+      contents: read 
     environment: Development
     needs: [build-document-manager-backend, build-frontend, build-backend]
     steps:
