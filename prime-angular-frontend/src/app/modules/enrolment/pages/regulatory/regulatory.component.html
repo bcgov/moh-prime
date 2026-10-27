@@ -134,7 +134,7 @@
       <div class="row">
         <div class="col col-sm-12 py-1"
              formArrayName="unlicensedStudents">
-          <app-toggle-content label="I am a unlicensed student nurse."
+          <app-toggle-content label="I am an unlicensed student nurse or midwife."
                               [checked]="hasUnlicensedStudent"
                               (toggle)="toggleUnlicensedStudent($event)">
             <ng-container *ngFor="let unlicensedStudent of this.formState.unlicensedStudents.controls; let i = index;"

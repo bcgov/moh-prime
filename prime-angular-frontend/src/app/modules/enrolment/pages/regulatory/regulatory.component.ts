@@ -260,11 +260,13 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
   protected nextRouteAfterSubmit() {
     const certifications = this.formState.collegeCertifications;
+    const unlicensedStudent = this.formState.unlicensedStudents;
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       // If DP Role Code is "None", we go to Job Site page
-      nextRoutePath = (!certifications.length || (this.isDeviceProvider && this.formState.deviceProviderRoleCode.value === 15))
+      nextRoutePath = (!certifications.length || unlicensedStudent.length ||
+        (this.isDeviceProvider && this.formState.deviceProviderRoleCode.value === 15))
         ? EnrolmentRoutes.OBO_SITES
         : (this.hasMatchingRemoteUser)
           ? EnrolmentRoutes.REMOTE_ACCESS

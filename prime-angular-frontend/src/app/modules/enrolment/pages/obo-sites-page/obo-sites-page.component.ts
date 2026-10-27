@@ -95,6 +95,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     return this.form.get('lastUpdatedDatetime') as UntypedFormGroup;
   }
 
+
   public get chosenHealthAuthorityCodes(): string[] {
     return Object.keys(this.healthAuthoritySites.value);
   }
@@ -322,7 +323,9 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
 
   protected onSubmitFormIsValid() {
     // Enrollees can not have jobs and certifications
-    this.removeCollegeCertifications();
+    if (!this.enrolmentFormStateService.regulatoryFormState.hasUnlicensedStudentNurse()) {
+      this.removeCollegeCertifications();
+    }
     this.removeIncompleteOboSites(true);
 
     this.oboSites.clear();
