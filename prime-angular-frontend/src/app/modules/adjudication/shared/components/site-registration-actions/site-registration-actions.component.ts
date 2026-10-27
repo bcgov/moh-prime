@@ -12,10 +12,10 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
 
 @Component({
-    selector: 'app-site-registration-actions',
-    templateUrl: './site-registration-actions.component.html',
-    styleUrls: ['./site-registration-actions.component.scss'],
-    standalone: false
+  selector: 'app-site-registration-actions',
+  templateUrl: './site-registration-actions.component.html',
+  styleUrls: ['./site-registration-actions.component.scss'],
+  standalone: false
 })
 export class SiteRegistrationActionsComponent implements OnInit {
   @Input() siteRegistration: SiteRegistrationListViewModel | HealthAuthoritySiteAdminList;
@@ -25,6 +25,8 @@ export class SiteRegistrationActionsComponent implements OnInit {
   @Output() public escalate: EventEmitter<number>;
   @Output() public archive: EventEmitter<number>;
   @Output() public restore: EventEmitter<number>;
+  @Output() public lock: EventEmitter<number>;
+  @Output() public unlock: EventEmitter<number>;
   @Output() public archiveOrganization: EventEmitter<number>;
   @Output() public restoreOrganization: EventEmitter<number>;
   @Output() public delete: EventEmitter<{ [key: string]: number }>;
@@ -46,6 +48,8 @@ export class SiteRegistrationActionsComponent implements OnInit {
     this.approve = new EventEmitter<number>();
     this.reject = new EventEmitter<number>();
     this.unreject = new EventEmitter<number>();
+    this.lock = new EventEmitter<number>();
+    this.unlock = new EventEmitter<number>();
     this.escalate = new EventEmitter<number>();
     this.archive = new EventEmitter<number>();
     this.restore = new EventEmitter<number>();
@@ -92,6 +96,18 @@ export class SiteRegistrationActionsComponent implements OnInit {
   public onUnreject(): void {
     if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
       this.unreject.emit(this.siteRegistration.id);
+    }
+  }
+
+  public onLock(): void {
+    if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
+      this.lock.emit(this.siteRegistration.id);
+    }
+  }
+
+  public onUnlock(): void {
+    if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
+      this.unlock.emit(this.siteRegistration.id);
     }
   }
 
@@ -201,14 +217,18 @@ export class SiteRegistrationActionsComponent implements OnInit {
     switch (this.siteRegistration.status) {
       case SiteStatusType.EDITABLE:
         return (action === SiteAdjudicationAction.REJECT
-          || action === SiteAdjudicationAction.ARCHIVE);
+          || action === SiteAdjudicationAction.ARCHIVE
+          || action === SiteAdjudicationAction.LOCK);
       case SiteStatusType.IN_REVIEW:
         return (action === SiteAdjudicationAction.REQUEST_CHANGES
           || action === SiteAdjudicationAction.APPROVE
           || action === SiteAdjudicationAction.REJECT
-          || action === SiteAdjudicationAction.ARCHIVE);
-      case SiteStatusType.LOCKED:
+          || action === SiteAdjudicationAction.ARCHIVE
+          || action === SiteAdjudicationAction.LOCK);
+      case SiteStatusType.REJECTED:
         return (action === SiteAdjudicationAction.UNREJECT);
+      case SiteStatusType.LOCKED:
+        return (action === SiteAdjudicationAction.UNLOCK);
       case SiteStatusType.ARCHIVED:
         return (action === SiteAdjudicationAction.RESTORE);
       default:

@@ -55,7 +55,7 @@ export class HealthAuthoritySiteGuard extends BaseGuard {
       case SiteStatusType.IN_REVIEW: {
         return this.manageInReviewHealthAuthoritySite(routePath, params);
       }
-      case SiteStatusType.LOCKED: {
+      case SiteStatusType.REJECTED: {
         return this.manageLockedHealthAuthoritySite(routePath, params);
       }
     }

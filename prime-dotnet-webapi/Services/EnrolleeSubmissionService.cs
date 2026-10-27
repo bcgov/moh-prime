@@ -67,6 +67,7 @@ namespace Prime.Services
                     .ThenInclude(c => c.License)
                         .ThenInclude(l => l.LicenseDetails).AsSplitQuery()
                 .Include(e => e.UnlistedCertifications)
+                .Include(e => e.UnlicensedStudents)
                 .Include(e => e.OboSites)
                     .ThenInclude(s => s.PhysicalAddress).AsSplitQuery()
                 .Include(e => e.EnrolleeCareSettings)
@@ -87,7 +88,8 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.SelfDeclarationDocuments)
                 .Include(e => e.IdentificationDocuments)
-                .Include(e => e.Agreements).AsSplitQuery()
+                .Include(e => e.Agreements).
+                    ThenInclude(a => a.AgreementVersion).AsSplitQuery()
                 .FirstOrDefaultAsync(e => e.Id == enrolleeId);
 
             var selfDeclarationQuestions = await _context.Set<SelfDeclarationType>()

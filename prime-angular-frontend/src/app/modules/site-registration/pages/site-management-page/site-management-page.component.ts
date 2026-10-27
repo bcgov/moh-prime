@@ -29,10 +29,10 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 @Component({
-    selector: 'app-site-management-page',
-    templateUrl: './site-management-page.component.html',
-    styleUrls: ['./site-management-page.component.scss'],
-    standalone: false
+  selector: 'app-site-management-page',
+  templateUrl: './site-management-page.component.html',
+  styleUrls: ['./site-management-page.component.scss'],
+  standalone: false
 })
 export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
@@ -206,12 +206,16 @@ export class SiteManagementPageComponent implements OnInit {
     return this.organization?.pendingTransfer;
   }
 
-  public isLocked(site: SiteListViewModel): boolean {
-    return site.status === SiteStatusType.LOCKED;
+  public isRejected(site: SiteListViewModel): boolean {
+    return site.status === SiteStatusType.REJECTED;
   }
 
   public isArchived(site: SiteListViewModel): boolean {
     return site.status === SiteStatusType.ARCHIVED;
+  }
+
+  public isLocked(site: SiteListViewModel): boolean {
+    return site.status === SiteStatusType.LOCKED;
   }
 
   public getLockedSiteNotificationProperties() {

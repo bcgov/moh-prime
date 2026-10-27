@@ -9,5 +9,7 @@ namespace Prime.Models.Api
         Unreject = 5,
         Archive = 8,
         Restore = 9,
+        Lock = 10,
+        Unlock = 11
     }
 }
