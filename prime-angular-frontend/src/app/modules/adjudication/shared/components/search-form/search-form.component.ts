@@ -12,10 +12,10 @@ import { SiteStatusType } from '@lib/enums/site-status.enum';
 import { SearchFormStatusType } from '@adjudication/shared/enums/search-form-status-type.enum';
 
 @Component({
-    selector: 'app-search-form',
-    templateUrl: './search-form.component.html',
-    styleUrls: ['./search-form.component.scss'],
-    standalone: false
+  selector: 'app-search-form',
+  templateUrl: './search-form.component.html',
+  styleUrls: ['./search-form.component.scss'],
+  standalone: false
 })
 export class SearchFormComponent implements OnInit {
   @Input() public hideStatus: boolean;
@@ -50,8 +50,9 @@ export class SearchFormComponent implements OnInit {
 
     const inReviewStatus = new Config<number>(SiteStatusType.IN_REVIEW, 'In Review');
     const editableStatus = new Config<number>(SiteStatusType.EDITABLE, 'Editable');
+    const rejectedStatus = new Config<number>(SiteStatusType.REJECTED, 'Rejected');
     const lockedStatus = new Config<number>(SiteStatusType.LOCKED, 'Locked');
-    this.siteStatuses.push(inReviewStatus, editableStatus, lockedStatus);
+    this.siteStatuses.push(inReviewStatus, editableStatus, rejectedStatus, lockedStatus);
 
     this.search = new EventEmitter<string>();
     this.filter = new EventEmitter<number>();
