@@ -216,6 +216,39 @@ export abstract class AbstractSiteAdminPage {
         exhaustMap((note: string) =>
           this.siteResource.rejectSite(siteId)
             .pipe(
+              map(() => this.updateSite(siteId, { status: SiteStatusType.REJECTED })),
+              map(() => note)
+            )
+        ),
+        exhaustMap((note: string) =>
+          (note)
+            ? this.siteResource.createSiteRegistrationNote(siteId, note)
+            : of(noop)
+        )
+      )
+      .subscribe(() => this.onRefresh());
+  }
+
+  public onLock(siteId: number): void {
+    const data: DialogOptions = {
+      title: 'Lock Site Registration',
+      message: 'Are you sure you want to lock this Site Registration?',
+      actionText: 'Lock Site Registration',
+      actionType: 'warn',
+      component: NoteComponent,
+    };
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: string }) =>
+          (result)
+            ? of(result.output ?? null)
+            : EMPTY
+        ),
+        exhaustMap((note: string) =>
+          this.siteResource.lockSite(siteId)
+            .pipe(
               map(() => this.updateSite(siteId, { status: SiteStatusType.LOCKED })),
               map(() => note)
             )
@@ -226,6 +259,11 @@ export abstract class AbstractSiteAdminPage {
             : of(noop)
         )
       )
+      .subscribe(() => this.onRefresh());
+  }
+
+  public onUnlock(siteId: number): void {
+    this.busy = this.siteResource.unlockSite(siteId)
       .subscribe(() => this.onRefresh());
   }
 

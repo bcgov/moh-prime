@@ -149,6 +149,7 @@ namespace Prime.Services
                     ((searchOptions.StatusId == (int)SiteStatusType.Editable && s.ApprovedDate.HasValue) ||
                     (searchOptions.StatusId == (int)SiteStatusType.EditableNotApproved && !s.ApprovedDate.HasValue) ||
                     searchOptions.StatusId == (int)SiteStatusType.InReview ||
+                    searchOptions.StatusId == (int)SiteStatusType.Rejected ||
                     searchOptions.StatusId == (int)SiteStatusType.Locked)))
                 .If(flagged, q => q.Where(s => s.Flagged))
                 .If(!string.IsNullOrWhiteSpace(searchOptions.AdminUserName),

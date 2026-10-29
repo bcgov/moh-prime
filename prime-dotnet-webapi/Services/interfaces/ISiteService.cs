@@ -22,6 +22,8 @@ namespace Prime.Services
         Task<Site> ApproveSite(int siteId);
         Task<Site> DeclineSite(int siteId);
         Task<Site> UnrejectSite(int siteId);
+        Task<Site> LockSite(int siteId);
+        Task<Site> UnlockSite(int siteId);
         Task<Site> EnableEditingSite(int siteId);
         Task<Site> SubmitRegistrationAsync(int siteId);
         Task<IEnumerable<BusinessDayViewModel>> GetBusinessHoursAsync(int siteId);

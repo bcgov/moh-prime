@@ -64,7 +64,8 @@ namespace Prime.Services.Rules
                     PractitionerId = c.PractitionerId,
                 }).ToList(),
                 EnrolleeDeviceProviders = enrollee.EnrolleeDeviceProviders,
-                UnlicensedStudents = enrollee.UnlicensedStudents
+                UnlicensedStudents = enrollee.UnlicensedStudents,
+                Agreements = enrollee.Agreements
             };
             var expectedAgreementType = AgreementEngine.DetermineAgreementType(agreementDto);
 

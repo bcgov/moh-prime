@@ -1061,6 +1061,63 @@ namespace Prime.Controllers
             return Ok();
         }
 
+        // PUT: api/Sites/5/lock
+        /// <summary>
+        /// Lock a site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpPut("{siteId}/lock", Name = nameof(LockSite))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> LockSite(int siteId)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            var status = await _siteService.GetSiteCurrentStatusAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Lock, status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
+
+            await _siteService.LockSite(siteId);
+            return Ok();
+        }
+
+        // PUT: api/Sites/5/unlock
+        /// <summary>
+        /// Unlock a site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpPut("{siteId}/unlock", Name = nameof(UnlockSite))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UnlockSite(int siteId)
+        {
+            if (!await _siteService.SiteExistsAsync(siteId))
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            var status = await _siteService.GetSiteCurrentStatusAsync(siteId);
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Unlock, status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
+
+            await _siteService.UnlockSite(siteId);
+            return Ok();
+        }
+
+
         // PUT: api/Sites/5/enable-editing
         /// <summary>
         /// Enable editing a site

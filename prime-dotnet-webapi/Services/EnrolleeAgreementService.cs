@@ -200,6 +200,8 @@ namespace Prime.Services
                         .ThenInclude(l => l.LicenseDetails)
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.UnlicensedStudents)
+                .Include(e => e.Agreements)
+                    .ThenInclude(a => a.AgreementVersion)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (!enrollee.ProfileCompleted)
