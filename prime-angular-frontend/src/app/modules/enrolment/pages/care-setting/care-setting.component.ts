@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, provideExperimentalCheckNoChangesForDebug } from '@angular/core';
 import { UntypedFormGroup, UntypedFormArray, UntypedFormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -63,7 +63,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       authService
     );
 
-    this.careSettingTypes = this.configService.careSettings.filter(c => CareSettingEnum[c.code] !== undefined);
+    this.careSettingTypes = this.configService.careSettings.filter(c => CareSettingEnum[c.code] !== undefined && this.validateCareSetting(c.code));
     this.healthAuthorities = this.configService.healthAuthorities;
     this.hasNoHealthAuthoritiesError = false;
   }
@@ -123,6 +123,18 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   public removeCareSetting(index: number) {
     this.careSettings.removeAt(index);
     this.setHealthAuthorityValidator();
+  }
+
+  public validateCareSetting(careSettingCode: number): boolean {
+    switch (careSettingCode) {
+      case CareSettingEnum.HEALTH_AUTHORITY:
+      case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
+      case CareSettingEnum.COMMUNITY_PHARMACY:
+      case CareSettingEnum.DEVICE_PROVIDER:
+        return true;
+      default:
+        return false;
+    };
   }
 
   public filterCareSettingTypes(careSetting: UntypedFormGroup) {

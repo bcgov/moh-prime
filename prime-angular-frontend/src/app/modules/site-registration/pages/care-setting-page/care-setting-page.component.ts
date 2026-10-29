@@ -69,10 +69,9 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
   public enableCareSetting(careSettingCode: number): boolean {
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
-        return true;
       case CareSettingEnum.COMMUNITY_PHARMACY:
-        return true;
       case CareSettingEnum.DEVICE_PROVIDER:
+      case CareSettingEnum.DISPENSING_PRACTITIONER:
         return true;
       default:
         return false;
@@ -159,7 +158,7 @@ export class CareSettingPageComponent extends AbstractCommunitySiteRegistrationP
             );
         }),
         map((careSettingCode: CareSettingEnum) =>
-          this.vendorConfig.filter((vendorConfig: VendorConfig) => vendorConfig.careSettingCode === careSettingCode)
+          this.vendorConfig.filter((vendorConfig: VendorConfig) => vendorConfig.careSettingCode === careSettingCode && vendorConfig.discontinued === false)
         )
       )
       .subscribe((vendors: VendorConfig[]) => {

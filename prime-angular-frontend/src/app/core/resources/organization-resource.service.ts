@@ -408,7 +408,10 @@ export class OrganizationResource {
    */
   public getOrganizationAgreementForSigning(
     organizationId: number,
-    agreementType: AgreementType.COMMUNITY_PRACTICE_ORGANIZATION_AGREEMENT | AgreementType.COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT | AgreementType.DEVICE_PROVIDER_ORGANIZATION_AGREEMENT
+    agreementType: AgreementType.COMMUNITY_PRACTICE_ORGANIZATION_AGREEMENT |
+      AgreementType.COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT |
+      AgreementType.DEVICE_PROVIDER_ORGANIZATION_AGREEMENT |
+      AgreementType.DISPENSING_PRACTITIONER_ORGANIZATION_AGREEMENT
   ) {
     const params = this.apiResourceUtilsService.makeHttpParams({ agreementType });
     return this.apiResource.get<string>(`organizations/${organizationId}/signable`, params)

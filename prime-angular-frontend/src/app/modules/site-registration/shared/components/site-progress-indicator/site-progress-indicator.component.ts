@@ -10,10 +10,10 @@ import { OrganizationService } from '@registration/shared/services/organization.
 import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
-    selector: 'app-site-progress-indicator',
-    templateUrl: './site-progress-indicator.component.html',
-    styleUrls: ['./site-progress-indicator.component.scss'],
-    standalone: false
+  selector: 'app-site-progress-indicator',
+  templateUrl: './site-progress-indicator.component.html',
+  styleUrls: ['./site-progress-indicator.component.scss'],
+  standalone: false
 })
 export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicator {
   @Input() public inProgress: boolean;
@@ -52,6 +52,7 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
             this.steps = SiteRoutes.deviceProviderSiteSteps();
             break;
           case CareSettingEnum.COMMUNITY_PHARMACY:
+          case CareSettingEnum.DISPENSING_PRACTITIONER:
             this.steps = SiteRoutes.pharmacySiteSteps();
             break;
         }

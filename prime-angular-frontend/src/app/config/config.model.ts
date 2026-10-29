@@ -83,6 +83,7 @@ export interface CollegePracticeConfig {
 
 export interface VendorConfig extends Config<number> {
   careSettingCode: number;
+  discontinued: boolean;
 }
 
 export interface HAConfig extends Config<number> {
