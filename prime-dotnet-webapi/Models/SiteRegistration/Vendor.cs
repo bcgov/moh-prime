@@ -23,5 +23,7 @@ namespace Prime.Models
 
         [JsonIgnore]
         public IEnumerable<SiteVendor> SiteVendors { get; set; }
+
+        public bool Discontinued { get; set; }
     }
 }

@@ -18,6 +18,16 @@
                       }"></ng-container>
       </ng-template>
     </mat-tab>
+    <mat-tab label="Dispensing Practitioners"
+             [id]="CareSettingEnum.DISPENSING_PRACTITIONER">
+      <ng-template matTabContent>
+        <ng-container [ngTemplateOutlet]="table"
+                      [ngTemplateOutletContext]="{
+                          columns: communityPracticeColumns,
+                          localStoragePrefix: 'site-dpr'
+                      }"></ng-container>
+      </ng-template>
+    </mat-tab>
     <mat-tab label="Community Pharmacies"
              [id]="CareSettingEnum.COMMUNITY_PHARMACY">
       <ng-template matTabContent>

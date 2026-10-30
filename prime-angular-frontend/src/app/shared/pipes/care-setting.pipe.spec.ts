@@ -41,14 +41,16 @@ describe('CareSettingPipe', () => {
       CareSettingEnum.COMMUNITY_PHARMACY,
       CareSettingEnum.DEVICE_PROVIDER,
       CareSettingEnum.HEALTH_AUTHORITY,
-      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
+      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
+      CareSettingEnum.DISPENSING_PRACTITIONER
     ];
     const results = pipe.transform(value, 'abbr') as string[];
     const abbrs = [
       'CP',
       'DP',
       'HA',
-      'PCHP'
+      'PCHP',
+      'DISP'
     ];
     results.forEach((result, i) => expect(result).toBe(abbrs[i]));
   });

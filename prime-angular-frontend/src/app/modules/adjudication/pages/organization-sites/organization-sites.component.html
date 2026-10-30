@@ -19,6 +19,20 @@
     </app-site-registration-table>
   </app-page-section>
 
+  <app-page-section *ngIf="dispensingPractitioners.data.length">
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>
+        Dispensing Practitioners
+      </ng-container>
+    </app-page-subheader>
+    <app-site-registration-table [dataSource]="dispensingPractitioners"
+                                 (assign)="onAssign($event)"
+                                 (reassign)="onReassign($event)"
+                                 (notify)="onNotify($event)"
+                                 (route)="onRoute($event)">
+    </app-site-registration-table>
+  </app-page-section>
+
   <app-page-section *ngIf="communityPharmacies.data.length">
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>

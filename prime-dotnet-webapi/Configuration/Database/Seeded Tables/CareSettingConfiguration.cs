@@ -13,7 +13,8 @@ namespace Prime.Configuration.Database
                     new CareSetting { Code = 1, Name = "Health Authority"                  },
                     new CareSetting { Code = 2, Name = "Private Community Health Practice" },
                     new CareSetting { Code = 3, Name = "Community Pharmacy"                },
-                    new CareSetting { Code = 4, Name = "Device Provider"                   }
+                    new CareSetting { Code = 4, Name = "Device Provider"                   },
+                    new CareSetting { Code = 6, Name = "Dispensing Practitioner"           },
                 };
             }
         }
