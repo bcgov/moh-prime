@@ -14378,6 +14378,96 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true
+                        },
+                        new
+                        {
+                            Id = 396,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 11, 10, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 132,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            Multijurisdictional = false,
+                            NamedInImReg = true,
+                            Prefix = "94",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 397,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 11, 10, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 133,
+                            LicensedToProvideCare = true,
+                            Manual = false,
+                            Multijurisdictional = false,
+                            NamedInImReg = true,
+                            Prefix = "94",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 398,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 11, 10, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 134,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = false,
+                            Prefix = "94",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 399,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 11, 10, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 135,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = false,
+                            Prefix = "94",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
+                        },
+                        new
+                        {
+                            Id = 400,
+                            AllowRequestRemoteAccess = false,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            EffectiveDate = new DateTime(2026, 11, 10, 8, 0, 0, 0, DateTimeKind.Utc),
+                            LicenseCode = 136,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Multijurisdictional = false,
+                            NamedInImReg = false,
+                            Prefix = "94",
+                            PrescriberIdType = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Validate = true
                         });
                 });
 
