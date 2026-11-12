@@ -38,6 +38,7 @@ namespace Prime.Configuration.Database
         public static readonly DateTime BCCNMLicenseChange24June2026 = new(2026, 6, 24, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime CPSBCLicenseChange25June2026 = new(2026, 6, 25, 8, 0, 0, DateTimeKind.Utc);
         public static readonly DateTime NaturopathicLicenseChange6August2026 = new(2026, 8, 6, 8, 0, 0, DateTimeKind.Utc);
+        public static readonly DateTime OptometryLicenseChange = new(2026, 11, 10, 8, 0, 0, DateTimeKind.Utc);
 
         public override IEnumerable<LicenseDetail> SeedData
         {
@@ -517,6 +518,13 @@ namespace Prime.Configuration.Database
                     new LicenseDetail { Id = 393, LicenseCode = 166, Prefix = "97",   Manual = false,  Validate = true, NamedInImReg = true, LicensedToProvideCare = true, PrescriberIdType = PrescriberIdType.Mandatory, EffectiveDate = NaturopathicLicenseChange6August2026, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id = 394, LicenseCode = 167, Prefix = "97",   Manual = false,  Validate = true, NamedInImReg = true, LicensedToProvideCare = true, PrescriberIdType = PrescriberIdType.Mandatory, EffectiveDate = NaturopathicLicenseChange6August2026, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new LicenseDetail { Id = 395, LicenseCode = 169, Prefix = "97",   Manual = false,  Validate = true, NamedInImReg = false, LicensedToProvideCare = false, PrescriberIdType = PrescriberIdType.Mandatory, EffectiveDate = NaturopathicLicenseChange6August2026, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // Add PharmaNet ID field as optional for Optometry
+                    new LicenseDetail { Id = 396, LicenseCode = 132, Prefix = "94",   Manual = false,  Validate = true, NamedInImReg = true, LicensedToProvideCare = true, PrescriberIdType = PrescriberIdType.Mandatory, EffectiveDate = OptometryLicenseChange, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 397, LicenseCode = 133, Prefix = "94",   Manual = false,  Validate = true, NamedInImReg = true, LicensedToProvideCare = true, PrescriberIdType = PrescriberIdType.Mandatory, EffectiveDate = OptometryLicenseChange, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 398, LicenseCode = 134, Prefix = "94",   Manual = true,  Validate = true, NamedInImReg = false, LicensedToProvideCare = true, PrescriberIdType = PrescriberIdType.Mandatory, EffectiveDate = OptometryLicenseChange, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 399, LicenseCode = 135, Prefix = "94",   Manual = true,  Validate = true, NamedInImReg = false, LicensedToProvideCare = true, PrescriberIdType = PrescriberIdType.Mandatory, EffectiveDate = OptometryLicenseChange, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new LicenseDetail { Id = 400, LicenseCode = 136, Prefix = "94",   Manual = true,  Validate = true, NamedInImReg = false, LicensedToProvideCare = true, PrescriberIdType = PrescriberIdType.Mandatory, EffectiveDate = OptometryLicenseChange, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
 
             }
