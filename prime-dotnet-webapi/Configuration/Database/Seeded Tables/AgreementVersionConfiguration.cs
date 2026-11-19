@@ -63,7 +63,10 @@ namespace Prime.Configuration.Database
 
                     new AgreementVersion { Id = 34, AgreementType = AgreementType.DeviceProviderOrgAgreement,    Text =  "device-provider-org-v3.html",         EffectiveDate = August15th2023AgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    new AgreementVersion { Id = 35, AgreementType = AgreementType.PrescriberOBOTOA,              Text =  "obo-access-terms-v6.html",            EffectiveDate = PhysicianAssistantAgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                    new AgreementVersion { Id = 35, AgreementType = AgreementType.PrescriberOBOTOA,              Text =  "obo-access-terms-v6.html",            EffectiveDate = PhysicianAssistantAgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // TODO update the actual file, placeholder with pharmacy org agreement v4 text for now
+                    new AgreementVersion { Id = 36, AgreementType = AgreementType.DispensingPractitionerOrgAgreement, Text =  "com-pharmacy-org-v4.html",     EffectiveDate = PhysicianAssistantAgreementUpdate, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
                 };
             }
         }

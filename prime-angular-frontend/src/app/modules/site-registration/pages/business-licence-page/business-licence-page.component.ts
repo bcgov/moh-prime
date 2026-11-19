@@ -87,6 +87,7 @@ export class BusinessLicencePageComponent extends AbstractCommunitySiteRegistrat
       CareSettingEnum.COMMUNITY_PHARMACY,
       CareSettingEnum.DEVICE_PROVIDER,
       CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
+      CareSettingEnum.DISPENSING_PRACTITIONER
     ].includes(this.siteService.site.careSettingCode);
   }
 

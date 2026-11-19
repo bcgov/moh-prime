@@ -20,10 +20,10 @@ namespace Prime.Configuration.Database
                     new Vendor { Code = 7,  CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "Applied Robotics Inc.",             Email = ""                       },
                     new Vendor { Code = 8,  CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "Loblaws/Shoppers Drug Mart",        Email = ""                       },
                     new Vendor { Code = 9,  CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "McKesson Canada",                   Email = ""                       },
-                    new Vendor { Code = 10, CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "Commander Group Software",          Email = ""                       },
+                    new Vendor { Code = 10, CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "Commander Group Software",          Email = "", Discontinued = true  },
 
                     new Vendor { Code = 14, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Applied Robotics Inc.",             Email = ""                       },
-                    new Vendor { Code = 15, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Commander Group Software",          Email = ""                       },
+                    new Vendor { Code = 15, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Commander Group Software",          Email = "", Discontinued = true },
 
                     new Vendor { Code = 21, CareSettingCode = (int)CareSettingType.HealthAuthority,   Name = "CareConnect",                       Email = ""                       },
                     new Vendor { Code = 22, CareSettingCode = (int)CareSettingType.HealthAuthority,   Name = "Excelleris",                        Email = ""                       },
@@ -40,6 +40,10 @@ namespace Prime.Configuration.Database
                     new Vendor { Code = 33, CareSettingCode = (int)CareSettingType.HealthAuthority,   Name = "BDM",                               Email = ""                       },
                     new Vendor { Code = 34, CareSettingCode = (int)CareSettingType.HealthAuthority,   Name = "Meditech",                          Email = ""                       },
                     new Vendor { Code = 35, CareSettingCode = (int)CareSettingType.HealthAuthority,   Name = "Cerner",                            Email = ""                       },
+
+                    new Vendor { Code = 500, CareSettingCode = (int)CareSettingType.DispensingPractitioner, Name = "ARI (Applied Robotics Inc)",  Email = ""                       },
+                    new Vendor { Code = 501, CareSettingCode = (int)CareSettingType.DispensingPractitioner, Name = "McKesson Canada",  Email = ""                                  },
+                    new Vendor { Code = 502, CareSettingCode = (int)CareSettingType.DispensingPractitioner, Name = "Telus Health – Kroll",  Email = ""                             },
                 };
             }
         }

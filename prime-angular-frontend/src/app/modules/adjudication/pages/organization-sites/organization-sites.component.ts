@@ -32,6 +32,7 @@ export class OrganizationSitesComponent implements OnInit {
   public organization: OrganizationAdminView;
   public communityPharmacies: MatTableDataSource<SiteRegistrationListViewModel>;
   public privateCommunityHealthPractices: MatTableDataSource<SiteRegistrationListViewModel>;
+  public dispensingPractitioners: MatTableDataSource<SiteRegistrationListViewModel>;
   public deviceProviders: MatTableDataSource<SiteRegistrationListViewModel>;
 
   constructor(
@@ -45,6 +46,7 @@ export class OrganizationSitesComponent implements OnInit {
 
     this.communityPharmacies = new MatTableDataSource<SiteRegistrationListViewModel>([]);
     this.privateCommunityHealthPractices = new MatTableDataSource<SiteRegistrationListViewModel>([]);
+    this.dispensingPractitioners = new MatTableDataSource<SiteRegistrationListViewModel>([]);
     this.deviceProviders = new MatTableDataSource<SiteRegistrationListViewModel>([]);
   }
 
@@ -66,6 +68,7 @@ export class OrganizationSitesComponent implements OnInit {
 
       this.communityPharmacies.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACY);
       this.privateCommunityHealthPractices.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
+      this.dispensingPractitioners.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.DISPENSING_PRACTITIONER);
       this.deviceProviders.data = sites.results.filter((s) => s.careSettingCode === CareSettingEnum.DEVICE_PROVIDER);
 
       this.initializeFirstSite();

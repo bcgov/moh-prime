@@ -466,6 +466,7 @@ namespace Prime.Services
                 CareSettingType.CommunityPractice => AgreementType.CommunityPracticeOrgAgreement,
                 CareSettingType.CommunityPharmacy => AgreementType.CommunityPharmacyOrgAgreement,
                 CareSettingType.DeviceProvider => AgreementType.DeviceProviderOrgAgreement,
+                CareSettingType.DispensingPractitioner => AgreementType.DispensingPractitionerOrgAgreement,
                 _ => throw new InvalidOperationException($"Did not recognize care setting code {careSettingCode} in {nameof(OrgAgreementTypeForSiteSetting)}"),
             };
         }
@@ -477,6 +478,7 @@ namespace Prime.Services
                 AgreementType.CommunityPharmacyOrgAgreement => CareSettingType.CommunityPharmacy,
                 AgreementType.CommunityPracticeOrgAgreement => CareSettingType.CommunityPractice,
                 AgreementType.DeviceProviderOrgAgreement => CareSettingType.DeviceProvider,
+                AgreementType.DispensingPractitionerOrgAgreement => CareSettingType.DispensingPractitioner,
                 _ => throw new InvalidOperationException($"Did not recognize agreement type code {agreementTypeCode} in {nameof(SiteSettingForOrgAgreementType)}"),
             };
         }

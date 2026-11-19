@@ -2687,177 +2687,212 @@ export class MockConfig {
         {
           'code': 2,
           'careSettingCode': 2,
-          'name': 'Excelleris'
+          'name': 'Excelleris',
+          'discontinued': false
         },
         {
           'code': 3,
           'careSettingCode': 2,
-          'name': 'iClinic'
+          'name': 'iClinic',
+          'discontinued': false
         },
         {
           'code': 4,
           'careSettingCode': 2,
-          'name': 'Medinet'
+          'name': 'Medinet',
+          'discontinued': false
         },
         {
           'code': 5,
           'careSettingCode': 2,
-          'name': 'Plexia'
+          'name': 'Plexia',
+          'discontinued': false
         },
         {
           'code': 6,
           'careSettingCode': 3,
-          'name': 'PharmaClik'
+          'name': 'PharmaClik',
+          'discontinued': false
         },
         {
           'code': 10,
           'careSettingCode': 3,
-          'name': 'WinRx'
+          'name': 'WinRx',
+          'discontinued': false
         },
         {
           'code': 8,
           'careSettingCode': 3,
-          'name': 'Kroll'
+          'name': 'Kroll',
+          'discontinued': false
         },
         {
           'code': 9,
           'careSettingCode': 3,
-          'name': 'Assyst Rx-A'
+          'name': 'Assyst Rx-A',
+          'discontinued': false
         },
         {
           'code': 11,
           'careSettingCode': 3,
-          'name': 'Shoppers Drug Mart HealthWatch NG'
+          'name': 'Shoppers Drug Mart HealthWatch NG',
+          'discontinued': false
         },
         {
           'code': 12,
           'careSettingCode': 3,
-          'name': 'Commander Group'
+          'name': 'Commander Group',
+          'discontinued': false
         },
         {
           'code': 13,
           'careSettingCode': 3,
-          'name': 'BDM'
+          'name': 'BDM',
+          'discontinued': false
         },
         {
           'code': 7,
           'careSettingCode': 3,
-          'name': 'Nexxsys'
+          'name': 'Nexxsys',
+          'discontinued': false
         },
         {
           'code': 1,
           'careSettingCode': 2,
-          'name': 'CareConnect'
+          'name': 'CareConnect',
+          'discontinued': false
         },
         {
           'code': 14,
           'careSettingCode': 4,
-          'name': 'Assyst Rx-A'
+          'name': 'Assyst Rx-A',
+          'discontinued': false
         },
         {
           'code': 15,
           'careSettingCode': 4,
-          'name': 'Commander Group'
+          'name': 'Commander Group',
+          'discontinued': false
         },
         {
           'code': 16,
           'careSettingCode': 4,
-          'name': 'Kroll'
+          'name': 'Kroll',
+          'discontinued': false
         },
         {
           'code': 17,
           'careSettingCode': 4,
-          'name': 'Nexxsys'
+          'name': 'Nexxsys',
+          'discontinued': false
         },
         {
           'code': 18,
           'careSettingCode': 4,
-          'name': 'PharmaClik'
+          'name': 'PharmaClik',
+          'discontinued': false
         },
         {
           'code': 19,
           'careSettingCode': 4,
-          'name': 'Shoppers Drug Mart HealthWatch NG'
+          'name': 'Shoppers Drug Mart HealthWatch NG',
+          'discontinued': false
         },
         {
           'code': 20,
           'careSettingCode': 4,
-          'name': 'WinRx'
+          'name': 'WinRx',
+          'discontinued': false
         },
         {
           'code': 21,
           'careSettingCode': 1,
-          'name': 'CareConnect'
+          'name': 'CareConnect',
+          'discontinued': false
         },
         {
           'code': 22,
           'careSettingCode': 1,
-          'name': 'Excelleris'
+          'name': 'Excelleris',
+          'discontinued': false
         },
         {
           'code': 23,
           'careSettingCode': 1,
-          'name': 'iClinic'
+          'name': 'iClinic',
+          'discontinued': false
         },
         {
           'code': 24,
           'careSettingCode': 1,
-          'name': 'Medinet'
+          'name': 'Medinet',
+          'discontinued': false
         },
         {
           'code': 25,
           'careSettingCode': 1,
-          'name': 'Plexia'
+          'name': 'Plexia',
+          'discontinued': false
         },
         {
           'code': 26,
           'careSettingCode': 1,
-          'name': 'PharmaClik'
+          'name': 'PharmaClik',
+          'discontinued': false
         },
         {
           'code': 27,
           'careSettingCode': 1,
-          'name': 'Nexxsys'
+          'name': 'Nexxsys',
+          'discontinued': false
         },
         {
           'code': 28,
           'careSettingCode': 1,
-          'name': 'Kroll'
+          'name': 'Kroll',
+          'discontinued': false
         },
         {
           'code': 29,
           'careSettingCode': 1,
-          'name': 'Assyst Rx-A'
+          'name': 'Assyst Rx-A',
+          'discontinued': false
         },
         {
           'code': 30,
           'careSettingCode': 1,
-          'name': 'WinRx'
+          'name': 'WinRx',
+          'discontinued': false
         },
         {
           'code': 31,
           'careSettingCode': 1,
-          'name': 'Shoppers Drug Mart HealthWatch NG'
+          'name': 'Shoppers Drug Mart HealthWatch NG',
+          'discontinued': false
         },
         {
           'code': 32,
           'careSettingCode': 1,
-          'name': 'Commander Group'
+          'name': 'Commander Group',
+          'discontinued': false
         },
         {
           'code': 33,
           'careSettingCode': 1,
-          'name': 'BDM'
+          'name': 'BDM',
+          'discontinued': false
         },
         {
           'code': 34,
           'careSettingCode': 1,
-          'name': 'Meditech'
+          'name': 'Meditech',
+          'discontinued': false
         },
         {
           'code': 35,
           'careSettingCode': 1,
-          'name': 'Cerner'
+          'name': 'Cerner',
+          'discontinued': false
         }
       ],
       'healthAuthorities': [

@@ -6,5 +6,6 @@ namespace Prime.Models
         CommunityPractice = 2,
         CommunityPharmacy = 3,
         DeviceProvider = 4,
+        DispensingPractitioner = 6
     }
 }
