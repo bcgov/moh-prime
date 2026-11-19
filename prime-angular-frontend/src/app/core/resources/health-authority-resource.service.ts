@@ -21,6 +21,7 @@ import { HealthAuthoritySiteAdminList } from '@health-auth/shared/models/health-
 import { HealthAuthoritySiteAdmin } from '@health-auth/shared/models/health-authority-admin-site.model';
 import { ApiResourceUtilsService } from './api-resource-utils.service';
 import { BusinessDay } from '@lib/models/business-day.model';
+import { HaCareTypeVendor } from '@lib/models/ha-care-type-vendor.model';
 
 @Injectable({
   providedIn: 'root'
@@ -131,6 +132,18 @@ export class HealthAuthorityResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority vendors could not be updated');
           this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthorityVendors error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateHealthAuthorityCareTypeVendor(healthAuthorityId: number, careTypeVendor: HaCareTypeVendor[]): NoContent {
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthorityId}/care-type-vendor`, careTypeVendor)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority care type vendor could not be updated');
+          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthorityCareTypeVendor error has occurred: ', error);
           throw error;
         })
       );

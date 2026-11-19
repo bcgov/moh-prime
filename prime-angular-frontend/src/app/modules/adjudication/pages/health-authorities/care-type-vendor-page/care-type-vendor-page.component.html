@@ -1,0 +1,71 @@
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Health Authority Information</app-page-header>
+  <app-progress-indicator [noContent]="true"></app-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <app-page-section>
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Identify the Care Type Vendor associated with this Health Authority.
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3">
+
+          <ng-container *ngFor="let careTypeVendor of careTypeVendors.controls; let careTypeIndex = index;">
+
+            <div class="mb-3"
+                 [ngClass]="{'mt-3':careTypeIndex > 0}">
+              <strong>Care Type: </strong><span>{{careTypeVendor.get('careType').value}}</span>
+            </div>
+            <div class="text-danger mb-2"
+                 *ngIf="hasDuplicate(careTypeIndex)">
+              Duplicate vendors detected. Please remove duplicate vendor.
+            </div>
+            <ng-container *ngIf="careTypeVendor.get('vendorCodes').controls">
+              <ng-container
+                            *ngFor="let careTypeVendorCode of careTypeVendor.get('vendorCodes').controls; let vendorIndex = index;">
+                <ng-container [formGroup]="careTypeVendorCode">
+                  <app-form-icon-group [show]="careTypeVendor.get('vendorCodes').length > 1"
+                                       (event)="removeVendor(careTypeIndex, vendorIndex)">
+                    <mat-form-field class="w-100">
+                      <mat-label>Vendor</mat-label>
+                      <mat-select formControlName="vendorCode">
+                        <mat-option *ngFor="let vendor of availableVendors"
+                                    [value]="vendor.code">
+                          {{ vendor.name }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="isRequired(careTypeIndex, vendorIndex)">
+                        Required
+                      </mat-error>
+                    </mat-form-field>
+                  </app-form-icon-group>
+                </ng-container>
+              </ng-container>
+              <button mat-button
+                      *ngIf="careTypeVendor.get('vendorCodes').length < availableVendors.length"
+                      type="button"
+                      color="primary"
+                      (click)="addVendor(careTypeIndex)">
+                <mat-icon>add</mat-icon>
+                Add Vendor
+              </button>
+            </ng-container>
+
+          </ng-container>
+        </div>
+      </div>
+    </app-page-section>
+  </form>
+
+  <app-page-footer [hasSecondaryAction]="true"
+                   primaryActionLabel="Save and Continue"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+</app-page>

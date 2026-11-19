@@ -6159,6 +6159,9 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("DeletedDateTime")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<int>("HealthAuthorityCareTypeId")
                         .HasColumnType("integer");
 

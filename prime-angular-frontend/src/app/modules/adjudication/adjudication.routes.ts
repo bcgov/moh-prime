@@ -39,6 +39,7 @@ export class AdjudicationRoutes {
   public static HEALTH_AUTHORITIES = 'health-authorities';
   public static HEALTH_AUTH_CARE_TYPES = 'health-auth-care-types';
   public static HEALTH_AUTH_VENDORS = 'vendors';
+  public static HEALTH_AUTH_CARE_TYPE_VENDOR = 'health-auth-care-type-vendor';
   public static HEALTH_AUTH_PRIVACY_OFFICE = 'privacy-office';
   public static HEALTH_AUTH_TECHNICAL_SUPPORTS = 'technical-supports';
   public static HEALTH_AUTH_ADMINISTRATORS = 'administrators';

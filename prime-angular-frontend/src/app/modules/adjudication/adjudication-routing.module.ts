@@ -55,6 +55,7 @@ import { SiteOverviewPageComponent } from './pages/health-authorities/site-overv
 import { SiteEventsPageComponent } from './pages/health-authorities/site-events-page/site-events-page.component';
 import { SiteNotesPageComponent } from './pages/health-authorities/site-notes-page/site-notes-page.component';
 import { SiteDocumentsPageComponent } from './pages/health-authorities/site-documents-page/site-documents-page.component';
+import { CareTypeVendorPageComponent } from './pages/health-authorities/care-type-vendor-page/care-type-vendor-page.component';
 import { HaSiteSubmissionListPageComponent } from './pages/health-authorities/ha-site-submission-list-page/ha-site-submission-list-page.component';
 import { HaSiteSubmissionPageComponent } from './pages/health-authorities/ha-site-submission-page/ha-site-submission-page.component';
 import { CommunitySiteSubmissionPageComponent } from './pages/community-site-submission-page/community-site-submission-page.component';
@@ -354,6 +355,11 @@ const routes: Routes = [
                 path: AdjudicationRoutes.HEALTH_AUTH_VENDORS,
                 component: VendorsPageComponent,
                 data: { title: 'Vendors' }
+              },
+              {
+                path: AdjudicationRoutes.HEALTH_AUTH_CARE_TYPE_VENDOR,
+                component: CareTypeVendorPageComponent,
+                data: { title: 'Health Authority Care Type Vendor' }
               },
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE,

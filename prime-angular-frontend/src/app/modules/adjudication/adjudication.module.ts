@@ -82,6 +82,7 @@ import { SiteOverviewPageComponent } from './pages/health-authorities/site-overv
 import { SiteEventsPageComponent } from './pages/health-authorities/site-events-page/site-events-page.component';
 import { SiteNotesPageComponent } from './pages/health-authorities/site-notes-page/site-notes-page.component';
 import { SiteDocumentsPageComponent } from './pages/health-authorities/site-documents-page/site-documents-page.component';
+import { CareTypeVendorPageComponent } from './pages/health-authorities/care-type-vendor-page/care-type-vendor-page.component';
 import { CommunitySiteSubmissionPageComponent } from './pages/community-site-submission-page/community-site-submission-page.component';
 import { CommunitySiteSubmissionListPageComponent } from './pages/community-site-submission-list-page/community-site-submission-list-page.component';
 import { HaSiteSubmissionListPageComponent } from './pages/health-authorities/ha-site-submission-list-page/ha-site-submission-list-page.component';
@@ -150,6 +151,7 @@ import { OrganizationSitesComponent } from './pages/organization-sites/organizat
     EnrolleeToaMaintenanceListPageComponent,
     EnrolleeToaMaintenanceViewPageComponent,
     HealthAuthCareTypesPageComponent,
+    CareTypeVendorPageComponent,
     VendorsPageComponent,
     PrivacyOfficePageComponent,
     TechnicalSupportsPageComponent,
