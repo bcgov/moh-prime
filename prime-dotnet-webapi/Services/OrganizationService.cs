@@ -608,5 +608,21 @@ namespace Prime.Services
                 .Where(o => o.DeletedDate == null)
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
+
+        public async Task<Organization[]> GetOrganizationSiteBySiteIdAsync(string pec)
+        {
+            return await GetBaseOrganizationQuery()
+                .Include(org => org.Sites.Where(s => s.PEC == pec && s.DeletedDate == null))
+                .Where(o => o.Sites.Any(s => s.PEC == pec && s.DeletedDate == null))
+                .ToArrayAsync();
+        }
+
+        public async Task<Organization[]> GetOrganizationSiteBySiteNameAsync(string siteName)
+        {
+            return await GetBaseOrganizationQuery()
+                .Include(org => org.Sites.Where(s => s.DoingBusinessAs.ToUpper() == siteName && s.DeletedDate == null))
+                .Where(o => o.Sites.Any(s => s.DoingBusinessAs.ToUpper().Contains(siteName) && s.DeletedDate == null))
+                .ToArrayAsync();
+        }
     }
 }

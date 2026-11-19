@@ -8,16 +8,23 @@
   <form [formGroup]="form">
     <div class="row">
       <mat-form-field class="col-10">
-        <mat-label>Organization Reference ID or Organization Name</mat-label>
+        <mat-label>Organization Name or Organization Reference ID</mat-label>
         <input matInput
                formControlName="organizationIdOrName">
       </mat-form-field>
       <button mat-flat-button
               class="col-2"
               color="primary"
-              (click)="searchOrganization()">
+              (click)="searchOrganizationSite()">
         Search
       </button>
+    </div>
+    <div class="row">
+      <mat-form-field class="col-10">
+        <mat-label>Site Name or Site ID</mat-label>
+        <input matInput
+               formControlName="siteIdOrName">
+      </mat-form-field>
     </div>
     <div *ngIf="showOrganization"
          class="row">
