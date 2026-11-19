@@ -15,6 +15,7 @@ using System.Linq;
 using System;
 using Prime.Models;
 using Prime.Models.Api;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Prime.Controllers
 {
@@ -373,6 +374,58 @@ namespace Prime.Controllers
             // TODO: Potentially get a ticket to add business events to the Health Authority Organization Side of the app.
 
             return Ok(document); ;
+        }
+
+        // PUT: api/health-authorities/1/additional-document
+        /// <summary>
+        ///    Create or Update health auth organization agreement
+        /// </summary>
+        /// <param name="healthAuthorityId"></param>
+        /// <param name="documentGuid"></param>
+        [HttpPut("{healthAuthorityId}/additional-document", Name = nameof(CreateAdditionalDocument))]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<HealthAuthorityOrganizationAgreementDocument>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> CreateAdditionalDocument(int healthAuthorityId, [FromQuery] Guid documentGuid)
+        {
+            if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
+            {
+                return NotFound($"Health Authority not found with id {healthAuthorityId}");
+            }
+
+            var document = await _healthAuthorityService.CreateAdditionalDocumentAsync(healthAuthorityId, documentGuid);
+            if (document == null)
+            {
+                return BadRequest("Additional Document could not be created; network error or upload is already submitted");
+            }
+
+            return Ok(document);
+        }
+
+        // DELETE: api/health-authorities/1/additional-document
+        /// <summary>
+        ///    Create or Update health auth organization agreement
+        /// </summary>
+        /// <param name="healthAuthorityId"></param>
+        /// <param name="documentGuid"></param>
+        [HttpDelete("{healthAuthorityId}/additional-document", Name = nameof(DeleteAdditionalDocument))]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> DeleteAdditionalDocument(int healthAuthorityId, [FromQuery] Guid documentGuid)
+        {
+            if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
+            {
+                return NotFound($"Health Authority not found with id {healthAuthorityId}");
+            }
+
+            await _healthAuthorityService.DeleteAdditionalDocumentAsync(healthAuthorityId, documentGuid);
+
+            return NoContent();
         }
 
         // GET: api/health-authorities/1/organization-agreement/token

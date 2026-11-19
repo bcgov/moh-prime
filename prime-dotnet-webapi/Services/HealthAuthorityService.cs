@@ -342,6 +342,43 @@ namespace Prime.Services
             return doc;
         }
 
+        public async Task<HealthAuthorityOrganizationAdditionalDocument> CreateAdditionalDocumentAsync(int healthAuthorityId, Guid documentGuid)
+        {
+            var healthAuthority = await _context.HealthAuthorities
+                .Include(ha => ha.HealthAuthorityOrganizationAdditionalDocuments)
+                .SingleOrDefaultAsync(ha => ha.Id == healthAuthorityId);
+
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.HealthAuthorityOrganizationAgreements);
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                return null;
+            }
+
+            var doc = new HealthAuthorityOrganizationAdditionalDocument
+            {
+                DocumentGuid = documentGuid,
+                Filename = filename,
+                UploadedDate = DateTimeOffset.Now
+            };
+
+            healthAuthority.HealthAuthorityOrganizationAdditionalDocuments.Append(doc);
+
+            _context.HealthAuthorities.Update(healthAuthority);
+            await _context.SaveChangesAsync();
+
+            return doc;
+        }
+
+        public async Task DeleteAdditionalDocumentAsync(int healthAuthorityId, Guid documentGuid)
+        {
+            var document = await _context.HealthAuthorities
+                .Where(ha => ha.Id == healthAuthorityId && ha.HealthAuthorityOrganizationAdditionalDocuments.Where(doc => doc.DocumentGuid == documentGuid).Any())
+                .Select(ha => ha.HealthAuthorityOrganizationAdditionalDocuments.Where(doc => doc.DocumentGuid == documentGuid)).SingleOrDefaultAsync();
+
+            _context.HealthAuthorityOrganizationAdditionalDocuments.RemoveRange(document);
+            await _context.SaveChangesAsync();
+        }
+
         private static ICollection<HealthAuthorityTechnicalSupportVendor> MapToVendorsSupported(HealthAuthorityTechnicalSupport healthAuthorityTechnicalSupport, TechnicalSupportContactViewModel contact, DbSet<HealthAuthorityVendor> healthAuthorityVendors)
         {
             var result = new List<HealthAuthorityTechnicalSupportVendor>();
