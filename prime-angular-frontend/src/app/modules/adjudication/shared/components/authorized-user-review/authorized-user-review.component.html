@@ -10,15 +10,15 @@
 
   <ng-container *ngIf="user?.preferredFirstName">
     <app-enrollee-property title="Alternate First Name">
-      {{ user?.preferredFirstName | default }}
+      {{ user?.preferredFirstName | alternateName | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Alternate Middle Name">
-      {{ user?.preferredMiddleName | default }}
+      {{ user?.preferredMiddleName | alternateName | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Alternate Last Name">
-      {{ user?.preferredLastName | default }}
+      {{ user?.preferredLastName | alternateName | default }}
     </app-enrollee-property>
   </ng-container>
 
