@@ -59,6 +59,20 @@
       <span>Unlock Enrollee</span>
     </button>
     <button mat-menu-item
+            *ngIf="enrollee.currentStatusCode !== EnrolmentStatus.ARCHIVED"
+            [disabled]="!(Role.MANAGE_ENROLLEE | inRole) && enrollee.currentStatusCode !== EnrolmentStatus.LOCKED"
+            (click)="onArchive()">
+      <mat-icon>archive</mat-icon>
+      <span>Archive Enrollee</span>
+    </button>
+    <button mat-menu-item
+            *ngIf="enrollee.currentStatusCode === EnrolmentStatus.ARCHIVED"
+            [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
+            (click)="onRestore()">
+      <mat-icon>unarchive</mat-icon>
+      <span>Restore Enrollee</span>
+    </button>
+    <button mat-menu-item
             *ngIf="enrollee.currentStatusCode === EnrolmentStatus.DECLINED"
             [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
             (click)="onEnableEnrollee()">

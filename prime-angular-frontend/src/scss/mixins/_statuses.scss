@@ -18,7 +18,8 @@
       color: theme-palette(green);
     }
 
-    &.declined {
+    &.declined,
+    &.archived {
       color: theme-palette(red)
     }
 

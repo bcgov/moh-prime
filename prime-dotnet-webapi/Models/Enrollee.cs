@@ -136,6 +136,8 @@ namespace Prime.Models
         /// </summary>
         public string Username { get; set; }
 
+        public DateTimeOffset? ArchivedDate { get; set; }
+
         [NotMapped]
         [Computed]
         public PhysicalAddress PhysicalAddress

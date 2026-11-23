@@ -298,6 +298,14 @@ namespace Prime.Services
                     await UnlockProfileAsync(enrollee);
                     break;
 
+                case EnrolleeStatusAction.ArchiveProfile:
+                    await ArchiveProfileAsync(enrollee);
+                    break;
+
+                case EnrolleeStatusAction.RestoreProfile:
+                    await RestoreProfileAsync(enrollee);
+                    break;
+
                 default:
                     throw new InvalidOperationException($"Action {action} is not recognized in {nameof(HandleEnrolleeStatusActionAsync)}");
             }
@@ -471,6 +479,22 @@ namespace Prime.Services
         {
             enrollee.AddEnrolmentStatus(StatusType.UnderReview);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Unlocked");
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task ArchiveProfileAsync(Enrollee enrollee)
+        {
+            enrollee.AddEnrolmentStatus(StatusType.Archived);
+            enrollee.ArchivedDate = DateTimeOffset.Now;
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Archived");
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task RestoreProfileAsync(Enrollee enrollee)
+        {
+            enrollee.AddEnrolmentStatus((StatusType)enrollee.PreviousStatus.StatusCode);
+            enrollee.ArchivedDate = null;
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Restored");
             await _context.SaveChangesAsync();
         }
 

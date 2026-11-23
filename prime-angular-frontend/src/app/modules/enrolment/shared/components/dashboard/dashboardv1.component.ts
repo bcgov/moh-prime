@@ -213,7 +213,8 @@ export class DashboardV1Component implements OnInit {
                 !hasAcceptedAtLeastOneToa ||
                 [
                   EnrolmentStatusEnum.LOCKED,
-                  EnrolmentStatusEnum.DECLINED
+                  EnrolmentStatusEnum.DECLINED,
+                  EnrolmentStatusEnum.ARCHIVED
                 ].includes(enrolmentStatus)
               ) ||
               enrolment?.currentTOAStatus === "" ||
@@ -228,7 +229,8 @@ export class DashboardV1Component implements OnInit {
               !hasAcceptedAtLeastOneToa ||
               [
                 EnrolmentStatusEnum.LOCKED,
-                EnrolmentStatusEnum.DECLINED
+                EnrolmentStatusEnum.DECLINED,
+                EnrolmentStatusEnum.ARCHIVED
               ].includes(enrolmentStatus)
             )
           }

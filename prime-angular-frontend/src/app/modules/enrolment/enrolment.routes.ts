@@ -33,6 +33,7 @@ export class EnrolmentRoutes {
   public static NEXT_STEPS = 'next-steps';
   public static ACCESS_LOCKED = 'access-locked';
   public static ACCESS_DECLINED = 'access-declined';
+  public static ACCESS_ARCHIVED = 'access-archived';
   // Enrollee history and PharmaNet:
   // Replaces terms of access after accepting the terms of access (TOA)
   public static CURRENT_ACCESS_TERM = 'current-access-term';

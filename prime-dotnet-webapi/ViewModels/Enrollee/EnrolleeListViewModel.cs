@@ -23,6 +23,8 @@ namespace Prime.ViewModels
 
         public DateTimeOffset? ApprovedDate { get; set; }
 
+        public DateTimeOffset? ArchivedDate { get; set; }
+
         public DateTimeOffset? ExpiryDate { get; set; }
 
         public bool HasNewestAgreement { get; set; }
@@ -77,6 +79,6 @@ namespace Prime.ViewModels
 
         public DateTime DateOfBirth { get; set; }
 
-        public string Email { get; set;}
+        public string Email { get; set; }
     }
 }

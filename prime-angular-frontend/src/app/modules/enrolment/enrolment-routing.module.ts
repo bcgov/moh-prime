@@ -35,6 +35,7 @@ import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/
 import { PaperEnrolleeReturneesPageComponent } from './pages/paper-enrollee-returnees-page/paper-enrollee-returnees-page.component';
 import { AbsenceManagementPageComponent } from './pages/absence-management-page/absence-management-page.component';
 import { IdentityAssuranceLevelGuard } from '@core/guards/identity-assurance-level.guard';
+import { AccessArchivedComponent } from './pages/access-archived/access-archived.component';
 
 const routes: Routes = [
   {
@@ -165,6 +166,11 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.ACCESS_DECLINED,
         component: AccessDeclinedComponent,
+        data: { title: 'Enrolment Summary' }
+      },
+      {
+        path: EnrolmentRoutes.ACCESS_ARCHIVED,
+        component: AccessArchivedComponent,
         data: { title: 'Enrolment Summary' }
       },
       {

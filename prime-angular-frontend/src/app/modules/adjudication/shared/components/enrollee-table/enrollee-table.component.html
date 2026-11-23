@@ -169,7 +169,6 @@
               *matCellDef="let row;"
               class="status"
               [class]="row.currentStatusCode | configCode: 'statuses' | case: 'space' : 'kebab'">
-
             <div class="d-flex align-items-center">
               <span class="mr-1">
                     {{ ((row?.gpid | contains: PAPER_ENROLLEE_GPID_PREFIX:'startsWith')
@@ -191,6 +190,10 @@
                 <mat-icon *ngIf="row.alwaysManual"
                           matTooltip="Enrollee flagged for manual adjudication"
                           matTooltipPosition="after">flag
+                </mat-icon>
+                <mat-icon *ngIf="row.currentStatusCode === EnrolmentStatus.ARCHIVED"
+                          matTooltip="Account archived"
+                          matTooltipPosition="after">archive
                 </mat-icon>
                 <mat-icon *ngIf="row.confirmed"
                           class="material-icons-outlined"
