@@ -53,7 +53,7 @@
     "rxjs": "~7.8.2",
     "smoothscroll-polyfill": "^0.4.4",
     "socket.io-parser": "^4.2.7",
-    "tinymce": "^7.9.3",
+    "tinymce": "^8.10.1",
     "tslib": "^2.3.0",
     "tus-js-client": "^1.8.0",
     "web-animations-js": "^2.3.2",
