@@ -4,6 +4,7 @@ export enum EnrolmentStatusEnum {
   REQUIRES_TOA,
   LOCKED,
   DECLINED,
+  ARCHIVED = 8
 }
 
 export const PaperEnrolmentStatusMap: Record<number, string> = {

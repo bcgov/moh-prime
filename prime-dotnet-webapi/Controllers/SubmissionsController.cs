@@ -240,6 +240,40 @@ namespace Prime.Controllers
             return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.UnlockedProfile);
         }
 
+        // POST: api/enrollees/5/status-actions/archive-profile
+        /// <summary>
+        /// Archives the Enrolle's profile.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/status-actions/archive-profile", Name = nameof(ArchiveProfile))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> ArchiveProfile(int enrolleeId)
+        {
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.ArchiveProfile);
+        }
+
+        // POST: api/enrollees/5/status-actions/restore-profile
+        /// <summary>
+        /// Restores the Enrolle's profile.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/status-actions/restore-profile", Name = nameof(RestoreProfile))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> RestoreProfile(int enrolleeId)
+        {
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.RestoreProfile);
+        }
+
         // POST: api/enrollees/5/status-actions/return-to-editing
         /// <summary>
         /// Return the Enrollee back into an editable state if certain conditions apply

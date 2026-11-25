@@ -30,6 +30,7 @@ namespace PrimeTests.UnitTests
                 EnrolleeStatusAction.LockProfile,
                 EnrolleeStatusAction.DeclineProfile,
                 EnrolleeStatusAction.ChangeToa,
+                EnrolleeStatusAction.ArchiveProfile,
             }.Contains(action);
 
             // Act
@@ -51,7 +52,8 @@ namespace PrimeTests.UnitTests
                 EnrolleeStatusAction.EnableEditing,
                 EnrolleeStatusAction.LockProfile,
                 EnrolleeStatusAction.DeclineProfile,
-                EnrolleeStatusAction.RerunRules
+                EnrolleeStatusAction.RerunRules,
+                EnrolleeStatusAction.ArchiveProfile,
             }.Contains(action);
 
             // Act
@@ -74,7 +76,8 @@ namespace PrimeTests.UnitTests
                 EnrolleeStatusAction.EnableEditing,
                 EnrolleeStatusAction.LockProfile,
                 EnrolleeStatusAction.DeclineProfile,
-                EnrolleeStatusAction.CancelToaAssignment
+                EnrolleeStatusAction.CancelToaAssignment,
+                EnrolleeStatusAction.ArchiveProfile,
             }.Contains(action);
 
             // Act
@@ -112,6 +115,24 @@ namespace PrimeTests.UnitTests
             var expectedAllowed = new[]
             {
                 EnrolleeStatusAction.EnableEditing
+            }.Contains(action);
+
+            // Act
+            var allowed = EnrolleeStatusStateEngine.AllowableAction(action, status);
+
+            // Assert
+            Assert.Equal(expectedAllowed, allowed);
+        }
+
+        [Theory]
+        [MemberData(nameof(SubmissionActionsData))]
+        public void TestAllowableActions_Archived(EnrolleeStatusAction action)
+        {
+            // Arrange
+            var status = EnrolmentStatus.FromType(StatusType.Archived, 0);
+            var expectedAllowed = new[]
+            {
+                EnrolleeStatusAction.RestoreProfile
             }.Contains(action);
 
             // Act
