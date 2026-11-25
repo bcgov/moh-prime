@@ -37,6 +37,7 @@ import { HeaderComponent } from './shared/components/header/header.component';
 import { EnrolmentProgressIndicatorComponent } from './shared/components/enrolment-progress-indicator/enrolment-progress-indicator.component';
 import { PaperEnrolleeReturneesPageComponent } from './pages/paper-enrollee-returnees-page/paper-enrollee-returnees-page.component';
 import { AbsenceManagementPageComponent } from './pages/absence-management-page/absence-management-page.component';
+import { AccessArchivedComponent } from './pages/access-archived/access-archived.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { AbsenceManagementPageComponent } from './pages/absence-management-page/
     AccessAgreementComponent,
     AccessDeclinedComponent,
     AccessLockedComponent,
+    AccessArchivedComponent,
     AccessAgreementHistoryComponent,
     PharmanetEnrolmentSummaryComponent,
     AccessTermsComponent,

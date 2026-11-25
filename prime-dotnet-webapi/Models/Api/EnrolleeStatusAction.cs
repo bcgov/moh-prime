@@ -12,5 +12,7 @@ namespace Prime.Models.Api
         RerunRules,
         CancelToaAssignment,
         UnlockedProfile,
+        ArchiveProfile,
+        RestoreProfile
     }
 }

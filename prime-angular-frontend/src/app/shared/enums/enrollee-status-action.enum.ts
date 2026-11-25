@@ -8,4 +8,6 @@ export enum EnrolleeStatusAction {
   DECLINE_PROFILE = 'decline-profile',
   RERUN_RULES = 'rerun-rules',
   UNLOCK_PROFILE = 'unlock-profile',
+  ARCHIVE_PROFILE = 'archive-profile',
+  RESTORE_PROFILE = 'restore-profile',
 }

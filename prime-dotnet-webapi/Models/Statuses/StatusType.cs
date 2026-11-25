@@ -6,7 +6,8 @@ namespace Prime.Models
         UnderReview = 2,
         RequiresToa = 3,
         Locked = 4,
-        Declined = 5
+        Declined = 5,
+        Archived = 8
     }
 
     public enum AdminStatusType

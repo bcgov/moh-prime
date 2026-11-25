@@ -153,6 +153,8 @@ export class EnrolmentGuard extends BaseGuard {
         return this.navigate(routePath, EnrolmentRoutes.ACCESS_LOCKED);
       case EnrolmentStatusEnum.DECLINED:
         return this.navigate(routePath, EnrolmentRoutes.ACCESS_DECLINED);
+      case EnrolmentStatusEnum.ARCHIVED:
+        return this.manageArchivedRouting(routePath, enrolment);
       default:
         return false; // Status is unknown and routing cannot be determined
     }
@@ -211,6 +213,25 @@ export class EnrolmentGuard extends BaseGuard {
       ? this.navigate(routePath, redirectionRoute)
       // Otherwise, allow the route to resolve
       : true;
+  }
+
+  private manageArchivedRouting(routePath: string, enrolment: Enrolment): boolean {
+
+    const hasSignedToA = !!enrolment.expiryDate;
+
+    const allowedRoutes = [
+      EnrolmentRoutes.OVERVIEW,
+      EnrolmentRoutes.CURRENT_ACCESS_TERM,
+      EnrolmentRoutes.ACCESS_ARCHIVED];
+
+    const routPath = this.routePath(routePath)
+
+    if (hasSignedToA && !allowedRoutes.includes(routPath)) {
+      this.navigate(routePath, EnrolmentRoutes.OVERVIEW);
+    }
+
+    return hasSignedToA && allowedRoutes.includes(routPath)
+      ? true : this.navigate(routePath, EnrolmentRoutes.ACCESS_ARCHIVED);
   }
 
   private manageUnderReviewRouting(routePath: string, enrolment: Enrolment): boolean {

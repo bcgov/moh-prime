@@ -62,6 +62,8 @@ namespace Prime.ViewModels
 
         public DateTimeOffset? ApprovedDate { get; set; }
 
+        public DateTimeOffset? ArchivedDate { get; set; }
+
         public DateTimeOffset? ExpiryDate { get; set; }
 
         public DateTimeOffset? SelfDeclarationCompletedDate { get; set; }
@@ -85,6 +87,7 @@ namespace Prime.ViewModels
             StatusType.UnderReview => "",
             StatusType.Locked => "N/A",
             StatusType.Declined => "N/A",
+            StatusType.Archived => "N/A",
             StatusType.RequiresToa => "Pending",
             StatusType.Editable => EditableToaStatusText(),
             _ => null

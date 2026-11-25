@@ -5329,6 +5329,9 @@ namespace Prime.Migrations
                     b.Property<bool>("AlwaysManual")
                         .HasColumnType("boolean");
 
+                    b.Property<DateTimeOffset?>("ArchivedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 

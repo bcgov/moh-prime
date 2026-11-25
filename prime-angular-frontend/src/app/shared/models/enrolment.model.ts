@@ -25,6 +25,7 @@ export interface HttpEnrollee extends Enrollee {
   displayId?: number;
   appliedDate: string;
   approvedDate: string;
+  archivedDate: string;
   expiryDate?: string;
   certifications: CollegeCertification[];
   //deviceProviderIdentifier: string;
@@ -85,6 +86,7 @@ export interface Enrolment {
   enrollee: Enrollee;
   appliedDate: string;
   approvedDate: string;
+  archivedDate: string;
   expiryDate?: string;
   certifications: CollegeCertification[];
   //deviceProviderIdentifier: string;
@@ -136,6 +138,7 @@ export interface EnrolleeListViewModel {
   givenNames: string;
   appliedDate: string;
   approvedDate: string;
+  archivedDate: string;
   expiryDate: string;
   currentStatusCode: number;
   currentTOAStatus: string;
