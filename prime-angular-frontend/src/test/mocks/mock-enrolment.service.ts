@@ -46,6 +46,7 @@ export class MockEnrolmentService implements IEnrolmentService {
       },
       appliedDate: null,
       approvedDate: null,
+      archivedDate: null,
       expiryDate: null,
       selfDeclarationCompletedDate: null,
       requireRedoSelfDeclaration: false,

@@ -19,10 +19,10 @@ import { PermissionService } from '@auth/shared/services/permission.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-    selector: 'app-adjudicator-actions',
-    templateUrl: './adjudicator-actions.component.html',
-    styleUrls: ['./adjudicator-actions.component.scss'],
-    standalone: false
+  selector: 'app-adjudicator-actions',
+  templateUrl: './adjudicator-actions.component.html',
+  styleUrls: ['./adjudicator-actions.component.scss'],
+  standalone: false
 })
 export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   @Input() public enrollee: EnrolleeListViewModel;
@@ -31,6 +31,8 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   @Output() public decline: EventEmitter<number>;
   @Output() public lock: EventEmitter<number>;
   @Output() public unlock: EventEmitter<number>;
+  @Output() public archive: EventEmitter<number>;
+  @Output() public restore: EventEmitter<number>;
   @Output() public enableEnrollee: EventEmitter<number>;
   @Output() public toggleManualAdj: EventEmitter<{ enrolleeId: number, alwaysManual: boolean }>;
   @Output() public enableEditing: EventEmitter<number>;
@@ -62,6 +64,8 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
     this.decline = new EventEmitter<number>();
     this.lock = new EventEmitter<number>();
     this.unlock = new EventEmitter<number>();
+    this.archive = new EventEmitter<number>();
+    this.restore = new EventEmitter<number>();
     this.enableEnrollee = new EventEmitter<number>();
     this.enableEditing = new EventEmitter<number>();
     this.cancelToa = new EventEmitter<number>();
@@ -111,6 +115,18 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   public onUnlock() {
     if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
       this.unlock.emit(this.enrollee.id);
+    }
+  }
+
+  public onArchive() {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
+      this.archive.emit(this.enrollee.id);
+    }
+  }
+
+  public onRestore() {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
+      this.restore.emit(this.enrollee.id);
     }
   }
 
@@ -223,4 +239,5 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
       this.enrollee.currentStatusCode === this.EnrolmentStatus.EDITABLE &&
       this.enrollee.approvedDate !== null;
   }
+
 }

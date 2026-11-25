@@ -14,12 +14,14 @@ namespace Prime.Engines
                 (StatusType.Editable, EnrolleeStatusAction.LockProfile) => true,
                 (StatusType.Editable, EnrolleeStatusAction.DeclineProfile) => true,
                 (StatusType.Editable, EnrolleeStatusAction.ChangeToa) => true,
+                (StatusType.Editable, EnrolleeStatusAction.ArchiveProfile) => true,
 
                 (StatusType.UnderReview, EnrolleeStatusAction.Approve) => true,
                 (StatusType.UnderReview, EnrolleeStatusAction.EnableEditing) => true,
                 (StatusType.UnderReview, EnrolleeStatusAction.LockProfile) => true,
                 (StatusType.UnderReview, EnrolleeStatusAction.DeclineProfile) => true,
                 (StatusType.UnderReview, EnrolleeStatusAction.RerunRules) => true,
+                (StatusType.UnderReview, EnrolleeStatusAction.ArchiveProfile) => true,
 
                 (StatusType.RequiresToa, EnrolleeStatusAction.AcceptToa) => true,
                 (StatusType.RequiresToa, EnrolleeStatusAction.DeclineToa) => true,
@@ -27,11 +29,14 @@ namespace Prime.Engines
                 (StatusType.RequiresToa, EnrolleeStatusAction.LockProfile) => true,
                 (StatusType.RequiresToa, EnrolleeStatusAction.DeclineProfile) => true,
                 (StatusType.RequiresToa, EnrolleeStatusAction.CancelToaAssignment) => true,
+                (StatusType.RequiresToa, EnrolleeStatusAction.ArchiveProfile) => true,
 
                 (StatusType.Locked, EnrolleeStatusAction.UnlockedProfile) => true,
                 (StatusType.Locked, EnrolleeStatusAction.DeclineProfile) => true,
 
                 (StatusType.Declined, EnrolleeStatusAction.EnableEditing) => true,
+
+                (StatusType.Archived, EnrolleeStatusAction.RestoreProfile) => true,
 
                 _ => false
             };

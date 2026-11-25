@@ -247,6 +247,46 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
+  public onArchive(enrolleeId: number) {
+    const data: DialogOptions = {
+      title: 'Archive Enrollee',
+      message: 'When archived the enrollee will not have access to PRIME. Are you sure you want to archive this enrollee?',
+      actionType: 'warn',
+      actionText: 'Archive Enrollee',
+      component: NoteComponent,
+    };
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ARCHIVE_PROFILE)
+      )
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
+        this.action.emit();
+      });
+  }
+
+  public onRestore(enrolleeId: number) {
+    const data: DialogOptions = {
+      title: 'Restore Enrollee',
+      message: 'When restored the enrollee will have access to PRIME. Are you sure you want to restore this enrollee?',
+      actionType: 'warn',
+      actionText: 'Restore Enrollee',
+      component: NoteComponent,
+    };
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.RESTORE_PROFILE)
+      )
+      .subscribe(() => {
+        this.updateEnrollee(enrolleeId);
+        this.action.emit();
+      });
+  }
+
   public onEnableEnrollee(enrolleeId: number) {
     const data: DialogOptions = {
       title: 'Enable Enrollee',
@@ -607,6 +647,7 @@ export class AdjudicationContainerComponent implements OnInit {
       givenNames,
       appliedDate,
       approvedDate,
+      archivedDate,
       expiryDate,
       currentStatus,
       previousStatus,
@@ -634,6 +675,7 @@ export class AdjudicationContainerComponent implements OnInit {
       givenNames,
       appliedDate,
       approvedDate,
+      archivedDate,
       expiryDate,
       currentStatusCode: currentStatus?.statusCode,
       previousStatus,
