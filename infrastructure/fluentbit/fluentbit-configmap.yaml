@@ -104,7 +104,6 @@ objects:
         [SERVICE]
           Flush         5
           Daemon        Off
-          # define the log format (see additional config map key/value)
           Parsers_File  parsers.conf
           Log_Level     info
           HTTP_Server   On
@@ -113,25 +112,21 @@ objects:
           Health_Check  On
 
         [INPUT]
-          # get logs from file written by webapi app
-          Name        tail
-          Path        /opt/app-root/app/logs/*.log
-          Tag         app
+          # Read daily rolling Serilog files (e.g. prime20261110.json)
+          Name              tail
+          Path              /opt/app-root/app/logs/prime[0-9]*.json
+          Tag               app
+          Parser            serilog_json
+          DB                /tmp/flb_prime.db
+          Read_from_Head    false
+          Ignore_Older      24h
+          Refresh_Interval  5
 
         [FILTER]
-          # filter logs based on certain keyword(s)
-          name   grep
-          match  app
-          Logical_Op or
-          regex log \bERR\b
-          regex log FTL
-
-        [FILTER]
-          name          parser
-          match         app
-          Key_Name      log
-          Parser        parser
-          Preserve_Key  On
+          # Keep only Error or Fatal logs (case-insensitive)
+          Name        grep
+          Match       app
+          Regex       Level (?i)(error|err|ERR|fatal|ftl|FTL)
 
         [FILTER]
           # modify log entry to include namespace and container name
@@ -145,7 +140,7 @@ objects:
         [FILTER]
           Name          rewrite_tag
           Match         app
-          Rule          $level ([a-zA-Z]*)$ $TAG.$level true
+          Rule          $Level ^([a-zA-Z]+)$ $TAG.$1 true
           Emitter_Name  re_emitted
 
 
@@ -156,15 +151,16 @@ objects:
 
         [OUTPUT]
           Name    stdout
-          Match   app
+          Match   app*
           Format  json_lines
 
       parsers.conf: |
         [PARSER]
-          Name   parser
-          Format regex
-          Regex  \[(?<timestamp>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})(?<level>.*)]\ (?<message>.*)
-          Time_Key time
+          Name        serilog_json
+          Format      json
+          Time_Key    Timestamp
+          Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+          Time_Keep   On
 
 parameters:
   - name: APP_NAME

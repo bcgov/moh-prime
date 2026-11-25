@@ -51,7 +51,7 @@ export class EnrolmentRoutes {
   public static STEP_REVIEW = 'Review';
   public static STEP_TOA = 'Terms of <br/>Access ';
   public static STEP_ADMIN_EMAIL = 'Administrator Email';
-  public static STEP_COMPLETE = 'Completed';
+  public static STEP_COMPLETE = 'Under Review';
 
   public static routePath(route: string): string {
     return `/${EnrolmentRoutes.MODULE_PATH}/${route}`;
