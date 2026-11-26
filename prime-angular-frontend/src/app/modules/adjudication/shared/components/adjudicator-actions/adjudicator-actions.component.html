@@ -60,7 +60,7 @@
     </button>
     <button mat-menu-item
             *ngIf="enrollee.currentStatusCode !== EnrolmentStatus.ARCHIVED"
-            [disabled]="!(Role.MANAGE_ENROLLEE | inRole) || enrollee.currentStatusCode === EnrolmentStatus.LOCKED"
+            [disabled]="!(Role.MANAGE_ENROLLEE | inRole) || enrollee.currentStatusCode === EnrolmentStatus.LOCKED || enrollee.currentStatusCode === EnrolmentStatus.DECLINED"
             (click)="onArchive()">
       <mat-icon>archive</mat-icon>
       <span>Archive Enrollee</span>
