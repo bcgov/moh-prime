@@ -48,10 +48,11 @@ export class EnrolmentRoutes {
   public static STEP_CARE_SETTING = 'Care Setting';
   public static STEP_COLLEGE = 'College /<br/>Professional /<br/>Job Info';
   public static STEP_SELF_DECLARATION = 'Self-Declaration';
-  public static STEP_REVIEW = 'Review';
+  public static STEP_REVIEW = 'Review & Submit';
   public static STEP_TOA = 'Terms of <br/>Access ';
   public static STEP_ADMIN_EMAIL = 'Administrator Email';
-  public static STEP_COMPLETE = 'Under Review';
+  public static STEP_UNDER_REVIEW = 'Under Review by MoH';
+  public static STEP_COMPLETE = 'Completed';
 
   public static routePath(route: string): string {
     return `/${EnrolmentRoutes.MODULE_PATH}/${route}`;
@@ -125,7 +126,7 @@ export class EnrolmentRoutes {
       { routes: [this.REGULATORY, this.OBO_SITES, this.REMOTE_ACCESS, this.REMOTE_ACCESS_ADDRESSES], step: this.STEP_COLLEGE },
       { routes: [this.SELF_DECLARATION], step: this.STEP_SELF_DECLARATION },
       { routes: [this.OVERVIEW], step: this.STEP_REVIEW },
-      { routes: [this.SUBMISSION_CONFIRMATION], step: this.STEP_COMPLETE },
+      { routes: [this.SUBMISSION_CONFIRMATION], step: this.STEP_UNDER_REVIEW },
     ];
   }
 
